@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>通知 · operad 文档</title>
+<meta name="description" content="notify 命令：何时运行、能拿到什么，以及一个示例脚本。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/notifications/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/notifications/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/notifications/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/notifications/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="通知 · operad 文档">
+<meta property="og:description" content="notify 命令：何时运行、能拿到什么，以及一个示例脚本。">
+<meta property="og:url" content="https://operad.io/zh/docs/notifications/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="通知 · operad 文档">
+<meta name="twitter:description" content="notify 命令：何时运行、能拿到什么，以及一个示例脚本。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "通知",
+ "description": "notify 命令：何时运行、能拿到什么，以及一个示例脚本。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/notifications/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/notifications/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/" aria-current="page">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="notifications">通知</h1>
+<p><code>config.json</code> 中的 <code>notify</code> 指定一个命令，当有事项开始等待人处理时，由 <code>serve</code> 运行它：</p>
+<pre data-ui><code class="lang-json">{ &quot;notify&quot;: { &quot;command&quot;: &quot;sh ~/.operad/notify.sh&quot;, &quot;on&quot;: [&quot;waiting&quot;] } }</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>notify</code></td><td>object</td><td><code>{ &quot;command&quot;: null, &quot;on&quot;: [&quot;waiting&quot;] }</code></td><td>一个带有下列键的对象；缺少该部分表示通知关闭</td><td><code>operad serve</code> 启动时；新配置加载时重新加载</td><td>被拒绝：<code>notify: must be an object</code></td></tr><tr><td><code>notify.command</code></td><td>string or <code>null</code></td><td><code>null</code></td><td>一个非空的 shell 命令行，在 operad home 中用 <code>sh -c</code> 运行；<code>null</code> 关闭通知</td><td><code>serve</code> 启动或重新加载时；该命令对每次新的等待运行</td><td>被拒绝：<code>notify.command: must be a non-empty string or null</code></td></tr><tr><td><code>notify.on</code></td><td>array of strings</td><td><code>[&quot;waiting&quot;]</code></td><td>只有 <code>waiting</code>：一个对象现在在等待人处理</td><td><code>serve</code> 启动或重新加载时；它决定哪些新的等待会通知</td><td>被拒绝：<code>notify.on: must be an array of &quot;waiting&quot;</code>；重复的 <code>waiting</code> 只保留一个</td></tr></tbody></table></div>
+<p><code>notify</code> 内的未知键会被忽略；只读取上面的键。该命令对每个事项和每次等待运行一次，环境中有以下变量：</p>
+<div class="table-wrap"><table><thead><tr><th>Variable</th><th>Value</th></tr></thead><tbody><tr><td><code>OPERAD_ID</code></td><td>对象，格式为 <code>&lt;type&gt;:&lt;id&gt;</code>。</td></tr><tr><td><code>OPERAD_TITLE</code></td><td>对象的标题；读不到标题时为它的 id。</td></tr><tr><td><code>OPERAD_REASON</code></td><td>它在等待什么：<code>operad pending</code> 中显示的提示。</td></tr><tr><td><code>OPERAD_LINK</code></td><td>对象链接，<code>operad://objects/&lt;id&gt;</code>。</td></tr></tbody></table></div>
+<p>对于 <code>dev</code> 插件的任务，提示会写明它停在哪个 step；具体原因（<code>ready to merge</code>、<code>review findings</code> 等）在该任务的 <code>dev.waiting</code> 通知中，<a href="https://github.com/operad-io/operad/blob/main/docs/dogfood.md">Running operad on operad</a> 列出了这些通知。</p>
+<p>token 从不在环境中。一个命令最多运行 30 秒，之后会被停止。任何不为 0 的退出、超时，或无法启动的命令，都会由 <code>serve</code> 连同退出码和输出的最后几行记入日志，并且不会重试。</p>
+<p>每次等待只通知一次。一次等待指的是一个 run 一次到达一个 step：同一个事项在你回答之后再次等待，是一次新的等待，会再次通知。重启 <code>serve</code> 不会对已经通知过的等待再次通知。通知是在命令结束之后才记录的，所以如果 <code>serve</code> 恰好在这两者之间被终止，下一个 <code>serve</code> 会对该等待再运行一次命令：最多多一次通知，绝不会丢失。停止 <code>serve</code> 会取消仍在运行的命令，下一个 <code>serve</code> 会再次运行它。</p>
+<p>使用 <a href="https://ntfy.sh">ntfy</a> 的示例：向你的手机推送一条通知，点按后在 app 中打开该事项。</p>
+<pre data-ui><code class="lang-sh">#!/bin/sh
+# ~/.operad/notify.sh
+curl -s \
+  -H &quot;Title: $OPERAD_TITLE&quot; \
+  -H &quot;Click: $OPERAD_LINK&quot; \
+  -d &quot;$OPERAD_REASON&quot; \
+  https://ntfy.sh/my-operad-topic</code></pre>
+<p>配合 <code>&quot;command&quot;: &quot;sh ~/.operad/notify.sh&quot;</code> 使用。topic 名称对任何猜到它的人来说就是密码；请选一个很长的随机名称，或使用自建服务器。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/notifications.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../chats-and-bots/"><small>上一页</small>chat 和 bot</a>
+      <a class="next" href="../checks/"><small>下一页</small>检查</a>
+    </nav>
+  </main>
+  
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手机 app · operad 文档</title>
+<meta name="description" content="手机 app：配对、tab、通知、chat、附件、model 和 effort，以及 always allow。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/app/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/app/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/app/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/app/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="手机 app · operad 文档">
+<meta property="og:description" content="手机 app：配对、tab、通知、chat、附件、model 和 effort，以及 always allow。">
+<meta property="og:url" content="https://operad.io/zh/docs/app/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="手机 app · operad 文档">
+<meta name="twitter:description" content="手机 app：配对、tab、通知、chat、附件、model 和 effort，以及 always allow。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "手机 app",
+ "description": "手机 app：配对、tab、通知、chat、附件、model 和 effort，以及 always allow。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/app/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/app/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/" aria-current="page">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="the-phone-app">手机 app</h1>
+<p>app 通过 <a href="../../../zh/docs/http/">HTTP 接口</a>连到 <code>operad serve</code>，显示的对象、pending 项和 history 与命令行相同。它不认识任何插件：插件的类型提供一个 tab、一个对象页和若干 action，由 app 渲染它们。</p>
+<h2 id="pairing-the-app">配对 app<a class="anchor" href="#pairing-the-app" aria-label="链接到本节">#</a></h2>
+<p><code>operad pair</code> 显示 app 连到这个 <code>serve</code> 所需的信息：</p>
+<pre data-ui><code class="lang-text">url http://192.168.1.20:7480
+token &lt;the token&gt;
+
+Scan this in the operad app:
+
+&lt;a QR code&gt;</code></pre>
+<p>URL 是 <code>http://&lt;address&gt;:&lt;port&gt;</code>，其中地址取 <code>http.listen</code> 中第一个非 loopback 的条目。传入 <code>--url &lt;base url&gt;</code> 可以指定另一个地址，例如 Tailscale 的 HTTPS 名称（<code>operad pair --url https://mac.tail1234.ts.net</code>）；它必须是不带凭据和 query 的 <code>http</code> 或 <code>https</code> URL。QR 码编码的是 <code>operad://pair?url=&lt;url&gt;&amp;token=&lt;token&gt;</code>。它要求 <code>http.enabled</code> 为 true，没有 <code>--url</code> 时还要求 <code>http.listen</code> 中有非 loopback 的地址。在默认的 <code>http</code> 值下，<code>pair</code> 会指出 <code>http.listen</code> 只有 loopback 地址，并要求提供一个地址或 <code>--url</code>；只有它为 false 时才会提到 <code>http.enabled</code>。</p>
+<p><code>pair</code> 是唯一会打印 token 的命令。当它的输出不是终端时它会拒绝，因此管道或日志永远收不到 token；<code>--show-token</code> 会覆盖这一点，把 <code>url</code>、<code>token</code> 和配对的 <code>link</code> 作为普通行打印，不带 QR 码。如果你把 token 粘贴到了任何地方，请用 <code>operad http token rotate</code> 轮换它；运行中的 <code>serve</code> 会立即拒绝旧 token，并关闭用它打开的流。</p>
+<p>app 只能连到 <code>serve</code> 可以监听的地址：loopback、私有地址（<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code>）、link-local 或 Tailscale 地址。同一网络中的手机使用私有地址；在别处的手机使用 Tailscale 或 <code>--url</code>。每个请求都需要 token；缺少或过期的 token 会得到 <code>401</code>，app 会提示 token 已被轮换。</p>
+<h2 id="tabs">Tab<a class="anchor" href="#tabs" aria-label="链接到本节">#</a></h2>
+<p>底部的 tab 栏是：</p>
+<ul><li><strong>Pending</strong>：所有在等待用户的内容。</li><li><strong>Running</strong>：每一个进行中的 run。</li><li>每个插件的顶层对象类型各有一个 tab：<code>dev</code> 是 <strong>Repo</strong>，<code>chat</code> 是 <strong>Chat</strong>。</li><li><strong>Settings</strong>：服务器设置，以及插件放在 settings 之下的对象。</li></ul>
+<p>顶层以下的类型（计划、任务）没有 tab；它从父对象的页面、Pending 或 Running 中打开。<code>bot</code> 插件没有 tab：bot 页就是该 bot 的设置页，bot 出现在 <strong>Settings</strong> 下名为 <strong>Bots</strong> 的 section 中。</p>
+<p>对象页依次是：行（id、title、state、note、badge 和 mark）、对象有下一级时的进度条、子对象列表，然后是 section 的 tab。History 始终是最后一个 section；没有单独的 History tab。live section 会跟随它的末尾并显示新内容；chat 的 transcript 就是一个 live section。底部的 action 栏把第一个可用的 action 作为主按钮，其余放在 <code>⋯</code> 菜单中；需要 note 的 action 会打开输入框，<code>confirm: true</code> 的 action 用红色询问。打开某个对象的 action（<code>opens</code>）会把 app 带到那个对象。</p>
+<h2 id="pending-and-notifications">Pending 和通知<a class="anchor" href="#pending-and-notifications" aria-label="链接到本节">#</a></h2>
+<p>Pending 就是 <code>GET /v1/pending</code>：与 <code>operad pending</code> 相同的列表。每一项显示对象的标题和行、提示、选项以及它提供的 action。回答问题是 <code>POST /v1/answer</code>；运行 action 是 <code>POST /v1/act</code>。同时也是对象上 action 的选项会运行该 action，因此适用它的 note 和确认。已关闭的问题是 <code>409</code>，不会被应用；app 会显示原因并刷新。</p>
+<p>有东西开始等待用户时，app 会收到推送；<code>notify</code> 命令是这一时刻在命令行上的对应物。点按它会打开 <code>OPERAD_LINK</code>，即 <code>operad://objects/&lt;id&gt;</code>，并打开该对象的页面。app 不会为每次状态变化推送；那些变化请打开对象，或下拉刷新。插件自动回答的 wait 不会被通知，因此手机不会为一个即将自行得到答复的问题而震动。</p>
+<h2 id="running">Running<a class="anchor" href="#running" aria-label="链接到本节">#</a></h2>
+<p>Running 就是 <code>GET /v1/running</code>：对象、它的标题、flow 和 step、该 step 已运行多久、该 run 已运行多久，以及是否在排队。它通过事件流实时更新。没有对象的 run 显示它的 run id；尚未开始的 step 显示 <code>-</code>。</p>
+<h2 id="chats">Chat<a class="anchor" href="#chats" aria-label="链接到本节">#</a></h2>
+<p>chat 是与 agent 的一段长对话。<strong>Chat</strong> tab 列出已打开的 chat，按它们的父对象（仓库或 bot）分组；<code>open</code> filter 是默认的，<code>closed</code> 显示已关闭的。</p>
+<h3 id="starting-a-chat">开始一个 chat<a class="anchor" href="#starting-a-chat" aria-label="链接到本节">#</a></h3>
+<p>新建 chat 的入口在 Chat tab 上，而不在仓库页或 bot 页上。它要求填写父对象（仓库或 bot）、agent、model、effort 和标题；标题可选，省略时取自第一条消息。第一条消息才会创建 chat：打开新建 chat 页后不发消息就离开，不会留下空的 chat。app 用这些参数和第一条消息，一步调用父对象的创建 action（仓库用 <code>dev:chat</code>，bot 用 <code>bot:chat</code>），然后打开返回的 chat。</p>
+<ul><li><strong>Agent</strong>：已加载时可选 <code>claude</code>、<code>pi</code> 或 <code>radian</code>。仓库 chat 只提供能在工具调用开始之前拦下它的 agent（<code>claude</code> 和 <code>pi</code>），因为它默认是只读的；<code>radian</code> 只提供给 bot chat。chat 开始后不能更换 agent；要更换就新建一个 chat。</li><li><strong>Model</strong> 和 <strong>effort</strong>：列表和默认值来自所选的 agent。没有列出这两者的 agent 没有可选的 model 或 effort，该字段不显示。chat 可以随时更改它的 model 或 effort；更改在下一条回复时生效。</li></ul>
+<p>chat 的行和页面显示 agent，已知时还显示 model 和 effort。agent 报告累计费用时，页面也会显示。</p>
+<h3 id="the-transcript-and-sending">transcript 和发送<a class="anchor" href="#the-transcript-and-sending" aria-label="链接到本节">#</a></h3>
+<p>chat 页由 <code>transcript</code> section 加上输入框组成。每条用户消息显示它的文本、附件和发送者（<code>ios</code>、<code>telegram</code>、<code>cli</code> 等）。agent 的回复及其过程以 Markdown 行显示：中间文本、<code>Thinking</code>、带结果的工具调用、耗时和一小段输出，以及最终回复。transcript 中的工具输出会被截断；agent 可以从 chat 的目录中读取完整文件。仍在回复的 run 把它未完成的文本和思考显示为一个会更新的 tail；已完成的条目已经被记录，因此重新打开 chat 不会丢失它们，<code>serve</code> 重启也不会重复它们。</p>
+<p>发送是带 <code>note</code> 和已上传附件的 <code>chat:send</code>。app 发送消息、记录它并开始回复；已关闭的 chat 会拒绝消息并说明原因。关闭 chat 需要确认（<code>chat:close</code>），之后 transcript 仍可阅读，但 chat 不再接收消息，也不提供其他 action。</p>
+<h3 id="a-repository-chat-is-read-only">仓库 chat 是只读的<a class="anchor" href="#a-repository-chat-is-read-only" aria-label="链接到本节">#</a></h3>
+<p>仓库上的 chat 在主 clone 中以只读方式工作。shell 命令只有在属于那份只读命令的短名单（<code>git status</code>、<code>ls</code>、<code>cat</code>、<code>grep</code>、<code>sed -n</code>、<code>bun test</code> 等）时才会在那里运行；其他所有命令以及每一次写入或编辑，都会变成一个指出该命令或路径的问题。agent 想修改代码时，会询问是否打开一个 worktree。回答否，会告诉 agent 该调用因为 chat 是只读的而被拒绝，它应该在 chat 里回答，或使用只读命令。回答是，<code>dev</code> 会打开 <code>work/chat-&lt;id&gt;</code>，此后 chat 在那里工作，仅此一次；主 clone 仍然是只读的。worktree 中的改动只能通过指向它的任务，经过正常的 gate 和 integrate 进入 main。</p>
+<h3 id="a-bot-chat">bot chat<a class="anchor" href="#a-bot-chat" aria-label="链接到本节">#</a></h3>
+<p>bot 上的 chat 使用该 bot 的工作目录、skill 和访问 profile；bot 的设置在每次回复时都会重新读取，因此收紧访问权限或添加 skill 无需新建 chat 即可生效。如果 agent 原生支持 MCP 服务器（<code>claude</code> 和 <code>radian</code> 支持；<code>pi</code> 暂不支持），bot chat 可以使用该 bot 列出的本地 MCP 服务器。工具发生变化的服务器，在用户于 Pending 中批准该变化之前不会被挂载。</p>
+<h2 id="attachments">附件<a class="anchor" href="#attachments" aria-label="链接到本节">#</a></h2>
+<p>输入框可以发送照片、相机图像和文件。app 用 <code>POST /v1/uploads</code> 上传每一个，然后把返回的 <code>ref</code> 放在消息的 <code>attachments</code> 中。文件最大 20 MB；更大的会得到 <code>413</code> 和该上限。记录消息时，上传的文件会移到 operad home 下该 chat 自己的附件目录，transcript 通过 <code>GET /v1/attachments/...</code> 链接它。</p>
+<p>agent 回复时，agent 能读取的图像（<code>claude</code>、<code>pi</code>）作为图像输入给出，每张最大 5 MB；其他所有文件以 agent 可以读取的路径给出。chat 的访问 profile 会获得对该 chat 附件目录的读取权限，除此之外没有别的。一条消息可以只有附件而没有文本。</p>
+<h2 id="always-allow">Always allow<a class="anchor" href="#always-allow" aria-label="链接到本节">#</a></h2>
+<p>当 agent 请求运行访问 profile 不允许的命令或访问不允许的路径时，该问题是 chat 上的一个 pending 项。选项有一次性允许、一次性拒绝，以及在该 step 提供时的 <code>allow_always</code>。选择 <code>allow_always</code> 会在 <code>$OPERAD_HOME/access-user.json</code> 中写入一个条目：</p>
+<div class="table-wrap"><table><thead><tr><th>键</th><th>类型</th><th>值</th></tr></thead><tbody><tr><td><code>kind</code></td><td>字符串</td><td><code>command</code> 或 <code>path</code></td></tr><tr><td><code>value</code></td><td>字符串</td><td>确切的命令文本，或调用中写的路径；工具调用写作 <code>mcp &lt;server&gt;.&lt;tool&gt;</code></td></tr><tr><td><code>cwd</code></td><td>字符串</td><td>该调用被允许时所在的工作目录</td></tr><tr><td><code>tool</code></td><td>字符串</td><td>对 <code>path</code> 条目，它所允许的工具，例如 <code>write</code> 或 <code>edit</code></td></tr></tbody></table></div>
+<p>只有下一次调用的 kind、value 和工作目录都完全一致时，才不会再次询问。不是由用户的消息启动的 run 看不到 always-allowed 条目（见<a href="../../../zh/docs/access/">访问</a>）。要撤销某一条，从 <code>access-user.json</code> 中删掉它那一行；不存在的文件视为空列表，无法读取的文件会被报告并视为空。</p>
+<h2 id="settings">设置<a class="anchor" href="#settings" aria-label="链接到本节">#</a></h2>
+<p>Settings tab 列出 <code>GET /v1/settings</code> 返回的服务器设置，附带当前值、默认值，以及是否可编辑。修改一项会调用 <code>POST /v1/settings</code>；要求确认的设置会在 app 中询问，被拒绝的值会显示服务器给出的原因，并且不写入任何内容。属于某个仓库的设置，在该仓库是当前打开的 scope 时显示。</p>
+<p>bot 在 Settings 之下，每个一页。bot 页显示它的工作目录、默认 agent、speaker、skill 和 MCP 服务器；它的设置通过提案来编辑，提案出现在 Pending 中，只有用户批准后才会应用。MCP 服务器用 <code>operad bot mcp</code> 添加，并在 Pending 中批准。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/app.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../tui/"><small>上一页</small>终端客户端</a>
+      <a class="next" href="../http/"><small>下一页</small>HTTP 接口</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#pairing-the-app">配对 app</a></li><li class="l2"><a href="#tabs">Tab</a></li><li class="l2"><a href="#pending-and-notifications">Pending 和通知</a></li><li class="l2"><a href="#running">Running</a></li><li class="l2"><a href="#chats">Chat</a></li><li class="l3"><a href="#starting-a-chat">开始一个 chat</a></li><li class="l3"><a href="#the-transcript-and-sending">transcript 和发送</a></li><li class="l3"><a href="#a-repository-chat-is-read-only">仓库 chat 是只读的</a></li><li class="l3"><a href="#a-bot-chat">bot chat</a></li><li class="l2"><a href="#attachments">附件</a></li><li class="l2"><a href="#always-allow">Always allow</a></li><li class="l2"><a href="#settings">设置</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

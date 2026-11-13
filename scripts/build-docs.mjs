@@ -1,15 +1,19 @@
 #!/usr/bin/env node
-// Compiles operad's user docs (docs/user/*.md in the operad repository) into
-// static pages under docs/, in the site's own style (style.css + docs.css).
-// No dependencies: needs only Node 18+ or Bun.
+// Compiles operad's user docs into static pages in the site's own style
+// (style.css + docs.css). No dependencies: needs only Node 18+ or Bun.
 //
 //   node scripts/build-docs.mjs [path/to/operad/docs/user]
 //
-// The source directory is the first argument, or $OPERAD_DOCS, or ../operad/docs/user.
-// It rewrites docs/, sitemap.xml and llms.txt. Everything else is left alone.
+// English: the source directory is the first argument, or $OPERAD_DOCS, or
+//   ../operad/docs/user (operad's docs/user/*.md). Output: docs/.
+// Chinese: docs-zh/*.md in this repository, one file per English page, same
+//   file names. Output: zh/docs/. A page with no Chinese file is skipped there.
+//   A heading carries the English heading's id as `## 标题 {#english-id}` so that
+//   links such as `dev.md#the-gate-and-its-checks` keep working.
+// It also rewrites sitemap.xml and llms.txt. Everything else is left alone.
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync } from "node:fs";
-import { resolve, dirname, join, relative, basename } from "node:path";
+import { resolve, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const SITE = "https://operad.io";
@@ -17,6 +21,7 @@ const REPO = "https://github.com/operad-io/operad";
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
 const srcDir = resolve(process.argv[2] || process.env.OPERAD_DOCS || join(root, "../operad/docs/user"));
+const zhDir = join(root, "docs-zh");
 const repoDir = resolve(srcDir, "../..");
 if (!existsSync(join(srcDir, "index.md"))) {
   console.error(`no index.md in ${srcDir}; pass the path to operad's docs/user`);
@@ -25,29 +30,63 @@ if (!existsSync(join(srcDir, "index.md"))) {
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-// ---------- read the pages ----------
-function readPage(file) {
-  let text = readFileSync(join(srcDir, file), "utf8").replace(/\r\n/g, "\n");
-  let description = "";
-  const m = text.match(/^---\n([\s\S]*?)\n---\n/);
-  if (m) {
-    const d = m[1].match(/^description:\s*(.*)$/m);
-    if (d) description = d[1].trim();
-    text = text.slice(m[0].length);
-  }
-  const slug = file === "index.md" ? "" : file.replace(/\.md$/, "");
-  const title = (text.match(/^#\s+(.+)$/m) || [, slug])[1].replace(/`/g, "");
-  return { file, slug, title, description, body: text };
-}
-const files = readdirSync(srcDir).filter((f) => f.endsWith(".md")).sort();
-const pages = Object.fromEntries(files.map((f) => [f, readPage(f)]));
+// ---------- locales ----------
+const LOCALES = {
+  en: {
+    code: "en",
+    htmlLang: "en",
+    og: "en_US",
+    dir: "docs",
+    home: "",
+    s: {
+      siteDocs: "operad docs", overview: "Overview", docs: "Docs", homeLink: "Home", runIt: "Run it", onThisPage: "On this page",
+      linkHere: "Link to this section", prevNext: "Previous and next", prev: "Previous", next: "Next", source: "View this page's source",
+      homeAria: "operad, home", sections: "Sections", docsAria: "Documentation", defaultDesc: "The operad user manual.",
+      other: "中文", otherLabel: "中文", footHome: "Home",
+    },
+  },
+  zh: {
+    code: "zh",
+    htmlLang: "zh-CN",
+    og: "zh_CN",
+    dir: "zh/docs",
+    home: "zh/",
+    s: {
+      siteDocs: "operad 文档", overview: "概览", docs: "文档", homeLink: "首页", runIt: "开始用", onThisPage: "本页目录",
+      linkHere: "链接到本节", prevNext: "上一页和下一页", prev: "上一页", next: "下一页", source: "查看英文原文",
+      homeAria: "operad，回到首页", sections: "章节", docsAria: "文档", defaultDesc: "operad 用户手册。",
+      other: "EN", otherLabel: "English", footHome: "首页",
+    },
+  },
+};
 
-// Sidebar order: index first, then the order of the index page's "Pages" list.
-const order = ["index.md"];
-for (const m of pages["index.md"].body.matchAll(/\]\(([\w-]+\.md)\)/g)) {
-  if (pages[m[1]] && !order.includes(m[1])) order.push(m[1]);
+// ---------- read the pages ----------
+function readPages(dir) {
+  const out = {};
+  if (!existsSync(dir)) return out;
+  for (const file of readdirSync(dir).filter((f) => f.endsWith(".md")).sort()) {
+    let text = readFileSync(join(dir, file), "utf8").replace(/\r\n/g, "\n");
+    let description = "";
+    const m = text.match(/^---\n([\s\S]*?)\n---\n/);
+    if (m) {
+      const d = m[1].match(/^description:\s*(.*)$/m);
+      if (d) description = d[1].trim();
+      text = text.slice(m[0].length);
+    }
+    const slug = file === "index.md" ? "" : file.replace(/\.md$/, "");
+    const title = (text.match(/^#\s+(.+?)(\s*\{#[\w-]+\})?\s*$/m) || [, slug])[1].replace(/`/g, "");
+    out[file] = { file, slug, title, description, body: text };
+  }
+  return out;
 }
-for (const f of files) if (!order.includes(f)) order.push(f);
+const PAGES = { en: readPages(srcDir), zh: readPages(zhDir) };
+
+// Sidebar order: index first, then the order of the English index page's "Pages" list.
+const order = ["index.md"];
+for (const m of PAGES.en["index.md"].body.matchAll(/\]\(([\w-]+\.md)\)/g)) {
+  if (PAGES.en[m[1]] && !order.includes(m[1])) order.push(m[1]);
+}
+for (const f of Object.keys(PAGES.en)) if (!order.includes(f)) order.push(f);
 
 // ---------- markdown ----------
 function slugify(text, seen) {
@@ -58,17 +97,21 @@ function slugify(text, seen) {
   return n ? `${s}-${n}` : s;
 }
 
-// Where a link from a doc page goes. `from` is the page's output directory depth.
-function rewriteHref(url, page, rootPrefix) {
+const pageUrl = (L, slug) => `${SITE}/${L.dir}/${slug ? slug + "/" : ""}`;
+const rootPrefixFor = (L, page) => "../".repeat(L.dir.split("/").length + (page.slug ? 1 : 0));
+
+// Where a link inside a doc page goes.
+function rewriteHref(url, L, rootPrefix) {
   if (/^(https?:|mailto:)/.test(url)) return url;
   if (url.startsWith("#")) return url;
   const [pathPart, hash] = url.split("#");
   const abs = resolve(srcDir, pathPart);
   const rel = relative(srcDir, abs);
   const frag = hash ? `#${hash}` : "";
-  if (!rel.startsWith("..") && pages[rel]) {
-    const target = pages[rel].slug;
-    return `${rootPrefix}docs/${target ? target + "/" : ""}${frag}`;
+  if (!rel.startsWith("..") && PAGES.en[rel]) {
+    const useL = PAGES[L.code][rel] ? L : LOCALES.en;
+    const slug = PAGES.en[rel].slug;
+    return `${rootPrefix}${useL.dir}/${slug ? slug + "/" : ""}${frag}`;
   }
   const inRepo = relative(repoDir, abs);
   if (inRepo.startsWith("..")) return url;
@@ -76,7 +119,7 @@ function rewriteHref(url, page, rootPrefix) {
   return `${REPO}/${isDir ? "tree" : "blob"}/main/${inRepo}${frag}`;
 }
 
-function inline(s, page, rootPrefix) {
+function inline(s, L, rootPrefix) {
   const codes = [];
   s = s.replace(/`([^`]+)`/g, (_, c) => {
     codes.push(c);
@@ -84,7 +127,7 @@ function inline(s, page, rootPrefix) {
   });
   s = esc(s);
   s = s.replace(/&lt;(https?:\/\/[^&\s]+)&gt;/g, (_, u) => `<a href="${u}">${u}</a>`);
-  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => `<a href="${esc(rewriteHref(u.replace(/&amp;/g, "&"), page, rootPrefix))}">${t}</a>`);
+  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => `<a href="${esc(rewriteHref(u.replace(/&amp;/g, "&"), L, rootPrefix))}">${t}</a>`);
   s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   s = s.replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?![\w*])/g, "$1<em>$2</em>");
   s = s.replace(/(^|[^\w])_([^_\s][^_]*?)_(?!\w)/g, "$1<em>$2</em>");
@@ -98,12 +141,12 @@ function splitRow(line) {
   return t.split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, "|"));
 }
 
-function render(page, rootPrefix) {
+function render(page, L, rootPrefix) {
   const lines = page.body.split("\n");
   const out = [];
   const seen = new Map();
   const headings = [];
-  const inl = (s) => inline(s, page, rootPrefix);
+  const inl = (s) => inline(s, L, rootPrefix);
   let i = 0;
   const isBlockStart = (l, next) =>
     /^```/.test(l) || /^#{1,6}\s/.test(l) || /^---+\s*$/.test(l) || /^[-*]\s/.test(l) || /^\d+\.\s/.test(l) ||
@@ -123,10 +166,13 @@ function render(page, rootPrefix) {
     }
     if ((m = line.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/))) {
       const level = m[1].length;
-      const text = m[2];
-      const id = slugify(text, seen);
+      let text = m[2];
+      let id = null;
+      const im = text.match(/^(.*?)\s*\{#([\w-]+)\}$/);
+      if (im) { text = im[1]; id = im[2]; seen.set(id, (seen.get(id) || 0) + 1); }
+      if (!id) id = slugify(text, seen);
       if (level === 2 || level === 3) headings.push({ level, id, text: text.replace(/`/g, "") });
-      out.push(`<h${level} id="${id}">${inl(text)}${level > 1 ? `<a class="anchor" href="#${id}" aria-label="Link to this section">#</a>` : ""}</h${level}>`);
+      out.push(`<h${level} id="${id}">${inl(text)}${level > 1 ? `<a class="anchor" href="#${id}" aria-label="${esc(L.s.linkHere)}">#</a>` : ""}</h${level}>`);
       i++;
       continue;
     }
@@ -177,38 +223,53 @@ const X_SVG =
 const LOGO_SVG =
   '<svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg>';
 
-function pageHtml(page, index) {
-  const depth = page.slug ? 2 : 1; // docs/<slug>/index.html or docs/index.html
-  const rootPrefix = "../".repeat(depth);
+function pageHtml(L, page) {
+  const pages = PAGES[L.code];
+  const otherL = L.code === "en" ? LOCALES.zh : LOCALES.en;
+  const S = L.s;
+  const rootPrefix = rootPrefixFor(L, page);
   const docsPrefix = page.slug ? "../" : "";
-  const { html, headings } = render(page, rootPrefix);
-  const url = `${SITE}/docs/${page.slug ? page.slug + "/" : ""}`;
-  const title = page.slug ? `${page.title} · operad docs` : "operad docs";
-  const desc = page.description || "The operad user manual.";
-  const pos = order.indexOf(page.file);
-  const prev = pos > 0 ? pages[order[pos - 1]] : null;
-  const next = pos < order.length - 1 ? pages[order[pos + 1]] : null;
+  const { html, headings } = render(page, L, rootPrefix);
+  const url = pageUrl(L, page.slug);
+  const title = page.slug ? `${page.title} · ${S.siteDocs}` : S.siteDocs;
+  const desc = page.description || S.defaultDesc;
+  const here = order.filter((f) => pages[f]);
+  const pos = here.indexOf(page.file);
+  const prev = pos > 0 ? pages[here[pos - 1]] : null;
+  const next = pos < here.length - 1 ? pages[here[pos + 1]] : null;
   const link = (p) => `${docsPrefix}${p.slug ? p.slug + "/" : ""}`;
-  const nav = order
-    .map((f) => {
-      const p = pages[f];
-      const label = f === "index.md" ? "Overview" : p.title;
-      return `<li><a href="${link(p)}"${f === page.file ? ' aria-current="page"' : ""}>${esc(label)}</a></li>`;
-    })
+  const label = (p) => (p.file === "index.md" ? S.overview : p.title);
+  const nav = here
+    .map((f) => `<li><a href="${link(pages[f])}"${f === page.file ? ' aria-current="page"' : ""}>${esc(label(pages[f]))}</a></li>`)
     .join("\n        ");
   const toc =
     headings.length > 2
-      ? `<nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul>${headings
+      ? `<nav class="toc" aria-label="${esc(S.onThisPage)}"><p class="s3">${esc(S.onThisPage)}</p><ul>${headings
           .map((h) => `<li class="l${h.level}"><a href="#${h.id}">${esc(h.text)}</a></li>`)
           .join("")}</ul></nav>`
       : "";
+  // The same page in the other language, or that language's docs index.
+  const counterpart = PAGES[otherL.code][page.file] ? page : PAGES[otherL.code]["index.md"] ? PAGES[otherL.code]["index.md"] : null;
+  const counterHref = counterpart
+    ? `${rootPrefix}${otherL.dir}/${counterpart.slug ? counterpart.slug + "/" : ""}`
+    : null;
+  const alternates = [];
+  if (PAGES.en[page.file]) alternates.push(`<link rel="alternate" hreflang="en" href="${pageUrl(LOCALES.en, page.slug)}">`);
+  if (PAGES.zh[page.file]) alternates.push(`<link rel="alternate" hreflang="zh-CN" href="${pageUrl(LOCALES.zh, page.slug)}">`);
+  if (PAGES.en[page.file]) alternates.push(`<link rel="alternate" hreflang="x-default" href="${pageUrl(LOCALES.en, page.slug)}">`);
+  const langToggle = counterHref
+    ? `\n    <a class="gh lang" href="${counterHref}" hreflang="${otherL.htmlLang}" lang="${otherL.htmlLang}" aria-label="${esc(S.otherLabel)}" title="${esc(S.otherLabel)}">${
+        L.code === "en" ? "<b>EN</b><i>/</i><span>中</span>" : "<span>EN</span><i>/</i><b>中</b>"
+      }</a>`
+    : "";
+  const sourceHref = `${REPO}/blob/main/docs/user/${page.file}`;
   const ld = JSON.stringify(
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
       headline: page.title,
       description: desc,
-      inLanguage: "en",
+      inLanguage: L.htmlLang,
       url,
       isPartOf: { "@type": "WebSite", name: "operad", url: `${SITE}/` },
     },
@@ -216,7 +277,7 @@ function pageHtml(page, index) {
     1,
   );
   return `<!doctype html>
-<html lang="en">
+<html lang="${L.htmlLang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -224,6 +285,7 @@ function pageHtml(page, index) {
 <meta name="description" content="${esc(desc)}">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="${url}">
+${alternates.join("\n")}
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
@@ -232,7 +294,7 @@ function pageHtml(page, index) {
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${url}">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="${L.og}">
 <meta property="og:image" content="${SITE}/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -250,20 +312,20 @@ ${ld}
 <body>
 
 <header class="top board">
-  <a class="tile logo" href="${rootPrefix}" aria-label="operad, home">${LOGO_SVG}</a>
-  <nav class="tile links" aria-label="Sections">
-    <a href="${rootPrefix}">Home</a>
-    <a href="${docsPrefix || "./"}" aria-current="true">Docs</a>
+  <a class="tile logo" href="${rootPrefix}${L.home}" aria-label="${esc(S.homeAria)}">${LOGO_SVG}</a>
+  <nav class="tile links" aria-label="${esc(S.sections)}">
+    <a href="${rootPrefix}${L.home}">${S.homeLink}</a>
+    <a href="${docsPrefix || "./"}" aria-current="true">${S.docs}</a>
     <a class="gh end" href="${REPO}" aria-label="GitHub" title="GitHub">${GH_SVG}</a>
-    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X">${X_SVG}</a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X">${X_SVG}</a>${langToggle}
   </nav>
-  <a class="tile go" href="${rootPrefix}#install">Run it</a>
+  <a class="tile go" href="${rootPrefix}${L.home}#install">${S.runIt}</a>
 </header>
 
 <div class="docs">
-  <aside class="tile side" aria-label="Documentation">
+  <aside class="tile side" aria-label="${esc(S.docsAria)}">
     <details class="side-nav" open>
-      <summary class="s3">Docs</summary>
+      <summary class="s3">${S.docs}</summary>
       <ul>
         ${nav}
       </ul>
@@ -273,17 +335,17 @@ ${ld}
 
   <main class="tile paper doc" id="top">
 ${html}
-    <p class="src"><a href="${REPO}/blob/main/docs/user/${page.file}">View this page's source</a></p>
-    <nav class="pn" aria-label="Previous and next">
-      ${prev ? `<a class="prev" href="${link(prev)}"><small>Previous</small>${esc(prev.file === "index.md" ? "Overview" : prev.title)}</a>` : "<span></span>"}
-      ${next ? `<a class="next" href="${link(next)}"><small>Next</small>${esc(next.title)}</a>` : "<span></span>"}
+    <p class="src"><a href="${sourceHref}">${S.source}</a></p>
+    <nav class="pn" aria-label="${esc(S.prevNext)}">
+      ${prev ? `<a class="prev" href="${link(prev)}"><small>${S.prev}</small>${esc(label(prev))}</a>` : "<span></span>"}
+      ${next ? `<a class="next" href="${link(next)}"><small>${S.next}</small>${esc(label(next))}</a>` : "<span></span>"}
     </nav>
   </main>
   ${toc ? `<aside class="tile toc-wrap">${toc}</aside>` : ""}
 </div>
 
 <footer class="foot docs-foot">
-  <p class="fnote">operad.io · <a href="${rootPrefix}">Home</a> · <a href="${REPO}">GitHub</a></p>
+  <p class="fnote">operad.io · <a href="${rootPrefix}${L.home}">${S.footHome}</a> · <a href="${REPO}">GitHub</a></p>
 </footer>
 
 </body>
@@ -292,36 +354,45 @@ ${html}
 }
 
 // ---------- write ----------
-const outDir = join(root, "docs");
-rmSync(outDir, { recursive: true, force: true });
-for (const f of order) {
-  const page = pages[f];
-  const dir = page.slug ? join(outDir, page.slug) : outDir;
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "index.html"), pageHtml(page));
+const built = {};
+for (const L of Object.values(LOCALES)) {
+  const outDir = join(root, L.dir);
+  rmSync(outDir, { recursive: true, force: true });
+  built[L.code] = [];
+  for (const f of order) {
+    const page = PAGES[L.code][f];
+    if (!page) continue;
+    const dir = page.slug ? join(outDir, page.slug) : outDir;
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, "index.html"), pageHtml(L, page));
+    built[L.code].push(f);
+  }
 }
 
 const today = new Date().toISOString().slice(0, 10);
-const alt = (en, zh) =>
-  `    <xhtml:link rel="alternate" hreflang="en" href="${SITE}/"/>\n    <xhtml:link rel="alternate" hreflang="zh-CN" href="${SITE}/zh/"/>\n    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/"/>\n`;
-const docUrls = order.map((f) => `${SITE}/docs/${pages[f].slug ? pages[f].slug + "/" : ""}`);
+const altLinks = (en, zh) =>
+  [en && `    <xhtml:link rel="alternate" hreflang="en" href="${en}"/>`, zh && `    <xhtml:link rel="alternate" hreflang="zh-CN" href="${zh}"/>`, en && `    <xhtml:link rel="alternate" hreflang="x-default" href="${en}"/>`]
+    .filter(Boolean)
+    .join("\n") + "\n";
+const entries = [
+  `  <url>\n    <loc>${SITE}/</loc>\n    <lastmod>${today}</lastmod>\n${altLinks(`${SITE}/`, `${SITE}/zh/`)}  </url>`,
+  `  <url>\n    <loc>${SITE}/zh/</loc>\n    <lastmod>${today}</lastmod>\n${altLinks(`${SITE}/`, `${SITE}/zh/`)}  </url>`,
+];
+for (const f of order) {
+  const en = PAGES.en[f], zh = PAGES.zh[f];
+  if (en) entries.push(`  <url>\n    <loc>${pageUrl(LOCALES.en, en.slug)}</loc>\n    <lastmod>${today}</lastmod>\n${altLinks(pageUrl(LOCALES.en, en.slug), zh && pageUrl(LOCALES.zh, zh.slug))}  </url>`);
+  if (zh) entries.push(`  <url>\n    <loc>${pageUrl(LOCALES.zh, zh.slug)}</loc>\n    <lastmod>${today}</lastmod>\n${altLinks(en && pageUrl(LOCALES.en, en.slug), pageUrl(LOCALES.zh, zh.slug))}  </url>`);
+}
 writeFileSync(
   join(root, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>${SITE}/</loc>
-    <lastmod>${today}</lastmod>
-${alt()}  </url>
-  <url>
-    <loc>${SITE}/zh/</loc>
-    <lastmod>${today}</lastmod>
-${alt()}  </url>
-${docUrls.map((u) => `  <url>\n    <loc>${u}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`).join("\n")}
+${entries.join("\n")}
 </urlset>
 `,
 );
 
+const zhIndex = PAGES.zh["index.md"];
 writeFileSync(
   join(root, "llms.txt"),
   `# operad
@@ -335,12 +406,12 @@ writeFileSync(
 
 ## Documentation
 
-${order.map((f) => `- [${f === "index.md" ? "Overview" : pages[f].title}](${SITE}/docs/${pages[f].slug ? pages[f].slug + "/" : ""}): ${pages[f].description}`).join("\n")}
-
+${order.map((f) => `- [${f === "index.md" ? "Overview" : PAGES.en[f].title}](${pageUrl(LOCALES.en, PAGES.en[f].slug)}): ${PAGES.en[f].description}`).join("\n")}
+${zhIndex ? `\nThe same documentation in Chinese (中文文档): [${SITE}/zh/docs/](${SITE}/zh/docs/)\n` : ""}
 ## Source
 
 - [GitHub](${REPO}): the operad repository
 `,
 );
 
-console.log(`built ${order.length} pages from ${srcDir}`);
+console.log(`built ${built.en.length} English and ${built.zh.length} Chinese pages from ${srcDir}`);

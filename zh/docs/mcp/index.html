@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP server · operad 文档</title>
+<meta name="description" content="面向 lead agent 的 MCP server：设置、传输、Claude Code channel、工具和错误。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/mcp/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/mcp/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/mcp/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/mcp/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="MCP server · operad 文档">
+<meta property="og:description" content="面向 lead agent 的 MCP server：设置、传输、Claude Code channel、工具和错误。">
+<meta property="og:url" content="https://operad.io/zh/docs/mcp/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP server · operad 文档">
+<meta name="twitter:description" content="面向 lead agent 的 MCP server：设置、传输、Claude Code channel、工具和错误。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "MCP server",
+ "description": "面向 lead agent 的 MCP server：设置、传输、Claude Code channel、工具和错误。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/mcp/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/mcp/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/" aria-current="page">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="mcp-server">MCP server</h1>
+<p><code>operad mcp</code> 是运行在 stdio 上的 Model Context Protocol server。它让 lead agent 以带类型的方式访问对象、列表、section、pending 项、运行中的项和 history，这些内容与 <code>operad</code> 和 <code>/v1</code> 接口读取的相同。它还通过与 CLI 相同的路径运行插件 verb 和 <code>config.json</code> 允许的 lead action。它从不启动 step，也不做 owner 的决定；只有 <code>operad serve</code> 运行 step，未列入 <code>mcp.actions</code> 的 action 仍留在命令行或 app 中。</p>
+<p>该 server 实现 MCP JSON-RPC 2.0 传输，协议版本为 <code>2025-06-18</code>。除 <code>@operad-io/engine</code> 外，它没有运行时依赖。</p>
+<h2 id="setting-it-up">设置<a class="anchor" href="#setting-it-up" aria-label="链接到本节">#</a></h2>
+<p><code>operad mcp</code> 在 stdio 上为 lead agent 运行一个 MCP server。它读取与各命令相同的对象、pending 项、运行中的项、section 和 history，并运行插件 verb 和 <code>config.json</code> 允许的 lead action。它从不启动 step，也不做 owner 的决定；只有 <code>operad serve</code> 运行 step，未列入 <code>mcp.actions</code> 的 action 仍留在命令行或 app 中。协议、工具和错误映射见下文；stdout 只承载 JSON-RPC，日志写到 stderr。</p>
+<p>Claude Code 在项目的 <code>.mcp.json</code> 中找到该 server：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;mcpServers&quot;: {
+    &quot;operad&quot;: {
+      &quot;command&quot;: &quot;operad&quot;,
+      &quot;args&quot;: [&quot;mcp&quot;]
+    }
+  }
+}</code></pre>
+<p>server 使用 <code>$OPERAD_HOME</code>，未设置时使用 <code>~/.operad</code>。如果 agent 应读取另一个 home，在该条目的 <code>env</code> 中设置 <code>OPERAD_HOME</code>。</p>
+<h3 id="turning-the-channel-on">开启 channel<a class="anchor" href="#turning-the-channel-on" aria-label="链接到本节">#</a></h3>
+<p><code>operad mcp --claude-channel</code> 把 server 变成单向 channel：它声明实验性的 <code>claude/channel</code> capability，并在对象的状态、waiting 标志或 running 标志变化时发送 <code>notifications/claude/channel</code>。它从不声明 <code>claude/channel/permission</code>，也从不转发权限提示。不带该标志时，server 不发送任何通知，也不声明任何实验性 capability。</p>
+<p>server 同时监视对象和 flow，因此即使没有写入任何对象，打开的等待或启动的 step 也会被报告（其他进程所做的变更由轮询发现，默认 500 ms）。在客户端发送 <code>notifications/initialized</code> 之前它不发送任何内容，之后再发送自启动以来的变化。启动时 server 读取当前的行，并且不为它们发送任何内容。之后的每条通知都有一行 <code>content</code>，格式为 <code>&lt;id&gt; &lt;old state&gt; -&gt; &lt;new state&gt;</code>，当该行有 note 时附加 <code>: &lt;note&gt;</code>，另有字符串类型的 <code>meta</code>，含 <code>id</code>、<code>type</code>、<code>state</code>、<code>previous</code>、<code>waiting</code> 和 <code>running</code>。起始读取之后才首次出现的对象，其 <code>previous</code> 为 <code>new</code>。该 channel 是单向的；详情请用 <code>show</code>、<code>section</code>、<code>pending</code> 和 <code>history</code>。</p>
+<p><code>--types &lt;t,…&gt;</code> 把 channel 限制在某些对象类型上，类型之间用逗号分隔。默认是所有带视图的类型；不是类型的名称属于用法错误。例如：</p>
+<pre data-ui><code class="lang-json">&quot;args&quot;: [&quot;mcp&quot;, &quot;--claude-channel&quot;, &quot;--types&quot;, &quot;task&quot;]</code></pre>
+<p>Claude Code 通过其 development-channel 标志启用该扩展，并指明 <code>.mcp.json</code> 中的 server：</p>
+<pre data-ui><code class="lang-sh">claude --dangerously-load-development-channels server:operad</code></pre>
+<h2 id="transport">传输<a class="anchor" href="#transport" aria-label="链接到本节">#</a></h2>
+<p>消息为每行一个 JSON-RPC 对象，stdin 为输入，stdout 为输出。消息不得包含内嵌换行。stdout 只承载 JSON-RPC 消息；插件加载、视图错误和其他日志写到 stderr。</p>
+<p>server 接受以下方法：</p>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>作用</th></tr></thead><tbody><tr><td><code>initialize</code></td><td>返回协议版本、<code>tools</code> capability、server 名称和版本，以及 instructions。</td></tr><tr><td><code>notifications/initialized</code></td><td>接受；没有响应。</td></tr><tr><td><code>ping</code></td><td>返回 <code>{}</code>。</td></tr><tr><td><code>tools/list</code></td><td>返回下面的工具表。</td></tr><tr><td><code>tools/call</code></td><td>运行一个工具。</td></tr></tbody></table></div>
+<p><code>initialize</code> 的结果带有这条固定的 instruction：</p>
+<pre data-ui><code class="lang-text">The operad MCP server reads objects, pending items and history, and writes the commands and lead actions it is allowed to. Owner decisions are not offered here.</code></pre>
+<p><code>tools/call</code> 接受 <code>{ &quot;name&quot;: &quot;&lt;tool&gt;&quot;, &quot;arguments&quot;: { ... } }</code>。在读取任何视图之前，先按该工具的输入 schema 检查参数。缺少必填字段、出现未知字段或字段类型错误，都属于格式错误的请求。</p>
+<h2 id="claude-code-channel">Claude Code channel<a class="anchor" href="#claude-code-channel" aria-label="链接到本节">#</a></h2>
+<p><code>operad mcp --claude-channel</code> 还会把对象的变化推送给理解 Claude Code channel 扩展的客户端。不带该标志时，server 的工具、capability 和 instructions 与之前相同，并且不发送通知。</p>
+<p>带该标志时，<code>initialize</code> 的结果含有 <code>capabilities.experimental[&quot;claude/channel&quot;] = {}</code>。它从不声明 <code>claude/channel/permission</code>：server 不转发权限提示。instructions 会多出一段，说明该 channel 是单向的，详情由读取类工具提供。</p>
+<p>有两个来源。一个是 store 的对象变化。另一个是 flow 的变化，因为对象的 <code>waiting</code> 和 <code>running</code> 标志来自它的 flow：打开的等待或启动的 step 不会写入对象。两者都使用目录监视，并以轮询作为后备，因此其他进程所做的变更也能被看到（轮询间隔是 store 自身和 flow 记录自身的间隔，默认 500 ms）。每次变化都会重新读取该对象的行。启动时，server 读取每个带视图的类型的当前行，并且不为它们发送任何内容；如果读不到某个类型的行，则该类型每个对象第一次看到的行就是它的基线，同样不发送任何内容。它记住每个对象最后看到的行，并且只为以下三种情况之一发送一个 block（见下面的 <code>mcp.channel.notify</code>）：</p>
+<ul><li><strong>waiting</strong>：<code>waiting</code> 标志变为开。content 带有该行的 note，其中有原因时即为原因（返工次数上限、work 失败、可以合并）。对象自己的插件会自动回答的等待不会被通知：dev 对计划为 auto merge 且评审已通过的任务这样处理，因为 dev 稍后就会回答 &quot;merge&quot;。kernel 每次都会询问插件（对象类型的 <code>answeredAutomatically</code> hook），并且 pending 项带有仅供 channel 使用的 <code>auto: true</code>。如果回答没有到来（dev 拒绝，或计划的 auto 级别改变），下一次变化会发现该等待没有被标记，此时才发送 block。插件不会回答的等待（要求返工、work 没做任何事、评审两次失败）照常发送。</li><li><strong>ended</strong>：对象到达最终状态。插件通过在返回的行上设置 <code>final: true</code> 来声明哪些状态是最终状态（dev：已合并或已取消的任务，已完成或已取消的计划）；channel 不认识任何状态名。</li><li><strong>loop</strong>：对象在没有等待或结束介入的情况下，到达同一状态 <code>loopAfter</code> 次，次数从 channel 自启动以来看到的状态变化计起。该情形在这一段期间只发送一次；等待或结束会让计数重新开始。</li></ul>
+<p>其他所有状态变化、<code>running</code> 的翻转以及 <code>waiting</code> 变为关都不发送任何内容，并且与该对象最后发送的行（state、<code>waiting</code> 和 <code>running</code>）相同的行不会再次发送。每个对象最后发送的行保存在 operad home 的一个文件中（<code>mcp-channel-&lt;hash of the store root&gt;.json</code>），在 block 送达时写入，因此重新连接或重启后再次看到的变化保持安静。起始读取之后才首次出现的对象，其 previous 状态为 <code>new</code>。再也找不到的对象会被遗忘。</p>
+<p>该设置在 home 的 <code>config.json</code> 中，并在 server 启动时读取：</p>
+<pre data-ui><code class="lang-json">{ &quot;mcp&quot;: { &quot;channel&quot;: { &quot;notify&quot;: [&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;], &quot;loopAfter&quot;: 3 } } }</code></pre>
+<p>省略该键则使用上面的值。把 <code>&quot;changes&quot;</code> 加入 <code>notify</code> 还会发送每一次状态变化，其 <code>reason</code> 为 <code>changes</code>，除非它同时也是一次 wait、一次 end 或一次 loop。不是 <code>waiting</code>、<code>ended</code>、<code>loop</code> 或 <code>changes</code> 的条目是会指出该条目的配置错误；<code>loopAfter</code> 是 2 或更大的整数。</p>
+<p>在客户端发送 <code>notifications/initialized</code> 之前，server 不发送任何内容。它在此期间继续比较各行，然后按顺序发送自启动以来看到的变化。</p>
+<p>每条通知都是 server 的 <code>notifications/claude/channel</code> 方法，参数如下：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;content&quot;: &quot;T-0014-kernel running -&gt; waiting: review passed&quot;,
+  &quot;meta&quot;: {
+    &quot;id&quot;: &quot;T-0014-kernel&quot;,
+    &quot;type&quot;: &quot;task&quot;,
+    &quot;state&quot;: &quot;waiting&quot;,
+    &quot;previous&quot;: &quot;running&quot;,
+    &quot;waiting&quot;: &quot;true&quot;,
+    &quot;running&quot;: &quot;false&quot;,
+    &quot;reason&quot;: &quot;waiting&quot;,
+    &quot;step&quot;: &quot;review&quot;
+  }
+}</code></pre>
+<p><code>reason</code> 说明发送该 block 的原因：<code>waiting</code>、<code>ended</code>、<code>loop</code> 或 <code>changes</code>。<code>step</code> 是对象当前 run 的最后一个 step；对象没有 run 时则没有该字段，因此当 review state 内 verify 失败时，block 显示为 <code>state=&quot;review&quot; step=&quot;verify&quot;</code>。</p>
+<p><code>content</code> 是一行，格式为 <code>&lt;id&gt; &lt;old state&gt; -&gt; &lt;new state&gt;</code>，当该行有 note 时附加 <code>: &lt;note&gt;</code>。<code>meta</code> 的每个值都是字符串。该 channel 是单向的：没有回复工具，详情由 <code>show</code>、<code>section</code>、<code>pending</code>、<code>history</code> 和其他读取类工具提供。</p>
+<p><code>--types &lt;t,…&gt;</code> 把 channel 限制在指定的对象类型上，类型之间用逗号分隔；默认是所有带视图的类型。不是带视图的类型的名称属于会指出该名称的用法错误。该标志不改变读取类工具。</p>
+<p>Claude Code 通过其 development-channel 标志启用该扩展，并指明 <code>.mcp.json</code> 中的 server：</p>
+<pre data-ui><code class="lang-sh">claude --dangerously-load-development-channels server:operad</code></pre>
+<h2 id="lead-permissions">lead 权限<a class="anchor" href="#lead-permissions" aria-label="链接到本节">#</a></h2>
+<p>server 只能运行 <code>mcp.actions</code> 列出的 action；其他所有 action 都属于 owner，<code>show</code> 会把它们列在 <code>ownerActions</code> 中。带有 <code>confirm: true</code> 的 action 还需要 <code>mcp.confirmActions</code> 列出它。这些设置在 <code>config.json</code> 中，并在 <code>operad mcp</code> 启动时读取：</p>
+<div class="table-wrap"><table><thead><tr><th>键</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th></tr></thead><tbody><tr><td><code>mcp</code></td><td>object</td><td>见下面的各个键</td><td><code>channel</code>、<code>actions</code>、<code>confirmActions</code></td><td><code>operad mcp</code> 启动时。</td></tr><tr><td><code>mcp.actions</code></td><td>字符串数组</td><td><code>[]</code>（<code>operad init</code> 会把五个 <code>dev</code> lead action 和 <code>chat:close</code> 写入新文件）</td><td><code>plugin:action</code> 名称</td><td><code>operad mcp</code> 启动时：lead 可以运行的 action。其他任何 action 都会被拒绝，消息中指出该 action 并说明由 owner 运行。</td></tr><tr><td><code>mcp.confirmActions</code></td><td>字符串数组</td><td><code>[]</code>（<code>operad init</code> 会把 <code>[&quot;chat:close&quot;]</code> 写入新文件）</td><td><code>plugin:action</code> 名称</td><td><code>operad mcp</code> 启动时：同时带有 <code>confirm: true</code> 的被允许 action。只在 <code>actions</code> 中且要求确认的 action 会被拒绝；只在此列表中的也会被拒绝。</td></tr><tr><td><code>mcp.channel</code></td><td>object</td><td>见下面的两个键</td><td><code>notify</code>、<code>loopAfter</code></td><td><code>operad mcp --claude-channel</code> 启动时。</td></tr><tr><td><code>mcp.channel.notify</code></td><td>字符串数组</td><td><code>[&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;]</code></td><td><code>waiting</code>、<code>ended</code>、<code>loop</code>、<code>changes</code></td><td>channel 启动时：什么情况会发送 block。<code>waiting</code> 是等待打开；<code>ended</code> 是最终状态；<code>loop</code> 是在没有等待或结束介入的情况下到达同一状态 <code>loopAfter</code> 次；<code>changes</code> 是每一次状态变化。未知的值是指出该值的配置错误。</td></tr><tr><td><code>mcp.channel.loopAfter</code></td><td>integer</td><td><code>3</code></td><td>从 2 起的整数</td><td>channel 启动时：对象连续多少次到达同一状态之后发送 <code>loop</code> block。小于 2 的值是指出该值的配置错误。</td></tr></tbody></table></div>
+<p><code>mcp.actions</code> 和 <code>mcp.confirmActions</code> 从不改变已经在运行的 action。MCP server 从不把 owner 的 action 当作自己的提供；<code>show</code> 把它们单独列出，以便 lead 告诉 owner 该运行什么。</p>
+<p><code>config.json</code> 中没有 <code>mcp.actions</code> 时，lead 不能运行任何 action。在 <code>operad init</code> 开始写入这些列表之前创建的 home 可能缺少它们；把 <a href="../../../zh/docs/config/">config.json</a> 中的这些行加入其 <code>mcp</code> 部分并重启 <code>operad mcp</code>。之后启用某个插件不会添加它的 action；请手动列出。</p>
+<h2 id="tools">工具<a class="anchor" href="#tools" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>工具</th><th>必填参数</th><th>返回内容</th></tr></thead><tbody><tr><td><code>types</code></td><td>无</td><td><code>{ &quot;types&quot;: [...] }</code>，与 <code>GET /v1/types</code> 的列表相同。</td></tr><tr><td><code>list</code></td><td>无；<code>type</code>、<code>root</code>、<code>parent</code> 需要给出其中之一</td><td><code>{ &quot;rows&quot;: [...], &quot;next&quot;: &quot;&lt;c&gt;&quot; }</code>，与 <code>GET /v1/objects</code> 的页相同。</td></tr><tr><td><code>show</code></td><td><code>id</code></td><td>对象及其行、section、允许的 action 和 <code>ownerActions</code>。</td></tr><tr><td><code>section</code></td><td><code>id</code>、<code>section</code></td><td><code>{ &quot;markdown&quot;, &quot;next&quot;, &quot;mark&quot;, &quot;tail&quot;, &quot;delta&quot; }</code>，与 HTTP section 调用的读取相同；可选 <code>cursor</code>、<code>after</code>、<code>full</code>。</td></tr><tr><td><code>pending</code></td><td>无</td><td><code>{ &quot;items&quot;: [...] }</code>，只含 lead 可以运行的 action。</td></tr><tr><td><code>answer</code></td><td><code>runId</code>、<code>waitId</code>、<code>choice</code></td><td><code>{ &quot;runId&quot;, &quot;waitId&quot;, &quot;choice&quot; }</code>；可选 <code>note</code>、<code>confirmed</code>。</td></tr><tr><td><code>running</code></td><td>无</td><td><code>{ &quot;items&quot;: [...], &quot;load&quot;: { &quot;load1&quot;, &quot;cores&quot; } }</code>。</td></tr><tr><td><code>history</code></td><td><code>id</code></td><td><code>{ &quot;id&quot;, &quot;markdown&quot;, &quot;next&quot; }</code>，即 History section。</td></tr><tr><td><code>command</code></td><td><code>plugin</code>、<code>verb</code></td><td>插件 verb 的值，与 <code>operad &lt;plugin&gt; &lt;verb&gt;</code> 相同；可选 <code>args</code> 和 <code>input</code>。</td></tr><tr><td><code>act</code></td><td><code>action</code></td><td>action 记录；可选 <code>id</code>、<code>args</code>、<code>note</code>。</td></tr></tbody></table></div>
+<p>本页其余部分给出每个工具完整的输入 schema 和结果形状。</p>
+<p>工具表作为 <code>TOOLS</code> 从 <code>@operad-io/mcp</code> 导出；server 提供的就是同一张表。每个结果都是普通的 MCP 工具结果，带有 <code>structuredContent</code> 和一个文本块，文本是同样内容的 Markdown。<code>structuredContent</code> 始终是对象：列表被包装为 <code>{ &quot;items&quot;: [...] }</code>。<code>next</code> 出现时是一个 cursor，调用方应原样传回。</p>
+<h3 id="types"><code>types</code><a class="anchor" href="#types" aria-label="链接到本节">#</a></h3>
+<p>输入：<code>{ &quot;type&quot;: &quot;object&quot;, &quot;additionalProperties&quot;: false, &quot;properties&quot;: {} }</code>。</p>
+<p>结果：<code>{ &quot;types&quot;: [...] }</code>，与 <code>GET /v1/types</code> 提供的列表相同：每个带视图的对象类型，连同它的 <code>title</code>、<code>plugin</code>、<code>filters</code>（有则包含）和 <code>defaultFilter</code>，以及创建它的 action 所作用的 <code>parents</code>。声明了 <code>objectsUnderSettings</code> 的插件（bot）会把它的每个类型都标为 <code>&quot;settings&quot;: true</code>：客户端不给它设标签页，而是把它的顶层对象列在 settings 之下。Markdown 是一张表，列出类型、title、插件、是否在 settings 之下、filters 和 parents。</p>
+<h3 id="list"><code>list</code><a class="anchor" href="#list" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;type&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;An object type, such as task. Optional with root or parent: then every type is listed.&quot; },
+    &quot;root&quot;: { &quot;type&quot;: &quot;boolean&quot;, &quot;description&quot;: &quot;Only rows with no parent.&quot; },
+    &quot;parent&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;Only rows whose parent is this object id.&quot; },
+    &quot;cursor&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The next cursor from an earlier list.&quot; }
+  }
+}</code></pre>
+<p>结果：<code>{ &quot;rows&quot;: [ ... ], &quot;next&quot;: &quot;&lt;cursor&gt;&quot; }</code>。<code>rows</code> 是某一个对象类型的行，带有插件的 <code>id</code>、<code>title</code>、<code>state</code> 以及可选的 <code>note</code> 和 <code>scope</code>，再加上 kernel 的 <code>waiting</code> 和 <code>running</code> 标志。出错的行还带有 <code>error</code>。Markdown 是一张表，列出 id、state、title、note 和标志。未知的类型是带有该视图消息的工具错误。</p>
+<p><code>root</code> 和 <code>parent</code> 列出一个层级，如 <a href="../../../zh/docs/cli/#levels">Levels</a> 所述：给出 <code>type</code> 时列出该类型的行，不给出时按类型的顺序列出所有类型的行。该类型的默认 filter 在该层级中生效，<code>hidden</code> 统计被它排除的行数。不指向任何对象的 parent 得到空列表。不带 <code>type</code>、<code>root</code> 或 <code>parent</code> 的调用是工具错误。行的 <code>parent</code>（有则）出现在结构化的行和 <code>show</code> 的 Markdown 中。</p>
+<h3 id="show"><code>show</code><a class="anchor" href="#show" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;id&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A bare id or type:id.&quot; }
+  }
+}</code></pre>
+<p>结果：对象 <code>{ &quot;id&quot;, &quot;type&quot;, &quot;link&quot;, &quot;row&quot;, &quot;sections&quot;, &quot;actions&quot;, &quot;ownerActions&quot; }</code>。<code>row</code> 是列表中的行。<code>sections</code> 是 section 目录。<code>actions</code> 是 lead 现在可以运行的可用 action，每个都带有 <code>name</code>、<code>on</code>、<code>args</code> JSON Schema、<code>note</code> 字段名、<code>noteRequired</code> 和 <code>confirm</code>。<code>ownerActions</code> 只包含 lead 不可以运行的可用 action 的名称，其中包括 <code>mcp.confirmActions</code> 没有列出的 <code>confirm: true</code> action。Markdown 显示行、section 目录、带参数的允许 action，以及一份 Owner actions 列表。未知的 id 是带有该视图消息的工具错误。</p>
+<h3 id="section"><code>section</code><a class="anchor" href="#section" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;id&quot;, &quot;section&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A bare id or type:id.&quot; },
+    &quot;section&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A section id from show.&quot; },
+    &quot;cursor&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The next cursor from an earlier read.&quot; },
+    &quot;after&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;A mark from an earlier read: return only the finished content after it. The answer says in `delta` whether it is that part alone or a whole page.&quot; },
+    &quot;full&quot;: { &quot;type&quot;: &quot;boolean&quot;, &quot;description&quot;: &quot;Return the whole section without the size cap.&quot; }
+  }
+}</code></pre>
+<p>结果：<code>{ &quot;markdown&quot;: &quot;...&quot;, &quot;next&quot;: &quot;&lt;cursor&gt;&quot;, &quot;mark&quot;: &quot;&lt;mark&gt;&quot;, &quot;tail&quot;: &quot;...&quot; }</code>。<code>mark</code> 是已完成内容所到达的不透明位置，<code>tail</code> 是仍在变化的那部分的 Markdown；不使用它们的插件两者都不发送。带着前一次读取得到的 <code>after=&lt;mark&gt;</code> 时，<code>markdown</code> 只包含该 mark 之后已完成的内容，<code>delta</code> 说明它是仅这一部分（true）还是客户端必须替换的整页（false）。大小上限同时计入 <code>markdown</code> 和 <code>tail</code>，但绝不截断 <code>tail</code>：两者放不下时，先缩短 <code>markdown</code>；连 tail 和截断说明都放不下时，调用被拒绝，消息提到超出上限并指明 <code>--full</code>。文本块是 Markdown，当 section 分页时，最后一行指明 <code>next</code>。未知的 id 或 section，或来自另一个 section 或对象的 mark，是带有该视图消息的工具错误。</p>
+<h3 id="pending"><code>pending</code><a class="anchor" href="#pending" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {}
+}</code></pre>
+<p>结果：<code>{ &quot;items&quot;: [...] }</code>，与 <code>operad pending</code> 和 <code>GET /v1/pending</code> 的列表相同，只含 lead 现在可以运行的 action。问题带有 <code>waitId</code>。每个关于某个对象的项都带有它的 <code>row</code>，与 <code>GET /v1/pending</code> 中一样。<code>mcp.actions</code> 之外的 action，或 <code>mcp.confirmActions</code> 没有列出的 <code>confirm: true</code> action，在结构化内容和 Markdown 中都会被省略。Markdown 列出每个 pending 项、它的提示、choice 和 action。要查看 owner action，对该项的对象调用 <code>show</code>。</p>
+<h3 id="answer"><code>answer</code><a class="anchor" href="#answer" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;runId&quot;, &quot;waitId&quot;, &quot;choice&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;runId&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;The pending item's runId.&quot; },
+    &quot;waitId&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;The pending item's waitId.&quot; },
+    &quot;choice&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;One of the item's choices.&quot; },
+    &quot;note&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The note, when the question asks for one.&quot; },
+    &quot;confirmed&quot;: { &quot;type&quot;: &quot;boolean&quot;, &quot;description&quot;: &quot;Set when the answer is a choice whose action asks to confirm.&quot; }
+  }
+}</code></pre>
+<p>结果：<code>{ &quot;runId&quot;, &quot;waitId&quot;, &quot;choice&quot; }</code>，给出 note 时再加 <code>note</code>。它记录 actor <code>{ &quot;via&quot;: &quot;mcp&quot;, &quot;id&quot;: &quot;lead&quot; }</code>。已经关闭的问题，或问题没有提供的 choice，是带有该视图消息的工具错误。当每个 choice 同时也是该项对象上的 action 时（<code>dev</code> 的等待），该 choice 通过那个 action 运行，因此它的确认和 <code>mcp.actions</code> 允许列表仍然适用，结果是 action 记录。需要确认的 action 要带 <code>&quot;confirmed&quot;: true</code>。</p>
+<h3 id="running"><code>running</code><a class="anchor" href="#running" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {}
+}</code></pre>
+<p>结果：<code>{ &quot;items&quot;: [...] }</code>，与 <code>operad running</code> 和 <code>GET /v1/running</code> 的列表相同。Markdown 是一张表，列出每个活动的 run：它的对象、title、flow、step、step 耗时和 run 的存续时间。每个项还带有 <code>object</code>、<code>title</code>、<code>stepStartedAt</code>、<code>stepElapsedMs</code> 和 <code>mark</code>（对象行的 mark，没有时省略；见手册中的 <code>GET /v1/running</code>）。</p>
+<h3 id="history"><code>history</code><a class="anchor" href="#history" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;id&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A bare id or type:id.&quot; }
+  }
+}</code></pre>
+<p>结果：<code>{ &quot;id&quot;: &quot;&lt;the id as given&gt;&quot;, &quot;markdown&quot;: &quot;...&quot;, &quot;next&quot;: &quot;&lt;cursor&gt;&quot; }</code>。Markdown 是 kernel 为该对象提供的 History section。未知的 id 是带有该视图消息的工具错误。</p>
+<h3 id="command"><code>command</code><a class="anchor" href="#command" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;plugin&quot;, &quot;verb&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;plugin&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A loaded plugin name, such as dev.&quot; },
+    &quot;verb&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A verb the plugin declares, such as plan.&quot; },
+    &quot;args&quot;: { &quot;type&quot;: &quot;array&quot;, &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }, &quot;description&quot;: &quot;The command-line arguments after the verb.&quot; },
+    &quot;input&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The text the CLI reads from stdin, such as a brief.&quot; }
+  }
+}</code></pre>
+<p>结果：插件 verb 的输出，与 <code>operad &lt;plugin&gt; &lt;verb&gt;</code> 打印的值相同。是对象的值原样作为结构化内容；其他任何值（列表、字符串）被包装为 <code>{ &quot;value&quot;: ... }</code>。该调用构造 CLI 的 <code>[plugin, verb, ...args]</code>，由 <code>input</code> 代替 stdin，因此 <code>dev plan add</code> 和 <code>dev task add</code> 从它取得 brief。它针对已加载的插件解析这一对名称，因此即使插件名称与某个 kernel 命令相同，插件 verb 也会运行。名称本身就是 kernel verb 的插件会被拒绝，即使这一对名称解析到它的某个命令也一样。指定的插件没有声明的 kernel verb（<code>serve</code>、<code>init</code>、<code>plugin ...</code>、<code>secret ...</code>、<code>http ...</code>，以及 CLI 自己负责的其他命令），以及它没有声明的任何其他 verb，都会以工具错误被拒绝。</p>
+<h3 id="act"><code>act</code><a class="anchor" href="#act" aria-label="链接到本节">#</a></h3>
+<p>输入：</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;action&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;action&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A &lt;plugin&gt;:&lt;action&gt; name from show.&quot; },
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The object id when the action targets one.&quot; },
+    &quot;args&quot;: { &quot;type&quot;: &quot;object&quot;, &quot;description&quot;: &quot;The action's arguments, as its schema names them.&quot; },
+    &quot;note&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The note for an action whose schema declares one.&quot; }
+  }
+}</code></pre>
+<p>结果：与 <code>POST /v1/act</code> 返回的相同的 action 记录，含 <code>plugin</code>、<code>action</code>、<code>name</code> 和 <code>value</code>。它通过 <code>views.act</code> 运行，记录 actor <code>{ &quot;via&quot;: &quot;mcp&quot;, &quot;id&quot;: &quot;lead&quot; }</code>，并为处于等待的 run 记录一次人的回答。未列入 <code>mcp.actions</code> 的 action 是指出它并说明由 owner 运行的工具错误。带有 <code>confirm: true</code> 的 action 同样被拒绝，除非 <code>mcp.confirmActions</code> 也列出它。</p>
+<h2 id="errors">错误<a class="anchor" href="#errors" aria-label="链接到本节">#</a></h2>
+<p>JSON-RPC 错误用于格式错误的请求，而不用于视图的拒绝：</p>
+<div class="table-wrap"><table><thead><tr><th>Code</th><th>何时</th></tr></thead><tbody><tr><td><code>-32700</code></td><td>该行不是 JSON。</td></tr><tr><td><code>-32600</code></td><td>消息不是 JSON-RPC 2.0 请求。</td></tr><tr><td><code>-32601</code></td><td>方法不是上面列出的方法之一。</td></tr><tr><td><code>-32602</code></td><td><code>tools/call</code> 格式错误：未知的工具、没有 <code>name</code>、<code>arguments</code> 不是对象，或参数与该工具的输入 schema 不符。</td></tr><tr><td><code>-32603</code></td><td>读取视图时发生意外错误；消息是通用的。</td></tr></tbody></table></div>
+<p>视图的拒绝是一个成功的 <code>tools/call</code> 响应，其结果带有 <code>&quot;isError&quot;: true</code> 和一个文本块，文本是该视图自己的消息。这包括未知的 id、section 或类型。工具错误不带 <code>structuredContent</code>。server 不写堆栈跟踪，也不写内部名称。</p>
+<p>示例：</p>
+<pre data-ui><code class="lang-json">{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:3,&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;no object \&quot;task:nope\&quot;&quot;}],&quot;isError&quot;:true}}</code></pre>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/mcp.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../http/"><small>上一页</small>HTTP 接口</a>
+      <a class="next" href="../chats-and-bots/"><small>下一页</small>chat 和 bot</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#setting-it-up">设置</a></li><li class="l3"><a href="#turning-the-channel-on">开启 channel</a></li><li class="l2"><a href="#transport">传输</a></li><li class="l2"><a href="#claude-code-channel">Claude Code channel</a></li><li class="l2"><a href="#lead-permissions">lead 权限</a></li><li class="l2"><a href="#tools">工具</a></li><li class="l3"><a href="#types">types</a></li><li class="l3"><a href="#list">list</a></li><li class="l3"><a href="#show">show</a></li><li class="l3"><a href="#section">section</a></li><li class="l3"><a href="#pending">pending</a></li><li class="l3"><a href="#answer">answer</a></li><li class="l3"><a href="#running">running</a></li><li class="l3"><a href="#history">history</a></li><li class="l3"><a href="#command">command</a></li><li class="l3"><a href="#act">act</a></li><li class="l2"><a href="#errors">错误</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

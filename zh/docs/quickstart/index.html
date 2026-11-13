@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>快速上手 · operad 文档</title>
+<meta name="description" content="开始使用 operad：创建 home，启动 serve，打开客户端。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/quickstart/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/quickstart/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/quickstart/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/quickstart/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="快速上手 · operad 文档">
+<meta property="og:description" content="开始使用 operad：创建 home，启动 serve，打开客户端。">
+<meta property="og:url" content="https://operad.io/zh/docs/quickstart/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="快速上手 · operad 文档">
+<meta name="twitter:description" content="开始使用 operad：创建 home，启动 serve，打开客户端。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "快速上手",
+ "description": "开始使用 operad：创建 home，启动 serve，打开客户端。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/quickstart/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/quickstart/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/" aria-current="page">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="quickstart">快速上手</h1>
+<p><code>operad init</code> 创建 home 并检查插件。<code>operad serve</code> 为该 home 运行循环；<code>operad tui</code> 打开<a href="../../../zh/docs/tui/">终端客户端</a>，并在没有 <code>serve</code> 应答时启动它。<code>operad pending</code> 列出等待人处理的事项，<code>operad list &lt;type&gt;</code> 列出对象。</p>
+<p>要让你的编码 agent 为某个仓库编写 <code>.operad/dev.json</code>，请使用 <a href="../../../zh/docs/setup-prompt/">the setup prompt</a>。在仓库上的完整工作流（一个计划、若干任务、由人负责 merge）见 <a href="https://github.com/operad-io/operad/blob/main/docs/dogfood.md">Running operad on operad</a>。设置见 <a href="../../../zh/docs/config/">config.json</a>，命令见<a href="../../../zh/docs/cli/">命令行</a>，出问题时怎么办见 <a href="../../../zh/docs/troubleshooting/">troubleshooting</a>。</p>
+<h2 id="a-repository-that-is-not-javascript">非 JavaScript 的仓库<a class="anchor" href="#a-repository-that-is-not-javascript" aria-label="链接到本节">#</a></h2>
+<p>仓库不需要 <code>package.json</code>、不需要 <code>scripts/</code> 目录，也不需要任何特定语言的工具。它的 <code>.operad/dev.json</code> 写明 dev 运行的 shell 命令行，dev 不使用仓库的其他任何内容。下面是一个小型 shell 项目：<code>sh check.sh</code> 运行它的测试，失败的测试会打印 <code>FAIL: &lt;name&gt;</code>，<code>sh check.sh &lt;name&gt;</code> 运行单个测试。</p>
+<pre data-ui><code class="lang-json">{
+  &quot;name&quot;: &quot;greeter&quot;,
+  &quot;prepare&quot;: [&quot;sh prepare.sh&quot;],
+  &quot;gate&quot;: {
+    &quot;commands&quot;: [
+      {
+        &quot;run&quot;: &quot;sh check.sh&quot;,
+        &quot;failed&quot;: {
+          &quot;match&quot;: &quot;^FAIL: (.+)$&quot;,
+          &quot;rerun&quot;: &quot;sh check.sh {name}&quot;,
+          &quot;stress&quot;: &quot;sh check.sh --repeat 20 {name}&quot;,
+          &quot;rule&quot;: &quot;docs/flaky-rule.md&quot;
+        }
+      }
+    ],
+    &quot;commandTimeoutSecs&quot;: 60
+  }
+}</code></pre>
+<p><code>prepare</code> 在 dev 创建的每个 checkout 中运行，也在 merge 使主 clone 前进之后在主 clone 中运行。<code>run</code> 是检查。<code>failed.match</code> 在日志中找出失败测试的名称（一个捕获组），<code>failed.rerun</code> 单独运行该测试；在这里先失败后通过的测试不算检查失败，而是不稳定（flaky）。对于不稳定的测试，dev 会提出一个任务，其 brief 包含 <code>failed.stress</code> 命令和 <code>failed.rule</code> 文件的文本；没有它们时，brief 中没有命令，只有一句不指明任何工具的话。这些设置在 <a href="../../../zh/docs/dev/">dev</a> 中说明。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/quickstart.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../"><small>上一页</small>概览</a>
+      <a class="next" href="../setup-prompt/"><small>下一页</small>用 agent 设置 operad</a>
+    </nav>
+  </main>
+  
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

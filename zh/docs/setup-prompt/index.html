@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用 agent 设置 operad · operad 文档</title>
+<meta name="description" content="一个 prompt，让你的编码 agent 为某个仓库编写并检查 .operad/dev.json。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/setup-prompt/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/setup-prompt/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/setup-prompt/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/setup-prompt/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="用 agent 设置 operad · operad 文档">
+<meta property="og:description" content="一个 prompt，让你的编码 agent 为某个仓库编写并检查 .operad/dev.json。">
+<meta property="og:url" content="https://operad.io/zh/docs/setup-prompt/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="用 agent 设置 operad · operad 文档">
+<meta name="twitter:description" content="一个 prompt，让你的编码 agent 为某个仓库编写并检查 .operad/dev.json。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "用 agent 设置 operad",
+ "description": "一个 prompt，让你的编码 agent 为某个仓库编写并检查 .operad/dev.json。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/setup-prompt/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/setup-prompt/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/" aria-current="page">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="set-up-operad-with-an-agent">用 agent 设置 operad</h1>
+<p>在你希望 operad 处理的仓库的根目录，把下面的 prompt 粘贴到你的编码 agent（Claude Code、pi、radian 或其他）中。agent 会读取仓库的 CI 和脚本，写入 <code>.operad/dev.json</code>，注册该仓库，并告诉你它的选择。它不会修改源代码，也不会 commit、push 或启动 <code>operad serve</code>。</p>
+<p>需要先安装 operad：<code>bun add -g @operad-io/cli</code>（见 <a href="../../../zh/docs/quickstart/">quickstart</a>）。agent 可能写入的每个键都在 <a href="../../../zh/docs/dev/">dev</a> 中说明。</p>
+<pre data-ui><code class="lang-text">Set up operad for this repository. operad is an orchestration layer that runs coding
+agents through verified flows (plan, work, verify, review, merge). Your job is to write
+a correct `.operad/dev.json` for this repo and register it. Do not change source code.
+Reply in the language I write to you in.
+
+Reference, if you need a key's details: https://operad.io/docs/dev/ (the full key table)
+and https://operad.io/llms.txt.
+
+1. Check what is installed. Run `operad --help` (if it is missing, tell me to run
+   `bun add -g @operad-io/cli` and stop). Check which agents are on PATH: `claude`,
+   `pi`, `radian`. Check `git remote -v` and the main branch name. The repository
+   needs a git remote; if it has none, say so and stop.
+
+2. Find this repo's checks. Read CI config (.github/workflows, .gitlab-ci.yml, ...),
+   the Makefile, package.json scripts, pyproject, Cargo.toml or whatever applies.
+   Choose the commands that CI runs to judge whether a change is good: tests, typecheck,
+   lint, build. Each must exit non-zero on failure. Order them fast to slow. Run each
+   once on the current checkout; if one already fails on main, tell me instead of
+   hiding it. If the repo has no checks, say so and leave `gate.commands` empty.
+
+3. Find what a fresh checkout needs. Each task runs in its own git worktree, so
+   dependencies are not there. Put the install step in `prepare` (for example
+   `bun install --frozen-lockfile` or `npm ci`), only if the repo needs one.
+
+4. Write `.operad/dev.json`. Use only keys that matter; keep it small. Use the
+   `workers` form, never the old `worker` form:
+
+   {
+     &quot;name&quot;: &quot;&lt;repo name&gt;&quot;,
+     &quot;remote&quot;: &quot;&lt;remote&gt;&quot;,
+     &quot;mainBranch&quot;: &quot;&lt;main branch&gt;&quot;,
+     &quot;workers&quot;: { &quot;&lt;agent&gt;&quot;: { &quot;use&quot;: &quot;&lt;agent&gt;/agent&quot;, &quot;args&quot;: [] } },
+     &quot;prepare&quot;: [ ... ],
+     &quot;gate&quot;: { &quot;commands&quot;: [ ... ], &quot;commandTimeoutSecs&quot;: 1800 },
+     &quot;reviewer&quot;: { &quot;use&quot;: &quot;&lt;agent&gt;/agent&quot;, &quot;args&quot;: [] },
+     &quot;autoDefault&quot;: &quot;off&quot;
+   }
+
+   - Workers and reviewer: use agents that are actually installed. If two or more are
+     installed, use a different one for the reviewer than for the worker. `use` is
+     `&lt;plugin&gt;/&lt;step&gt;`, such as `claude/agent`, `pi/agent`, `radian/agent`.
+   - Leave `autoDefault` at &quot;off&quot;: nothing merges without me.
+   - Do not invent model names or flags. Leave `args` empty unless I give you some.
+
+5. Register and verify. Run `operad plugin enable pool` (the dev flow needs it), then
+   `operad init` and `operad repo add .`. Read every line they print. If a command
+   refuses a field, fix the file using the field path in the message and run it again.
+   `operad pending` must not show an invalid-settings item for this repo.
+
+6. Report. Show me the final `.operad/dev.json`, say in one line why you chose each
+   check command, worker and reviewer, and list anything you were unsure about. Tell
+   me to commit `.operad/dev.json` (operad reads it from the main clone). Do not
+   commit, push, start `operad serve` or create plans yourself.
+
+When I am ready, the next steps are `operad serve`, then
+`operad plan add --slug &lt;slug&gt; --title &quot;&lt;title&gt;&quot; &lt; request.md`.</code></pre>
+<p>请先检查 agent 写下的内容，再 commit。<code>gate.commands</code> 中的检查用来判断一项变更是否好到可以进入评审，所以它们应当是你信任的那些。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/setup-prompt.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../quickstart/"><small>上一页</small>快速上手</a>
+      <a class="next" href="../config/"><small>下一页</small>config.json</a>
+    </nav>
+  </main>
+  
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

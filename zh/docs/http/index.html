@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTP 接口 · operad 文档</title>
+<meta name="description" content="/v1 HTTP 接口：http 段、token、endpoint、事件和错误。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/http/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/http/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/http/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/http/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="HTTP 接口 · operad 文档">
+<meta property="og:description" content="/v1 HTTP 接口：http 段、token、endpoint、事件和错误。">
+<meta property="og:url" content="https://operad.io/zh/docs/http/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HTTP 接口 · operad 文档">
+<meta name="twitter:description" content="/v1 HTTP 接口：http 段、token、endpoint、事件和错误。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "HTTP 接口",
+ "description": "/v1 HTTP 接口：http 段、token、endpoint、事件和错误。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/http/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/http/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/" aria-current="page">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="the-http-interface">HTTP 接口</h1>
+<p><code>operad serve</code> 向 app 和终端客户端等客户端提供 <code>/v1</code> 接口。本页介绍 <code>http</code> 的键和 token，然后依次介绍每个 endpoint、行标记和链接、事件以及错误。手机配对见 <a href="../../../zh/docs/app/">app 页</a>；终端客户端见<a href="../../../zh/docs/tui/">它自己的页面</a>。</p>
+<h2 id="the-http-section"><code>http</code> 段<a class="anchor" href="#the-http-section" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>键</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>http</code></td><td>对象</td><td><code>{ &quot;enabled&quot;: true, &quot;port&quot;: 7480, &quot;listen&quot;: [&quot;127.0.0.1&quot;] }</code></td><td>含下列键的对象；缺少该段表示使用这些默认值</td><td>每次命令启动时；<code>serve</code> 在启动时和重新加载后绑定</td><td>被拒绝：<code>http: must be an object</code></td></tr><tr><td><code>http.enabled</code></td><td>布尔值</td><td><code>true</code></td><td><code>true</code> 或 <code>false</code></td><td><code>serve</code> 启动时；重新加载后按新值开启或关闭接口</td><td>被拒绝：<code>http.enabled: must be a boolean</code></td></tr><tr><td><code>http.port</code></td><td>整数</td><td><code>7480</code></td><td><code>0</code> 到 <code>65535</code>；<code>0</code> 表示向系统要一个端口</td><td><code>serve</code> 绑定时；重新加载后绑定新端口</td><td>被拒绝：<code>http.port: must be an integer from 0 to 65535</code></td></tr><tr><td><code>http.listen</code></td><td>字符串数组</td><td><code>[&quot;127.0.0.1&quot;]</code></td><td>至少一个非空的 IP 字面量：loopback、RFC 1918、link-local 或 Tailscale；通配地址和其他所有地址都被拒绝</td><td><code>serve</code> 绑定时；重新加载后绑定新地址</td><td>被拒绝：<code>http.listen: must be an array of IP addresses</code>、<code>http.listen: needs at least one address</code>、<code>http.listen: &quot;&lt;address&gt;&quot; is not an IP address</code>、<code>http.listen: &quot;&lt;address&gt;&quot; is a wildcard address; name each address to listen on</code>，或 <code>http.listen: &quot;&lt;address&gt;&quot; is not a loopback, private, link-local or Tailscale address</code></td></tr></tbody></table></div>
+<p><code>http</code> 内的未知键会被忽略；只读取上面的键。<code>listen</code> 的每一项都是 IP 字面量。<code>serve</code> 接受 loopback 地址、RFC 1918 地址（<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code>）、link-local 地址（<code>169.254.0.0/16</code>、<code>fe80::/10</code>）或 Tailscale 地址（<code>100.64.0.0/10</code>、<code>fd7a:115c:a1e0::/48</code>）。它在打开端口之前就拒绝通配地址（<code>0.0.0.0</code> 或 <code>::</code>）和其他所有地址，并指出是哪一项。默认只监听本机。没有 <code>http</code> 段的配置表示 <code>enabled</code> 为 true、端口为 <code>7480</code>、<code>listen</code> 为 <code>[&quot;127.0.0.1&quot;]</code>。有 <code>http</code> 段但没有 <code>enabled</code> 时，接口会开启，监听 <code>listen</code> 中的地址。</p>
+<p><code>http.enabled</code> 为 true（默认）时，第一次 <code>operad serve</code> 会创建一个 bearer token，即 32 个随机字节的 base64url 编码，保存在 <code>secrets/http.json</code>。每个请求都必须带 <code>Authorization: Bearer &lt;token&gt;</code>；没有它，或 token 不是当前的，请求会得到 <code>401</code>。<code>operad http token rotate</code> 立即替换 token：运行中的 <code>serve</code> 从该命令返回的那一刻起拒绝旧 token，并结束用它打开的事件流。没有任何 endpoint 会显示 token。</p>
+<p>客户端在 <code>X-Operad-Client</code> 头中给自己命名，这是一个小写单词，最多 32 个字母、数字、<code>-</code> 或 <code>_</code>（<code>ios</code>、<code>tui</code>）。它在 chat 中发送的消息会被记录，并显示为“via”该名称。没有该头，或值不是这样的单词，会被记录为 <code>http</code>；绝不会记录为 <code>cli</code>。</p>
+<p><code>serve</code> 为每个监听的地址打印一行：</p>
+<pre data-ui><code class="lang-text">http http://127.0.0.1:7480</code></pre>
+<p>对已经有一个 operad serve 的 home，再启动第二个 <code>operad serve</code> 会在读取 store 或打开端口之前以退出码 4 退出。</p>
+<h2 id="endpoints">Endpoint<a class="anchor" href="#endpoints" aria-label="链接到本节">#</a></h2>
+<p>所有 endpoint 都在 <code>/v1</code> 之下。除非 endpoint 另有说明，响应都是 JSON。路径中的对象 id 要做 URL 编码；<code>&lt;id&gt;</code> 可以是裸 id，也可以是 <code>&lt;type&gt;:&lt;id&gt;</code>。</p>
+<div class="table-wrap"><table><thead><tr><th>方法和路径</th><th>返回内容</th></tr></thead><tbody><tr><td><code>GET /v1/types</code></td><td><code>{ &quot;types&quot;: [{ &quot;type&quot;: &quot;task&quot;, &quot;title&quot;: &quot;Task&quot;, &quot;plugin&quot;: &quot;dev&quot; }] }</code>：有视图的对象类型、它们的显示名，以及各自所属插件的名称（客户端按它给类型分组）。声明了 filter 的类型还带有 <code>&quot;filters&quot;</code>，按显示顺序排列（<code>[{ &quot;name&quot;: &quot;active&quot;, &quot;states&quot;: [&quot;proposed&quot;, ...] }, { &quot;name&quot;: &quot;all&quot; }, ...]</code>），以及 <code>&quot;defaultFilter&quot;</code>。没有 filter 的类型两者都没有。声明了 <code>objectsUnderSettings</code> 的插件，其每个类型还带有 <code>&quot;settings&quot;: true</code>：这样的插件没有自己的 tab，它的顶层对象归在 settings 之下。</td></tr><tr><td><code>GET /v1/keys</code></td><td><code>{ &quot;keys&quot;: [{ &quot;key&quot;: &quot;m&quot;, &quot;action&quot;: &quot;dev:merge&quot;, &quot;source&quot;: &quot;plugin&quot; }] }</code>：当前生效的键绑定，即插件的默认值加上用户 <code>keys.json</code> 的覆盖；覆盖项的 <code>source</code> 为 <code>user</code>。</td></tr><tr><td><code>GET /v1/objects?type=&lt;type&gt;&amp;filter=&lt;name&gt;&amp;cursor=&lt;c&gt;</code>（还有 <code>root</code> 和 <code>parent=&lt;id&gt;</code>，见 <a href="../../../zh/docs/cli/#levels">Levels</a>）</td><td><code>{ &quot;rows&quot;: [...], &quot;next&quot;: &quot;&lt;c&gt;&quot;, &quot;hidden&quot;: 3 }</code>：列表的一页。<code>rows</code> 带有插件给出的 <code>id</code>、<code>title</code>、<code>state</code>，以及可选的 <code>note</code>、<code>wait</code>、<code>mark</code> 和 <code>badge</code>（见<a href="#row-marks">行标记</a>），另有 <code>waiting</code> 和 <code>running</code>；错误行还带有 <code>error</code>。<code>filter</code> 只保留指定 filter 显示的行，<code>hidden</code> 是该类型中被它排除的行数（整个类型，而不只是这一页）。没有 <code>filter</code> 时，若类型有 filter，则应用类型的默认 filter；没有 filter 的类型列出每一行，也没有 <code>hidden</code>。<code>filter=all</code> 列出每一行，没有 <code>hidden</code>。未知名称会得到 <code>400</code>，并列出允许的名称。<code>next</code> 在过滤后的列表内翻页。</td></tr><tr><td><code>GET /v1/pending</code></td><td>与 <code>operad pending</code> 相同的列表，附上每一项提供的 action。问题带有 <code>waitId</code>，即答复所引用的 id。插件即将自动回答的 wait（dev：处于 auto merge 的计划中，某个任务通过了评审）不会列出，因此计数不会闪烁；如果自动回答没有到来，它才会被列出。插件在没有 run 在等待时提出的项（<code>kind</code> 为 <code>standing</code>，没有 action，<code>runId</code> 为 <code>&lt;plugin&gt;:&lt;id&gt;</code>）也在列表中，插件不再报告它时它就消失。与某个对象有关的项还带有 <code>object</code>（<code>&lt;type&gt;:&lt;id&gt;</code>）、它的 <code>link</code> 和 <code>row</code>：row 与 <code>GET /v1/objects?type=…</code> 为该对象返回的行相同（<code>id</code>、<code>title</code>、<code>state</code>，可选的 <code>note</code>、<code>mark</code>、<code>badge</code>、<code>waiting</code>、<code>running</code>），因此客户端不必逐个读取对象。当无法构造该行时（对象已不存在、没有已加载的插件显示它的类型，或插件的行出错），该项带有列表对坏行显示的错误行，<code>state</code> 为 <code>error</code>，并带 <code>error</code> 消息；列表本身绝不会因一个对象而失败。candidate 没有对象，也没有 <code>row</code>。<code>operad pending</code> 在每个有标题的行下面打印该行的标题。</td></tr><tr><td><code>GET /v1/running</code></td><td>与 <code>operad running</code> 相同的列表。每一项有 <code>runId</code>、<code>flow</code>、<code>step</code>、<code>stepLabel</code>、<code>queued</code>、<code>startedAt</code> 和 <code>elapsedMs</code>（run 的存在时长），以及：<code>object</code>，即行和 <code>operad show</code> 所用的对象 id（例如 <code>operad/T-0048-type-filters</code>），没有对象的 run 为 <code>null</code>；<code>title</code>，该对象的行标题，没有对象或查找失败时为 <code>null</code>（查找失败绝不会让列表失败）；<code>stepStartedAt</code> 和 <code>stepElapsedMs</code>，即当前 step 的当前 attempt 何时开始、已运行多久（第一个 step 之前为 <code>null</code>）；<code>mark</code>，对象的行标记（<a href="#row-marks">行标记</a>之一），行没有标记或无法构造时省略。step 的时间在 step 变化和新 attempt 开始时重新计时。</td></tr><tr><td><code>GET /v1/objects/&lt;id&gt;</code></td><td><code>{ &quot;id&quot;, &quot;type&quot;, &quot;link&quot;, &quot;row&quot;, &quot;sections&quot;, &quot;actions&quot; }</code>：打开该对象的链接、行、section 目录，以及当前可用的 action，附带它们的 <code>args</code> schema、<code>note</code> 字段和 <code>confirm</code> 标志。</td></tr><tr><td><code>GET /v1/objects/&lt;id&gt;/sections/&lt;section&gt;?cursor=&lt;c&gt;&amp;full=&lt;bool&gt;&amp;after=&lt;mark&gt;</code></td><td><code>{ &quot;markdown&quot;: &quot;...&quot;, &quot;next&quot;: &quot;&lt;c&gt;&quot;, &quot;mark&quot;: &quot;&lt;m&gt;&quot;, &quot;tail&quot;: &quot;...&quot; }</code>。<code>full=true</code> 跳过大小上限。<code>mark</code> 是已完成内容所到的不透明位置，<code>tail</code> 是仍在变化的部分的 Markdown；不使用它们的插件两者都不发送。带上前一次读取得到的 <code>after=&lt;mark&gt;</code> 时，<code>markdown</code> 只包含该 mark 之后已完成的内容；此时答复还带有 <code>delta</code>：只有那一部分时为 true；插件答复的是整页、客户端必须替换而不是追加时为 false。大小上限同时涵盖 <code>markdown</code> 和 <code>tail</code>，但绝不截断 <code>tail</code>：两者放不下时，先缩短 <code>markdown</code>；连 tail 和截断说明也放不下时，调用会被拒绝，并给出提到 <code>--full</code> 的超限消息。来自其他 section 或对象的 mark 会以 <code>400</code> 被拒绝。</td></tr><tr><td><code>POST /v1/act</code></td><td>运行一个 action。请求体是 <code>{ &quot;action&quot;: &quot;plugin:action&quot;, &quot;id&quot;: &quot;&lt;id&gt;&quot;, &quot;args&quot;: {...}, &quot;note&quot;: &quot;...&quot;, &quot;confirmed&quot;: true }</code>；只有 <code>action</code> 始终必需，针对对象的 action 还需要 <code>id</code>。带 <code>confirm: true</code> 的 action 需要 <code>&quot;confirmed&quot;: true</code>。请求体最大 1 MiB；更大的会得到 <code>413</code>，消息为 <code>the request body is larger than the 1 MB limit</code>。action 的 schema 中以 <code>&quot;format&quot;: &quot;file&quot;</code> 声明的参数（一个字符串，或字符串列表）接受上传的 <code>ref</code>；action 以文件存放的路径运行。</td></tr><tr><td><code>GET /v1/settings?scope=&lt;scope&gt;</code></td><td>列出用户可以调整的设置：<code>{ &quot;settings&quot;: [{ &quot;name&quot;, &quot;scope&quot;, &quot;value&quot;, &quot;default&quot;, &quot;description&quot;, &quot;type&quot;, &quot;enum&quot;, &quot;editable&quot;, &quot;confirm&quot; }] }</code>。没有 <code>scope</code> 时，列出全局设置和每个仓库 scope；一个 scope 指定一个仓库。在某个 scope 中无法读取的设置会被省略。</td></tr><tr><td><code>POST /v1/settings</code></td><td>修改一项设置。请求体是 <code>{ &quot;name&quot;: &quot;&lt;plugin&gt;.&lt;path&gt;&quot;, &quot;value&quot;: &lt;any&gt;, &quot;scope&quot;?: &quot;&lt;repo&gt;&quot;, &quot;confirmed&quot;?: true }</code>；<code>name</code> 和 <code>value</code> 必需，<code>value</code> 可以是 <code>null</code>。答复是改动后的设置，形状与上面的一项相同。未知的设置名是 <code>404</code>；schema 拒绝的值是 <code>422</code>，并附原因；不可编辑的设置，或要求确认却没有 <code>confirmed</code> 的设置，是 <code>409</code>。</td></tr><tr><td><code>POST /v1/uploads?name=&lt;file name&gt;</code></td><td>为 action 的文件参数上传文件。请求体就是文件本身，以流的方式发送；它的 <code>content-type</code> 头会保留为文件的类型。答复是 <code>201</code> 和 <code>{ &quot;ref&quot;, &quot;name&quot;, &quot;type&quot;, &quot;size&quot; }</code>。大于 20 MB 的文件得到 <code>413</code> 和指出该上限的消息。<code>ref</code> 只能用一次：接收它的 action 把文件移到目标对象在 operad home 下的附件目录（<code>attachments/&lt;type&gt;/&lt;id&gt;/</code>），再次使用会以 <code>400</code> 被拒绝。一小时内没有 action 取用的上传会被删除。</td></tr><tr><td><code>GET /v1/attachments/&lt;type&gt;/&lt;id&gt;/&lt;ref&gt;/&lt;name&gt;</code></td><td>提供 action 文件参数所存的文件，类型取自上传时给出的类型。chat 的 transcript 把它的附件链接到这里。</td></tr><tr><td><code>POST /v1/answer</code></td><td>回答 pending 项中一个未决的问题。请求体是 <code>{ &quot;runId&quot;: &quot;&lt;item runId&gt;&quot;, &quot;waitId&quot;: &quot;&lt;item waitId&gt;&quot;, &quot;choice&quot;: &quot;&lt;one of the item's choices&gt;&quot;, &quot;note&quot;: &quot;...&quot;, &quot;confirmed&quot;: true }</code>；<code>runId</code>、<code>waitId</code> 和 <code>choice</code> 必需，<code>note</code> 和 <code>confirmed</code> 可选。当每个选项同时也是该项对象上的 action（<code>dev</code> 的 wait）时，它运行该 action，因此适用该 action 的 note 和确认；需要确认的 action 与 <code>/v1/act</code> 一样需要 <code>&quot;confirmed&quot;: true</code>。对已关闭的问题作答会得到 <code>409</code>，且不会被应用。</td></tr><tr><td><code>GET /v1/events</code></td><td>变更的 SSE 流。</td></tr></tbody></table></div>
+<p>action 的 <code>args</code> 可以带有 JSON Schema 条件，用一个字段来限定另一个字段：<code>allOf</code> 持有 <code>{ &quot;if&quot;: { &quot;properties&quot;: { &quot;agent&quot;: { &quot;const&quot;: &quot;claude&quot; } }, &quot;required&quot;: [&quot;agent&quot;] }, &quot;then&quot;: { &quot;properties&quot;: { &quot;model&quot;: { &quot;enum&quot;: [...], &quot;default&quot;: &quot;...&quot; }, &quot;effort&quot;: { ... } } } }</code>，每个 agent 一条。新建 chat 的 action（<code>bot:chat</code>、<code>dev:chat</code>）使用它：顶层的 <code>model</code> 和 <code>effort</code> enum 列出每个已加载 agent 的选项（只读这些的客户端仍然可用），所选 agent 的 <code>then</code> 持有该 agent 采用的列表和默认值（该 agent 列出了 bot 配置的 model 或 effort 时取配置值，否则取 agent 的默认值）。没有列出 model 或 effort 的 agent，其 <code>then</code> 中没有 <code>model</code> 或 <code>effort</code>：不能为它选择。客户端显示所选 agent 的 enum 和默认值，在选定 agent 之前回退到顶层的值。服务器检查请求时不计算这些条件；它按名称拒绝 agent 没有列出的 model 或 effort。</p>
+<p><code>POST /v1/act</code> 把调用者记录为 <code>{ &quot;via&quot;: &quot;http&quot;, &quot;id&quot;: &quot;operad app&quot; }</code>。它记录 action 的方式与命令行相同，运行中的 <code>operad serve</code> 会继续 waiting 的 run 所要求的 step。<code>POST /v1/answer</code> 以同样的方式记录它的调用者，并按与命令行和插件 action 相同的规则作答。</p>
+<h2 id="reading-a-section">读取 section<a class="anchor" href="#reading-a-section" aria-label="链接到本节">#</a></h2>
+<p><code>GET /v1/objects/&lt;id&gt;/sections/&lt;section&gt;</code> 读取一个 section。<code>cursor</code> 取前一次读取的 <code>next</code>；<code>full=true</code>（或 <code>1</code>）跳过大小上限。有 <code>pages</code> 的 section 还会答复目录，因此客户端可以跳转：第一页没有 cursor，其他每一页带有自己的 cursor。</p>
+<p>live section 还带有 <code>mark</code> 和 <code>tail</code>。<code>mark</code> 是已完成内容的不透明位置；<code>tail</code> 是仍在变化的部分的 Markdown（chat 中未完成的回复和思考、正在运行的工具调用），每次读取都给出整个 tail。若要追加而不是替换，传入上一次读取的 <code>after=&lt;mark&gt;</code>：此时答复的 <code>markdown</code> 只包含该 mark 之后已完成的内容，当它只包含这些时 <code>delta</code> 为 <code>true</code>。无法以 delta 作答的插件答复整页，<code>delta</code> 为 <code>false</code>；此时客户端替换自己的内容。来自其他 section 或对象的 mark 是 <code>400</code>。</p>
+<p>大小上限同时涵盖 <code>markdown</code> 和 <code>tail</code>，但绝不截断 <code>tail</code>：它先缩短 <code>markdown</code>。连 tail 和截断说明也放不下时，调用是 <code>400</code>，并提到 <code>--full</code>。</p>
+<h2 id="settings">设置<a class="anchor" href="#settings" aria-label="链接到本节">#</a></h2>
+<p><code>GET /v1/settings?scope=&lt;scope&gt;</code> 读取设置，方式与 <code>operad settings</code> 相同。没有 <code>scope</code> 时返回全局设置和每个仓库 scope；有 scope 时返回一个仓库的设置。每一项有 <code>name</code>、<code>scope</code>、<code>value</code>、<code>default</code>、<code>description</code>、<code>type</code>、<code>enum</code>（有则带）、<code>editable</code> 和 <code>confirm</code>。没有 <code>value</code> 表示该设置未设置。</p>
+<p><code>POST /v1/settings</code> 修改一项。请求体是 <code>{ &quot;name&quot;: &quot;&lt;plugin&gt;.&lt;path&gt;&quot;, &quot;value&quot;: &lt;any&gt;, &quot;scope&quot;?: &quot;&lt;repo&gt;&quot;, &quot;confirmed&quot;?: true }</code>。<code>name</code> 和 <code>value</code> 必需；<code>value</code> 可以是 <code>null</code>。答复是改动后的那一项。不是设置的名称是 <code>404</code>；schema 拒绝的值是 <code>422</code>，附 schema 给出的原因；只读的设置，或要求确认却没有收到 <code>confirmed</code> 的设置，是 <code>409</code>。成功的修改以原子方式写入文件，并保留其他所有键。<code>POST /v1/act</code> 还会把调用者记录为 <code>{ &quot;via&quot;: &quot;&lt;client&gt;&quot;, &quot;id&quot;: &quot;&lt;token label&gt;&quot; }</code>；除非 secret store 给出别的名称，token label 是 <code>operad app</code>。</p>
+<h2 id="row-marks">行标记<a class="anchor" href="#row-marks" aria-label="链接到本节">#</a></h2>
+<p>插件的 <code>row</code> 除了 <code>id</code>、<code>title</code>、<code>state</code> 和 <code>note</code> 之外，还可以返回 <code>mark</code> 和 <code>badge</code>。<code>GET /v1/objects</code>、<code>GET /v1/objects/&lt;id&gt;</code>、pending 项的行，以及 MCP 的 <code>list</code> 和 <code>show</code> 结果都原样传递它们。</p>
+<p>行还可以带有 <code>wait</code>：对象为何在等待，是一段单独的文本，与 <code>note</code> 分开（dev 把同样的文本放进两者，因此 note 的读法不变）。想把 wait 单独放在一行的客户端读取 <code>wait</code>，而不是按 <code> · </code> 拆分 note；当 wait 文本本身含有 <code> · </code> 时，拆分会出错。它是协议字段；不在等待任何东西的行没有 <code>wait</code>。<code>operad show --json</code> 以及 HTTP 和 MCP 的行都包含它。</p>
+<p><code>mark</code> 说明对象正在做什么，图标和颜色由客户端选择。它是下面 17 个值之一，kernel 会把任何其他值变成错误行，并列出这些值：</p>
+<div class="table-wrap"><table><thead><tr><th>标记</th><th>含义</th><th>TUI</th></tr></thead><tbody><tr><td><code>todo</code></td><td>未开始</td><td><code>○</code></td></tr><tr><td><code>blocked</code></td><td>等待另一个对象或被保留的区域</td><td><code>◌</code></td></tr><tr><td><code>retry_wait</code></td><td>等待重试时间</td><td><code>◷</code></td></tr><tr><td><code>paused</code></td><td>已暂停</td><td><code>‖</code></td></tr><tr><td><code>proposed</code></td><td>已建议，尚未接受</td><td><code>+</code></td></tr><tr><td><code>starting</code></td><td>正在设置</td><td><code>◔</code></td></tr><tr><td><code>running</code></td><td>工作进行中</td><td><code>◐</code></td></tr><tr><td><code>reconciling</code></td><td>正在与别处的变更对齐</td><td><code>↻</code></td></tr><tr><td><code>checking</code></td><td>正在验证或评审</td><td><code>⌕</code></td></tr><tr><td><code>rework_pending</code></td><td>正在询问是否重做</td><td><code>↩</code></td></tr><tr><td><code>waiting</code></td><td>等待用户</td><td><code>●</code></td></tr><tr><td><code>integrating</code></td><td>正在合并</td><td><code>⑂</code></td></tr><tr><td><code>ready_to_merge</code></td><td>已检查，等待合并</td><td><code>◉</code></td></tr><tr><td><code>done</code></td><td>已完成</td><td><code>✓</code></td></tr><tr><td><code>failed</code></td><td>已放弃</td><td><code>✗</code></td></tr><tr><td><code>cancelled</code></td><td>已取消</td><td><code>⊘</code></td></tr><tr><td><code>broken</code></td><td>无法使用</td><td><code>!</code></td></tr></tbody></table></div>
+<p>kernel 的 <code>waiting</code> 和 <code>running</code> 标志保持不变。客户端按这个顺序选择绘制内容：错误行绘制错误；当 <code>waiting</code> 为 true 时，<code>mark</code> 为 <code>waiting</code>、<code>proposed</code>、<code>rework_pending</code> 或 <code>ready_to_merge</code> 则保留它，其他任何 mark（或没有 mark）绘制 <code>waiting</code>；当 <code>waiting</code> 为 false 时，有 mark 就绘制 <code>mark</code>；否则 <code>running</code> 为 true 就绘制 <code>running</code>；这些都不满足的行是普通行。TUI 按角色给 mark 着色：<code>proposed</code>、<code>rework_pending</code> 和 <code>waiting</code> 用强调色，<code>starting</code>、<code>running</code>、<code>reconciling</code>、<code>checking</code> 和 <code>integrating</code> 用 run 的颜色，<code>ready_to_merge</code> 和 <code>done</code> 用成功色，<code>failed</code> 和 <code>broken</code> 用错误色，其余用弱色。</p>
+<p><code>after</code> 列出对象所等待的同级（<code>parent</code> 相同的行）的 id，采用行 id 的形式；它是由非空字符串组成的数组，否则该行是错误行。它在 list、get 和 pending 的行中原样传递，<code>operad list</code> 和 <code>operad show</code> 不打印它。<code>dev</code> 插件用任务所等待的任务 id 填写任务的 <code>after</code>，按存储的形式给出：其他仓库的任务显示为 <code>&lt;repository&gt;/&lt;task id&gt;</code>。</p>
+<p><code>operad task add</code> 和 <code>operad task update</code> 用 <code>--after &lt;task&gt;</code> 指同一仓库（任何计划）的任务，用 <code>--after &lt;repository&gt;/&lt;task&gt;</code> 指任何已注册仓库的任务。在它所跟随的每个任务都合并之前，该任务一直被阻塞，无论那些任务在哪里，它的 note 会说明它在等什么（对另一个仓库是 <code>waiting for operad/T-0188</code>）。被指名的任务必须存在，任务不能跟随自己，也不能构成环。</p>
+<p><code>operad plan add</code> 和 <code>operad task add</code> 接受 <code>--flow &lt;name&gt;</code>，取该仓库 <code>.operad/dev.json</code> 定义的 flow 之一。没有 <code>--flow</code> 的任务采用它所在计划的 flow，没有 flow 的计划采用 <code>default</code>。<code>operad task update &lt;id&gt; --flow &lt;name&gt;</code> 只能在任务的第一次 attempt 之前更改它的 flow；之后该命令会拒绝。flow 在 dev.json 中没有定义的任务保持 ready，它的行和它所在计划的行显示 <code>flow &lt;name&gt; is not defined in .operad/dev.json</code>。当仓库定义了不止一个 flow 时，任务行的 note 和 Brief section 会写出任务的 flow，History 会在每个 run 开始处写出 flow。</p>
+<p><code>badge</code> 是客户端原样显示的一小段文本，放在 state 之后：一行，最多 16 个字符，否则该行是错误行。<code>dev</code> 插件把任务的 badge 设为 <code>#&lt;attempt&gt;</code>（第一次 attempt 之前为 <code>#0</code>），并根据阶段、attempt 已到达的 step 和调度器记录的 hold 来标记它的任务和计划。<code>operad list</code> 和 <code>operad show</code> 的前几行会在 state 之后打印行的 badge；没有 badge 的行与没有 badge 功能时的打印相同。</p>
+<h2 id="links">链接<a class="anchor" href="#links" aria-label="链接到本节">#</a></h2>
+<p>对象链接是 <code>operad://objects/&lt;id&gt;</code>，其中 <code>&lt;id&gt;</code> 是 <code>get</code> 所接受的对象形式，即 <code>&lt;type&gt;:&lt;id&gt;</code> 并做 URL 编码：<code>item:a b/c</code> 是 <code>operad://objects/item%3Aa%20b%2Fc</code>。<code>GET /v1/objects/&lt;id&gt;</code> 和每个 pending 项都以 <code>link</code> 带有它，通知命令则以 <code>OPERAD_LINK</code> 得到它。在 app 中打开它会显示该对象。顺着链接的路径（<code>/v1/objects/&lt;the part after objects/&gt;</code>）能找到同一个对象。</p>
+<h2 id="events">事件<a class="anchor" href="#events" aria-label="链接到本节">#</a></h2>
+<p><code>GET /v1/events</code> 以 server-sent events 流式发送。每个事件是一个发生了变化的对象：</p>
+<pre data-ui><code class="lang-text">id: 3f9c2a1b7d4e5f60-7
+data: {&quot;id&quot;:&quot;T-0019-http-api&quot;}
+</code></pre>
+<p><code>id:</code> 是不透明的字符串。它在每个事件上都会变化，并以进程在启动时选定的一个值开头，因此来自更早 <code>serve</code> 的 id 不可恢复。带着 <code>Last-Event-ID</code> 重新连接的客户端会收到它错过的事件。当该 id 比服务器仍保留的更旧，或来自更早的 <code>serve</code> 时，服务器改发一个 <code>reset</code> 事件；客户端随后重新获取列表和已打开的 section。没有变化时，注释行让流保持打开。停止读取的客户端，在其积压达到恢复窗口的大小时会被断开；它重新连接后会得到 <code>reset</code>。</p>
+<h2 id="errors">错误<a class="anchor" href="#errors" aria-label="链接到本节">#</a></h2>
+<p>每个错误体都是：</p>
+<pre data-ui><code class="lang-json">{ &quot;error&quot;: { &quot;kind&quot;: &quot;not-found&quot;, &quot;message&quot;: &quot;no object \&quot;T-1\&quot;&quot; } }</code></pre>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>何时</th></tr></thead><tbody><tr><td><code>400</code></td><td>参数错误、未知的 filter、格式错误的 cursor，或有歧义的 id。</td></tr><tr><td><code>401</code></td><td>缺少 bearer token 或 token 错误。</td></tr><tr><td><code>404</code></td><td>没有这个对象、section 或 action，或没有这个 endpoint。</td></tr><tr><td><code>409</code></td><td>action 现在不可用、需要确认，或它的插件未加载。</td></tr><tr><td><code>405</code></td><td>endpoint 存在，但不支持该 method；消息体为 <code>this endpoint takes GET</code> 或 <code>this endpoint takes POST</code>。</td></tr><tr><td><code>413</code></td><td>请求体大于 1 MiB，或上传大于 20 MB。</td></tr><tr><td><code>422</code></td><td>action 的插件拒绝了它；<code>message</code> 是插件自己的消息。</td></tr><tr><td><code>504</code></td><td>section 没有在规定时间内加载。</td></tr><tr><td><code>500</code></td><td>其他情况；消息体不带 stack trace。</td></tr></tbody></table></div>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/http.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../app/"><small>上一页</small>手机 app</a>
+      <a class="next" href="../mcp/"><small>下一页</small>MCP server</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-http-section">http 段</a></li><li class="l2"><a href="#endpoints">Endpoint</a></li><li class="l2"><a href="#reading-a-section">读取 section</a></li><li class="l2"><a href="#settings">设置</a></li><li class="l2"><a href="#row-marks">行标记</a></li><li class="l2"><a href="#links">链接</a></li><li class="l2"><a href="#events">事件</a></li><li class="l2"><a href="#errors">错误</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

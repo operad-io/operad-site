@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>config.json · operad 文档</title>
+<meta name="description" content="config.json 文件：home 在哪里、每个部分和每个键，以及每个插件的设置。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/config/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/config/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/config/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/config/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="config.json · operad 文档">
+<meta property="og:description" content="config.json 文件：home 在哪里、每个部分和每个键，以及每个插件的设置。">
+<meta property="og:url" content="https://operad.io/zh/docs/config/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="config.json · operad 文档">
+<meta name="twitter:description" content="config.json 文件：home 在哪里、每个部分和每个键，以及每个插件的设置。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "config.json",
+ "description": "config.json 文件：home 在哪里、每个部分和每个键，以及每个插件的设置。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/config/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/config/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/" aria-current="page">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="configjson">config.json</h1>
+<p><code>config.json</code> 配置 <code>operad</code>。本页说明 home 在哪里、该文件的每个键，以及每个插件的设置部分。<code>http</code> 的键也在 <a href="../../../zh/docs/http/#the-http-section">HTTP 页</a>中，<code>notify</code> 的键在 <a href="../../../zh/docs/notifications/">notifications</a> 中，<code>mcp</code> 的键在 <a href="../../../zh/docs/mcp/">MCP 页</a>中，<code>dev</code> 的仓库设置在 <a href="../../../zh/docs/dev/">dev 页</a>中。</p>
+<h2 id="the-home">home<a class="anchor" href="#the-home" aria-label="链接到本节">#</a></h2>
+<p><code>operad</code> 把它的状态保存在一个目录中：设置了 <code>$OPERAD_HOME</code> 时用它，否则用 <code>~/.operad</code>。home 中有 <code>config.json</code>、store、secrets 目录、<code>access-user.json</code>、<code>keys.json</code>、<code>triggers.json</code>、<code>tui.json</code> 和 themes 目录。secret 文件的权限是 <code>0600</code>，位于权限为 <code>0700</code> 的目录内；本手册中没有任何地方会打印 secret。</p>
+<h2 id="an-example">示例<a class="anchor" href="#an-example" aria-label="链接到本节">#</a></h2>
+<pre data-ui><code class="lang-json">{
+  &quot;plugins&quot;: {
+    &quot;shell&quot;: { &quot;module&quot;: &quot;@operad-io/shell&quot;, &quot;enabled&quot;: true },
+    &quot;cron&quot;: { &quot;module&quot;: &quot;@operad-io/source-cron&quot;, &quot;enabled&quot;: true },
+    &quot;chat&quot;: { &quot;module&quot;: &quot;@operad-io/chat&quot;, &quot;settings&quot;: { &quot;speaker&quot;: &quot;Operad Bot&quot; } },
+    &quot;dev&quot;: { &quot;module&quot;: &quot;@operad-io/dev&quot;, &quot;settings&quot;: { &quot;checks&quot;: 2 } },
+    &quot;pool&quot;: { &quot;module&quot;: &quot;@operad-io/pool&quot;, &quot;settings&quot;: { &quot;harnesses&quot;: { &quot;pi&quot;: 2 } } },
+    &quot;bot&quot;: {
+      &quot;module&quot;: &quot;@operad-io/bot&quot;,
+      &quot;settings&quot;: {
+        &quot;bots&quot;: {
+          &quot;default&quot;: {
+            &quot;harness&quot;: &quot;pi&quot;,
+            &quot;model&quot;: &quot;opencode-go/deepseek-v4.1-flash&quot;,
+            &quot;effort&quot;: &quot;medium&quot;,
+            &quot;cwd&quot;: &quot;~/work/assistant&quot;,
+            &quot;skills&quot;: [&quot;~/work/assistant/skills&quot;],
+            &quot;speaker&quot;: &quot;Assistant&quot;,
+            &quot;mcpAllow&quot;: [&quot;notes.search&quot;],
+            &quot;access&quot;: { &quot;readOnly&quot;: true, &quot;askCommands&quot;: [&quot;git push&quot;] }
+          }
+        }
+      }
+    },
+    &quot;claude&quot;: {
+      &quot;module&quot;: &quot;@operad-io/harness-claude&quot;,
+      &quot;settings&quot;: {
+        &quot;model&quot;: &quot;sonnet&quot;,
+        &quot;effort&quot;: &quot;high&quot;,
+        &quot;command&quot;: &quot;claude&quot;,
+        &quot;maxTurns&quot;: 40,
+        &quot;budgetUsd&quot;: 10,
+        &quot;bashTimeoutSecs&quot;: 1800,
+        &quot;wallTimeSecs&quot;: 3600,
+        &quot;stallSecs&quot;: 600,
+        &quot;concurrency&quot;: { &quot;sonnet&quot;: 2 }
+      }
+    },
+    &quot;pi&quot;: {
+      &quot;module&quot;: &quot;@operad-io/harness-pi&quot;,
+      &quot;settings&quot;: {
+        &quot;model&quot;: &quot;opencode-go/deepseek-v4.1-flash&quot;,
+        &quot;models&quot;: [&quot;opencode-go/deepseek-v4.1-flash&quot;, &quot;openai/gpt-5&quot;],
+        &quot;thinkingLevel&quot;: &quot;medium&quot;,
+        &quot;command&quot;: &quot;pi&quot;,
+        &quot;authPath&quot;: &quot;~/.pi/agent/auth.json&quot;,
+        &quot;modelsPath&quot;: &quot;~/.pi/agent/models.json&quot;,
+        &quot;wallTimeSecs&quot;: 3600,
+        &quot;stallSecs&quot;: 600,
+        &quot;bashTimeoutSecs&quot;: 1800,
+        &quot;concurrency&quot;: { &quot;opencode-go/deepseek-v4.1-flash&quot;: 2 }
+      }
+    },
+    &quot;radian&quot;: {
+      &quot;module&quot;: &quot;@operad-io/harness-radian&quot;,
+      &quot;settings&quot;: {
+        &quot;command&quot;: &quot;radian&quot;,
+        &quot;wallTimeSecs&quot;: 300,
+        &quot;stallSecs&quot;: 600,
+        &quot;concurrency&quot;: { &quot;anthropic/claude-sonnet-4&quot;: 1 }
+      }
+    }
+  },
+  &quot;store&quot;: { &quot;backend&quot;: &quot;sqlite&quot;, &quot;path&quot;: &quot;store/log.sqlite&quot; },
+  &quot;http&quot;: { &quot;enabled&quot;: true, &quot;port&quot;: 7480, &quot;listen&quot;: [&quot;127.0.0.1&quot;] },
+  &quot;notify&quot;: { &quot;command&quot;: &quot;sh ~/.operad/notify.sh&quot;, &quot;on&quot;: [&quot;waiting&quot;] },
+  &quot;mcp&quot;: {
+    &quot;channel&quot;: { &quot;notify&quot;: [&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;], &quot;loopAfter&quot;: 3 },
+    &quot;actions&quot;: [&quot;dev:rework&quot;, &quot;dev:reverify&quot;, &quot;dev:reject&quot;, &quot;dev:priority&quot;, &quot;dev:concurrency&quot;, &quot;chat:close&quot;],
+    &quot;confirmActions&quot;: [&quot;chat:close&quot;]
+  },
+  &quot;ask&quot;: { &quot;graceSecs&quot;: 600 }
+}</code></pre>
+<p>当 home 中没有 <code>config.json</code> 时，<code>operad init</code> 会写入一个：安装了 <code>shell</code>、<code>radian</code>、<code>chat</code> 和 <code>dev</code>，store 位于 <code>store/log.sqlite</code>，<code>http</code> 在 <code>127.0.0.1:7480</code> 上开启，通知关闭，写入上面的 <code>mcp.actions</code> 和 <code>mcp.confirmActions</code> 列表，以及 600 秒的 ask grace。这些全部写入文件；其中没有任何隐藏的默认值。完全没有 <code>config.json</code> 的 home 没有插件，也不允许任何 lead action。</p>
+<p>已有的 home 不会被重写。在已有 <code>config.json</code> 的 home 上运行 <code>operad init</code> 会保持该文件不变；唯一的例外是没有 <code>plugins</code> 键的文件，它会被加上默认插件，其他什么都不改。没有 <code>mcp.actions</code> 的 <code>config.json</code> 不允许任何 lead action。在这次变更之前创建的 home 已经列出了它的插件，但可能没有 <code>mcp.actions</code>；要保留 lead 的 action，请把下面几行加入它的 <code>mcp</code> 部分，然后重启 <code>operad mcp</code>：</p>
+<pre data-ui><code class="lang-json">&quot;mcp&quot;: {
+  &quot;actions&quot;: [&quot;dev:rework&quot;, &quot;dev:reverify&quot;, &quot;dev:reject&quot;, &quot;dev:priority&quot;, &quot;dev:concurrency&quot;, &quot;chat:close&quot;],
+  &quot;confirmActions&quot;: [&quot;chat:close&quot;]
+}</code></pre>
+<p>之后启用某个插件不会把它的 action 加入 <code>mcp.actions</code>；请手动添加。</p>
+<p>每个顶层部分都是可选的。内核只读取它点名的键：顶层、引擎部分（<code>store</code>、<code>http</code>、<code>notify</code>、<code>mcp</code>、<code>ask</code>）内部，或 <code>plugins</code> 条目内部的未知键都会被忽略。唯一会拒绝拼写错误的地方是 <code>plugins.&lt;name&gt;.settings</code>，它由该插件自己的 schema 检查；那里的未知键会使该插件被拒绝，并给出一行指明插件和字段的信息。</p>
+<h2 id="the-sections">各个部分<a class="anchor" href="#the-sections" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>plugins</code></td><td>object，或模块名数组</td><td><code>operad init</code> 安装的四个插件</td><td>插件名对应模块名、路径或选项对象</td><td>每次命令启动时，以及运行中的 <code>serve</code> 在变更后重新加载时</td><td>被拒绝：<code>plugins: must be an object of plugin options or an array of module names</code></td></tr><tr><td><code>store</code></td><td>object</td><td>位于 <code>&lt;home&gt;/store/log.sqlite</code> 的 sqlite</td><td>下面的键</td><td>每次命令启动时</td><td>被拒绝：<code>store: must be an object</code></td></tr><tr><td><code>http</code></td><td>object</td><td>开启，端口 <code>7480</code>，<code>127.0.0.1</code></td><td><a href="../../../zh/docs/http/#the-http-section">HTTP 页</a>中的键</td><td><code>operad serve</code> 启动时；新配置加载时重新加载</td><td>被拒绝：<code>http: must be an object</code>，或该字段自己的信息</td></tr><tr><td><code>notify</code></td><td>object</td><td>command 为 <code>null</code>，<code>on</code> 为 <code>[&quot;waiting&quot;]</code></td><td><a href="../../../zh/docs/notifications/">notifications</a> 中的键</td><td><code>operad serve</code> 启动时；新配置加载时重新加载</td><td>被拒绝：<code>notify: must be an object</code>，或该字段自己的信息</td></tr><tr><td><code>mcp</code></td><td>object</td><td>下面的列表</td><td>下面的键</td><td><code>operad mcp</code> 启动时</td><td>被拒绝：<code>mcp: must be an object</code>，或该字段自己的信息</td></tr><tr><td><code>ask</code></td><td>object</td><td><code>{ &quot;graceSecs&quot;: 600 }</code></td><td>下面的键</td><td>当某个 step 向人提问时</td><td>被拒绝：<code>ask: must be an object</code>，或 <code>ask.graceSecs: ...</code></td></tr></tbody></table></div>
+<p>内核在命令启动时读取 <code>config.json</code>。运行中的 <code>serve</code> 会监视该文件，并在新文件加载成功时重新加载；加载失败时，旧配置继续运行，并把问题记入日志。一次性命令在下次运行时重新读取该文件。</p>
+<h3 id="plugins"><code>plugins</code><a class="anchor" href="#plugins" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>plugins</code></td><td>object 或数组</td><td>没有 <code>plugins</code> 部分的文件中为 <code>[]</code></td><td>插件名对应模块或选项对象；数组条目是模块名</td><td>加载插件时</td><td>被拒绝：<code>plugins: must be an object of plugin options or an array of module names</code></td></tr><tr><td><code>plugins.&lt;name&gt;</code></td><td>string 或 object</td><td>无</td><td>非空的模块名或路径，或带有下列键的对象</td><td>加载插件时</td><td>被拒绝：<code>plugins.&lt;name&gt;: must be a module name or an object of options</code></td></tr><tr><td><code>plugins.&lt;name&gt;.module</code></td><td>string</td><td>键 <code>&lt;name&gt;</code> 本身</td><td>模块名、相对于 home 的路径，或 <code>file:</code> URL；随附的包是 <code>@operad-io/&lt;name&gt;</code>，<code>claude</code>、<code>pi</code> 和 <code>radian</code> 则是 <code>@operad-io/harness-&lt;name&gt;</code></td><td>加载插件时</td><td>被拒绝：<code>plugins.&lt;name&gt;.module: must be a non-empty string</code></td></tr><tr><td><code>plugins.&lt;name&gt;.enabled</code></td><td>boolean</td><td><code>true</code></td><td><code>true</code> 或 <code>false</code></td><td>加载插件时；被禁用插件已存储的对象会保留</td><td>被拒绝：<code>plugins.&lt;name&gt;.enabled: must be a boolean</code></td></tr><tr><td><code>plugins.&lt;name&gt;.settings</code></td><td>object</td><td><code>{}</code></td><td>该插件自己的设置 schema 接受的部分；见下文</td><td>加载插件时</td><td>该插件被拒绝，并给出一行指明字段的 <code>plugin &quot;&lt;name&gt;&quot;: ...</code>；需要它的插件也会被拒绝</td></tr></tbody></table></div>
+<p>如果某个插件条目的模块导入失败、设置无效，或它声明的名称与它的键不匹配，它就不会加载。文件的其余部分仍会加载，<code>serve</code> 和 <code>operad plugin check</code> 会打印说明原因的那一行。<code>operad plugin list</code>、<code>operad plugin enable</code>、<code>operad plugin disable</code> 和 <code>operad plugin check</code> 见 <a href="../../../zh/docs/cli/">CLI 页</a>。</p>
+<p><code>operad init</code> 安装 <code>shell</code>、<code>radian</code>、<code>chat</code> 和 <code>dev</code>。<code>pi</code>、<code>claude</code>、<code>codex</code>、<code>pool</code> 和 <code>bot</code> 随附但未安装；用 <code>operad plugin enable &lt;name&gt;</code> 启用。</p>
+<h3 id="store"><code>store</code><a class="anchor" href="#store" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>store.backend</code></td><td>string</td><td><code>&quot;sqlite&quot;</code></td><td>只有 <code>&quot;sqlite&quot;</code></td><td>每次命令启动时</td><td>被拒绝：<code>store.backend: must be &quot;sqlite&quot;</code></td></tr><tr><td><code>store.path</code></td><td>string</td><td><code>&lt;home&gt;/store/log.sqlite</code></td><td>非空路径；相对路径相对于 home 解析</td><td>每次命令启动时</td><td>被拒绝：<code>store.path: must be a non-empty string</code></td></tr></tbody></table></div>
+<p>store 是 history 和 pending 视图读取的内容。更改路径会让新进程读取另一份 history；它不会移动旧文件。</p>
+<h3 id="mcp"><code>mcp</code><a class="anchor" href="#mcp" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>mcp.channel</code></td><td>object</td><td><code>{ &quot;notify&quot;: [&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;], &quot;loopAfter&quot;: 3 }</code></td><td>下面的键</td><td><code>operad mcp</code> 启动时</td><td>被拒绝：<code>mcp.channel: must be an object</code></td></tr><tr><td><code>mcp.channel.notify</code></td><td>字符串数组</td><td><code>[&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;]</code></td><td><code>waiting</code>、<code>ended</code>、<code>loop</code>、<code>changes</code></td><td><code>operad mcp</code> 启动时</td><td>被拒绝：<code>mcp.channel.notify: unknown entry &lt;value&gt;; use &quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;, &quot;changes&quot;</code></td></tr><tr><td><code>mcp.channel.loopAfter</code></td><td>integer</td><td><code>3</code></td><td><code>2</code> 或更大</td><td><code>operad mcp</code> 启动时</td><td>被拒绝：<code>mcp.channel.loopAfter: must be an integer of 2 or more</code></td></tr><tr><td><code>mcp.actions</code></td><td>字符串数组</td><td><code>[]</code>（<code>operad init</code> 会在新文件中写入五个 <code>dev</code> lead action 和 <code>chat:close</code>）</td><td><code>&lt;plugin&gt;:&lt;action&gt;</code> 名称</td><td><code>operad mcp</code> 启动时</td><td>被拒绝：<code>mcp.actions: must be an array of &quot;&lt;plugin&gt;:&lt;action&gt;&quot; names</code></td></tr><tr><td><code>mcp.confirmActions</code></td><td>字符串数组</td><td><code>[]</code>（<code>operad init</code> 会在新文件中写入 <code>[&quot;chat:close&quot;]</code>）</td><td>同时在 <code>mcp.actions</code> 中、且需要确认的 <code>&lt;plugin&gt;:&lt;action&gt;</code> 名称</td><td><code>operad mcp</code> 启动时</td><td>被拒绝：<code>mcp.confirmActions: must be an array of &quot;&lt;plugin&gt;:&lt;action&gt;&quot; names</code></td></tr></tbody></table></div>
+<p><code>mcp.actions</code> 是 MCP server 可以替 lead 运行的列表。其他所有 action 都会被拒绝，留给 owner 运行。<code>mcp.confirmActions</code> 是允许的 action 中更小的一个列表，这些 action 还需要 <code>confirm: true</code>；在 <code>actions</code> 中但不在这里的 action，即使 MCP 调用已确认也会被拒绝。channel 的键在 <a href="../../../zh/docs/mcp/#claude-code-channel">MCP 页</a>中说明。</p>
+<h3 id="ask"><code>ask</code><a class="anchor" href="#ask" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>ask.graceSecs</code></td><td>number</td><td><code>600</code></td><td><code>0</code> 到 <code>2147483</code> 秒；<code>0</code> 表示不等待</td><td>当某个 step 调用 <code>ctx.ask</code> 且没有更窄的 grace 时</td><td>被拒绝：<code>ask.graceSecs: must be a number of seconds from 0 to 2147483</code></td></tr></tbody></table></div>
+<p>step 自己的 <code>askGraceSecs</code> 参数，或该调用自己的 grace，可以更窄。没有无限值；当人可能在很长时间之后才回答时，请使用允许的最大数值。提问的方式在 <a href="https://github.com/operad-io/operad/blob/main/docs/plugins/asking.md">Asking a person from a step</a> 中说明。</p>
+<h2 id="plugin-settings">插件设置<a class="anchor" href="#plugin-settings" aria-label="链接到本节">#</a></h2>
+<p>插件设置位于 <code>plugins.&lt;name&gt;.settings</code> 之下。没有设置 schema 的插件没有键：<code>shell</code> 和 cron 来源（<code>cron</code>，即 <code>@operad-io/source-cron</code> 包）完全由它们的 flow step 和 <code>triggers.json</code> 配置。<code>review-grading</code> 是一个读取 <code>&lt;repository&gt;/.operad/review.json</code> 的库，记录在 <a href="../../../zh/docs/dev/#reviewjson">dev 页</a>中。MCP server、终端客户端、HTTP 接口和通知由上面的部分配置，而不是由插件设置配置。</p>
+<p>每项设置都在插件加载时读取。运行中的 <code>serve</code> 在 <code>config.json</code> 变更且新文件加载成功时重新加载；已经启动的 step 保留它启动时的设置。例外情况在各表中说明。</p>
+<h3 id="bot"><code>bot</code><a class="anchor" href="#bot" aria-label="链接到本节">#</a></h3>
+<p><code>bot</code> 部分描述属于某个 bot 的 chat。默认 bot <code>default</code> 即使没有写出也存在。名称由小写字母、数字、<code>-</code> 和 <code>_</code> 组成，且以字母或数字开头；任何其他名称都会使该 bot 被拒绝，信息为 <code>bot &quot;&lt;name&gt;&quot;: a name is lowercase letters, digits, &quot;-&quot; and &quot;_&quot;, and starts with a letter or digit</code>。bot 在每次回复时都会重新读取，所以修改会应用到下一次回复。见 <a href="../../../zh/docs/chats-and-bots/">Chats and bots</a>。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>bot.bots</code></td><td>object</td><td><code>{ &quot;default&quot;: {} }</code></td><td>bot 名称对应 bot 对象</td><td>下一次回复</td><td>被 schema 拒绝；错误的名称会使该 bot 被拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;</code></td><td>object</td><td><code>{}</code></td><td>下面的键</td><td>下一次回复</td><td>被拒绝：<code>bot &quot;&lt;name&gt;&quot;: ...</code> 或 schema 的字段信息</td></tr><tr><td><code>bot.bots.&lt;name&gt;.cwd</code></td><td>string</td><td><code>default</code> 为 <code>~/.operad/bot</code>，其他 bot 为 <code>~/.operad/bot/&lt;name&gt;</code></td><td><code>~/.operad/bot</code> 内的目录，或完全在 operad home 之外的目录</td><td>下一次回复和下一次 chat 启动</td><td>被拒绝：<code>bot &quot;&lt;name&gt;&quot;: the working directory &lt;path&gt; is inside the operad home but outside &lt;bot dir&gt;</code> 或 <code>... is the operad home or holds it</code></td></tr><tr><td><code>bot.bots.&lt;name&gt;.harness</code></td><td>string</td><td>chat 提供的第一个已加载的 agent</td><td>已加载的 agent 插件名，例如 <code>claude</code> 或 <code>pi</code></td><td>新 chat 启动时</td><td>chat 启动时，不是 agent 的名称会被拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.skills</code></td><td>字符串数组</td><td><code>[]</code></td><td>包含 <code>SKILL.md</code> 的目录；相对路径位于工作目录之下</td><td>下一次回复</td><td>被拒绝：<code>skill &quot;&lt;path&gt;&quot;: there is no SKILL.md in &lt;path&gt;</code></td></tr><tr><td><code>bot.bots.&lt;name&gt;.model</code></td><td>string</td><td>agent 的默认值</td><td>chat 的 agent 所列出的 model</td><td>新 chat 启动时</td><td>agent 没有列出它时，在 chat 启动时被拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.effort</code></td><td>string</td><td>agent 的默认值</td><td>chat 的 agent 所列出的 effort</td><td>新 chat 启动时</td><td>agent 没有列出它时，在 chat 启动时被拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.speaker</code></td><td>string</td><td><code>chat.speaker</code> 的值</td><td>非空文本</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers</code></td><td>object</td><td><code>{}</code></td><td>server 名称对应 server 对象；用 <code>operad bot mcp</code> 添加，需由人批准</td><td>下一次回复</td><td>被 schema 拒绝；工具发生变化的 server 不会被挂载</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;</code></td><td>object</td><td>无</td><td>下面的键</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.command</code></td><td>string</td><td>无</td><td>启动该 server 的程序</td><td>下一次回复</td><td>被 schema 拒绝；缺少 command 表示该 server 无法启动</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.args</code></td><td>字符串数组</td><td><code>[]</code></td><td>该程序的参数</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.package</code></td><td>string</td><td>无</td><td>command 所运行的包（当它运行某个包时）</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.version</code></td><td>string</td><td>无</td><td>该包固定的版本</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.secrets</code></td><td>字符串数组</td><td><code>[]</code></td><td>变量名；每个值是 bot 插件的 secret <code>&lt;server&gt;.&lt;variable&gt;</code></td><td>server 启动时</td><td>被 schema 拒绝；缺失的 secret 以空值给出</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools</code></td><td>对象数组</td><td><code>[]</code></td><td>人批准过的工具</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools.name</code></td><td>string</td><td>必填</td><td>工具名</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools.description</code></td><td>string</td><td><code>&quot;&quot;</code></td><td>工具的描述</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.digest</code></td><td>string</td><td>无</td><td>工具名和描述的摘要</td><td>下一次回复</td><td>发现其他工具的 chat 不会挂载该 server</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpAllow</code></td><td>字符串数组</td><td><code>[]</code></td><td><code>&lt;server&gt;.&lt;tool&gt;</code> 或 <code>&lt;server&gt;.*</code></td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access</code></td><td>object</td><td><code>{}</code></td><td>下面的键；叠加到默认 access profile 上</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.denyPaths</code></td><td>字符串数组</td><td><code>[]</code></td><td>路径；追加到默认列表之后</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.denyCommands</code></td><td>字符串数组</td><td><code>[]</code></td><td>命令规则；追加到默认列表之后</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.askCommands</code></td><td>字符串数组</td><td><code>[]</code></td><td>命令规则；追加到默认列表之后</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.askPaths</code></td><td>字符串数组</td><td><code>[]</code></td><td>路径；追加到默认列表之后</td><td>下一次回复</td><td>被 schema 拒绝</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.readOnly</code></td><td>boolean</td><td><code>false</code></td><td><code>true</code> 使 bot 的工作目录变为只读；bot 只能收紧默认值，不能放宽</td><td>下一次回复</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<p>默认 profile 和各个 access 字段的含义见 <a href="../../../zh/docs/access/">access 页</a>。<code>mcpAllow</code> 的含义与 profile 的 <code>allowMcp</code> 相同；未列出的 MCP 工具会先询问。</p>
+<h3 id="chat"><code>chat</code><a class="anchor" href="#chat" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>chat.speaker</code></td><td>string</td><td><code>&quot;Operad Bot&quot;</code></td><td>非空文本</td><td>渲染 chat 记录时</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<p>bot chat 使用它的 bot 的 <code>speaker</code>。见 <a href="../../../zh/docs/chats-and-bots/">Chats and bots</a>。</p>
+<h3 id="dev"><code>dev</code><a class="anchor" href="#dev" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>dev.checks</code></td><td>integer</td><td><code>2</code></td><td><code>1</code> 或更大</td><td>下一次检查占用名额时；已经在等待或运行的检查保留它们的名额</td><td>被 schema 拒绝；该插件被拒绝，日志指明 <code>settings.checks</code></td></tr></tbody></table></div>
+<p><code>dev.checks</code> 是这个 home 中同时运行的检查（任务的 verify，以及 merge 之前的检查）的最大数量，跨所有仓库计算。仓库可以用<a href="../../../zh/docs/dev/#the-gate-and-its-checks">它的 dev.json</a> 中的 <code>gate.places</code> 降低自己的份额。</p>
+<h3 id="pool"><code>pool</code><a class="anchor" href="#pool" aria-label="链接到本节">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>pool.harnesses</code></td><td>object</td><td><code>{}</code></td><td>harness 插件名对应数量</td><td>下一个 <code>pool/agent</code> step 启动时；已经在运行的 step 保留它们的名额</td><td>被 schema 拒绝；该插件被拒绝，日志指明 <code>settings.harnesses</code></td></tr><tr><td><code>pool.harnesses.&lt;name&gt;</code></td><td>integer</td><td>该 harness 没有上限</td><td><code>1</code> 或更大</td><td>下一个 <code>pool/agent</code> step 启动时</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<p>该数量涵盖这个 home 中通过 <code>pool/agent</code> 对该 harness 发起的每一次 run，跨仓库和 flow。直接调用 harness step 的 flow 不计入，但该 harness 自己的 <code>concurrency</code> 仍然适用。见 <a href="../../../zh/docs/dev/#sharing-agents-between-flows-the-pool-plugin">Sharing agents between flows</a>。</p>
+<h3 id="claude"><code>claude</code><a class="anchor" href="#claude" aria-label="链接到本节">#</a></h3>
+<p><code>claude</code> 插件运行 Claude Code。它的 step 是 <code>claude/agent</code>；见 <a href="../../../zh/docs/dev/#long-commands-under-claude">dev 页</a>。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>claude.model</code></td><td>string</td><td>claude 的默认值，新 chat 为 <code>sonnet</code></td><td>claude 接受的 model 名，例如 <code>opus</code> 或 <code>sonnet</code></td><td>agent step 或新 chat 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>claude.effort</code></td><td>string</td><td>claude 的默认值</td><td><code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code>、<code>max</code></td><td>agent step 或新 chat 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>claude.command</code></td><td>string</td><td><code>&quot;claude&quot;</code></td><td>命令名或路径</td><td>agent step 启动时</td><td>被 schema 拒绝；不是 claude 的命令会使插件检查失败</td></tr><tr><td><code>claude.maxTurns</code></td><td>integer</td><td>无限制</td><td><code>1</code> 或更大</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>claude.budgetUsd</code></td><td>number</td><td>无限制</td><td><code>0.01</code> 或更大</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>claude.bashTimeoutSecs</code></td><td>integer</td><td><code>1800</code></td><td><code>1</code> 或更多秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>claude.wallTimeSecs</code></td><td>number</td><td><code>3600</code></td><td><code>1</code> 到 <code>28500</code> 秒</td><td>agent step 启动时</td><td>被 schema 拒绝；更大的值还会使该 step 失败，信息为 <code>must be at most 28500</code></td></tr><tr><td><code>claude.stallSecs</code></td><td>number</td><td><code>600</code></td><td><code>1</code> 或更多秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>claude.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model 名对应 <code>1</code> 或更大的数量</td><td>随下一个启动的 agent step，该 model 最多不超过此数量</td><td>被 schema 拒绝；会指明该数量的键</td></tr><tr><td><code>claude.concurrency.&lt;name&gt;</code></td><td>integer</td><td>该 model 没有限制</td><td><code>1</code> 或更大</td><td>随该 model 的下一个 agent step</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<p><code>maxTurns</code> 和 <code>budgetUsd</code> 是针对单次 run 的限制；未设置表示没有限制。<code>budgetUsd</code> 用于 API key 登录。<code>bashTimeoutSecs</code> 是一次 Bash 调用在前台最长可以运行的时间。<code>concurrency</code> 统计这个 home 中的每一次 run，包括 <code>dev</code> 启动的那些；更改不会停止已经在运行的 run。</p>
+<h3 id="codex"><code>codex</code><a class="anchor" href="#codex" aria-label="链接到本节">#</a></h3>
+<p><code>codex</code> 插件通过 <code>codex-acp</code> 运行用户自己的 Codex。它的 step 是 <code>codex/agent</code>；设置方法见 <code>docs/dogfood.md</code>，这些设置也列在 <a href="../../../zh/docs/dev/#the-codex-settings">dev 页</a>中。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>codex.model</code></td><td>string</td><td>Codex 的默认值</td><td>codex-acp 提供的 model 名</td><td>agent step 启动时</td><td>被 schema 拒绝；codex-acp 不提供的 model 会使该 step 失败</td></tr><tr><td><code>codex.effort</code></td><td>string</td><td>Codex 的默认值</td><td><code>minimal</code>、<code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code></td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>codex.command</code></td><td>字符串数组</td><td><code>PATH</code> 中的 <code>bun</code> 和 <code>codex-acp</code></td><td>程序及其参数</td><td>agent step 启动时</td><td>被 schema 拒绝；无法启动的命令会使插件检查失败</td></tr><tr><td><code>codex.wallTimeSecs</code></td><td>number</td><td><code>3600</code></td><td><code>1</code> 到 <code>28500</code> 秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>codex.stallSecs</code></td><td>number</td><td><code>600</code></td><td><code>1</code> 或更多秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>codex.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model 名对应 <code>1</code> 或更大的数量</td><td>随下一个启动的 agent step</td><td>被 schema 拒绝；会指明该数量的键</td></tr><tr><td><code>codex.concurrency.&lt;name&gt;</code></td><td>integer</td><td>该 model 没有限制</td><td><code>1</code> 或更大</td><td>随该 model 的下一个 agent step</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<h3 id="pi"><code>pi</code><a class="anchor" href="#pi" aria-label="链接到本节">#</a></h3>
+<p><code>pi</code> 插件运行 pi。它的 step 是 <code>pi/agent</code>；见 <a href="../../../zh/docs/dev/#long-commands-under-pi">Long commands under pi</a>。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>pi.model</code></td><td>string</td><td>pi 的默认 model</td><td><code>provider/id</code></td><td>agent step 或新 chat 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>pi.models</code></td><td>字符串数组</td><td><code>pi --list-models</code> 打印的每个 model</td><td><code>provider/id</code> 值</td><td>新 chat 列出它的 model 时</td><td>被 schema 拒绝</td></tr><tr><td><code>pi.thinkingLevel</code></td><td>string</td><td>pi 的默认值</td><td><code>off</code>、<code>minimal</code>、<code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code>、<code>max</code></td><td>agent step 或新 chat 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>pi.command</code></td><td>string</td><td><code>&quot;pi&quot;</code></td><td>指向已安装的 <code>@earendil-works/pi-coding-agent</code> 的命令名或路径</td><td>插件加载时和 agent step 启动时</td><td>被 schema 拒绝；缺失或过旧的安装会使插件检查失败</td></tr><tr><td><code>pi.authPath</code></td><td>string</td><td><code>&quot;~/.pi/agent/auth.json&quot;</code></td><td>pi 的凭据文件</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>pi.modelsPath</code></td><td>string</td><td><code>&quot;~/.pi/agent/models.json&quot;</code></td><td>pi 的自定义 model 文件</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>pi.wallTimeSecs</code></td><td>number</td><td><code>3600</code></td><td><code>1</code> 到 <code>28500</code> 秒</td><td>agent step 启动时</td><td>被 schema 拒绝；更大的值还会使该 step 失败，信息为 <code>must be at most 28500</code></td></tr><tr><td><code>pi.stallSecs</code></td><td>number</td><td><code>600</code></td><td><code>1</code> 或更多秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>pi.bashTimeoutSecs</code></td><td>integer</td><td><code>1800</code></td><td><code>1</code> 或更多秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>pi.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model 名对应 <code>1</code> 或更大的数量</td><td>随下一个启动的 agent step，该 model 最多不超过此数量</td><td>被 schema 拒绝；会指明该数量的键</td></tr><tr><td><code>pi.concurrency.&lt;name&gt;</code></td><td>integer</td><td>该 model 没有限制</td><td><code>1</code> 或更大</td><td>随该 model 的下一个 agent step</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<p><code>authPath</code> 和 <code>modelsPath</code> 由 pi 读取；<code>~</code> 是用户的 home。对 <code>concurrency</code> 的更改会应用到下一个启动的 step；已经在运行的 step 保留它们的名额。</p>
+<h3 id="radian"><code>radian</code><a class="anchor" href="#radian" aria-label="链接到本节">#</a></h3>
+<p><code>radian</code> 插件运行 radian。它的 step 是 <code>radian/agent</code>。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>radian.command</code></td><td>string</td><td><code>&quot;radian&quot;</code></td><td>radian 可执行文件：<code>PATH</code> 中的名称或路径</td><td>agent step 启动时</td><td>被 schema 拒绝；找不到的命令会使该 step 失败</td></tr><tr><td><code>radian.wallTimeSecs</code></td><td>number</td><td><code>300</code></td><td>正数秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>radian.stallSecs</code></td><td>number</td><td><code>600</code></td><td>正数秒</td><td>agent step 启动时</td><td>被 schema 拒绝</td></tr><tr><td><code>radian.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model 名对应 <code>1</code> 或更大的数量</td><td>随下一个启动的 agent step，该 model 最多不超过此数量</td><td>被 schema 拒绝；会指明该数量的键</td></tr><tr><td><code>radian.concurrency.&lt;name&gt;</code></td><td>integer</td><td>该 model 没有限制</td><td><code>1</code> 或更大</td><td>随该 model 的下一个 agent step</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<p>Radian 没有 <code>model</code> 设置；一个 step 受其自身参数中的 <code>--provider</code> 和 <code>--model</code> 限制。没有 <code>--model</code> 的 step 不受 <code>concurrency</code> 限制。</p>
+<h2 id="triggersjson"><code>triggers.json</code><a class="anchor" href="#triggersjson" aria-label="链接到本节">#</a></h2>
+<p>home 中的 <code>triggers.json</code> 保存规则，规定哪个事件启动哪个 flow。它是一个 JSON 数组；文件缺失表示没有你自己的规则。你的规则会替换具有相同 <code>source</code> 和 <code>type</code> 的插件规则；该组合的插件规则随后不再使用。</p>
+<pre data-ui><code class="lang-json">[
+  {
+    &quot;source&quot;: &quot;operad&quot;,
+    &quot;type&quot;: &quot;dev.waiting&quot;,
+    &quot;start&quot;: { &quot;flow&quot;: &quot;dev&quot;, &quot;params&quot;: {} },
+    &quot;object&quot;: &quot;$event.object&quot;,
+    &quot;mode&quot;: &quot;observe&quot;
+  },
+  {
+    &quot;source&quot;: &quot;cron&quot;,
+    &quot;type&quot;: &quot;tick&quot;,
+    &quot;start&quot;: { &quot;flow&quot;: &quot;nightly&quot; },
+    &quot;object&quot;: &quot;flow:nightly&quot;,
+    &quot;mode&quot;: &quot;auto&quot;,
+    &quot;schedule&quot;: &quot;0 3 * * *&quot;
+  }
+]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>source</code></td><td>string</td><td>必填</td><td>发送事件的来源，例如 <code>cron</code> 或 <code>operad</code></td><td>读取文件时</td><td>被拒绝：<code>rule &lt;n&gt;: source: must be a non-empty string</code></td></tr><tr><td><code>type</code></td><td>string</td><td>必填</td><td>事件类型，例如 <code>tick</code> 或 <code>run.done</code></td><td>读取文件时</td><td>被拒绝：<code>rule &lt;n&gt;: type: must be a non-empty string</code></td></tr><tr><td><code>start</code></td><td>object</td><td>必填</td><td>下面的键</td><td>读取文件时</td><td>被拒绝：<code>rule &lt;n&gt;: start: must be an object</code></td></tr><tr><td><code>start.flow</code></td><td>string</td><td>必填</td><td>已加载的 flow 名称</td><td>读取文件时；未知的 flow 会被拒绝</td><td>被拒绝：<code>rule &lt;n&gt;: start.flow: unknown flow &quot;&lt;name&gt;&quot;</code></td></tr><tr><td><code>start.params</code></td><td>任意 JSON 值</td><td>缺省</td><td>flow 的固定参数</td><td>规则启动 flow 时</td><td>不是纯 JSON 时被拒绝：<code>rule &lt;n&gt;: ... is not JSON</code></td></tr><tr><td><code>object</code></td><td>string</td><td>必填</td><td>固定的对象 id，或 <code>$event.object</code></td><td>规则启动 run 时</td><td>被拒绝：<code>rule &lt;n&gt;: object: must be a non-empty string</code></td></tr><tr><td><code>mode</code></td><td>string</td><td>必填</td><td><code>observe</code>、<code>candidate</code>、<code>auto</code></td><td>规则启动 run 时</td><td>被拒绝：<code>rule &lt;n&gt;: mode: must be &quot;observe&quot;, &quot;candidate&quot;, &quot;auto&quot;</code></td></tr><tr><td><code>schedule</code></td><td>string</td><td>缺省</td><td>使用本地时区的五字段 cron 表达式</td><td>加载 cron 规则时；只有 source 为 <code>cron</code> 的规则使用它</td><td>被拒绝：<code>rule &lt;n&gt;: schedule: &lt;why the cron expression is not valid&gt;</code></td></tr></tbody></table></div>
+<p>cron 来源是来自 <code>@operad-io/source-cron</code>、名为 <code>cron</code> 的插件。对每条 <code>source</code> 为 <code>cron</code> 且带有 <code>schedule</code> 的规则，它在每个到期的分钟发出一个 <code>tick</code>；其他规则忽略 <code>schedule</code>。通过命令添加规则时，规则不能使用保留的来源 <code>operad</code>。</p>
+<p>如果 <code>triggers.json</code> 无效，整个文件会被拒绝，信息中包含规则和字段。<code>operad serve</code> 会记录日志，并在文件修复之前不带来源运行；需要规则的命令会报告这一点。运行中的 <code>serve</code> 会监视该文件，并在新文件加载成功时重新加载。</p>
+<h2 id="settings-from-a-client">从客户端修改设置<a class="anchor" href="#settings-from-a-client" aria-label="链接到本节">#</a></h2>
+<p><code>operad settings</code> 列出人可以调整的设置，<code>operad settings set &lt;name&gt; &lt;value&gt;</code> 修改其中一项；<code>--repo &lt;name&gt;</code> 指定一个已注册的仓库。全局设置是 <code>&lt;plugin&gt;.&lt;path&gt;</code>。文件名与其插件名相同的项目文件只使用插件名，所以 <code>.operad/dev.json</code> 对应 <code>dev.concurrency</code>、<code>dev.autoDefault</code>、<code>dev.gate.commands</code>、<code>dev.gate.commandTimeoutSecs</code>、<code>dev.reviewer.use</code>、<code>dev.reviewer.args</code>、<code>dev.reviewer.timeoutSecs</code> 和 <code>dev.reviewer.fixLevel</code>。其他文件会加上它的名称：<code>.operad/review.json</code> 对应 <code>dev.review.default.levels</code>、<code>dev.review.default.rules</code> 和 <code>dev.review.default.fixLevel</code>。更改会影响 merge 的内容（<code>autoDefault</code>、<code>fixLevel</code>、levels 和 rules）时需要 <code>--yes</code>。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/config.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../setup-prompt/"><small>上一页</small>用 agent 设置 operad</a>
+      <a class="next" href="../dev/"><small>下一页</small>dev.json 和 dev 插件</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-home">home</a></li><li class="l2"><a href="#an-example">示例</a></li><li class="l2"><a href="#the-sections">各个部分</a></li><li class="l3"><a href="#plugins">plugins</a></li><li class="l3"><a href="#store">store</a></li><li class="l3"><a href="#mcp">mcp</a></li><li class="l3"><a href="#ask">ask</a></li><li class="l2"><a href="#plugin-settings">插件设置</a></li><li class="l3"><a href="#bot">bot</a></li><li class="l3"><a href="#chat">chat</a></li><li class="l3"><a href="#dev">dev</a></li><li class="l3"><a href="#pool">pool</a></li><li class="l3"><a href="#claude">claude</a></li><li class="l3"><a href="#codex">codex</a></li><li class="l3"><a href="#pi">pi</a></li><li class="l3"><a href="#radian">radian</a></li><li class="l2"><a href="#triggersjson">triggers.json</a></li><li class="l2"><a href="#settings-from-a-client">从客户端修改设置</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

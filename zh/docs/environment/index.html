@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>环境变量 · operad 文档</title>
+<meta name="description" content="所有 OPERAD_ 环境变量，以及 operad 读取的其他变量，附默认值和各自何时生效。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/environment/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/environment/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/environment/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/environment/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="环境变量 · operad 文档">
+<meta property="og:description" content="所有 OPERAD_ 环境变量，以及 operad 读取的其他变量，附默认值和各自何时生效。">
+<meta property="og:url" content="https://operad.io/zh/docs/environment/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="环境变量 · operad 文档">
+<meta name="twitter:description" content="所有 OPERAD_ 环境变量，以及 operad 读取的其他变量，附默认值和各自何时生效。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "环境变量",
+ "description": "所有 OPERAD_ 环境变量，以及 operad 读取的其他变量，附默认值和各自何时生效。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/environment/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/environment/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/" aria-current="page">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="environment-variables">环境变量</h1>
+<p><code>operad</code> 或它的脚本读取的、或它启动的命令会收到的每个 <code>OPERAD_*</code> 变量，以及 <code>operad</code> 读取的其他变量。适合放进文件的设置在 <a href="../../../zh/docs/config/">config.json</a> 中；对于每个 shell 或每台检查主机各不相同的值，请使用环境变量。</p>
+<p>表中给出类型、默认值、接受的值以及值何时被读取。超出允许范围的值要么被忽略，要么被拒绝，并给出该行所指明的消息。</p>
+<h2 id="what-you-set">你设置的变量<a class="anchor" href="#what-you-set" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>变量</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th></tr></thead><tbody><tr><td><code>OPERAD_HOME</code></td><td>path</td><td><code>~/.operad</code></td><td>目录路径</td><td>每个命令：存放 <code>config.json</code>、store、secrets 目录、<code>tui.json</code>、<code>keys.json</code>、<code>serve.lock</code> 和 <code>access-user.json</code> 的 home。相对路径从当前目录解析。</td></tr><tr><td><code>OPERAD_SERVE_INTERVAL_MS</code></td><td>integer</td><td><code>1000</code></td><td>毫秒，大于 0</td><td><code>operad serve</code> 启动时：loop 两次之间的间隔。不是有限正数的值会回退到 1000。</td></tr><tr><td><code>OPERAD_BIND_RETRY_MS</code></td><td>integer</td><td><code>10000</code></td><td>毫秒，大于 0</td><td>接替另一个 serve 的 <code>serve</code> 打开它的地址时：持续重试多久。第一次启动会立即失败。不是正数的值会回退到 10000。</td></tr><tr><td><code>OPERAD_BIND_RETRY_STEP_MS</code></td><td>integer</td><td><code>250</code></td><td>毫秒，大于 0</td><td>同一次重试中两次尝试之间的等待。不是正数的值会回退到 250。</td></tr><tr><td><code>OPERAD_RELOAD_QUIET_MS</code></td><td>integer</td><td><code>1000</code></td><td>毫秒，大于 0</td><td>文件需要保持多久不变，<code>serve</code> 才检查变更后的代码能否加载（见 <a href="../../../zh/docs/cli/#changed-code">Changed code</a>）。不是正数的值会回退到 1000。</td></tr><tr><td><code>OPERAD_RELOAD_POLL_MS</code></td><td>integer</td><td><code>5000</code></td><td>毫秒，大于 0</td><td><code>serve</code> 多久查看一次文件是否有变化，以及 run 的进程多久等待一次无法加载的代码。不是正数的值会回退到 5000。</td></tr><tr><td><code>OPERAD_CHECK_BASE</code></td><td>commit</td><td><code>HEAD</code> 与 <code>origin/main</code> 的 merge base</td><td>commit 名称</td><td><code>check-changed.sh</code> 选取一项变更涉及的包时：用来比较的 commit。git 无法解析的名称会使脚本停止。</td></tr><tr><td><code>OPERAD_CHECK_HOST</code></td><td>ssh destination</td><td>未设置：检查在本机运行</td><td><code>user@host</code></td><td><code>remote-check.sh</code> 运行命令时：设置后，命令在该主机上运行。为空表示在本机。</td></tr><tr><td><code>OPERAD_CHECK_SLOTS</code></td><td>integer</td><td><code>1</code></td><td>整数，1 或更大</td><td>主机上同时运行多少个任务检查；每个 slot 有自己的锁和 tree。其他任何值都会使脚本停止，并给出指明该变量的消息。</td></tr><tr><td><code>OPERAD_CHECK_LANE</code></td><td>string</td><td>未设置</td><td><code>integration</code></td><td><code>integration</code> 占用唯一的 integration slot，而不是任务 slot；其他任何值都会使脚本停止，并给出指明该变量的消息。</td></tr><tr><td><code>OPERAD_CHECK_TREE</code></td><td>path</td><td><code>Code/operad</code></td><td>相对于主机 home 的路径</td><td>主机上运行检查所用的 clone；其他每个 slot 使用它的一个 worktree。</td></tr><tr><td><code>OPERAD_CHECK_PATH</code></td><td>目录列表</td><td><code>$HOME/.bun-operad/bin:$HOME/.bun/bin</code></td><td>用 <code>:</code> 分隔的目录</td><td>在检查行运行之前放到主机 <code>PATH</code> 的最前面，在主机上展开。</td></tr><tr><td><code>OPERAD_CHECK_SSH</code></td><td>command</td><td><code>ssh -o BatchMode=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=4</code></td><td>ssh 命令行</td><td>检查连接它的主机时。</td></tr><tr><td><code>OPERAD_CHECK_SCP</code></td><td>command</td><td><code>scp -q -o BatchMode=yes</code></td><td>scp 命令行</td><td>检查把 bundle 复制到它的主机时。</td></tr><tr><td><code>OPERAD_TEST_PARALLEL</code></td><td>integer</td><td><code>2</code></td><td>整数，1 或更大</td><td><code>run-tests.sh</code> 启动时：有多少个 worker 进程运行测试文件。其他任何值都会使脚本停止，并输出 <code>run-tests: OPERAD_TEST_PARALLEL must be a whole number of 1 or more, not '&lt;value&gt;'</code>。</td></tr><tr><td><code>OPERAD_TEST_HEAVY_PARALLEL</code></td><td>integer</td><td><code>8</code></td><td>整数，1 或更大</td><td><code>run-tests.sh</code> 启动时：有多少个 worker 进程运行 heavy 测试文件（位于 <code>test/heavy/</code> 下）。其他任何值都会使脚本停止，并给出指明该变量的消息。</td></tr><tr><td><code>OPERAD_TEST_OVERLAP</code></td><td>integer</td><td><code>1</code></td><td><code>1</code> 让 heavy step 与 light step 同时运行；<code>0</code> 让它在 light step 之后运行</td><td><code>run-tests.sh</code> 启动时。</td></tr><tr><td><code>OPERAD_TEST_TIMES</code></td><td>path</td><td><code>~/.operad-test-times</code></td><td>文件路径</td><td>每次完整的测试运行在此追加一行耗时记录（<code>run-tests.sh</code> 和 <code>test-times.ts</code>）。</td></tr></tbody></table></div>
+<h2 id="what-operad-sets">operad 设置的变量<a class="anchor" href="#what-operad-sets" aria-label="链接到本节">#</a></h2>
+<p>这些变量是为 operad 启动的命令设置的。不要自己设置；你设置的值会被替换或移除。</p>
+<div class="table-wrap"><table><thead><tr><th>变量</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th></tr></thead><tbody><tr><td><code>OPERAD_ID</code></td><td>string</td><td>总是设置</td><td>处于等待的对象的 id，形式为 <code>&lt;type&gt;:&lt;id&gt;</code></td><td>在 <a href="../../../zh/docs/notifications/">notify command</a> 的环境中。</td></tr><tr><td><code>OPERAD_TITLE</code></td><td>string</td><td>总是设置</td><td>对象的 title，读不到 title 时为它的 id</td><td>在 notify command 的环境中。</td></tr><tr><td><code>OPERAD_REASON</code></td><td>string</td><td>总是设置</td><td>问题或等待的原因</td><td>在 notify command 的环境中。</td></tr><tr><td><code>OPERAD_LINK</code></td><td>string</td><td>总是设置</td><td><code>operad://objects/&lt;id&gt;</code> 链接</td><td>在 notify command 的环境中（见 <a href="../../../zh/docs/http/#links">Links</a>）。</td></tr><tr><td><code>OPERAD_TASK</code></td><td>string</td><td>总是设置</td><td>任务 id</td><td>在 <code>dev</code> cleanup 或 integration 命令的环境中。</td></tr><tr><td><code>OPERAD_WORKTREE</code></td><td>path</td><td>总是设置</td><td>任务的 worktree</td><td>在 <code>dev</code> cleanup 或 integration 命令的环境中。</td></tr><tr><td><code>OPERAD_REMOTE</code></td><td>string</td><td>总是设置</td><td>remote 的名称</td><td>在 <code>dev</code> cleanup 或 integration 命令的环境中。</td></tr><tr><td><code>OPERAD_RUN</code></td><td>string</td><td>总是设置</td><td><code>&lt;run id&gt;:&lt;step&gt;</code></td><td>在 step 的进程的环境中：它指明 run 和 step，使 <code>serve</code> 能找到 step 留下的仍在运行的东西。移除它的子进程不会被回收。</td></tr><tr><td><code>OPERAD_RUN_HOME</code></td><td>path</td><td>总是设置</td><td>home 路径</td><td>在 step 的进程的环境中，使两个 home 永不相遇。</td></tr><tr><td><code>OPERAD_SERVE_SUPERVISED</code></td><td>flag</td><td>未设置</td><td><code>1</code></td><td>由因代码变更而重启 <code>serve</code> 的进程设置；在子进程看到自己的环境之前被移除。不要自己设置。</td></tr><tr><td><code>OPERAD_SERVE_REPLACES</code></td><td>flag</td><td>未设置</td><td><code>1</code></td><td>设置在由卡住的 serve 启动来取代它的那个 <code>serve</code> 上；在子进程看到自己的环境之前被移除。不要自己设置。</td></tr></tbody></table></div>
+<h2 id="other-variables-operad-reads">operad 读取的其他变量<a class="anchor" href="#other-variables-operad-reads" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>变量</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th></tr></thead><tbody><tr><td><code>EDITOR</code></td><td>command</td><td>未设置</td><td>编辑器命令行</td><td><code>operad dev task edit</code>，当 stdin 是终端或没有带来 brief 时：编辑器打开当前的 brief。它通过 <code>/bin/sh -c '&lt;editor&gt; &quot;$1&quot;'</code> 运行。非零退出会使命令失败，并给出 <code>&quot;&lt;editor&gt;&quot; exited with code &lt;n&gt;</code>。</td></tr><tr><td><code>VISUAL</code></td><td>command</td><td>未设置</td><td>编辑器命令行</td><td>仅在 <code>EDITOR</code> 未设置时使用。<code>EDITOR</code> 设为空值或空白值时不会回退到 <code>VISUAL</code>；命令会报告没有设置编辑器。</td></tr><tr><td><code>HOME</code></td><td>path</td><td>该账户的 home</td><td>目录路径</td><td>默认的 home（<code>~/.operad</code>）、<code>~</code> 展开以及 radian 配置路径。</td></tr><tr><td><code>PATH</code></td><td>目录列表</td><td>该账户的 <code>PATH</code></td><td>用 <code>:</code> 分隔的目录</td><td>查找 <code>radian</code>、<code>pi</code>、<code>claude</code>、git 以及命令启动的其他程序。不带 <code>/</code> 的命令名必须在 <code>PATH</code> 中。</td></tr><tr><td><code>RADIAN_CONFIG</code></td><td>path</td><td><code>$HOME/.radian/config/config.toml</code></td><td>文件路径</td><td>radian harness 从该文件读取它自己的 provider 设置。</td></tr><tr><td><code>BASH_ENV</code></td><td>path</td><td>未设置</td><td>文件路径</td><td>pi worker 在启动之前把它从自己的环境中删除，因此 shell 启动文件不能改变工具调用。</td></tr><tr><td><code>ENV</code></td><td>path</td><td>未设置</td><td>文件路径</td><td>出于同样的原因被 pi worker 删除。</td></tr><tr><td><code>TMPDIR</code></td><td>path</td><td>系统临时目录</td><td>目录路径</td><td>传给 bot 的 MCP server，使该 server 能找到临时文件。</td></tr><tr><td><code>LANG</code></td><td>string</td><td>未设置</td><td>locale 名称</td><td>传给 bot 的 MCP server。</td></tr><tr><td><code>STRESS_LOCK</code></td><td>path</td><td><code>$HOME/.operad-stress.lock</code></td><td>目录路径</td><td><code>scripts/stress.sh</code>：本机上所有 stress 运行共用的锁。只有知道自己是唯一一个的运行才传 <code>--no-lock</code>。</td></tr><tr><td><code>NODE_ENV</code></td><td>string</td><td>未设置</td><td><code>test</code></td><td>内部使用：当它为 <code>test</code> 时，插件注册表会省略仅用于测试的检查。正常使用时不要设置。</td></tr></tbody></table></div>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/environment.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../checks/"><small>上一页</small>检查</a>
+      <a class="next" href="../troubleshooting/"><small>下一页</small>故障排查</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#what-you-set">你设置的变量</a></li><li class="l2"><a href="#what-operad-sets">operad 设置的变量</a></li><li class="l2"><a href="#other-variables-operad-reads">operad 读取的其他变量</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

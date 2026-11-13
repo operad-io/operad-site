@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>检查 · operad 文档</title>
+<meta name="description" content="检查一项变更，以及复现不稳定的测试。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/checks/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/checks/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/checks/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/checks/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="检查 · operad 文档">
+<meta property="og:description" content="检查一项变更，以及复现不稳定的测试。">
+<meta property="og:url" content="https://operad.io/zh/docs/checks/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="检查 · operad 文档">
+<meta name="twitter:description" content="检查一项变更，以及复现不稳定的测试。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "检查",
+ "description": "检查一项变更，以及复现不稳定的测试。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/checks/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/checks/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/" aria-current="page">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="checks">检查</h1>
+<p>一项变更在合并之前如何被检查，以及不稳定的测试如何复现。同样的检查也是 <code>dev</code> 插件任务的 gate（见<a href="../../../zh/docs/dev/">它的页面</a>）。</p>
+<h2 id="checking-a-change">检查一项变更<a class="anchor" href="#checking-a-change" aria-label="链接到本节">#</a></h2>
+<pre data-ui><code class="lang-sh">bash scripts/verify.sh
+bash scripts/check-changed.sh
+bash scripts/remote-check.sh '&lt;command&gt;'
+bash scripts/remote-check.sh -- &lt;word&gt;...</code></pre>
+<p><code>verify.sh</code> 按 lockfile 安装、做类型检查，并用 <code>scripts/run-tests.sh</code> 运行整个测试套件。该脚本在并行的 worker 进程中运行测试文件（<code>bun test --parallel</code>），之后再依次运行 <code>tui</code> 包的测试，一个文件接一个文件，因为它的终端库无法在并行 worker 中加载。<code>OPERAD_TEST_PARALLEL</code>（1 或更大的整数，默认 <code>2</code>）是 worker 进程的数量；其他任何值都会使脚本停止，并给出指明该变量的消息。会启动真实进程、构建真实 git 仓库、打开端口或占用大量内存的测试放在其包的 <code>test/heavy/</code> 下，在它们自己的 step 中运行，与 light step 同时进行，使用 <code>OPERAD_TEST_HEAVY_PARALLEL</code> 个 worker（默认 <code>8</code>；<code>OPERAD_TEST_OVERLAP=0</code> 让该 step 在 light step 之后运行）。给定包名时（<code>bash scripts/run-tests.sh dev shell</code>），它只运行这些包的测试。<code>check-changed.sh</code> 以同样的方式安装和做类型检查，然后只测试一项变更涉及的包：自 <code>HEAD</code> 与 <code>origin/main</code> 的 merge base 以来有文件改动的每个包（已提交、已暂存、未暂存或未跟踪），以及代码直接或经由其他包加载了其中某个包的每个包。测试（而非代码）加载了已改动包的包，它的测试也会运行；到此为止，不再向外扩展。<code>packages/</code> 之外的变更（lockfile、根 manifest、<code>scripts/</code>、<code>docs/</code>、<code>.operad/</code>）会测试每个包。它在测试之前打印所选的包（<code>all</code>、<code>none</code> 或名称）。<code>OPERAD_CHECK_BASE</code>（一个 commit，默认是 merge base）改变它的比较对象。本仓库的任务检查运行 <code>check-changed.sh</code>，它的 integration 运行 <code>verify.sh</code>。</p>
+<p><code>remote-check.sh</code> 在本机或（设置了 <code>OPERAD_CHECK_HOST</code> 时）在检查主机上、于同一个 commit 运行一条命令。它接受作为一个参数的命令（一条 shell 命令行），或在 <code>--</code> 之后作为分开的 word，这些 word 原样传递：途中没有 shell 把它们当作代码读取，因此 word 中可以含有引号、反引号或 <code>$</code>。失败测试的 rerun（<code>.operad/dev.json</code> 中的 <code>failed.rerun</code>）使用 <code>--</code> 形式，因此它在检查运行的地方运行。</p>
+<p><code>remote-check.sh</code> 把一条命令（一条 shell 行）作为检查运行。<code>OPERAD_CHECK_HOST</code> 未设置或为空时，它在仓库根目录于本机运行该行。设为 ssh destination（<code>user@host</code>）时，它把 <code>HEAD</code> 作为 git bundle 复制到该主机，并在那里占用 <code>OPERAD_CHECK_SLOTS</code> 个 slot 中的一个（锁为 <code>~/.operad-check-&lt;i&gt;.lock</code>；只有全部被占用时才等待），获取 <code>origin</code> 和该 bundle，以 detached 方式检出 <code>HEAD</code> 的 commit，除 <code>node_modules</code> 外移除未跟踪的文件，然后运行该行。每个 slot 有自己的 tree，因此在一个 slot 中的 checkout 或 clean 绝不会碰到另一个：slot 1 使用 clone <code>OPERAD_CHECK_TREE</code>（<code>~/Code/operad</code>），其他每个 slot 使用该 clone 在首次使用时创建的 git worktree，<code>&lt;tree&gt;-slot&lt;i&gt;</code>（例如 <code>~/Code/operad-slot2</code>），在该行安装之后拥有自己的 <code>node_modules</code>。带 <code>OPERAD_CHECK_LANE=integration</code> 时，检查改为占用唯一的 integration slot（锁 <code>~/.operad-check-integration.lock</code>，worktree <code>&lt;tree&gt;-integration</code>）：integration 从不等待任务检查，任务检查也从不占用该 slot。该行在主机上能看到 <code>OPERAD_CHECK_SLOTS</code>，因此检查可以使用 <code>cores / (N + 1)</code> 个测试 worker。输出在写出时即返回，退出码是该行的退出码；该行运行之前发生的失败（bundle、复制、连接、fetch、checkout）以 1 退出，并输出一行指明出错 step 的消息。主机需要有仓库的 clone 和 Bun。</p>
+<div class="table-wrap"><table><thead><tr><th>变量</th><th>类型</th><th>默认值</th><th>作用</th></tr></thead><tbody><tr><td><code>OPERAD_CHECK_HOST</code></td><td>ssh destination</td><td>空</td><td>检查在哪里运行；为空则在本机运行。</td></tr><tr><td><code>OPERAD_CHECK_TREE</code></td><td>path</td><td><code>Code/operad</code></td><td>主机上的 clone，相对于它的 home 目录。</td></tr><tr><td><code>OPERAD_CHECK_SLOTS</code></td><td>整数，1 或更大</td><td><code>1</code></td><td>主机上同时运行多少个任务检查；其他任何值会使脚本停止。</td></tr><tr><td><code>OPERAD_CHECK_LANE</code></td><td><code>integration</code></td><td>未设置</td><td><code>integration</code> 占用 integration slot，而不是任务 slot；其他任何值会使脚本停止。</td></tr><tr><td><code>OPERAD_CHECK_PATH</code></td><td>目录</td><td><code>$HOME/.bun-operad/bin:$HOME/.bun/bin</code></td><td>在该行运行之前放到主机 <code>PATH</code> 的最前面，在主机上展开。</td></tr><tr><td><code>OPERAD_CHECK_SSH</code></td><td>command</td><td><code>ssh -o BatchMode=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=4</code></td><td>ssh 命令。</td></tr><tr><td><code>OPERAD_CHECK_SCP</code></td><td>command</td><td><code>scp -q -o BatchMode=yes</code></td><td>scp 命令。</td></tr></tbody></table></div>
+<p>每个变量都在脚本启动时读取。</p>
+<h2 id="when-a-check-fails">检查失败时<a class="anchor" href="#when-a-check-fails" aria-label="链接到本节">#</a></h2>
+<p>该行运行之前发生的失败（缺少 clone、bundle 或复制失败、连接、fetch 或 checkout 失败）以 1 退出，并输出一行指明出错 step 的消息；修复该 step 后再次运行检查。已运行的行以它自己的退出码退出，输出在写出时即返回。<code>dev</code> 插件的任务会记录失败的行、它的退出码和最后的输出；消息和处理办法见 <a href="../../../zh/docs/troubleshooting/#checks-and-tests">Troubleshooting</a>。</p>
+<p>一个失败后在 rerun 时通过的测试，在证明并非如此之前就是一个 bug。不要提高它的超时，也不要在测试内部加重试。brief 是修复不稳定测试的任务会运行两次 <code>scripts/stress.sh</code>：一次在修复之前复现，一次在修复之后确认，并在最终答复中说明命令、运行次数和结果。本仓库通过 <code>.operad/dev.json</code> 中的 <code>failed.rule</code>（<code>.operad/flaky.md</code>）和 <code>failed.stress</code> 把这条规则和命令交给 <code>dev</code>；见 <a href="../../../zh/docs/dev/">dev settings</a>。其他每个任务的检查都是 <code>bash scripts/check-changed.sh</code>；完整的 <code>bash scripts/verify.sh</code> 在合并之前的 integration 时再运行一次。</p>
+<h2 id="reproducing-a-flaky-test">复现不稳定的测试<a class="anchor" href="#reproducing-a-flaky-test" aria-label="链接到本节">#</a></h2>
+<pre data-ui><code class="lang-sh">bash scripts/stress.sh [--runs N] [--load K] [-t &lt;name pattern&gt;] &lt;test files...&gt;</code></pre>
+<p>该脚本用 <code>--rerun-each N</code>（默认 50）和 <code>--timeout 30000</code> 对这些文件运行 <code>bun test</code>。<code>-t</code> 把运行限制在名称匹配该模式的测试上。<code>--load K</code> 在运行期间启动 K 个忙碌的后台进程（一个循环 fork 短进程，其余空转），数量绝不超过 CPU 数，用来模拟负载下的 gate；脚本退出时它们都会停止，无论以何种方式退出。</p>
+<p>它打印运行次数、通过数和失败数、每个失败的测试名称及其次数，以及完整日志的路径；当有任何失败、没有测试运行或 bun 本身失败时，以 1 退出。不稳定测试的修复在以下情况下算完成：带 <code>--load 2</code> 的 stress 运行通过，并且其 <code>--runs</code> 取值使运行约需十分钟（至少 20，至多 200）；一次只运行一个 stress 运行。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/checks.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../notifications/"><small>上一页</small>通知</a>
+      <a class="next" href="../environment/"><small>下一页</small>环境变量</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#checking-a-change">检查一项变更</a></li><li class="l2"><a href="#when-a-check-fails">检查失败时</a></li><li class="l2"><a href="#reproducing-a-flaky-test">复现不稳定的测试</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

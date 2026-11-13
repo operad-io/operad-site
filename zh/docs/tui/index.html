@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>终端客户端 · operad 文档</title>
+<meta name="description" content="终端客户端：主题、实时更新、状态与退出。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/tui/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/tui/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/tui/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/tui/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="终端客户端 · operad 文档">
+<meta property="og:description" content="终端客户端：主题、实时更新、状态与退出。">
+<meta property="og:url" content="https://operad.io/zh/docs/tui/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="终端客户端 · operad 文档">
+<meta name="twitter:description" content="终端客户端：主题、实时更新、状态与退出。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "终端客户端",
+ "description": "终端客户端：主题、实时更新、状态与退出。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/tui/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/tui/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/" aria-current="page">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="the-terminal-client">终端客户端</h1>
+<p><code>operad tui</code> 是同一个 <code>/v1</code> 接口的终端客户端。在全新的 <code>~/.operad</code> 下，它不需要任何其他东西：不用改 config，不用在另一个终端里运行 <code>operad serve</code>，也不用 token。它从不打开 store，也从不加载插件。它按下面的方式找到或启动服务器：</p>
+<ul><li>给出 <code>--url</code> 和 <code>--token</code> 时，它们优先于 home。给出 <code>--url</code> 时，从不启动任何东西。</li><li>没有 <code>--url</code> 时，URL 是 <code>http://&lt;address&gt;:&lt;port&gt;</code>，其中 address 取自 <code>config.json</code> 中 <code>http.listen</code> 的第一项，port 取自 <code>http.port</code>；没有 <code>http</code> 部分时是 <code>http://127.0.0.1:7480</code>。</li><li>它向该地址请求 <code>/v1/types</code>。如果有 <code>serve</code> 响应，就继续。</li><li>如果没有任何东西响应，且没有 <code>serve</code> 持有此 home，它会为这个 <code>OPERAD_HOME</code> 启动 <code>operad serve</code>，打印 <code>starting operad serve (log: &lt;path&gt;)</code>，最多等待 15 秒（探测时间也计入）让它响应，然后打开界面。这个 <code>serve</code> 使用与你所输入命令相同的运行时和 <code>operad</code> 入口，以 <code>$OPERAD_HOME</code> 作为工作目录，把输出追加到 <code>$OPERAD_HOME/serve.log</code>，并且在你退出 TUI 之后继续运行，因为 hub 要继续运行 flow。用 <code>operad serve stop</code> 停止它（见 &quot;Stopping serve&quot;），或者在你自己运行 <code>operad serve</code> 的终端里按 Ctrl-C。如果它立即退出或始终不响应，<code>operad tui</code> 会以一条点明 <code>serve.log</code> 的错误失败，并显示它的最后几行；<code>serve.log</code> 可能包含插件的输出，所以粘贴之前请先阅读这些行。如果是另一个 <code>operad tui</code> 先启动了这个 <code>serve</code>，那么本次会在同样的 15 秒内等待该 <code>serve</code> 响应。</li><li>如果已有 <code>serve</code> 持有此 home，但该地址没有任何东西响应（<code>http.enabled</code> 为 false，或 <code>http.port</code>/<code>http.listen</code> 不同），它不启动任何东西并说明这一点，同时点明 <code>http.enabled</code> 和 <code>http.port</code>。</li><li>如果该地址有东西响应，但它不是 operad，它会失败并点明端口。</li><li><code>http.port</code> 为 0 或 <code>http.listen</code> 为空时，它不启动任何东西，并提示设置 <code>http.port</code>（或 <code>http.listen</code>）或传入 <code>--url</code>。</li><li><code>http</code> 中为 <code>&quot;enabled&quot;: false</code> 时，它不启动任何东西，并点明 <code>http.enabled</code>。</li><li><code>--no-start</code> 关闭启动：界面照常打开，并在页脚显示失败信息。</li><li>没有 <code>--token</code> 时，token 是 <code>operad pair</code> 从 <code>$OPERAD_HOME/secrets/http.json</code> 读取的那一个。<code>operad pair --show-token</code> 会把它打印出来。</li></ul>
+<div class="table-wrap"><table><thead><tr><th>输入</th><th>类型</th><th>默认值</th><th>允许的值</th></tr></thead><tbody><tr><td><code>--url</code></td><td>字符串</td><td><code>http://&lt;first http.listen address&gt;:&lt;http.port&gt;</code>，没有 <code>http</code> 部分时即 <code>http://127.0.0.1:7480</code></td><td>不带凭据、query 或 fragment 的 <code>http</code> 或 <code>https</code> URL。</td></tr><tr><td><code>--no-start</code></td><td>flag</td><td>关闭</td><td>即使没有任何东西响应，也从不启动 <code>operad serve</code>。</td></tr><tr><td><code>--theme</code></td><td>字符串</td><td><code>$OPERAD_HOME/tui.json</code> 中的 <code>theme</code>，否则为 <code>auto</code></td><td><code>auto</code>、<code>light</code>、<code>dark</code>、<code>terminal</code>、一个 family 或内置主题（见 Themes），或你自己的主题文件的名称。本次会话中优先于 <code>tui.json</code>。</td></tr><tr><td><code>--token</code></td><td>字符串</td><td><code>$OPERAD_HOME/secrets/http.json</code> 中的 token</td><td>正在运行的 <code>serve</code> 的 bearer token。</td></tr><tr><td><code>OPERAD_HOME</code></td><td>环境变量</td><td><code>~/.operad</code></td><td>存放 <code>config.json</code>、<code>secrets/http.json</code>、<code>serve.lock</code> 以及被启动的 <code>serve</code> 所写的 <code>serve.log</code> 的目录。</td></tr><tr><td><code>http.listen</code></td><td><code>config.json</code> 中的字符串数组</td><td><code>[&quot;127.0.0.1&quot;]</code></td><td><code>serve</code> 可以监听的 IP 字面量；第一个是 TUI 的默认地址。</td></tr><tr><td><code>http.port</code></td><td><code>config.json</code> 中的整数</td><td><code>7480</code></td><td><code>0</code> 到 <code>65535</code>；TUI 需要 <code>serve</code> 实际使用的端口，所以 <code>0</code> 需要配合 <code>--url</code>。</td></tr></tbody></table></div>
+<h2 id="the-tuijson-file">tui.json 文件<a class="anchor" href="#the-tuijson-file" aria-label="链接到本节">#</a></h2>
+<p><code>$OPERAD_HOME/tui.json</code> 保存这个客户端自己的设置。它是 JSON；文件缺失表示使用默认值。TUI 监视该文件，并在它变化时重绘。如果文件不是 JSON 对象、不是合法的 JSON、使用了下面两个键和 <code>$schema</code> 之外的键，或使用了未知的主题，就会被拒绝，并指出文件和问题；启动时 TUI 不会打开。</p>
+<pre data-ui><code class="lang-json">{ &quot;theme&quot;: &quot;nord&quot;, &quot;layout&quot;: &quot;tree&quot; }</code></pre>
+<div class="table-wrap"><table><thead><tr><th>键</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>theme</code></td><td>字符串</td><td><code>&quot;auto&quot;</code></td><td><code>auto</code>、<code>light</code>、<code>dark</code>、<code>terminal</code>、一个 family 或内置主题，或 <code>$OPERAD_HOME/themes</code> 中某个主题文件的名称</td><td>启动时，以及 <code>tui.json</code> 变化时；<code>--theme</code> 在一次会话中优先于它</td><td>被拒绝：TUI 不会启动，消息指出文件和未知的主题</td></tr><tr><td><code>layout</code></td><td>字符串</td><td><code>&quot;tree&quot;</code></td><td><code>tree</code>、<code>list</code></td><td>启动时，以及 <code>tui.json</code> 变化时；<code>t</code> 切换它并把选择保存到 <code>tui.json</code></td><td>被拒绝：TUI 不会启动，消息指出文件和键</td></tr></tbody></table></div>
+<p><code>layout</code> 决定对象页面如何绘制它的下一层级：<code>tree</code> 把子对象嵌套在按 <code>after</code> 顺序排在最前的同级对象之下，<code>list</code> 则显示一个平铺的列表。</p>
+<h2 id="themes">主题<a class="anchor" href="#themes" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>名称</th><th>外观</th></tr></thead><tbody><tr><td><code>auto</code>（默认）</td><td>按终端的主题模式使用 <code>light</code> 或 <code>dark</code>，终端切换时它会实时切换。</td></tr><tr><td><code>light</code>、<code>dark</code></td><td>operad 应用的颜色。</td></tr><tr><td><code>terminal</code></td><td>终端自己的 16 种颜色（accent 为品红，run 为蓝，ok 为绿，error 为红，weak 为亮黑），因此由它的配色方案决定外观；不需要 truecolor。</td></tr></tbody></table></div>
+<p>未知的名称是一个错误，并会列出可用的名称。<code>tui.json</code> 中未知的主题是一个指出文件和问题的错误；TUI 不会启动。<code>tui.json</code> 的键在<a href="#the-tuijson-file">它的小节</a>中。</p>
+<p>颜色来自主题。<code>tui.json</code> 中的 <code>theme</code> 选择一个主题；<code>--theme</code> 为一次会话选择一个主题。主题文件只写它所更改的 token；其余的由 <code>extends</code> 补全。颜色可以是 <code>&quot;#rrggbb&quot;</code>，也可以是 0 到 15 的 ANSI 索引。</p>
+<pre data-ui><code class="lang-json">{ &quot;extends&quot;: &quot;dark&quot;, &quot;colors&quot;: { &quot;accent&quot;: &quot;#ff8800&quot;, &quot;error&quot;: 9 } }</code></pre>
+<div class="table-wrap"><table><thead><tr><th>键</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>comment</code></td><td>字符串</td><td>不存在</td><td>写给人看的说明：颜色的来源及其许可证</td><td>读取文件时；它不改变任何颜色</td><td>是文本则忽略；其他任何类型都会使文件被拒绝</td></tr><tr><td><code>extends</code></td><td>字符串</td><td><code>&quot;dark&quot;</code></td><td><code>light</code>、<code>dark</code>、<code>terminal</code>、一个内置主题，或另一个主题文件</td><td>读取文件时；出现环会被拒绝</td><td>被拒绝：显示 <code>theme not changed: &lt;why&gt;</code>，最后一个有效的主题保持不变；启动时 TUI 不会打开</td></tr><tr><td><code>colors</code></td><td>对象</td><td><code>{}</code></td><td>下面的 token 名称</td><td>读取文件时；省略的 token 来自 <code>extends</code></td><td>被拒绝：未知的 token 会指出文件和键</td></tr><tr><td><code>colors.text</code></td><td>字符串或整数</td><td>继承自 <code>extends</code></td><td><code>&quot;#rrggbb&quot;</code> 或整数 <code>0</code>–<code>15</code></td><td>绘制主题时</td><td>被拒绝：错误的颜色会指出文件和键；最后一个有效的主题保持不变</td></tr><tr><td><code>colors.weak</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；次要文本</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.rule</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；分隔线和边框</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.accent</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；需要你处理的内容</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.run</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；进行中的工作</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.ok</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；成功</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.error</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；失败</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.cancelled</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；已取消的对象</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.add</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；diff 中新增的行</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.remove</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；diff 中删除的行</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.tint</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；选中行的背景</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.code</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；代码块的背景</td><td>绘制主题时</td><td>被拒绝，同上</td></tr><tr><td><code>colors.background</code></td><td>字符串或整数</td><td>继承</td><td><code>&quot;#rrggbb&quot;</code> 或 <code>0</code>–<code>15</code>；palette、note、确认和键列表框的填充色</td><td>绘制主题时</td><td>被拒绝，同上</td></tr></tbody></table></div>
+<p>这些 token 的含义是：<code>text</code>、<code>weak</code>（次要文本）、<code>rule</code>（分隔线和边框）、<code>accent</code>（需要你处理）、<code>run</code>（进行中）、<code>ok</code>（成功）、<code>error</code>、<code>cancelled</code>（已取消的对象）、<code>add</code> 和 <code>remove</code>（diff 行）、<code>tint</code>（选中行的背景）、<code>code</code>（代码块的背景）以及 <code>background</code>（palette、note、确认和键列表框的填充色）。名称与内置主题相同的文件（<code>auto</code>、<code>light</code>、<code>dark</code>、<code>terminal</code>、一个 family 或一个内置主题）会被拒绝。<code>extends</code> 中出现环、未知的 token、错误的颜色或未知的键，都会使文件被拒绝，指出该文件，并保留最后一个有效的主题。</p>
+<h3 id="popular-themes">常用主题<a class="anchor" href="#popular-themes" aria-label="链接到本节">#</a></h3>
+<p>operad 内置了这些配色，每一种都取自其项目自己的仓库（来源、许可证和每一处对比度调整都写在 <code>packages/tui/themes/</code> 中对应文件的 <code>comment</code> 里，许可证文本就在这些文件旁边）。要选用其中一个，在 <code>tui.json</code> 中写上它的名称（<code>{ &quot;theme&quot;: &quot;nord&quot; }</code>），或传入 <code>--theme nord</code>。</p>
+<div class="table-wrap"><table><thead><tr><th>Family（像 <code>auto</code> 一样跟随终端）</th><th>浅色</th><th>深色</th></tr></thead><tbody><tr><td><code>catppuccin</code></td><td><code>catppuccin-latte</code></td><td><code>catppuccin-mocha</code></td></tr><tr><td><code>solarized</code></td><td><code>solarized-light</code></td><td><code>solarized-dark</code></td></tr><tr><td><code>tokyo-night</code></td><td><code>tokyo-night-day</code></td><td><code>tokyo-night-night</code></td></tr><tr><td><code>one</code></td><td><code>one-light</code></td><td><code>one-dark</code></td></tr><tr><td><code>rose-pine</code></td><td><code>rose-pine-dawn</code></td><td><code>rose-pine-main</code></td></tr><tr><td><code>github</code></td><td><code>github-light</code></td><td><code>github-dark</code></td></tr><tr><td><code>kanagawa</code></td><td><code>kanagawa-lotus</code></td><td><code>kanagawa-wave</code></td></tr></tbody></table></div>
+<p>写 family 的名称时，TUI 在浅色终端中显示它的浅色成员，在深色终端中显示它的深色成员，并像 <code>auto</code> 一样实时切换。写某个成员的名称，则无论终端如何都保持该成员。下面这些没有成对的另一个，始终保持不变：<code>dracula</code>、<code>nord</code>、<code>catppuccin-frappe</code>、<code>catppuccin-macchiato</code> 和 <code>kanagawa-dragon</code>（都是深色）。Gruvbox 没有内置，因为它的仓库没有许可证文件。</p>
+<h3 id="your-own-themes">你自己的主题<a class="anchor" href="#your-own-themes" aria-label="链接到本节">#</a></h3>
+<p><code>theme</code> 也可以写主题文件的名称，即 <code>$OPERAD_HOME/themes/&lt;name&gt;.json</code>（JSON Schema：<code>packages/tui/theme.schema.json</code>）。它只写所更改的 token；其余的由 <code>extends</code>（<code>light</code>、<code>dark</code>、<code>terminal</code>、一个内置主题或另一个主题文件；省略时为 <code>dark</code>）补全。颜色可以是 <code>&quot;#rrggbb&quot;</code>，也可以是 0 到 15 的 ANSI 索引：</p>
+<pre data-ui><code class="lang-json">{ &quot;extends&quot;: &quot;dark&quot;, &quot;colors&quot;: { &quot;accent&quot;: &quot;#ff8800&quot;, &quot;error&quot;: 9 } }</code></pre>
+<p><code>extends</code> 中出现环、未知的 token、错误的颜色或未知的键，都是一个指出文件和键的错误。名称与内置主题相同的文件（<code>auto</code>、<code>light</code>、<code>dark</code>、<code>terminal</code>、一个 family 或一个内置主题）会被拒绝。</p>
+<p><code>docs/themes/</code> 中有两个示例，它们没有被安装：<code>high-contrast.json</code> 和 <code>low-saturation.json</code>。要以其中一个为起点：</p>
+<pre data-ui><code class="lang-sh">mkdir -p ~/.operad/themes
+cp docs/themes/high-contrast.json ~/.operad/themes/mine.json
+echo '{ &quot;theme&quot;: &quot;mine&quot; }' &gt; ~/.operad/tui.json</code></pre>
+<p>TUI 监视 <code>tui.json</code> 和主题目录，其中任何一个变化时都会重绘，无需重启。变为无效的文件会让最后一个有效的主题保持不变，页脚会显示一行 <code>theme not changed: &lt;why&gt;</code>，直到下一次有效的更改。</p>
+<p>每个主题都定义同样的 token：<code>text</code>、<code>weak</code>（次要文本）、<code>rule</code>（分隔线和边框）、<code>accent</code>（需要你处理）、<code>run</code>（进行中）、<code>ok</code>（成功）、<code>error</code>、<code>add</code> 和 <code>remove</code>（diff 行）、<code>tint</code>（选中行的背景）、<code>code</code>（代码块的背景）以及 <code>background</code>（palette、note、确认和键列表框的填充色）。</p>
+<p><code>operad tui</code> 使用终端的尺寸：在 100 列或更宽时，列表和对象窗格并排显示；不足 100 列时，列表占满屏幕，打开的对象会替换它，直到按 <code>escape</code>。页眉统计 Pending 和 Running，然后列出每个带有标签页的插件。对象归在设置之下的插件没有标签页：它的对象列在 <code>:</code> palette 的设置区域中，每个类型一组，并像从 Pending、Running 或其他标签页中的分组标题一样，从那里打开。在打开某一行之前，右侧窗格显示 <code>select an object</code>。<code>enter</code> 通过 <code>GET /v1/objects/&lt;id&gt;</code> 打开选中的行：窗格以该行开头（id、标题、state、note 徽标和标记），然后是按服务器顺序排列的 section 标签页（History 在最后），然后是该 section 的 Markdown。实时的 section 在它的标签页上有一个圆点，并在窗格位于底部时跟随它的末尾（<code>following</code>）；向上滚动会停止跟随，<code>End</code> 会恢复。被服务器按大小上限截断的 section 会显示 <code>Truncated</code> 提示，<code>f</code> 会加载整个 section。请求失败，或事件流被拒绝（例如 token 错误），会在页脚显示原因，直到某次获取成功；屏幕关闭后会打印同样的消息。列表会滚动以保持光标可见，刷新时，如果所选对象仍然存在，就会保持选中。在 100 列或更宽时，列表和对象并排显示：对象跟随选中的行（光标停止后约 150 ms 打开），<code>j</code> / <code>k</code> 和方向键继续移动列表，而滚动或切换 section 的键作用于对象。在不足 100 列时，对象占满屏幕：<code>enter</code> 打开它，<code>escape</code> 返回，<code>j</code> / <code>k</code> 滚动它。切换标签页会关闭对象。在声明了过滤器的类型的标签页上，<code>f</code> 按服务器的顺序显示下一个过滤器（每次启动时每个标签页都以该类型的默认过滤器打开；这个选择不会被保存）。页眉在标签页之后加上 <code> · &lt;filter&gt;</code>，并且除非过滤器是 <code>all</code>，还加上 <code> · N hidden</code>。如果新的过滤器仍然显示所选对象，选择就停留在同一个对象上，否则移到第一行。通过实时更新离开过滤器的对象会从列表中消失。在打开了对象时，<code>f</code> 在 section 被截断时加载整个 section，否则切换过滤器；打开对象的下一层级也跟随该过滤器，所以它的进度条和数字只统计列表所显示的行。在窄屏幕上打开了对象时，它只加载 section。应用读取的每个键都在下面。</p>
+<div class="table-wrap"><table><thead><tr><th>输入</th><th>类型</th><th>默认值</th><th>允许的值</th></tr></thead><tbody><tr><td><code>1</code>–<code>9</code></td><td>键</td><td>无</td><td>编号对应的标签页。</td></tr><tr><td><code>tab</code></td><td>键</td><td>无</td><td>下一个标签页。</td></tr><tr><td><code>shift-tab</code></td><td>键</td><td>无</td><td>上一个标签页。</td></tr><tr><td><code>enter</code></td><td>键</td><td>无</td><td>把选中的行作为对象打开（不足 100 列时；并排显示时它已经是打开的）。在已经打开的那一行上不做任何事。</td></tr><tr><td><code>↑</code> / <code>↓</code></td><td>键</td><td>无</td><td>把列表光标移动一行；列表在接近末尾时加载它的下一页。在不足 100 列且打开了对象时，改为把 section 滚动一行。</td></tr><tr><td><code>j</code> / <code>k</code></td><td>键</td><td>无</td><td>与 <code>↓</code> / <code>↑</code> 相同。</td></tr><tr><td><code>PgUp</code> / <code>PgDn</code></td><td>键</td><td>无</td><td>把打开的 section 滚动一页。到末尾时，向该 section 请求它的 <code>next</code> 页。</td></tr><tr><td><code>b</code> / <code>space</code></td><td>键</td><td>无</td><td>与 <code>PgUp</code> / <code>PgDn</code> 相同。</td></tr><tr><td><code>Home</code> / <code>End</code></td><td>键</td><td>无</td><td>打开的 section 的顶部或末尾；<code>End</code> 会恢复跟随实时的 section。</td></tr><tr><td><code>[</code> / <code>]</code></td><td>键</td><td>无</td><td>切换到上一个或下一个 section 标签页。</td></tr><tr><td><code>←</code> / <code>→</code></td><td>键</td><td>无</td><td>与 <code>[</code> / <code>]</code> 相同。</td></tr><tr><td><code>p</code></td><td>键</td><td>无</td><td>在打开的 section 有分页时，选择一页。</td></tr><tr><td><code>n</code> / <code>N</code></td><td>键</td><td>无</td><td>在打开的 section 有分页时，下一页或上一页。</td></tr><tr><td><code>t</code></td><td>键</td><td>无</td><td>在 <code>tree</code> 和 <code>list</code> 之间切换子对象列表；选择会保存到 <code>tui.json</code>。仅当打开的对象有子对象时可用。</td></tr><tr><td><code>c</code></td><td>键</td><td>无</td><td>在 chat 标签页上，开始一个新的 chat；palette 会列出父对象（仓库或 bot）。</td></tr><tr><td><code>f</code></td><td>键</td><td>无</td><td>用 <code>full=true</code> 加载被截断的 section；否则，在有过滤器的标签页上，切换到下一个过滤器。</td></tr><tr><td><code>g</code></td><td>键</td><td>无</td><td>第一行；在不足 100 列且打开了对象时，是 section 的顶部。</td></tr><tr><td><code>G</code></td><td>键</td><td>无</td><td>最后一行；在不足 100 列且打开了对象时，是 section 的末尾（它会恢复跟随实时的 section）。</td></tr><tr><td><code>r</code></td><td>键</td><td>无</td><td>重新获取每个列表，以及打开的对象和它的实时 section。当打开的 section 加载失败时，也会重新请求该 section。</td></tr><tr><td><code>a</code></td><td>键</td><td>无</td><td>运行打开的对象的主 action，即该对象当前提供的第一个 action（页脚会连同它的键一起写出它的名称）。绑定到某个 action 的键（见下）优先于 <code>a</code>。在 Pending 上，当所选项的选项不是其对象上的 action 时，<code>a</code> 会打开这些选项并回答问题。没有 action 时，页脚会用一行说明这一点。</td></tr><tr><td>已绑定的键</td><td>键</td><td><code>GET /v1/keys</code></td><td>在打开的对象上运行那个 action。<code>keys.json</code> 中的用户绑定优先于同一个键上的插件默认值。保留键不能被绑定：<code>enter</code>、<code>return</code>、<code>escape</code>、<code>esc</code>、<code>tab</code>、方向键（<code>up</code>、<code>down</code>、<code>left</code>、<code>right</code>）、<code>pageup</code>、<code>pagedown</code>、<code>home</code>、<code>end</code>、<code>space</code>、<code>[</code>、<code>]</code>、<code>:</code>、<code>?</code>、<code>/</code>、<code>b</code>、<code>f</code>、<code>g</code>、<code>j</code>、<code>k</code>、<code>n</code>、<code>p</code>、<code>q</code>、<code>r</code>、<code>t</code>（字母大小写均可）和 <code>1</code>–<code>9</code>，以及 Ctrl-C 和任何 Ctrl 或 Meta 组合键。保留键上的插件默认值或 <code>keys.json</code> 条目会被丢弃；启动时页脚会用一行写出每个被丢弃的键及其 action 和来源。该 action 仍可通过 <code>:</code> palette 使用，不显示键。如果对象当前不提供该 action，页脚会用一行说明它不可用。</td></tr><tr><td><code>:</code></td><td>键</td><td>无</td><td>打开 palette：输入即可对打开的对象所提供的 <code>plugin:action</code> 名称做模糊匹配，每个都带有它的键以及“需要 note”或“要求确认”，也包括 TUI 自己的命令和设置。对象归在设置之下的插件会在这里列出它们，每个类型一个以类型命名的分组；<code>enter</code> 打开该对象的页面。<code>↑</code> / <code>↓</code>（或 Ctrl-P / Ctrl-N）移动，<code>enter</code> 运行，<code>escape</code> 关闭。没有打开对象时，它只列出 &quot;no object is selected&quot;。</td></tr><tr><td>note 输入</td><td>键</td><td>无</td><td>带有 note 字段的 action 会打开一个文本输入框。键入会添加文本，<code>backspace</code> 删除，<code>shift-enter</code> 或 <code>Ctrl-J</code> 换行，<code>enter</code> 发送，<code>escape</code> 取消。必填的 note 不能为空发送。</td></tr><tr><td>确认</td><td>键</td><td>无</td><td>要求确认的 action 会以红色显示 <code>&lt;action&gt; &lt;id&gt;? [y/N]</code>。<code>y</code> 以 <code>confirmed: true</code> 发送它；其他任何键都会取消。</td></tr><tr><td><code>?</code></td><td>键</td><td>无</td><td>显示或隐藏键列表。</td></tr><tr><td><code>q</code></td><td>键</td><td>无</td><td>退出。</td></tr><tr><td><code>Ctrl-C</code></td><td>键</td><td>无</td><td>立即退出。终端会自行恢复；其他任何 Ctrl 或 Meta 组合键都不起作用。</td></tr><tr><td><code>escape</code></td><td>键</td><td>无</td><td>关闭键列表，或关闭打开的对象并停止它的请求。键列表打开时，只有 <code>?</code>、<code>escape</code> 和 <code>q</code> 起作用；其他键不影响列表。</td></tr></tbody></table></div>
+<h2 id="keysjson"><code>keys.json</code><a class="anchor" href="#keysjson" aria-label="链接到本节">#</a></h2>
+<p><code>$OPERAD_HOME/keys.json</code> 覆盖插件所带的键绑定。它是一个 JSON 对象，键是键名，值是 action 名称，即 <code>&lt;plugin&gt;:&lt;action&gt;</code>。用户绑定优先于同一个键上的插件默认值。保留键上的绑定会被丢弃；启动时页脚会用一行写出每个被丢弃的键及其 action 和来源，该 action 仍在 <code>:</code> palette 中，不显示键。不是已加载 action 的值会被忽略，并记录一行日志，无论它怎么拼写。</p>
+<pre data-ui><code class="lang-json">{ &quot;m&quot;: &quot;dev:merge&quot;, &quot;g&quot;: &quot;dev:reject&quot;, &quot;n&quot;: &quot;dev:rework&quot; }</code></pre>
+<div class="table-wrap"><table><thead><tr><th>键</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>keys.&lt;name&gt;</code></td><td>字符串</td><td>不覆盖</td><td>任何非空字符串；已加载的 action 通常写作 <code>&lt;plugin&gt;:&lt;action&gt;</code></td><td>插件加载时；运行中的 <code>serve</code> 会在文件变化时重新加载，TUI 从它读取绑定</td><td>仅当值为空或不是字符串，或文件不是 JSON 对象时被拒绝：<code>key bindings &quot;&lt;path&gt;&quot;: &lt;reason&gt;</code>。指向未加载 action 的非空值会被忽略，并记录 <code>key &quot;&lt;key&gt;&quot;: &quot;&lt;action&gt;&quot; is not a loaded action; the key is ignored</code></td></tr></tbody></table></div>
+<p>保留键有 <code>enter</code>、<code>return</code>、<code>escape</code>、<code>esc</code>、<code>tab</code>、方向键（<code>up</code>、<code>down</code>、<code>left</code>、<code>right</code>，以及它们的 <code>arrow</code> 名称）、<code>pageup</code>、<code>page-up</code>、<code>prior</code>、<code>pagedown</code>、<code>page-down</code>、<code>next</code>、<code>home</code>、<code>end</code>、<code>space</code>、<code>[</code>、<code>]</code>、<code>:</code>、<code>?</code>、<code>/</code>、<code>b</code>、<code>f</code>、<code>g</code>、<code>j</code>、<code>k</code>、<code>n</code>、<code>p</code>、<code>q</code>、<code>r</code>、<code>t</code>（字母大小写均可）和 <code>1</code>–<code>9</code>，以及 Ctrl-C 和任何 Ctrl 或 Meta 组合键。保留键不能被绑定。</p>
+<h2 id="live-updates-states-and-leaving">实时更新、状态与退出<a class="anchor" href="#live-updates-states-and-leaving" aria-label="链接到本节">#</a></h2>
+<p>界面跟随事件流。某个对象的事件会让每个打开的列表重新获取该对象的行；如果它是打开的对象，则重新获取该对象及其打开的实时 section。<code>reset</code>（服务器无法恢复事件流，或事件流重新连接后没有可恢复的内容）会让每个打开的列表和打开的对象重新获取。任何事件都会让 Pending 和 Running 重新获取。一起到达的事件会合并成一批处理，每 250 ms 至多一批。</p>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>界面显示</th></tr></thead><tbody><tr><td>服务器无法连接</td><td>页脚一行，<code>no server at &lt;url&gt;: is </code>operad serve<code> running? retrying</code>。最后的列表保留在屏幕上，变暗显示。界面在 250 ms 后再次请求，然后是 500 ms、1 s、2 s、4 s，之后每 5 s 一次，并在服务器响应时恢复正常。</td></tr><tr><td>401</td><td><code>the token was rotated: run the TUI again or pass --token</code>。不会重试；<code>q</code> 退出。</td></tr><tr><td>Pending 为空</td><td><code>nothing waits for you</code></td></tr><tr><td>某个对象类型的列表为空</td><td><code>nothing in &lt;type&gt;</code>，开启了过滤器时为 <code>nothing &lt;filter&gt; in &lt;type&gt;</code></td></tr><tr><td>加载失败的 section</td><td>用服务器的消息和 <code>r retries</code> 取代该 section；<code>r</code> 再次请求该 section（并重新获取各列表）。</td></tr></tbody></table></div>
+<p><code>q</code>、Ctrl-C、SIGINT 和 SIGTERM 都以同样的方式结束界面：关闭事件流，恢复终端（离开备用屏幕，显示光标），打印界面打开期间收集到的失败信息，命令以 0 退出。由 TUI 启动的 <code>serve</code> 会继续运行。</p>
+<p>被拒绝的 action 会在一行页脚中原样显示服务器的状态和消息（例如 <code>409 …</code>），直到下一次按键。成功之后，应用会重新获取各列表和打开的对象。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/tui.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../cli/"><small>上一页</small>命令行</a>
+      <a class="next" href="../app/"><small>下一页</small>手机 app</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-tuijson-file">tui.json 文件</a></li><li class="l2"><a href="#themes">主题</a></li><li class="l3"><a href="#popular-themes">常用主题</a></li><li class="l3"><a href="#your-own-themes">你自己的主题</a></li><li class="l2"><a href="#keysjson">keys.json</a></li><li class="l2"><a href="#live-updates-states-and-leaving">实时更新、状态与退出</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

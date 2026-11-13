@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>命令行 · operad 文档</title>
+<meta name="description" content="operad 的每个命令和选项、它们的参数、输出和退出码。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/cli/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/cli/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/cli/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/cli/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="命令行 · operad 文档">
+<meta property="og:description" content="operad 的每个命令和选项、它们的参数、输出和退出码。">
+<meta property="og:url" content="https://operad.io/zh/docs/cli/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="命令行 · operad 文档">
+<meta name="twitter:description" content="operad 的每个命令和选项、它们的参数、输出和退出码。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "命令行",
+ "description": "operad 的每个命令和选项、它们的参数、输出和退出码。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/cli/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/cli/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/" aria-current="page">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="the-command-line">命令行</h1>
+<p><code>operad help</code> 会打印命令表；本页说明每个命令做什么、接受哪些选项、打印什么。<code>dev</code> 插件的命令也在<a href="../../../zh/docs/dev/">它自己的页面</a>；终端客户端在<a href="../../../zh/docs/tui/">它自己的页面</a>，<code>pair</code> 在<a href="../../../zh/docs/app/">应用页面</a>，<code>mcp</code> 在 <a href="../../../zh/docs/mcp/">MCP 页面</a>，环境变量在<a href="../../../zh/docs/environment/">环境页面</a>。</p>
+<h2 id="exit-codes">退出码<a class="anchor" href="#exit-codes" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>退出码</th><th>含义</th></tr></thead><tbody><tr><td><code>0</code></td><td>命令完成了要求的事，或没有事可做。</td></tr><tr><td><code>1</code></td><td>出错：id 有误、config 或插件无法加载、检查被拒绝、编辑器失败。</td></tr><tr><td><code>2</code></td><td>用法错误：未知的命令或选项、缺少参数、值不合法。消息之后会打印 <code>operad help</code>。</td></tr><tr><td><code>3</code></td><td>当前状态不允许该操作：插件已禁用、有 run 正在进行、任务所处的阶段不允许这项更改、<code>serve</code> 没有在限时内停止。</td></tr><tr><td><code>4</code></td><td>另一个进程持有 home 锁，或同一个 home 已有第二个 <code>serve</code>。</td></tr><tr><td><code>141</code></td><td>读取方关闭了管道（128 + SIGPIPE）。之后的输出会被丢弃。</td></tr></tbody></table></div>
+<h2 id="commands">命令<a class="anchor" href="#commands" aria-label="链接到本节">#</a></h2>
+<p>CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 <code>--help</code>；插件的 verb 会原样收到它的参数。<code>operad --help</code> 和 <code>operad help</code> 会打印完整的命令表。</p>
+<div class="table-wrap"><table><thead><tr><th>命令</th><th>参数</th><th>作用与输出</th></tr></thead><tbody><tr><td><code>operad init</code></td><td>无</td><td>在 <code>config.json</code> 缺失时创建它，并检查每个已加载的插件。打印 <code>created &lt;file&gt;</code> 或 <code>using &lt;file&gt;</code>，然后每项检查打印一行 <code>&lt;plugin&gt;: &lt;result&gt;</code>。检查失败时退出码为 <code>1</code>。</td></tr><tr><td><code>operad serve</code></td><td>无</td><td>运行此 home 的循环：启动等待、运行 step、提供 HTTP 服务并运行 notify。为每个监听地址打印 <code>http &lt;url&gt;</code>，最后打印 <code>serving &lt;home&gt;</code>。另一个 <code>serve</code> 持有该 home 时退出码为 <code>4</code>。</td></tr><tr><td><code>operad serve stop</code></td><td><code>--timeout &lt;secs&gt;</code></td><td>用 SIGTERM 停止此 home 的 <code>serve</code>；见<a href="#stopping-serve">停止 serve</a>。</td></tr><tr><td><code>operad pending</code></td><td><code>--json</code></td><td>列出等待人处理的事项：run、step、对象的标题、提示、选项和 action。为空时打印 <code>nothing is waiting</code>。</td></tr><tr><td><code>operad list &lt;type&gt;</code></td><td><code>--filter &lt;name&gt;</code>、<code>--repo &lt;name&gt;</code>、<code>--parent &lt;id&gt;</code>、<code>--root</code>、<code>--where &lt;field=value&gt;</code>、<code>--limit &lt;n&gt;</code>、<code>--cursor &lt;c&gt;</code>、<code>--json</code></td><td>列出某一对象类型的行。见<a href="#filtering-a-list">过滤列表</a>和<a href="#levels">层级</a>。为空时打印 <code>no objects of type &quot;&lt;type&gt;&quot;</code>，后面还有内容时打印 <code>next: operad list … --cursor …</code>，过滤器漏掉了一些行时打印 <code>N hidden (--filter all to show)</code>。</td></tr><tr><td><code>operad show [&lt;id&gt;]</code></td><td><code>--section &lt;id&gt;</code>、<code>--page &lt;label or number&gt;</code>、<code>--cursor &lt;c&gt;</code>、<code>--full</code>、<code>--raw</code>、<code>--json</code>、<code>--repo &lt;name&gt;</code></td><td>给出 id 时：打印该行、它的父对象、它的子对象、各 section 的名称和可用的 action，然后打印第一个 section（或 <code>--section</code> 指定的）。不给 id 时：打印最近变化的十个对象和 <code>operad show &lt;id&gt;</code>。</td></tr><tr><td><code>operad history &lt;id&gt;</code></td><td><code>--json</code></td><td>以 <a href="#the-history-section">History</a> 的形式打印一个 run 的 step，或某个对象的所有 run。若一个裸 id 属于多个对象类型，会因有歧义而被拒绝。</td></tr><tr><td><code>operad running</code></td><td><code>--json</code></td><td>列出进行中的 run：对象、step、step 耗时、标题、run 的存续时间和排队时间。为空时打印 <code>nothing is running</code>。</td></tr><tr><td><code>operad flows</code></td><td><code>--json</code></td><td>列出已加载的 flow、各自所属的插件，以及某个 flow 无法启动的原因。为空时打印 <code>no flows loaded</code>。</td></tr><tr><td><code>operad plugin list</code></td><td>无</td><td>列出已配置的插件及其版本，以及 <code>enabled</code> 或 <code>disabled</code>。</td></tr><tr><td><code>operad plugin enable &lt;name&gt;</code></td><td>无</td><td>在下一条命令时启用一个插件；config 中没有的内置插件会被加入。打印 <code>&lt;name&gt;: enabled</code>。</td></tr><tr><td><code>operad plugin disable &lt;name&gt;</code></td><td>无</td><td>在下一条命令时禁用一个插件。当有 run 正在使用它的某个 step 时拒绝，退出码为 <code>3</code>。打印 <code>&lt;name&gt;: disabled</code>。</td></tr><tr><td><code>operad plugin check &lt;path&gt;</code></td><td>无</td><td>加载一个插件声明，但不启动 run。打印 <code>&lt;name&gt;: ok</code> 或问题所在；有问题时退出码为 <code>1</code>。</td></tr><tr><td><code>operad secret set &lt;plugin&gt; &lt;name&gt;</code></td><td>无</td><td>从终端读取值且不回显，或读取 stdin 的第一行，并存储它。打印 <code>secret &quot;&lt;name&gt;&quot; set for plugin &quot;&lt;plugin&gt;&quot;</code>；值从不会被打印。</td></tr><tr><td><code>operad secret list &lt;plugin&gt;</code></td><td>无</td><td>每行打印一个该插件的 secret 名称，从不打印值。打印 <code>no secrets for plugin &quot;&lt;plugin&gt;&quot;</code>。</td></tr><tr><td><code>operad secret delete &lt;plugin&gt; &lt;name&gt;</code></td><td>无</td><td>删除一个 secret。打印 <code>secret &quot;&lt;name&gt;&quot; deleted for plugin &quot;&lt;plugin&gt;&quot;</code>。</td></tr><tr><td><code>operad settings</code></td><td><code>--repo &lt;name&gt;</code>、<code>--json</code></td><td>列出所有设置：作用域、名称、值、默认值、<code>editable</code> 或 <code>read-only</code>、是否要求确认，以及它的描述。</td></tr><tr><td><code>operad settings set &lt;name&gt; &lt;value&gt;</code></td><td><code>--repo &lt;name&gt;</code>、<code>--yes</code></td><td>更改一项设置。值能解析为 JSON 时按 JSON 处理，否则当作普通字符串。要求确认的设置需要 <code>--yes</code>。打印 <code>&lt;name&gt; = &lt;value&gt;</code>。</td></tr><tr><td><code>operad http token rotate</code></td><td>无</td><td>立即替换 bearer token。打印 <code>http token rotated</code>。</td></tr><tr><td><code>operad pair</code></td><td><code>--url &lt;url&gt;</code>、<code>--show-token</code></td><td>以二维码形式显示应用所用的地址和 token；见<a href="../../../zh/docs/app/#pairing-the-app">配对</a>。</td></tr><tr><td><code>operad tui</code></td><td><code>--url &lt;url&gt;</code>、<code>--token &lt;token&gt;</code>、<code>--no-start</code>、<code>--theme &lt;name&gt;</code></td><td>打开终端客户端，并在没有响应时启动 <code>serve</code>；见<a href="../../../zh/docs/tui/">终端客户端</a>。</td></tr><tr><td><code>operad mcp</code></td><td><code>--claude-channel</code>、<code>--types &lt;t,…&gt;</code></td><td>在 stdio 上为 lead agent 运行 MCP 服务器；见 <a href="../../../zh/docs/mcp/">MCP 页面</a>。</td></tr><tr><td><code>operad trigger &lt;source&gt; &lt;key&gt;</code></td><td><code>--type &lt;type&gt;</code>、<code>--object &lt;id&gt;</code>、<code>--summary &lt;text&gt;</code>、<code>--data &lt;file&gt;</code></td><td>让一个事件经过各条规则。打印 <code>started &lt;run&gt;</code>、<code>waiting &lt;pending id&gt;</code>、<code>recorded in &lt;run&gt;</code>、<code>observed &lt;flow&gt; on &lt;object&gt;</code>、<code>not started: &lt;reason&gt;</code> 或 <code>recorded &lt;id&gt;</code>。</td></tr><tr><td><code>operad trigger rules</code></td><td>无</td><td>打印当前生效的规则，以及每条规则来自哪个文件。打印 <code>no trigger rules</code>。</td></tr><tr><td><code>operad:start &lt;id&gt;</code></td><td>无</td><td>启动由某个事件创建的 pending 项。打印 <code>started &lt;run&gt;</code>。</td></tr><tr><td><code>operad:dismiss &lt;id&gt;</code></td><td>无</td><td>忽略由某个事件创建的 pending 项。打印 <code>dismissed &lt;id&gt;</code>。</td></tr><tr><td><code>operad &lt;plugin&gt;:&lt;action&gt; &lt;id&gt;</code></td><td>action 的参数、<code>--yes</code>、<code>--repo &lt;name&gt;</code></td><td>对一个对象运行一个 action；见 <a href="#actions">Actions</a>。</td></tr><tr><td><code>operad &lt;plugin&gt; &lt;verb&gt;</code></td><td>verb 的参数</td><td>运行插件声明的 verb。当恰好有一个插件声明了该 verb，且没有内核命令使用这个名字时，可以只写 <code>&lt;verb&gt;</code>。</td></tr><tr><td><code>operad dev repo add &lt;path&gt;</code></td><td><code>--name &lt;name&gt;</code></td><td>注册一个仓库；见 <a href="#dev-commands">dev 命令</a>。</td></tr><tr><td><code>operad dev repo list</code></td><td>无</td><td>列出已注册的仓库。</td></tr><tr><td><code>operad dev repo remove &lt;name&gt;</code></td><td>无</td><td>移除一个已注册的仓库。</td></tr><tr><td><code>operad dev plan add</code></td><td><code>--slug</code>、<code>--title</code>、<code>--concurrency</code>、<code>--flow</code>、<code>--repo</code></td><td>创建一个计划并打印它的 id。</td></tr><tr><td><code>operad dev task add</code></td><td><code>--plan</code>、<code>--slug</code>、<code>--title</code>、<code>--after</code>、<code>--area</code>、<code>--flow</code>、<code>--repo</code>、<code>--chat</code></td><td>创建一个任务并打印它的 id。</td></tr><tr><td><code>operad dev task edit &lt;id&gt;</code></td><td><code>--repo</code></td><td>用 stdin 或 <code>$EDITOR</code> 替换一个 proposed 或 ready 任务的 brief。打印任务 id。</td></tr><tr><td><code>operad dev task update &lt;id&gt;</code></td><td><code>--title</code>、<code>--after</code>、<code>--area</code>、<code>--flow</code>、<code>--repo</code></td><td>更改一个任务并打印它的 id。</td></tr><tr><td><code>operad dev start &lt;task&gt;</code></td><td><code>--repo</code></td><td>请求启动一个 ready 任务。打印 <code>start requested for &lt;id&gt;</code>。</td></tr><tr><td><code>operad dev reruns</code></td><td>无</td><td>列出仅在 rerun 时才通过的测试，以及它们所属的任务。</td></tr><tr><td><code>operad bot skill &lt;bot&gt; &lt;name&gt;</code></td><td><code>--from &lt;dir&gt;</code></td><td>提议一个新的或已更改的 skill；由人批准。</td></tr><tr><td><code>operad bot mcp &lt;bot&gt; &lt;name&gt; [&lt;command&gt; [args…]]</code></td><td>自身没有选项；命令中的词是服务器的</td><td>读取一个本地 MCP 服务器的 tools 后提议注册它。不给命令时，从 stdin 读取粘贴进来的 <code>mcpServers</code> 条目。</td></tr><tr><td><code>operad bot setting &lt;bot&gt;</code></td><td>无</td><td>根据 stdin 上的 JSON，为一个 bot 提议更改设置；由人批准。</td></tr></tbody></table></div>
+<h2 id="options">选项<a class="anchor" href="#options" aria-label="链接到本节">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>选项</th><th>命令</th><th>含义</th></tr></thead><tbody><tr><td><code>--help</code></td><td>CLI 自身拥有的命令</td><td>打印该命令的用法。插件的 verb 会原样收到它的参数，因此 <code>--help</code> 会被传给插件，并可能因未知选项而被拒绝；请用 <code>operad help</code> 查看命令表。<code>operad --help</code> 打印完整的命令表。</td></tr><tr><td><code>--version</code>、<code>-V</code></td><td><code>operad</code></td><td>打印 <code>operad &lt;version&gt;</code>。</td></tr><tr><td><code>--timeout &lt;secs&gt;</code></td><td><code>serve stop</code></td><td>等待被停止的 <code>serve</code> 多久：从 1 起的整数，默认 30。<code>0</code>、缺少值或不是数字都属于用法错误。</td></tr><tr><td><code>--json</code></td><td><code>pending</code>、<code>history</code>、<code>running</code>、<code>flows</code>、<code>list</code>、<code>show</code>、<code>settings</code></td><td>打印 JSON 而不是文本行。<code>settings set</code> 不接受它。</td></tr><tr><td><code>--filter &lt;name&gt;</code></td><td><code>list</code></td><td>要使用的过滤器；<code>all</code> 显示每一行。没有过滤器的类型会拒绝它。</td></tr><tr><td><code>--repo &lt;name&gt;</code></td><td><code>list</code>、<code>show</code>、<code>settings</code>、<code>settings set</code>、action、插件命令</td><td>把列表限制在一个仓库内，或指明一个裸 id 属于哪个仓库。</td></tr><tr><td><code>--where &lt;field=value&gt;</code></td><td><code>list</code></td><td>对该类型的行所带的某个字段做一次精确匹配；可以重复。</td></tr><tr><td><code>--limit &lt;n&gt;</code></td><td><code>list</code></td><td>一页包含多少行。</td></tr><tr><td><code>--cursor &lt;c&gt;</code></td><td><code>list</code>、<code>show</code></td><td>前一页的 <code>next</code> cursor。</td></tr><tr><td><code>--parent &lt;id&gt;</code></td><td><code>list</code></td><td>父对象为该对象的行。不能与 <code>--root</code> 一起使用。</td></tr><tr><td><code>--root</code></td><td><code>list</code></td><td>没有父对象的行。不能与 <code>--parent</code> 一起使用。</td></tr><tr><td><code>--section &lt;id&gt;</code></td><td><code>show</code></td><td>要打印的 section；<code>history</code> 始终是最后一个。</td></tr><tr><td><code>--page &lt;label or number&gt;</code></td><td><code>show</code></td><td>有分页的 section 的某一页。不能与 <code>--cursor</code> 一起使用。</td></tr><tr><td><code>--full</code></td><td><code>show</code></td><td>跳过 section 的大小上限。</td></tr><tr><td><code>--raw</code></td><td><code>show</code></td><td>按原样打印 section 的 Markdown，不带颜色。</td></tr><tr><td><code>--yes</code></td><td>action、<code>settings set</code></td><td>对确认回答“是”，或回答 action 所要求的确认。</td></tr><tr><td><code>--type &lt;type&gt;</code></td><td><code>trigger</code></td><td>事件类型；省略时为 <code>event</code>。</td></tr><tr><td><code>--object &lt;id&gt;</code></td><td><code>trigger</code></td><td>该事件所涉及的对象。</td></tr><tr><td><code>--summary &lt;text&gt;</code></td><td><code>trigger</code></td><td>事件的一行摘要。</td></tr><tr><td><code>--data &lt;file&gt;</code></td><td><code>trigger</code></td><td>事件的数据，从文件中读取。</td></tr><tr><td><code>--claude-channel</code></td><td><code>mcp</code></td><td>打开单向的 Claude Code channel。</td></tr><tr><td><code>--types &lt;t,…&gt;</code></td><td><code>mcp</code></td><td>把 channel 限制在这些对象类型内，以逗号分隔。</td></tr><tr><td><code>--url &lt;url&gt;</code></td><td><code>pair</code>、<code>tui</code></td><td>要指明的地址。对 <code>pair</code> 而言，它必须是 <code>http</code> 或 <code>https</code>，且不带凭据、query 或 fragment。</td></tr><tr><td><code>--show-token</code></td><td><code>pair</code></td><td>把 <code>url</code>、<code>token</code> 和 <code>link</code> 作为普通文本行打印，不显示二维码，即使输出不是终端也是如此。</td></tr><tr><td><code>--token &lt;token&gt;</code></td><td><code>tui</code></td><td>正在运行的 <code>serve</code> 的 bearer token。</td></tr><tr><td><code>--no-start</code></td><td><code>tui</code></td><td>从不启动 <code>operad serve</code>。</td></tr><tr><td><code>--theme &lt;name&gt;</code></td><td><code>tui</code></td><td>本次会话使用的主题；优先于 <code>tui.json</code>。</td></tr><tr><td><code>--name &lt;name&gt;</code></td><td><code>dev repo add</code></td><td>注册该仓库时使用的名称。</td></tr><tr><td><code>--slug &lt;slug&gt;</code></td><td><code>dev plan add</code>、<code>dev task add</code></td><td>新 id 中的短名称。</td></tr><tr><td><code>--title &lt;title&gt;</code></td><td><code>dev plan add</code>、<code>dev task add</code>、<code>dev task update</code></td><td>标题。</td></tr><tr><td><code>--concurrency &lt;n&gt;</code></td><td><code>dev plan add</code></td><td>计划中同时运行多少个任务，从 1 到 16 的整数（默认 1）。</td></tr><tr><td><code>--flow &lt;name&gt;</code></td><td><code>dev plan add</code>、<code>dev task add</code>、<code>dev task update</code></td><td>计划或任务的 flow。</td></tr><tr><td><code>--plan &lt;plan&gt;</code></td><td><code>dev task add</code></td><td>任务所属的计划。</td></tr><tr><td><code>--after &lt;task&gt;</code></td><td><code>dev task add</code>、<code>dev task update</code></td><td>要等待的任务；可以重复。<code>--after &quot;&quot;</code> 会清除它们。</td></tr><tr><td><code>--area &lt;area&gt;</code></td><td><code>dev task add</code>、<code>dev task update</code></td><td>任务的 area；<code>--area &quot;&quot;</code> 会清除它。</td></tr><tr><td><code>--chat &lt;id&gt;</code></td><td><code>dev task add</code></td><td>任务所使用 worktree 所属的 chat。</td></tr><tr><td><code>--from &lt;dir&gt;</code></td><td><code>bot skill</code></td><td>读取该 skill 的目录。</td></tr></tbody></table></div>
+<p>action 的 flag 由它的参数生成：名为 <code>note</code> 的参数变成 <code>--note &lt;text&gt;</code>，布尔值变成 <code>--flag</code> 或 <code>--flag=true</code>，数组或对象接受 JSON。声明了 <code>creates</code> 的 action 不会出现在父对象的页面上；它从新建对象的入口或命令行运行。</p>
+<h2 id="stopping-serve">停止 serve<a class="anchor" href="#stopping-serve" aria-label="链接到本节">#</a></h2>
+<p><code>operad serve stop [--timeout &lt;secs&gt;]</code> 停止当前 <code>OPERAD_HOME</code> 的 <code>serve</code>。它读取 <code>serve.lock</code>：</p>
+<ul><li>没有锁，或锁对应的进程已不存在时，它打印 <code>no operad serve runs for &lt;home&gt;</code> 并以 0 退出。它不向任何进程发信号，也不删除过期的锁；下一个 <code>serve</code> 会替换它。</li><li>进程仍然存活时，它先确认该进程是一个 <code>serve</code>：向操作系统查询该进程的命令行（<code>ps -p &lt;pid&gt; -o command=</code>，在 macOS 和 Linux 上相同），并要求 <code>serve</code> 是其中的一个单词。仅有锁是不够的，因为一个 <code>serve</code> 死亡后，它的 PID 可能被复用。当该进程不是 <code>serve</code> 时，命令会打印一条点明该 PID 的错误，不向任何进程发信号，并以 3 退出。</li><li>否则它发送 SIGTERM（<code>serve</code> 本来就会处理的停止信号），打印 <code>stopping operad serve (pid &lt;pid&gt;)</code>，等到进程消失或锁被释放，打印 <code>stopped</code> 并以 0 退出。它从不发送 SIGKILL。</li></ul>
+<p><code>--timeout &lt;secs&gt;</code> 是它等待的时长：整数秒，至少为 1，默认 30。若在此之后 <code>serve</code> 仍在运行，它会打印一条说明其未能停止的错误，并给出 <code>kill -9 &lt;pid&gt;</code> 作为强制停止的办法，然后以 3 退出。<code>--timeout</code> 为 0、没有值或不是整数，都属于用法错误（退出码 2）。不带子命令的 <code>operad serve</code> 照旧运行循环。</p>
+<p>正在运行的工作会怎样：SIGTERM 让循环在当前这一轮结束后退出，随后 <code>serve</code> 停止 notifier、HTTP 服务器和 trigger 源，释放锁并退出。它不会杀掉 step。当 <code>serve</code> 停止时，在自己进程中运行的 step 会继续运行，该 home 的下一个 <code>serve</code> 会重新接管这个 run。没有 <code>serve</code> 运行时，没有任何东西会启动新工作，也不会推进等待和计时器；<code>operad serve</code> 或 <code>operad tui</code> 会让它们恢复。</p>
+<p>step 会自行清理：它结束时，它启动的、仍在运行的每个进程（例如 worker 留在后台的循环）都会被停止，step 的日志会列出它们。启动时，<code>serve</code> 对不再活跃的 run 的 step 做同样的清理。关于如何找到这些进程以及哪些找不到，见 <code>packages/dev/REFERENCE.md</code> 中的 &quot;What a step cleans up&quot;。</p>
+<p>重启不会打扰正在运行的检查或命令。每个 run 都是独立的进程，step 启动的命令由该 run 持有，而不是由 <code>serve</code> 持有：停止和启动 <code>serve</code> 不会向它发信号，不会停止它的那一行，也不会把它再运行一次。该命令自行结束，run 照常记录它的退出码，就像什么都没发生一样。只有 run 自己的进程死亡才会停止它的命令（此时下一个 <code>serve</code> 会重新开始这个 step）。</p>
+<h2 id="changed-code">代码变更<a class="anchor" href="#changed-code" aria-label="链接到本节">#</a></h2>
+<p><code>serve</code> 和每个 run 的进程只在文件变化之前一直运行它们加载的代码。<code>serve</code> 监视内核的代码（<code>engine</code>、<code>cli</code>）、每个已加载插件的包（源码、flow、schema）以及该包所依赖的 workspace 包。文件安静一秒之后，它会启动一个新进程来检查新代码能否加载。若能，<code>serve</code> 以 <code>operad serve stop</code> 的方式停止，打印 <code>reloading: &lt;what changed&gt;</code>，并使用同样的命令行和环境重新启动，仍处于你所启动的进程之下（它留在你的终端里，会转发 Ctrl-C，并以 serve 的退出码结束）。正在运行的 step 继续使用它启动时的代码并运行完毕；run 的进程会在 step 之间查看这些文件，若有变化，它就停止，以便由新进程执行下一个 step。<code>operad history</code> 为此显示一行 <code>continuing on updated code</code>。</p>
+<p>无法加载的新代码（语法错误、无效的 schema）不会让任何东西停摆。<code>serve</code> 继续运行旧代码，并在它的错误输出上打印 <code>code changed (...) but does not load; the old code keeps running: &lt;problems&gt;</code>；当文件再次能够加载时，它会重新加载，如果是某个设置文件（<code>config.json</code>、<code>triggers.json</code>、<code>keys.json</code>）读取失败后被修好，同样如此。run 的进程不会在无法加载的代码上执行下一个 step：它把同样的一行打印到该 run 的日志（<code>&lt;store&gt;/logs/runs/&lt;run id&gt;.out</code>）中，并等待文件能够加载。设置文件在下次使用时重新读取；仅仅更改它们不会重启 <code>serve</code>。</p>
+<p>当 <code>serve</code> 运行的代码比磁盘上的文件旧时，<code>operad pending</code> 会显示一项：<code>serve runs older code than the files on disk: restart serve to load them (operad serve stop, then operad serve)</code>。它出现在新代码无法加载时（见上文），或重启时无法监听它的地址、旧代码重新提供服务时。它没有 action，并在 <code>serve</code> 再次运行磁盘上的代码时消失：即文件加载成功且 <code>serve</code> 重新加载之后，或你重启它之后，或文件恢复为 <code>serve</code> 所加载的内容时。</p>
+<p>当重启无法监听、旧代码重新提供服务时，该 serve 不会再次尝试同一个变更。它仍然沿用之前所运行内容的，是 <code>operad</code> 本身、按包名给出的插件（以及路径插件所 import 的文件），因此对这些的更改会让上面那一项持续显示。按路径给出的插件，以及自 <code>serve</code> 首次启动之后才启用的插件，会从磁盘上的文件重新加载，因此仅对这些的更改不会显示任何东西。下一个不同的变更会经过加载检查，并照常重新加载。</p>
+<h2 id="the-history-section">History section<a class="anchor" href="#the-history-section" aria-label="链接到本节">#</a></h2>
+<p>每个对象都有一个 History section（<code>operad show &lt;id&gt; --section history</code>，即网页和终端界面中的最后一个标签页）。它先按 run 分组，再按每个 step 的 attempt 分组。run 的标题写明 flow 和启动时间；run id 在该 run 的块末尾以小字出现一次，供支持人员使用。一个 step attempt 占一行：提供服务的主机的本地时间、step、attempt（大于 1 时）、启动的原因（当它不是顺理成章的下一个 step 时，如 <code>after fail</code>、<code>after reverify</code>）、结果、耗时（正在运行的 step 显示 <code>running</code> 和目前已用时间），以及被截成一行并以 <code>…</code> 结尾的结果详情。人的回答和事件各占一行。每新的一天以一行日期开头。</p>
+<pre data-ui><code>## dev run · started 21:38
+**2026-11-08**
+- 21:38:41  worktree  ready  1s
+- 21:38:44  work  done  41m
+- 22:20:01  review  fail  58s  packages/dev/src/gate.ts:1059 major …
+- 22:21:01  work  attempt 2  after fail  done  1m
+- 22:22:02  confirm  reverify  8m
+- 22:30:02  you chose merge: via plugin, as dev
+- 22:30:04  verify  after reverify  running  2m</code></pre>
+<p><code>operad show &lt;id&gt; --section history --full</code> 会保留每条详情的完整内容。<code>operad history &lt;id&gt;</code> 以 UTC 时间打印每个 step；<code>--json</code> 为每个 step 打印一个对象，当 id 指向多个 run 时，则为每个 run 打印一个对象。</p>
+<h2 id="levels">层级<a class="anchor" href="#levels" aria-label="链接到本节">#</a></h2>
+<p>插件可以把它的对象排成多个层级。一行可以带有 <code>parent</code>：上一层对象的 id，可以是完整 id（<code>plan:repo/P-0001</code>），也可以是按 <code>operad show</code> 的方式解析的裸 id。内核原样传递它，从不自行编造。没有 <code>parent</code> 的行位于顶层。</p>
+<ul><li><code>operad list &lt;type&gt; --root</code> 列出该类型中没有父对象的行；<code>operad list &lt;type&gt; --parent &lt;id&gt;</code> 列出父对象为该对象的行。普通的 <code>operad list &lt;type&gt;</code> 保持平铺。</li><li><code>GET /v1/objects?root</code> 和 <code>GET /v1/objects?parent=&lt;id&gt;</code> 的作用相同。对它们而言 <code>type</code> 是可选的。不带 <code>type</code> 时，它们按稳定的顺序跨所有插件的类型列出：类型按 <code>GET /v1/types</code> 给出的顺序（插件加载顺序，然后是每个插件声明其类型的顺序），同一类型内的行按该类型的普通列表的顺序（按 id）。<code>next</code> 在整个顺序中翻页。<code>root</code> 和 <code>parent</code> 不能一起使用。</li><li>该类型的过滤器在层级内生效：带 <code>type</code> 的请求使用指定的过滤器或该类型的默认过滤器；不带 <code>type</code> 时，每个类型使用各自的默认过滤器（或在该类型有指定过滤器时使用它）。<code>hidden</code> 统计该层级中被过滤器漏掉的行数。</li><li>指向不存在对象的 <code>parent</code> 不算错误：列表为空。若某行的 <code>parent</code> 指向一个不存在的对象，它仍会列在 <code>parent=&lt;that id&gt;</code> 之下，而不会列在 <code>root</code> 之下。</li><li>当一行有父对象时，<code>operad show &lt;id&gt;</code> 会在该行下面打印 <code>parent: &lt;id&gt;</code>。</li><li>MCP 的 <code>list</code> tool 也接受 <code>root</code> 和 <code>parent</code>；见 <a href="../../../zh/docs/mcp/">MCP 页面</a>。</li></ul>
+<h2 id="filtering-a-list">过滤列表<a class="anchor" href="#filtering-a-list" aria-label="链接到本节">#</a></h2>
+<p>插件可以为对象类型提供过滤器，这样列表就不会显示每一个旧对象。在插件中，对象类型有一个可选的 <code>filters</code> 字段，是由 <code>{ &quot;name&quot;: string, &quot;states&quot;: string[], &quot;default&quot;?: boolean }</code> 组成的有序列表：</p>
+<pre data-ui><code class="lang-ts">objects: [
+  {
+    name: &quot;task&quot;,
+    filters: [
+      { name: &quot;active&quot;, states: [&quot;proposed&quot;, &quot;ready&quot;, &quot;running&quot;], default: true },
+      { name: &quot;done&quot;, states: [&quot;merged&quot;] },
+    ],
+  },
+],</code></pre>
+<p>过滤器是数据：当一行的 <code>state</code> 是 <code>states</code> 之一时，该行匹配。<code>state</code> 为 <code>error</code> 的行（它的视图失败了）会被每个过滤器显示，因此有问题的行永远不会被隐藏。至多一个过滤器带有 <code>default: true</code>；一个都没标时，第一个是默认的。加载插件时，会拒绝空名称或重复的名称、两个默认过滤器、空的 <code>states</code>，以及名称 <code>all</code>，并指出出问题的字段。</p>
+<p>内核会在默认过滤器之后紧接着加入过滤器 <code>all</code>，它不测试任何 state。上面的任务列为 <code>active</code>、<code>all</code>、<code>done</code>。</p>
+<p><code>operad list &lt;type&gt; [--filter &lt;name&gt;] [--repo &lt;name&gt;]</code> 在类型有默认过滤器且没有给出 <code>--filter</code> 时，使用该默认过滤器。<code>--filter all</code> 列出所有内容。当过滤器漏掉了一些行时，最后一行是 <code>N hidden (--filter all to show)</code>。<code>--repo</code> 只保留一个仓库的对象，并可与 <code>--filter</code> 一起使用。没有过滤器的类型会以 &quot;this type has no filters&quot; 拒绝 <code>--filter</code>。HTTP 接口以 <code>filter</code> 接受同样的选择（见下面的端点）。</p>
+<p><code>dev</code> 插件声明了这些过滤器（<code>all</code> 跟在 <code>active</code> 之后）：</p>
+<div class="table-wrap"><table><thead><tr><th>类型</th><th>过滤器</th><th>State</th></tr></thead><tbody><tr><td>task</td><td><code>active</code>（默认）</td><td>proposed, ready, running, review, integrating, waiting, paused</td></tr><tr><td>task</td><td><code>done</code></td><td>merged</td></tr><tr><td>task</td><td><code>cancelled</code></td><td>cancelled</td></tr><tr><td>plan</td><td><code>active</code>（默认）</td><td>draft, confirmed, paused</td></tr><tr><td>plan</td><td><code>done</code></td><td>finished</td></tr><tr><td>plan</td><td><code>cancelled</code></td><td>cancelled</td></tr><tr><td>repo</td><td><code>active</code>（默认）</td><td>active</td></tr><tr><td>repo</td><td><code>removed</code></td><td>removed</td></tr></tbody></table></div>
+<p><code>chat</code> 插件声明了 <code>open</code>（默认）和 <code>closed</code>；<code>all</code> 跟在 <code>open</code> 之后。<code>bot</code> 插件声明了 <code>open</code>（默认）和 <code>removed</code>；<code>all</code> 跟在 <code>open</code> 之后。<code>bot</code> 的 proposal 类型声明了 <code>pending</code>（默认）、<code>applied</code> 和 <code>rejected</code>。</p>
+<h2 id="actions">Actions<a class="anchor" href="#actions" aria-label="链接到本节">#</a></h2>
+<p>action 以 <code>&lt;plugin&gt;:&lt;action&gt; &lt;id&gt;</code> 运行，或以 <code>&lt;plugin&gt; &lt;action&gt; &lt;id&gt;</code> 运行，或在只有一个插件提供该 action 时以 <code>&lt;action&gt; &lt;id&gt;</code> 运行。命令行为 action 声明的每个参数生成一个 flag：</p>
+<pre data-ui><code class="lang-sh">operad dev:reject T-0003 --note &quot;cover concurrent writers&quot;
+operad dev confirm T-0003 --yes
+operad chat:send C-0001 --note &quot;why does the gate fail on main?&quot;
+operad dev:model C-0001 --model sonnet</code></pre>
+<p>必填的 note 没有 <code>--note</code> 时，在终端中会被询问，在管道中则被拒绝；<code>confirm: true</code> 的 action 会询问 <code>[y/N]</code>，<code>--yes</code> 跳过这个询问。action 返回值时，会打印它的记录。打开对象的 action（<code>opens</code>）只打印它那一行；由终端和应用来打开该对象。记录一个回答的 action，会打印 <code>recorded; it runs when </code>operad serve<code> is running</code>，前提是没有 <code>serve</code> 持有该 home。</p>
+<h2 id="dev-commands">dev 命令<a class="anchor" href="#dev-commands" aria-label="链接到本节">#</a></h2>
+<p><code>operad dev repo add &lt;path&gt; [--name &lt;name&gt;]</code> 注册一个目录，该目录必须是带有 remote 的 git work tree。当目录没有 remote 时，它不写入任何内容，并打印原因。<code>operad dev repo list</code> 打印 <code>no repositories</code>，或每个仓库一行 <code>&lt;name&gt;  &lt;path&gt;</code>。<code>operad dev repo remove &lt;name&gt;</code> 打印 <code>removed &lt;name&gt;</code>。</p>
+<p><code>operad dev plan add --slug &lt;slug&gt; --title &lt;title&gt; [--concurrency &lt;n&gt;] [--flow &lt;name&gt;] [--repo &lt;name&gt;]</code> 创建一个计划并打印它的 id。 有 stdin 时，请求从 stdin 读取。<code>--concurrency</code> 是从 1 到 16 的整数，省略时默认为 1。</p>
+<p><code>operad dev task add --plan &lt;plan&gt; --slug &lt;slug&gt; --title &lt;title&gt; [--after &lt;task&gt;]… [--area &lt;area&gt;] [--flow &lt;name&gt;] [--repo &lt;name&gt;] [--chat &lt;id&gt;]</code> 在指定的计划中创建一个任务并打印它的 id。 有 stdin 时，brief 从 stdin 读取。<code>--after</code> 可以重复；该任务会等到每个指定的任务都被 merge 之后。另一个仓库的任务写作 <code>&lt;repository&gt;/&lt;task id&gt;</code>。任务不能跟随它自己，也不能构成环。<code>--chat</code> 使用该 chat 所请求的 worktree。</p>
+<p><code>operad dev task edit &lt;id&gt; [--repo &lt;name&gt;]</code> 替换一个 proposed 或 ready 任务的 brief。当 stdin 不是终端且带有内容时，新的 brief 就是 stdin 上的文本，否则是你在 <code>$EDITOR</code> 中保存的内容（<code>EDITOR</code> 未设置时用 <code>$VISUAL</code>）。没有编辑器也没有输入时，命令失败并说明这一点。它打印任务 id。</p>
+<p><code>operad dev task update &lt;id&gt; [--title &lt;title&gt;] [--after &lt;task&gt;]… [--area &lt;area&gt;] [--flow &lt;name&gt;] [--repo &lt;name&gt;]</code> 更改一个任务并打印它的 id。 <code>--after &quot;&quot;</code> 清除它所等待的任务；<code>--area &quot;&quot;</code> 清除 area。flow 只能在第一次 attempt 之前更改；之后命令会拒绝。</p>
+<p><code>operad dev start &lt;task&gt; [--repo &lt;name&gt;]</code> 请求启动一个 ready 任务，并打印 <code>start requested for &lt;id&gt;</code>；下一轮 <code>serve</code> 会认领它。</p>
+<p><code>operad dev reruns</code> 为每个仅在 rerun 时才通过的测试打印一行：<code>&lt;count&gt;  &lt;test name&gt;  &lt;task id&gt;</code>；没有这样的测试时，打印 <code>no test has passed on a rerun yet</code>。</p>
+<p>简写形式 <code>operad repo …</code>、<code>operad plan …</code>、<code>operad task …</code>、<code>operad start …</code> 和 <code>operad reruns</code> 之所以可用，是因为只有 <code>dev</code> 声明了这些 verb。</p>
+<h2 id="bot-commands">bot 命令<a class="anchor" href="#bot-commands" aria-label="链接到本节">#</a></h2>
+<p><code>operad bot skill &lt;bot&gt; &lt;name&gt; [--from &lt;dir&gt;]</code> 提议一个新的或已更改的 skill。不带 <code>--from</code> 时，stdin 是一个带有 <code>skill_md</code> 和 <code>files</code> 的 JSON 对象；带该选项时，读取该目录中的文件。skill 需要一个 <code>SKILL.md</code>。在有人于 pending 中批准该提议之前，不会写入任何内容。</p>
+<p><code>operad bot mcp &lt;bot&gt; &lt;name&gt; &lt;command&gt; [args…]</code> 启动一次本地 MCP 服务器，读取它的 tool 列表，并提议注册它。不给命令时，stdin 是粘贴进来的 <code>mcpServers</code> 条目。包命令（<code>npx</code>、<code>bunx</code>、<code>uvx</code>、<code>pipx</code>）必须指明确切的版本，如 <code>name@1.2.3</code>；tag 或版本范围会在服务器启动之前被拒绝。远程服务器（给出地址的）目前还无法注册。</p>
+<p><code>operad bot setting &lt;bot&gt;</code> 从 stdin 读取一个 JSON 对象并提议该更改。bot 可以收紧默认的访问配置，但绝不能放宽。MCP 服务器不在这里更改；请使用 <code>bot mcp</code>。</p>
+<h2 id="runnable-examples">可运行的示例<a class="anchor" href="#runnable-examples" aria-label="链接到本节">#</a></h2>
+<p>下面的每个命令都能在全新的 home 中运行，并由文档测试运行。</p>
+<pre data-ui><code class="lang-sh">operad --version
+operad pending
+operad running
+operad flows
+operad plugin list
+operad settings
+operad show
+operad trigger rules</code></pre>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/cli.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../access/"><small>上一页</small>访问</a>
+      <a class="next" href="../tui/"><small>下一页</small>终端客户端</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#exit-codes">退出码</a></li><li class="l2"><a href="#commands">命令</a></li><li class="l2"><a href="#options">选项</a></li><li class="l2"><a href="#stopping-serve">停止 serve</a></li><li class="l2"><a href="#changed-code">代码变更</a></li><li class="l2"><a href="#the-history-section">History section</a></li><li class="l2"><a href="#levels">层级</a></li><li class="l2"><a href="#filtering-a-list">过滤列表</a></li><li class="l2"><a href="#actions">Actions</a></li><li class="l2"><a href="#dev-commands">dev 命令</a></li><li class="l2"><a href="#bot-commands">bot 命令</a></li><li class="l2"><a href="#runnable-examples">可运行的示例</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

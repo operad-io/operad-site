@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>chat 和 bot · operad 文档</title>
+<meta name="description" content="与 agent 的 chat、bot、它们的命令、设置、MCP server 和 proposal。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/chats-and-bots/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/chats-and-bots/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/chats-and-bots/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/chats-and-bots/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="chat 和 bot · operad 文档">
+<meta property="og:description" content="与 agent 的 chat、bot、它们的命令、设置、MCP server 和 proposal。">
+<meta property="og:url" content="https://operad.io/zh/docs/chats-and-bots/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="chat 和 bot · operad 文档">
+<meta name="twitter:description" content="与 agent 的 chat、bot、它们的命令、设置、MCP server 和 proposal。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "chat 和 bot",
+ "description": "与 agent 的 chat、bot、它们的命令、设置、MCP server 和 proposal。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/chats-and-bots/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/chats-and-bots/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/" aria-current="page">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="chats-and-bots">chat 和 bot</h1>
+<p>chat 是与 agent 的一段长对话。bot 由一个工作目录、一个默认 agent、skill、一个 speaker 和一个访问 profile 组成；bot 上的 chat 使用这些，仓库上的 chat 则做该仓库的工作。两者都是来自插件的对象：<code>chat</code> 拥有所有 chat，<code>dev</code> 在仓库上打开 chat，<code>bot</code> 在 bot 上打开 chat。</p>
+<h2 id="chats">chat<a class="anchor" href="#chats" aria-label="链接到本节">#</a></h2>
+<p>chat 属于打开它的插件。<code>dev</code> 在仓库上打开 chat：</p>
+<pre data-ui><code class="lang-sh">operad dev:chat --repo operad --title &quot;The build&quot; [--agent pi]
+operad chat:send C-0001 --note &quot;why does the gate fail on main?&quot;
+operad show C-0001 --section transcript</code></pre>
+<p><code>dev:chat</code> 提供 <code>claude</code> 和 <code>pi</code> 作为 agent（省略 <code>--agent</code> 时用第一个已加载的）：它们可以在工具调用开始前拦下它，只读 chat 需要这一点。<code>radian</code> 在这里不能作为 agent，只用于 bot chat。<code>bot:chat</code> 提供所有已加载的 agent；它的默认值是 bot 的 <code>harness</code>，否则是第一个已加载的。</p>
+<p>chat 有这些 action：</p>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>Arguments</th><th>What it does</th></tr></thead><tbody><tr><td><code>chat:send</code></td><td><code>note</code>、<code>attachments</code>（已上传文件的引用）、<code>ref</code></td><td>记录一条消息并开始回复。消息可以只有附件。输出 <code>sent &lt;message id&gt;</code>；没有 <code>serve</code> 时输出 <code>recorded &lt;id&gt;; it is answered when operad serve runs</code>。已关闭的 chat 会拒绝它。</td></tr><tr><td><code>chat:model</code></td><td><code>model</code></td><td>更改下一次回复使用的模型。该模型必须是 chat 的 agent 所列出的；输出 <code>chat &lt;id&gt; now uses &lt;model&gt;; the next reply uses it</code>。</td></tr><tr><td><code>chat:effort</code></td><td><code>effort</code></td><td>从 agent 的列表中更改下一次回复使用的 effort；输出 <code>chat &lt;id&gt; now uses effort &lt;effort&gt;; the next reply uses it</code>。</td></tr><tr><td><code>chat:close</code></td><td>无；要求确认</td><td>记录 <code>chat.closed</code> 并结束 chat。输出 <code>closed &lt;id&gt;</code>。transcript 仍可读取；不再出现其他 action。</td></tr></tbody></table></div>
+<p>消息是一个事件：来源为 <code>ios</code>、<code>telegram</code>、<code>cli</code>、<code>tui</code> 或 <code>other</code>，key 是消息 id，对象是 chat。<code>chat</code> 插件自己的规则会为这些来源自动启动 <code>chat:reply</code>；你在 <code>triggers.json</code> 中写的、来源和类型相同的规则会替换它。回复从 chat 自己的记录中读取尚未被任何回复回答的消息，继续 agent 会话，记录回复，并且在此期间又有新消息进来时再来一轮（最多 20 轮）。重启之后，已经记录的回复不会再给一次。</p>
+<p><code>transcript</code> 部分是实时的：它显示用户消息、agent 的中间文本、<code>Thinking</code>、带结果的工具调用、耗时和简短输出，以及最终回复。工具输出在 transcript 中会被截断；完整输出在 chat 目录下的一个文件中。仍在回复的运行会把它尚未完成的文本和 thinking 显示为 <code>tail</code>；<code>mark</code> 和 <code>after</code> 让客户端只追加已完成的部分（见<a href="../../../zh/docs/http/#reading-a-section">读取一个部分</a>）。这些记录不依赖 agent 自己的会话文件，所以被清理或压缩的会话不会抹掉 chat 的 history；agent 的上下文仍然属于 agent，它继续自己的会话。</p>
+<p>chat 的过滤器是 <code>open</code>（默认）和 <code>closed</code>；内核再加上 <code>all</code>，所以 <code>operad list chat --filter all</code> 仍然显示已关闭的 chat。仓库上的 chat 在主 clone 中只读地工作：只有当 shell 命令在只读命令的短名单（<code>git status</code>、<code>ls</code>、<code>cat</code>、<code>grep</code>、<code>sed -n</code>、<code>bun test</code> 等）上时才会在那里运行；其他每条命令，以及每次写入或编辑，都会变成 worktree 问题，其中写明命令或路径。当 agent 想要修改代码时，它会询问是否打开 worktree。回答否，agent 会被告知调用因 chat 只读而被拒绝，应当在 chat 中回答或使用只读命令。回答是，<code>dev</code> 会打开 <code>work/chat-&lt;id&gt;</code>，此后 chat 一直在那里工作，只此一次；主 clone 保持只读。worktree 中的修改只能通过指向它的任务，经过正常的 gate 和 integrate 进入 main。</p>
+<p>附件是客户端上传的文件（<code>POST /v1/uploads</code>），存放在 operad home 中该 chat 的附件目录下。一条消息可以只有文件。transcript 把每个附件显示为一行，带有它的名称（图片显示为图片，其他文件显示为 <code>Attachment:</code> 链接）。回复会把图片作为图像输入交给 <code>claude</code> 和 <code>pi</code>（每张最大 5 MB），并把每个文件以路径的形式放进提示交给 agent；chat 的访问 profile 获得该 chat 附件目录的读取权限，除此之外没有别的。MCP 工具无法传递文件；文件由客户端上传。</p>
+<p>agent 通过它的工具（<code>list</code>、<code>show</code>、<code>section</code>、<code>pending</code>、<code>answer</code>、<code>running</code>、<code>history</code>、<code>command</code>、<code>act</code>，使用与 <code>operad mcp</code> 相同的允许列表）访问 operad，从不在 shell 中运行 <code>operad</code>。</p>
+<h2 id="bots">bot<a class="anchor" href="#bots" aria-label="链接到本节">#</a></h2>
+<p><code>bot</code> 插件没有 tab。它的对象在 Settings 之下：bot 页面就是该 bot 的设置页面，所有 bot 列在名为 Bots 的部分中。bot 写在 <code>config.json</code> 的 <code>plugins.bot.settings</code> 中；即使没有写，<code>default</code> bot 也存在。这一部分在每次使用时读取，所以修改会在下一次回复时生效，无需重启。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th></tr></thead><tbody><tr><td><code>bot.bots</code></td><td>对象</td><td><code>{ &quot;default&quot;: {} }</code></td><td>每个 bot 名称一个条目</td><td>解析 bot 时读取，每次回复都读。从 map 中移除的 bot 被标记为 removed，它的 chat 不再回答。</td></tr><tr><td><code>bot.bots.&lt;name&gt;</code></td><td>对象</td><td><code>{}</code></td><td>下面的 key</td><td>一个 bot。名称由小写字母、数字、<code>-</code> 和 <code>_</code> 组成，并以字母或数字开头；其他名称会得到 <code>bot &quot;&lt;name&gt;&quot;: a name is lowercase letters, digits, &quot;-&quot; and &quot;_&quot;, and starts with a letter or digit</code>。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.cwd</code></td><td>字符串</td><td><code>default</code> 为 <code>$OPERAD_HOME/bot</code>，其他为 <code>$OPERAD_HOME/bot/&lt;name&gt;</code></td><td>路径</td><td>bot 的 chat 的工作目录。它必须在 <code>$OPERAD_HOME/bot</code> 之内，或在 operad home 之外；其他路径在解析 bot 时被拒绝。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.harness</code></td><td>字符串</td><td>第一个已加载的 agent</td><td>已加载的 agent 名称</td><td>新 chat 未指定 agent 时使用的 agent。未加载的名称在打开 chat 时被拒绝：<code>agent &quot;&lt;name&gt;&quot; is not loaded; the loaded ones are: …</code>。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.skills</code></td><td>字符串数组</td><td><code>[]</code></td><td>含有 <code>SKILL.md</code> 的目录；相对路径位于工作目录之下</td><td>每次回复；这些目录会交给 agent。缺失或无法读取的 skill 在回复时报告。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.model</code></td><td>字符串</td><td>agent 的默认值</td><td>chat 的 agent 所列出的模型</td><td>新 chat 开始时；未列出的模型按名称被拒绝。chat 之后可以用 <code>chat:model</code> 更改。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.effort</code></td><td>字符串</td><td>agent 的默认值</td><td>chat 的 agent 所列出的 effort</td><td>新 chat 开始时；未列出的 effort 按名称被拒绝。chat 之后可以用 <code>chat:effort</code> 更改。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.speaker</code></td><td>字符串</td><td><code>chat.speaker</code></td><td>任何非空字符串</td><td>每次回复：transcript 如何标注模型的消息。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers</code></td><td>对象</td><td><code>{}</code></td><td>每个本地 MCP server 名称一个条目</td><td>在原生接受 MCP server 的 agent（<code>claude</code>、<code>radian</code>）上的 chat，每次回复时；只有设置了 <code>digest</code> 的 server 才会挂载。<code>pi</code> 目前不挂载它们。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;</code></td><td>对象</td><td>无</td><td>下面的 key</td><td>一个本地 server。名称由小写字母、数字和 <code>-</code> 组成，各部分之间可以有单个 <code>_</code>；<code>operad</code> 是保留名称。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.command</code></td><td>字符串</td><td>必填</td><td>启动 server 的程序</td><td>提议该 server 时，以及 chat 启动它时。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.args</code></td><td>字符串数组</td><td><code>[]</code></td><td>server 的参数</td><td>提议该 server 时，以及 chat 启动它时。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.package</code></td><td>字符串</td><td>缺省</td><td>包名</td><td>命令所运行的包（如果它运行一个包）；根据固定了版本的包命令（<code>npx</code>、<code>bunx</code>、<code>uvx</code>、<code>pipx</code>）记录。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.version</code></td><td>字符串</td><td>缺省</td><td>确切的版本</td><td>该包被固定的版本。tag 或范围在 server 启动之前被拒绝。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.secrets</code></td><td>字符串数组</td><td><code>[]</code></td><td>环境变量名</td><td>server 只在启动时，才从 bot 插件的 secret store 中以 <code>&lt;server&gt;.&lt;variable&gt;</code> 的形式收到每个值。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools</code></td><td>对象数组</td><td>缺省</td><td><code>{ &quot;name&quot;, &quot;description&quot; }</code> 条目</td><td>人批准该 server 时它提供的工具；启动时与它当前提供的工具比较。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools.name</code></td><td>字符串</td><td>必填</td><td>工具名</td><td>一个已批准的工具。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools.description</code></td><td>字符串</td><td>必填</td><td>工具的描述</td><td>与名称一起被批准的描述；两者共同构成 digest。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.digest</code></td><td>字符串</td><td>缺省</td><td>已批准工具的 digest</td><td>chat 启动 server 时：不同的工具列表不会被挂载，工具变更的 proposal 在 Pending 中等待。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpAllow</code></td><td>字符串数组</td><td><code>[]</code></td><td><code>&lt;server&gt;.&lt;tool&gt;</code> 或 <code>&lt;server&gt;.*</code></td><td>bot 的 chat 的每次 MCP 工具调用：已列出的工具无需询问即可运行；未列出的算作写入，会先询问。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access</code></td><td>对象</td><td><code>{}</code></td><td>下面的 key</td><td>每次回复：它会加到默认访问 profile 上。bot 可以收紧默认值，但不能放宽。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.denyPaths</code></td><td>字符串数组</td><td><code>[]</code></td><td>路径</td><td>追加到默认 deny 列表之后。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.denyCommands</code></td><td>字符串数组</td><td><code>[]</code></td><td>命令模式</td><td>追加到默认 deny 列表之后。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.askCommands</code></td><td>字符串数组</td><td><code>[]</code></td><td>命令模式</td><td>追加到默认 ask 列表之后；匹配时运行前会询问。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.askPaths</code></td><td>字符串数组</td><td><code>[]</code></td><td>路径</td><td>追加到默认 ask 列表之后。</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.readOnly</code></td><td>布尔值</td><td><code>false</code></td><td><code>true</code>、<code>false</code></td><td>每次回复：<code>true</code> 会拒绝每次写入，以及每条不确定只读的命令。</td></tr><tr><td><code>chat.speaker</code></td><td>字符串</td><td><code>&quot;Operad Bot&quot;</code></td><td>任何非空字符串</td><td>每次不使用 bot 的 <code>speaker</code> 的 chat 的回复；可用 <code>operad settings set chat.speaker &lt;value&gt;</code> 编辑。</td></tr></tbody></table></div>
+<p>默认访问 profile 拒绝凭据和秘密（<code>~/.ssh</code>、<code>~/.gnupg</code>、<code>~/.aws</code>、<code>~/.config/gh</code>、钥匙串和浏览器 profile）、operad home（bot 自己的目录除外）、<code>.git/config</code>、<code>.git/hooks</code>，以及 <code>sudo</code>、<code>operad</code>、<code>mkfs</code>、<code>dd</code>、<code>shutdown</code>、<code>pkill</code> 和 <code>killall</code> 之类的命令；在 <code>git push</code>、<code>brew install</code>、<code>npm install -g</code>、<code>pip install</code>、<code>osascript</code> 和 <code>open</code> 之前会询问。<code>access-user.json</code> 和 always allow 见<a href="../../../zh/docs/access/">访问</a>。</p>
+<h3 id="bot-objects-and-proposals">bot 对象和 proposal<a class="anchor" href="#bot-objects-and-proposals" aria-label="链接到本节">#</a></h3>
+<p>bot 页面有 <code>bot</code> 部分。无法使用的 bot 会保存它的问题，它的行也会这样显示；此时 <code>bot:chat</code> 会带着该问题拒绝。从设置中取出的 bot 被标记为 removed；新的 bot 在下一次使用时出现。</p>
+<p>bot 向自己提出的变更是一个 <code>bot-proposal</code> 对象。在人批准或拒绝它之前它一直是 pending；在此之前磁盘上不会有任何变化。proposal 是以下之一：</p>
+<ul><li>skill（<code>bot skill</code>）：修改前后的文件，应用到 skill 目录，并加入 bot 的 <code>skills</code>；</li><li>设置变更（<code>bot setting</code>）：bot 修改前后的设置；</li><li>MCP server（<code>bot mcp</code>）：新的 server、升级，或工具发生变化的 server。</li></ul>
+<p><code>bot:approve</code> 应用一个 pending 的 proposal，<code>bot:reject</code> 拒绝它。不是 pending 的 proposal 仍然显示它的状态。<code>bot-proposal</code> 的过滤器是 <code>pending</code>（默认）、<code>applied</code> 和 <code>rejected</code>；每个 pending 的 proposal 同时也是其 bot 的一个 pending 项，所以它出现在 Pending 和 app 中。</p>
+<h3 id="bot-commands">bot 命令<a class="anchor" href="#bot-commands" aria-label="链接到本节">#</a></h3>
+<p><code>operad bot skill &lt;bot&gt; &lt;name&gt; [--from &lt;dir&gt;]</code> 提议新的或修改后的 skill。不带 <code>--from</code> 时，stdin 是一个含有 <code>skill_md</code> 和 <code>files</code> 的 JSON 对象；带该选项时，读取该目录的文件。skill 需要有 <code>SKILL.md</code>。它输出 <code>proposed skill &quot;&lt;name&gt;&quot; for bot &lt;bot&gt;; review it in pending</code>。</p>
+<p><code>operad bot mcp &lt;bot&gt; &lt;name&gt; &lt;command&gt; [args…]</code> 启动一次本地 MCP server，读取它的工具列表，并提议注册它。没有 command 时，stdin 是粘贴进来的 <code>mcpServers</code> 条目。只能注册本地 server（带参数的命令）；地址（<code>url</code>、<code>type: &quot;http&quot;</code>、<code>type: &quot;sse&quot;</code>、<code>headers</code>）会被拒绝。包命令必须写明确切的版本：<code>npx -y pkg@1.2.3</code> 被接受；<code>pkg@latest</code> 或范围会被拒绝，并指出所需的版本。server 在 bot 的工作目录中，以 bot 的访问 profile 和它的 secret 启动。它输出 <code>proposed MCP server &quot;&lt;name&gt;&quot; for bot &lt;bot&gt; (&lt;n&gt; tools); review it in pending</code>。</p>
+<p><code>operad bot setting &lt;bot&gt;</code> 从 stdin 读取一个 JSON 对象并提议该变更。它不能添加或修改 <code>mcpServers</code>；那是 <code>bot mcp</code> 的用途。它输出 <code>proposed settings for bot &lt;bot&gt;; review it in pending</code>。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/chats-and-bots.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../mcp/"><small>上一页</small>MCP server</a>
+      <a class="next" href="../notifications/"><small>下一页</small>通知</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#chats">chat</a></li><li class="l2"><a href="#bots">bot</a></li><li class="l3"><a href="#bot-objects-and-proposals">bot 对象和 proposal</a></li><li class="l3"><a href="#bot-commands">bot 命令</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

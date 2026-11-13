@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>访问 · operad 文档</title>
+<meta name="description" content="访问 profile、默认 profile、access-user.json、always allow、MCP 工具和后台运行。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/access/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/access/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/access/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/access/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="访问 · operad 文档">
+<meta property="og:description" content="访问 profile、默认 profile、access-user.json、always allow、MCP 工具和后台运行。">
+<meta property="og:url" content="https://operad.io/zh/docs/access/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="访问 · operad 文档">
+<meta name="twitter:description" content="访问 profile、默认 profile、access-user.json、always allow、MCP 工具和后台运行。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "访问",
+ "description": "访问 profile、默认 profile、access-user.json、always allow、MCP 工具和后台运行。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/access/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/access/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">用 agent 设置 operad</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/" aria-current="page">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="access">访问</h1>
+<p>当 agent 要运行的命令或要访问的路径不在其访问 profile 允许的范围内时，它会先询问。人用一个操作回答这个问题；<code>allow_always</code> 会记录这次调用，以后不再询问。profile 是护栏，不是边界：它匹配的是调用的文本，如果程序用别的方式构造路径或命令，就超出了它能看到的范围。</p>
+<h2 id="the-profile">profile<a class="anchor" href="#the-profile" aria-label="链接到本节">#</a></h2>
+<p>profile 是一个 JSON 对象。bot 的 profile 是它的 <a href="../../../zh/docs/config/#bot">bot 设置</a>与下面的默认值合并的结果；flow 的 profile 会交给声明要强制执行其字段的 step。匹配器按这个顺序处理：<strong>deny 优先于 ask，ask 优先于 allow</strong>。匹配 deny 的调用无论 ask 规则怎么写都会被拒绝；只匹配 ask 规则的调用会询问人；其余调用一律允许。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>denyPaths</code></td><td>字符串数组</td><td>下面的默认列表</td><td>路径；<code>*</code> 只在单个路径段内匹配</td><td>step 判断一次调用时</td><td>读取器拒绝：<code>denyPaths must be an array of strings</code></td></tr><tr><td><code>denyCommands</code></td><td>字符串数组</td><td>下面的默认列表</td><td>命令规则；带 <code>*</code> 的单词模式，管道各部分之间用 <code>|</code></td><td>step 判断一条命令时</td><td>读取器拒绝：<code>denyCommands must be an array of strings</code></td></tr><tr><td><code>askCommands</code></td><td>字符串数组</td><td>下面的默认列表</td><td>与 <code>denyCommands</code> 形式相同的命令规则</td><td>step 判断一条未被任何 deny 拒绝的命令时</td><td>读取器拒绝：<code>askCommands must be an array of strings</code></td></tr><tr><td><code>askPaths</code></td><td>字符串数组</td><td>下面的默认列表</td><td>写入时需要询问的路径；<code>*</code> 只在单个路径段内匹配</td><td>step 判断一次写入或编辑，或一次 <code>bash</code> 重定向时</td><td>读取器拒绝：<code>askPaths must be an array of strings</code></td></tr><tr><td><code>readOnly</code></td><td>布尔值</td><td><code>false</code></td><td><code>true</code> 或 <code>false</code></td><td>step 判断发生在 profile 的工作目录中的调用时</td><td>读取器拒绝：<code>readOnly must be true or false</code></td></tr><tr><td><code>readPaths</code></td><td>字符串数组</td><td><code>[]</code></td><td>在被拒绝的上级目录之下仍可读取的目录</td><td>step 判断一次读取，或一条只读的 <code>bash</code> 命令时</td><td>读取器拒绝：<code>readPaths must be an array of strings</code></td></tr><tr><td><code>allowMcp</code></td><td>字符串数组</td><td>缺省：MCP 工具不受 profile 管辖</td><td><code>&lt;server&gt;.&lt;tool&gt;</code> 或 <code>&lt;server&gt;.*</code></td><td>step 判断一次 MCP 调用时；只要有这个字段，即使为空，MCP 工具就受 profile 管辖</td><td>读取器拒绝：<code>allowMcp must be an array of strings</code></td></tr><tr><td><code>alwaysAllow</code></td><td>条目对象数组</td><td>对于由人发起的运行，是 <a href="#access-userjson">access-user.json</a> 中的条目；后台运行中为空</td><td>下面的条目</td><td>step 判断一次原本会询问的调用时</td><td>读取器拒绝：<code>alwaysAllow must be an array</code>，或某个条目自己的消息</td></tr><tr><td><code>grants</code></td><td>grant 对象数组</td><td><code>[]</code></td><td>step 为某一次确切调用携带的一次性权限</td><td>一直在等待的 step 继续时</td><td>读取器拒绝：<code>grants must be an array</code>，或某个 grant 自己的消息</td></tr></tbody></table></div>
+<p>匹配器不读取 <code>cwd</code>、<code>outside</code> 和 <code>network</code> 这几个字段。MCP 条目说明本地或远程 MCP 工具可以做什么；见 <a href="#mcp-tool-entries">MCP 工具条目</a>。</p>
+<p><code>denyPaths</code> 和 <code>askPaths</code> 与调用所写的路径进行匹配，匹配前会做规范化：<code>~</code> 视为用户的 home，相对路径接在调用的工作目录之后。位于 <code>denyPaths</code> 条目之下的路径会被拒绝。位于 <code>askPaths</code> 条目之下的写入或编辑会询问；重定向到这样的路径的 <code>bash</code> 命令会连同整条命令一起询问。</p>
+<p><code>readOnly</code> 使调用的工作目录变为只读：在那里的写入或编辑会询问，<code>bash</code> 命令也会询问，除非它在只读命令的短名单上。deny 仍然优先。</p>
+<p><code>readPaths</code> 允许读取位于 <code>denyPaths</code> 某个上级条目之下的目录。它不允许写入：在那里写入会询问。</p>
+<h2 id="the-default-profile">默认 profile<a class="anchor" href="#the-default-profile" aria-label="链接到本节">#</a></h2>
+<p>默认 profile 是 bot 的起点。它的列表会加到 bot 自己写的列表上；bot 可以收紧，但不能放宽。</p>
+<div class="table-wrap"><table><thead><tr><th>List</th><th>Entries</th></tr></thead><tbody><tr><td><code>denyPaths</code></td><td><code>~/.ssh</code>、<code>~/.gnupg</code>、<code>~/.aws</code>、<code>~/.config/gh</code>、<code>~/.radian</code>、<code>~/Library/Keychains</code>、<code>~/Library/Application Support/Google/Chrome</code>、<code>~/Library/Application Support/Firefox</code>、<code>~/Library/Safari</code>、<code>.git/config</code>、<code>.git/hooks</code>，以及 operad home 中除 bot 自己的目录之外的每一项（目前那里的名称，以及 <code>store</code>、<code>secrets</code>、<code>config.json</code> 和 MCP 报告目录）</td></tr><tr><td><code>denyCommands</code></td><td><code>operad</code>、<code>sudo</code>、<code>su</code>、<code>rm -rf /</code>、<code>rm -rf ~</code>、<code>mkfs</code>、<code>dd</code>、<code>diskutil</code>、<code>shutdown</code>、<code>reboot</code>、<code>launchctl</code>、<code>crontab -r</code>、<code>git push --force*</code>、<code>git push --delete</code>、<code>curl … | sh</code>、<code>wget … | sh</code>、<code>pkill</code>、<code>killall</code></td></tr><tr><td><code>askCommands</code></td><td><code>git push</code>、<code>brew install</code>、<code>npm install -g</code>、<code>pip install</code>、<code>osascript</code>、<code>open</code></td></tr><tr><td><code>askPaths</code></td><td><code>~/.zshrc</code>、<code>~/.*profile</code></td></tr><tr><td><code>readPaths</code>、<code>readOnly</code>、<code>allowMcp</code></td><td>缺省</td></tr></tbody></table></div>
+<p>home 中的条目是绝对路径，所以不是 <code>~/.operad</code> 的 home 也被覆盖。<code>~/.operad/bot</code> 之下 bot 自己的工作目录，是 home 中唯一允许 agent 使用的部分。<code>dev</code> 已知的仓库的路径，以及 bot 的 skill 目录的路径，会加入 <code>denyPaths</code>：agent 通过 <code>dev</code> 的 action 访问仓库，而不是直接操作其中的文件。bot 自己的 <code>access</code> 列表会追加到这些列表之后，它的 <code>access.readOnly</code> 可以把工作目录变为只读。</p>
+<p>规则是由单词组成的模式；<code>*</code> 匹配单词中的任意字符。<code>-rf</code> 匹配相同的单短横字母，顺序不限，<code>…</code> 不增加任何条件。因此 <code>git push --force*</code> 能匹配 <code>git -C x push --force</code>。内联命令（例如 <code>bash -c</code>、<code>python -c</code>、<code>bun -e</code>、<code>osascript -e</code>、<code>find -exec</code>、<code>xargs</code>、<code>eval</code>、反引号或 <code>$()</code>）在设置了 <code>denyCommands</code> 时被拒绝，只设置了 <code>askCommands</code> 时会询问，因为匹配器看不到它运行的内容。完整的规则表见 <code>packages/access-match/REFERENCE.md</code>。</p>
+<h2 id="access-userjson"><code>access-user.json</code><a class="anchor" href="#access-userjson" aria-label="链接到本节">#</a></h2>
+<p><code>$OPERAD_HOME/access-user.json</code>（见 <a href="../../../zh/docs/config/#the-home">home</a>）保存人回答过 <code>allow_always</code> 的调用。文件不存在时视为空列表。无法读取的文件由读取它的 step 报告，并视为空。人通过回答 <code>allow_always</code> 添加条目；删除条目就是从数组中删掉它的对象。文件在加锁的情况下写入并整体替换，所以崩溃不会留下写了一半的文件。</p>
+<pre data-ui><code class="lang-json">[
+  { &quot;kind&quot;: &quot;command&quot;, &quot;value&quot;: &quot;git status --short&quot;, &quot;cwd&quot;: &quot;/Users/you/Code/example&quot; },
+  { &quot;kind&quot;: &quot;path&quot;, &quot;value&quot;: &quot;notes/todo.md&quot;, &quot;cwd&quot;: &quot;/Users/you/Code/example&quot;, &quot;tool&quot;: &quot;edit&quot; }
+]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>kind</code></td><td>字符串</td><td>必填</td><td><code>command</code>、<code>path</code></td><td>step 询问一次调用时：条目只匹配同种类的调用</td><td>没有 <code>command</code> 或 <code>path</code> 的条目会使整个文件被视为空；step 报告 <code>entry &lt;i&gt; is not a command or path entry with a value and a working directory</code></td></tr><tr><td><code>value</code></td><td>字符串</td><td>必填</td><td>与允许时完全一致的命令文本（MCP 工具则为 <code>mcp &lt;server&gt;.&lt;tool&gt;</code>），或调用所写的路径</td><td>step 询问一次调用时：调用必须与它完全匹配</td><td>没有非空 value 的条目会使整个文件被视为空</td></tr><tr><td><code>cwd</code></td><td>字符串</td><td>必填</td><td>调用被允许时所在的工作目录</td><td>step 询问一次调用时：调用必须在该目录中；换一个目录就是新的询问</td><td>没有非空工作目录的条目会使整个文件被视为空</td></tr><tr><td><code>tool</code></td><td>字符串</td><td><code>path</code> 必填</td><td>工具名，例如 <code>write</code> 或 <code>edit</code></td><td>path 条目只允许该工具，同一路径上的其他工具不在内</td><td>没有 tool 的 path 条目，或带有 tool 的 command 条目，会使整个文件被视为空</td></tr></tbody></table></div>
+<p>无效的文件被视为空列表，step 会记录 <code>the user access file &quot;&lt;path&gt;&quot; ...; it is treated as empty</code>。只有当调用被允许了一次，<code>allow_always</code> 的回答才会写入条目；含有秘密值的调用从不询问，也从不写入。</p>
+<h2 id="allow_always"><code>allow_always</code><a class="anchor" href="#allow_always" aria-label="链接到本节">#</a></h2>
+<p>当一次调用需要询问时，在由人发起的运行中，人会看到三个选项（<code>allow_once</code>、<code>allow_always</code>、<code>reject_once</code>）。<code>allow_always</code> 让这次调用运行，并把它的确切值和工作目录追加到 <code>access-user.json</code>；之后在同一目录中文本相同的调用就不再询问直接运行。它不会解除 <code>denyPaths</code> 或 <code>denyCommands</code> 的匹配，也不涵盖不同的命令、不同写法的路径，或另一个目录中的同一命令。迟到的回答也可能带有写入；如果文件无法写入，step 会记录这一点，并让这次调用运行一次。</p>
+<h2 id="mcp-tool-entries">MCP 工具条目<a class="anchor" href="#mcp-tool-entries" aria-label="链接到本节">#</a></h2>
+<p>profile 中的 <code>allowMcp</code>（或 bot 设置中的 <code>mcpAllow</code>）以 <code>&lt;server&gt;.&lt;tool&gt;</code> 或 <code>&lt;server&gt;.*</code> 的形式，列出无需询问即可运行的 MCP 工具。只要有这个字段，即使是空列表，MCP 工具就受 profile 管辖：未列出的工具算作写入，会先询问。已列出的工具无需询问即可运行；如果 deny 路径或命令覆盖了这次调用，deny 仍然优先。</p>
+<p>被回答的 MCP 问题和其他命令一样被记录：<code>kind</code> 是 <code>command</code>，<code>value</code> 是 <code>mcp &lt;server&gt;.&lt;tool&gt;</code>，<code>cwd</code> 是工作目录。条目只与该 server 和该工具完全匹配。</p>
+<h2 id="background-runs">后台运行<a class="anchor" href="#background-runs" aria-label="链接到本节">#</a></h2>
+<p>当没有任何人的消息启动一次运行时，它就是<strong>后台运行</strong>：计划任务、webhook、来自其他来源的传入消息，或某次运行发出的事件。按这条规则，只有来自 chat 自己的客户端来源（<code>ios</code>、<code>telegram</code>、<code>cli</code>、<code>tui</code>、<code>other</code>）的消息才算人的消息。</p>
+<p>在后台运行中，现有的 <code>alwaysAllow</code> 条目不被使用，也不提供 <code>allow_always</code>：每次询问都会重新问，只有 <code>allow_once</code> 和 <code>reject_once</code>。这是有意为之：计划运行或传入运行要重新受 profile 约束，而不是继承某个人在先前对话中给出的权限。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/access.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../dev/"><small>上一页</small>dev.json 和 dev 插件</a>
+      <a class="next" href="../cli/"><small>下一页</small>命令行</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-profile">profile</a></li><li class="l2"><a href="#the-default-profile">默认 profile</a></li><li class="l2"><a href="#access-userjson">access-user.json</a></li><li class="l2"><a href="#allow_always">allow_always</a></li><li class="l2"><a href="#mcp-tool-entries">MCP 工具条目</a></li><li class="l2"><a href="#background-runs">后台运行</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

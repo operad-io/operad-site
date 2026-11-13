@@ -26,6 +26,8 @@
 - [Environment variables](https://operad.io/docs/environment/): Every OPERAD_ environment variable and the other variables operad reads, with defaults and when each applies.
 - [Troubleshooting](https://operad.io/docs/troubleshooting/): When something does not work: each message operad prints that you can act on, and what to do.
 
+The same documentation in Chinese (中文文档): [https://operad.io/zh/docs/](https://operad.io/zh/docs/)
+
 ## Source
 
 - [GitHub](https://github.com/operad-io/operad): the operad repository
