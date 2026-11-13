@@ -74,6 +74,11 @@ pre code { font-size: inherit; }
 .links .gh { display: inline-flex; align-items: center; }
 .links .gh svg { width: 20px; height: 20px; }
 .links .end { margin-left: auto; }
+.links .lang { font-size: 14px; gap: 4px; letter-spacing: .02em; }
+.links .lang i { font-style: normal; opacity: .4; }
+.links .lang span { opacity: .55; }
+.links .lang b { font-weight: 600; }
+.links .lang:hover span { opacity: 1; }
 .links a:hover { color: var(--acc-ink); }
 .go { background: var(--acc); color: var(--on); font-weight: 500; transition: transform .15s; }
 .go:hover { background: var(--deep); }
