@@ -71,6 +71,7 @@ pre code { font-size: inherit; }
 .links { gap: 28px; }
 .links a { padding: 8px 0; margin: 0; }
 .links > * + * { margin-top: 0; }
+.links .gh { display: inline-flex; align-items: center; gap: 7px; }
 .links a:hover { color: var(--acc-ink); }
 .go { background: var(--acc); color: var(--on); font-weight: 500; transition: transform .15s; }
 .go:hover { background: var(--deep); }
@@ -235,7 +236,7 @@ html:not(.js) .r-open { display: block; background: var(--tile); }
 @media (max-width: 900px) {
   .top { grid-template-columns: 60px 1fr auto; }
   .links { gap: 16px; overflow-x: auto; }
-  .links a:nth-child(n+3) { display: none; }
+  .links a:nth-child(n+3):not(.gh) { display: none; }
   .bar { flex-direction: column; min-height: 0; }
   .seg { min-height: 120px; padding: 18px; gap: 16px; }
   .seg .clause { max-width: none; }
@@ -267,7 +268,7 @@ html:not(.js) .r-open { display: block; background: var(--tile); }
   .pair { order: 1; }
   .name { order: 0; }
   .pair .tile { aspect-ratio: 1; display: flex; align-items: flex-start; }
-  .links a:nth-child(n+2) { display: none; }
+  .links a:nth-child(n+2):not(.gh) { display: none; }
   .term pre { padding: 18px; font-size: 12.5px; }
   .mark { display: grid; grid-template-columns: repeat(3, 1fr); height: auto; min-height: 0; }
   .mark span { height: 15svh; min-height: 100px; font-size: 26vw; padding-bottom: 5%; border-radius: var(--r); }
@@ -276,3 +277,4 @@ html:not(.js) .r-open { display: block; background: var(--tile); }
   .mark { align-items: end; }
 }
 .acc pre { background: rgba(0,0,0,.22); border-radius: 6px; padding: 16px; }
+.src { text-decoration: underline; text-underline-offset: 3px; }
