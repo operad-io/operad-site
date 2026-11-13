@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP server · operad docs</title>
+<meta name="description" content="The MCP server for a lead agent: setup, transport, the Claude Code channel, tools and errors.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/docs/mcp/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="MCP server · operad docs">
+<meta property="og:description" content="The MCP server for a lead agent: setup, transport, the Claude Code channel, tools and errors.">
+<meta property="og:url" content="https://operad.io/docs/mcp/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP server · operad docs">
+<meta name="twitter:description" content="The MCP server for a lead agent: setup, transport, the Claude Code channel, tools and errors.">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "MCP server",
+ "description": "The MCP server for a lead agent: setup, transport, the Claude Code channel, tools and errors.",
+ "inLanguage": "en",
+ "url": "https://operad.io/docs/mcp/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../" aria-label="operad, home"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="../../">Home</a>
+    <a href="../" aria-current="true">Docs</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  </nav>
+  <a class="tile go" href="../../#install">Run it</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="Documentation">
+    <details class="side-nav" open>
+      <summary class="s3">Docs</summary>
+      <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../quickstart/">Quickstart</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json and the dev plugin</a></li>
+        <li><a href="../access/">Access</a></li>
+        <li><a href="../cli/">The command line</a></li>
+        <li><a href="../tui/">The terminal client</a></li>
+        <li><a href="../app/">The phone app</a></li>
+        <li><a href="../http/">The HTTP interface</a></li>
+        <li><a href="../mcp/" aria-current="page">MCP server</a></li>
+        <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../notifications/">Notifications</a></li>
+        <li><a href="../checks/">Checks</a></li>
+        <li><a href="../environment/">Environment variables</a></li>
+        <li><a href="../troubleshooting/">Troubleshooting</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="mcp-server">MCP server</h1>
+<p><code>operad mcp</code> is a Model Context Protocol server on stdio. It gives a lead agent typed access to the same objects, lists, sections, pending items, running items and history that <code>operad</code> and the <code>/v1</code> interface read. It also runs plugin verbs and the lead actions <code>config.json</code> allows, through the same paths as the CLI. It never starts a step or takes an owner decision; only <code>operad serve</code> runs steps, and the actions left out of <code>mcp.actions</code> stay in the command line or the app.</p>
+<p>The server implements the MCP JSON-RPC 2.0 transport, protocol version <code>2025-06-18</code>. It has no runtime dependency except <code>@operad-io/engine</code>.</p>
+<h2 id="setting-it-up">Setting it up<a class="anchor" href="#setting-it-up" aria-label="Link to this section">#</a></h2>
+<p><code>operad mcp</code> runs an MCP server on stdio for a lead agent. It reads the same objects, pending items, running items, sections and history as the commands, and it runs the plugin verbs and lead actions <code>config.json</code> allows. It never starts a step or takes an owner decision; only <code>operad serve</code> runs steps, and the actions left out of <code>mcp.actions</code> stay in the command line or the app. The protocol, tools and error mapping are below; stdout carries only JSON-RPC and logs go to stderr.</p>
+<p>Claude Code finds the server in a project <code>.mcp.json</code>:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;mcpServers&quot;: {
+    &quot;operad&quot;: {
+      &quot;command&quot;: &quot;operad&quot;,
+      &quot;args&quot;: [&quot;mcp&quot;]
+    }
+  }
+}</code></pre>
+<p>The server uses <code>$OPERAD_HOME</code>, or <code>~/.operad</code> when it is unset. Set <code>OPERAD_HOME</code> in the entry's <code>env</code> when the agent should read another home.</p>
+<h3 id="turning-the-channel-on">Turning the channel on<a class="anchor" href="#turning-the-channel-on" aria-label="Link to this section">#</a></h3>
+<p><code>operad mcp --claude-channel</code> turns the server into a one-way channel: it declares the experimental <code>claude/channel</code> capability and sends <code>notifications/claude/channel</code> when an object's state, waiting flag or running flag changes. It never declares <code>claude/channel/permission</code> and never relays a permission prompt. Without the flag the server sends no notification and declares no experimental capability.</p>
+<p>The server watches both the objects and the flows, so a wait that opens or a step that starts is reported even when no object is written (a change another process makes is found by a poll, 500 ms by default). It sends nothing until the client has sent <code>notifications/initialized</code>, then sends what changed since the start. At start the server reads the current rows and sends nothing for them. Every later notification has a one-line <code>content</code>, <code>&lt;id&gt; &lt;old state&gt; -&gt; &lt;new state&gt;</code> with <code>: &lt;note&gt;</code> when the row has one, and string <code>meta</code> with <code>id</code>, <code>type</code>, <code>state</code>, <code>previous</code>, <code>waiting</code> and <code>running</code>. An object seen for the first time after the starting read has <code>previous</code> set to <code>new</code>. The channel is one-way; use <code>show</code>, <code>section</code>, <code>pending</code> and <code>history</code> for the details.</p>
+<p><code>--types &lt;t,…&gt;</code> limits the channel to some object types, separated by commas. The default is every type with views; a name that is not one is a usage error. For example:</p>
+<pre data-ui><code class="lang-json">&quot;args&quot;: [&quot;mcp&quot;, &quot;--claude-channel&quot;, &quot;--types&quot;, &quot;task&quot;]</code></pre>
+<p>Claude Code enables the extension with its development-channel flag, naming the server from <code>.mcp.json</code>:</p>
+<pre data-ui><code class="lang-sh">claude --dangerously-load-development-channels server:operad</code></pre>
+<h2 id="transport">Transport<a class="anchor" href="#transport" aria-label="Link to this section">#</a></h2>
+<p>Messages are one JSON-RPC object per line, incoming on stdin and outgoing on stdout. A message must not contain an embedded newline. stdout carries only JSON-RPC messages; plugin loading, view errors and other logs go to stderr.</p>
+<p>The server accepts these methods:</p>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>What it does</th></tr></thead><tbody><tr><td><code>initialize</code></td><td>Returns the protocol version, the <code>tools</code> capability, the server name and version, and the instructions.</td></tr><tr><td><code>notifications/initialized</code></td><td>Accepted; it has no response.</td></tr><tr><td><code>ping</code></td><td>Returns <code>{}</code>.</td></tr><tr><td><code>tools/list</code></td><td>Returns the tool table below.</td></tr><tr><td><code>tools/call</code></td><td>Runs one tool.</td></tr></tbody></table></div>
+<p>The <code>initialize</code> result carries this fixed instruction:</p>
+<pre data-ui><code class="lang-text">The operad MCP server reads objects, pending items and history, and writes the commands and lead actions it is allowed to. Owner decisions are not offered here.</code></pre>
+<p><code>tools/call</code> takes <code>{ &quot;name&quot;: &quot;&lt;tool&gt;&quot;, &quot;arguments&quot;: { ... } }</code>. The arguments are checked against the tool's input schema before any view is read. A missing required field, an unknown field, or a field of the wrong type is a malformed request.</p>
+<h2 id="claude-code-channel">Claude Code channel<a class="anchor" href="#claude-code-channel" aria-label="Link to this section">#</a></h2>
+<p><code>operad mcp --claude-channel</code> also pushes object changes to a client that understands Claude Code's channel extension. Without the flag the server has the same tools, capabilities and instructions as before, and sends no notification.</p>
+<p>With the flag the <code>initialize</code> result carries <code>capabilities.experimental[&quot;claude/channel&quot;] = {}</code>. It never declares <code>claude/channel/permission</code>: the server relays no permission prompts. The instructions gain a paragraph saying the channel is one-way and the read tools give the details.</p>
+<p>There are two sources. One is the store's object changes. The other is the changes to flows, because an object's <code>waiting</code> and <code>running</code> flags come from its flow: a wait that opens or a step that starts writes no object. Both use a directory watch with a polling fallback, so a change another process makes is seen too (the poll interval is the store's and the flow records' own, 500 ms by default). Each change re-reads that object's row. At start the server reads the current rows of every type that has views and sends nothing for them; if it cannot read a type's rows, the first row it sees for each object of that type is its baseline and also sends nothing. It remembers the last row it saw for each object and sends a block only for one of three things (<code>mcp.channel.notify</code> below):</p>
+<ul><li><strong>waiting</strong>: the <code>waiting</code> flag turns on. The content carries the row's note, which holds the reason when there is one (rework limit, work failed, ready to merge). A wait the object's own plugin answers automatically is not announced: dev does this for a task whose plan is at auto merge and whose review passed, because dev answers &quot;merge&quot; a moment later. The kernel asks the plugin (the object type's <code>answeredAutomatically</code> hook) each time, and the pending item carries <code>auto: true</code> for the channel only. If the answer does not come (dev refuses it, or the plan's auto level changes) the next change finds the wait unmarked and the block is sent then. A wait the plugin does not answer (rework asked, work did nothing, review failed twice) is sent as before.</li><li><strong>ended</strong>: the object reaches a final state. The plugin declares which states are final by setting <code>final: true</code> on the row it returns (dev: a task that is merged or cancelled, a plan that is finished or cancelled); the channel knows no state name.</li><li><strong>loop</strong>: the object reached the same state <code>loopAfter</code> times with no wait or end in between, counted from the state changes the channel saw since it started. It is sent once for that stretch; a wait or an end starts the count again.</li></ul>
+<p>Every other state change, a <code>running</code> flip, and <code>waiting</code> turning off send nothing, and a row equal to the last one sent for that object (state, <code>waiting</code> and <code>running</code>) is not sent again. The last row sent for each object is kept in a file in the operad home (<code>mcp-channel-&lt;hash of the store root&gt;.json</code>), written when a block is delivered, so a change seen again after a reconnect or restart stays quiet. An object first seen after the starting read has the previous state <code>new</code>. An object that can no longer be found is forgotten.</p>
+<p>The setting is in the home <code>config.json</code>, and is read when the server starts:</p>
+<pre data-ui><code class="lang-json">{ &quot;mcp&quot;: { &quot;channel&quot;: { &quot;notify&quot;: [&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;], &quot;loopAfter&quot;: 3 } } }</code></pre>
+<p>Leaving the key out gives the values above. Adding <code>&quot;changes&quot;</code> to <code>notify</code> also sends every state change, with <code>reason</code> <code>changes</code> unless it is also a wait, an end or a loop. An entry that is not <code>waiting</code>, <code>ended</code>, <code>loop</code> or <code>changes</code> is a config error that names it; <code>loopAfter</code> is an integer of 2 or more.</p>
+<p>The server sends nothing until the client has sent <code>notifications/initialized</code>. It keeps comparing rows meanwhile, then sends the changes it saw since the start, in order.</p>
+<p>Each notification is the server's <code>notifications/claude/channel</code> method with these parameters:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;content&quot;: &quot;T-0014-kernel running -&gt; waiting: review passed&quot;,
+  &quot;meta&quot;: {
+    &quot;id&quot;: &quot;T-0014-kernel&quot;,
+    &quot;type&quot;: &quot;task&quot;,
+    &quot;state&quot;: &quot;waiting&quot;,
+    &quot;previous&quot;: &quot;running&quot;,
+    &quot;waiting&quot;: &quot;true&quot;,
+    &quot;running&quot;: &quot;false&quot;,
+    &quot;reason&quot;: &quot;waiting&quot;,
+    &quot;step&quot;: &quot;review&quot;
+  }
+}</code></pre>
+<p><code>reason</code> says why the block was sent: <code>waiting</code>, <code>ended</code>, <code>loop</code>, or <code>changes</code>. <code>step</code> is the last step of the object's active run and is absent when the object has none, so a block reads <code>state=&quot;review&quot; step=&quot;verify&quot;</code> when verify failed inside the review state.</p>
+<p><code>content</code> is one line, <code>&lt;id&gt; &lt;old state&gt; -&gt; &lt;new state&gt;</code>, with <code>: &lt;note&gt;</code> appended when the row has a note. Every <code>meta</code> value is a string. The channel is one-way: there is no reply tool, and <code>show</code>, <code>section</code>, <code>pending</code>, <code>history</code> and the other read tools give the details.</p>
+<p><code>--types &lt;t,…&gt;</code> limits the channel to the named object types, separated by commas; the default is every type with views. A name that is not a type with views is a usage error that names it. The flag does not change the read tools.</p>
+<p>Claude Code enables the extension with its development-channel flag, naming the server from <code>.mcp.json</code>:</p>
+<pre data-ui><code class="lang-sh">claude --dangerously-load-development-channels server:operad</code></pre>
+<h2 id="lead-permissions">Lead permissions<a class="anchor" href="#lead-permissions" aria-label="Link to this section">#</a></h2>
+<p>The server may run only the actions <code>mcp.actions</code> names; every other action is the owner's, and <code>show</code> lists it under <code>ownerActions</code> instead. An action that carries <code>confirm: true</code> also needs <code>mcp.confirmActions</code> to name it. The settings are in <code>config.json</code> and are read when <code>operad mcp</code> starts:</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th></tr></thead><tbody><tr><td><code>mcp</code></td><td>object</td><td>see the keys below</td><td><code>channel</code>, <code>actions</code>, <code>confirmActions</code></td><td>When <code>operad mcp</code> starts.</td></tr><tr><td><code>mcp.actions</code></td><td>array of strings</td><td><code>[]</code> (<code>operad init</code> writes the five <code>dev</code> lead actions and <code>chat:close</code> into a new file)</td><td><code>plugin:action</code> names</td><td>When <code>operad mcp</code> starts: the actions the lead may run. Any other action is refused with a message naming it and saying the owner runs it.</td></tr><tr><td><code>mcp.confirmActions</code></td><td>array of strings</td><td><code>[]</code> (<code>operad init</code> writes <code>[&quot;chat:close&quot;]</code> into a new file)</td><td><code>plugin:action</code> names</td><td>When <code>operad mcp</code> starts: the allowed actions that also carry <code>confirm: true</code>. An action that is only in <code>actions</code> and asks to confirm is refused; one only in this list is refused too.</td></tr><tr><td><code>mcp.channel</code></td><td>object</td><td>see the two keys below</td><td><code>notify</code>, <code>loopAfter</code></td><td>When <code>operad mcp --claude-channel</code> starts.</td></tr><tr><td><code>mcp.channel.notify</code></td><td>array of strings</td><td><code>[&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;]</code></td><td><code>waiting</code>, <code>ended</code>, <code>loop</code>, <code>changes</code></td><td>When the channel starts: what sends a block. <code>waiting</code> is a wait opening; <code>ended</code> a final state; <code>loop</code> the same state reached <code>loopAfter</code> times with no wait or end between; <code>changes</code> every state change. An unknown value is a config error naming it.</td></tr><tr><td><code>mcp.channel.loopAfter</code></td><td>integer</td><td><code>3</code></td><td>A whole number from 2</td><td>When the channel starts: how many times in a row an object reaches the same state before a <code>loop</code> block. A value below 2 is a config error naming it.</td></tr></tbody></table></div>
+<p><code>mcp.actions</code> and <code>mcp.confirmActions</code> never change an action already running. The MCP server never offers the owner's actions as its own; <code>show</code> lists them separately so the lead can tell the owner what to run.</p>
+<p>With no <code>mcp.actions</code> in <code>config.json</code> the lead may run no action. A home made before <code>operad init</code> wrote these lists may lack them; add the lines from <a href="../../docs/config/">config.json</a> to its <code>mcp</code> section and restart <code>operad mcp</code>. Enabling a plugin later does not add its actions; list them by hand.</p>
+<h2 id="tools">Tools<a class="anchor" href="#tools" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Required arguments</th><th>What it returns</th></tr></thead><tbody><tr><td><code>types</code></td><td>none</td><td><code>{ &quot;types&quot;: [...] }</code>, the same list as <code>GET /v1/types</code>.</td></tr><tr><td><code>list</code></td><td>none; one of <code>type</code>, <code>root</code>, <code>parent</code> is needed</td><td><code>{ &quot;rows&quot;: [...], &quot;next&quot;: &quot;&lt;c&gt;&quot; }</code>, the same page as <code>GET /v1/objects</code>.</td></tr><tr><td><code>show</code></td><td><code>id</code></td><td>The object with its row, sections, allowed actions and <code>ownerActions</code>.</td></tr><tr><td><code>section</code></td><td><code>id</code>, <code>section</code></td><td><code>{ &quot;markdown&quot;, &quot;next&quot;, &quot;mark&quot;, &quot;tail&quot;, &quot;delta&quot; }</code>, the same read as the HTTP section call; optional <code>cursor</code>, <code>after</code>, <code>full</code>.</td></tr><tr><td><code>pending</code></td><td>none</td><td><code>{ &quot;items&quot;: [...] }</code>, with only the actions the lead may run.</td></tr><tr><td><code>answer</code></td><td><code>runId</code>, <code>waitId</code>, <code>choice</code></td><td><code>{ &quot;runId&quot;, &quot;waitId&quot;, &quot;choice&quot; }</code>; optional <code>note</code>, <code>confirmed</code>.</td></tr><tr><td><code>running</code></td><td>none</td><td><code>{ &quot;items&quot;: [...], &quot;load&quot;: { &quot;load1&quot;, &quot;cores&quot; } }</code>.</td></tr><tr><td><code>history</code></td><td><code>id</code></td><td><code>{ &quot;id&quot;, &quot;markdown&quot;, &quot;next&quot; }</code>, the History section.</td></tr><tr><td><code>command</code></td><td><code>plugin</code>, <code>verb</code></td><td>The plugin verb's value, the same as <code>operad &lt;plugin&gt; &lt;verb&gt;</code>; optional <code>args</code> and <code>input</code>.</td></tr><tr><td><code>act</code></td><td><code>action</code></td><td>The action record; optional <code>id</code>, <code>args</code>, <code>note</code>.</td></tr></tbody></table></div>
+<p>The rest of this page gives each tool's full input schema and the result shape.</p>
+<p>The tool table is exported as <code>TOOLS</code> from <code>@operad-io/mcp</code>; the server serves that same table. Every result is a normal MCP tool result with <code>structuredContent</code> and one text block whose text is the same content as Markdown. <code>structuredContent</code> is always an object: a list is wrapped as <code>{ &quot;items&quot;: [...] }</code>. <code>next</code>, when present, is a cursor the caller passes back unchanged.</p>
+<h3 id="types"><code>types</code><a class="anchor" href="#types" aria-label="Link to this section">#</a></h3>
+<p>Input: <code>{ &quot;type&quot;: &quot;object&quot;, &quot;additionalProperties&quot;: false, &quot;properties&quot;: {} }</code>.</p>
+<p>Result: <code>{ &quot;types&quot;: [...] }</code>, the same listing <code>GET /v1/types</code> serves: each object type with views, its <code>title</code>, its <code>plugin</code>, its <code>filters</code> and <code>defaultFilter</code> when it has any, and the <code>parents</code> an action that creates it works on. A plugin that declares <code>objectsUnderSettings</code> (a bot) marks every one of its types <code>&quot;settings&quot;: true</code>: clients give it no tab and list its top-level objects under settings. The Markdown is a table of type, title, plugin, whether it is under settings, filters and parents.</p>
+<h3 id="list"><code>list</code><a class="anchor" href="#list" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;type&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;An object type, such as task. Optional with root or parent: then every type is listed.&quot; },
+    &quot;root&quot;: { &quot;type&quot;: &quot;boolean&quot;, &quot;description&quot;: &quot;Only rows with no parent.&quot; },
+    &quot;parent&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;Only rows whose parent is this object id.&quot; },
+    &quot;cursor&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The next cursor from an earlier list.&quot; }
+  }
+}</code></pre>
+<p>Result: <code>{ &quot;rows&quot;: [ ... ], &quot;next&quot;: &quot;&lt;cursor&gt;&quot; }</code>. <code>rows</code> are the rows of one object type, with the plugin's <code>id</code>, <code>title</code>, <code>state</code> and optional <code>note</code> and <code>scope</code>, plus the kernel's <code>waiting</code> and <code>running</code> flags. An error row also has <code>error</code>. The Markdown is a table of id, state, title, note and flags. An unknown type is a tool error with the view's message.</p>
+<p><code>root</code> and <code>parent</code> list one level, as <a href="../../docs/cli/#levels">Levels</a> describes: with a <code>type</code> the rows of that type, without one the rows of all types in the types' order. The type's default filter applies in the level and <code>hidden</code> counts the rows it left out. A parent that names no object gives an empty list. A call with no <code>type</code>, <code>root</code> or <code>parent</code> is a tool error. A row's <code>parent</code>, when it has one, is in the structured row and in the <code>show</code> Markdown.</p>
+<h3 id="show"><code>show</code><a class="anchor" href="#show" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;id&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A bare id or type:id.&quot; }
+  }
+}</code></pre>
+<p>Result: the object <code>{ &quot;id&quot;, &quot;type&quot;, &quot;link&quot;, &quot;row&quot;, &quot;sections&quot;, &quot;actions&quot;, &quot;ownerActions&quot; }</code>. <code>row</code> is the list row. <code>sections</code> is the section directory. <code>actions</code> are the available actions the lead may run now, each with its <code>name</code>, <code>on</code>, <code>args</code> JSON Schema, <code>note</code> field name, <code>noteRequired</code> and <code>confirm</code>. <code>ownerActions</code> holds only the names of the available actions the lead may not run, including a <code>confirm: true</code> action that <code>mcp.confirmActions</code> does not name. The Markdown shows the row, the section directory, the allowed actions with their arguments, and an Owner actions list. An unknown id is a tool error with the view's message.</p>
+<h3 id="section"><code>section</code><a class="anchor" href="#section" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;id&quot;, &quot;section&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A bare id or type:id.&quot; },
+    &quot;section&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A section id from show.&quot; },
+    &quot;cursor&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The next cursor from an earlier read.&quot; },
+    &quot;after&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;A mark from an earlier read: return only the finished content after it. The answer says in `delta` whether it is that part alone or a whole page.&quot; },
+    &quot;full&quot;: { &quot;type&quot;: &quot;boolean&quot;, &quot;description&quot;: &quot;Return the whole section without the size cap.&quot; }
+  }
+}</code></pre>
+<p>Result: <code>{ &quot;markdown&quot;: &quot;...&quot;, &quot;next&quot;: &quot;&lt;cursor&gt;&quot;, &quot;mark&quot;: &quot;&lt;mark&gt;&quot;, &quot;tail&quot;: &quot;...&quot; }</code>. <code>mark</code> is an opaque position the finished content goes to, and <code>tail</code> is the Markdown of the part still changing; a plugin that does not use them sends neither. With <code>after=&lt;mark&gt;</code> from an earlier read, <code>markdown</code> holds only the finished content after that mark, and <code>delta</code> says whether it is that part alone (true) or a whole page the client must replace (false). The size cap covers <code>markdown</code> and <code>tail</code> together but never cuts <code>tail</code>: when both do not fit, <code>markdown</code> is shortened first; when even the tail and the truncation note do not fit, the call is refused with an over-cap message naming <code>--full</code>. The text block is the Markdown, with a final line naming <code>next</code> when the section is paged. An unknown id or section, or a mark from another section or object, is a tool error with the view's message.</p>
+<h3 id="pending"><code>pending</code><a class="anchor" href="#pending" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {}
+}</code></pre>
+<p>Result: <code>{ &quot;items&quot;: [...] }</code>, the same list as <code>operad pending</code> and <code>GET /v1/pending</code>, with only the actions the lead may run now. A question carries <code>waitId</code>. Each item that is about an object carries its <code>row</code>, as in <code>GET /v1/pending</code>. An action outside <code>mcp.actions</code>, or a <code>confirm: true</code> action that <code>mcp.confirmActions</code> does not name, is left out of both the structured content and the Markdown. The Markdown lists each pending item, its prompt, choices and actions. Call <code>show</code> on the item's object to see the owner actions.</p>
+<h3 id="answer"><code>answer</code><a class="anchor" href="#answer" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;runId&quot;, &quot;waitId&quot;, &quot;choice&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;runId&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;The pending item's runId.&quot; },
+    &quot;waitId&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;The pending item's waitId.&quot; },
+    &quot;choice&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;One of the item's choices.&quot; },
+    &quot;note&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The note, when the question asks for one.&quot; },
+    &quot;confirmed&quot;: { &quot;type&quot;: &quot;boolean&quot;, &quot;description&quot;: &quot;Set when the answer is a choice whose action asks to confirm.&quot; }
+  }
+}</code></pre>
+<p>Result: <code>{ &quot;runId&quot;, &quot;waitId&quot;, &quot;choice&quot; }</code>, plus <code>note</code> when one was given. It records the actor <code>{ &quot;via&quot;: &quot;mcp&quot;, &quot;id&quot;: &quot;lead&quot; }</code>. A question that is already closed, or a choice the question does not offer, is a tool error with the view's message. When every choice is also an action on the item's object (a <code>dev</code> wait), the choice runs through that action, so its confirmation and the <code>mcp.actions</code> allow list still apply, and the result is the action record. A confirmed action needs <code>&quot;confirmed&quot;: true</code>.</p>
+<h3 id="running"><code>running</code><a class="anchor" href="#running" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {}
+}</code></pre>
+<p>Result: <code>{ &quot;items&quot;: [...] }</code>, the same list as <code>operad running</code> and <code>GET /v1/running</code>. The Markdown is a table of each active run: its object, title, flow, step, step time and run age. Each item also has <code>object</code>, <code>title</code>, <code>stepStartedAt</code>, <code>stepElapsedMs</code> and <code>mark</code> (the object's row mark, left out when it has none; see <code>GET /v1/running</code> in the manual).</p>
+<h3 id="history"><code>history</code><a class="anchor" href="#history" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;id&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A bare id or type:id.&quot; }
+  }
+}</code></pre>
+<p>Result: <code>{ &quot;id&quot;: &quot;&lt;the id as given&gt;&quot;, &quot;markdown&quot;: &quot;...&quot;, &quot;next&quot;: &quot;&lt;cursor&gt;&quot; }</code>. The Markdown is the kernel's History section for the object. An unknown id is a tool error with the view's message.</p>
+<h3 id="command"><code>command</code><a class="anchor" href="#command" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;plugin&quot;, &quot;verb&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;plugin&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A loaded plugin name, such as dev.&quot; },
+    &quot;verb&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A verb the plugin declares, such as plan.&quot; },
+    &quot;args&quot;: { &quot;type&quot;: &quot;array&quot;, &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }, &quot;description&quot;: &quot;The command-line arguments after the verb.&quot; },
+    &quot;input&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The text the CLI reads from stdin, such as a brief.&quot; }
+  }
+}</code></pre>
+<p>Result: the plugin verb's output, the same value <code>operad &lt;plugin&gt; &lt;verb&gt;</code> prints. A value that is an object is the structured content as it is; any other value (a list, a string) is wrapped as <code>{ &quot;value&quot;: ... }</code>. The call builds the CLI's <code>[plugin, verb, ...args]</code>, with <code>input</code> standing in for stdin, so <code>dev plan add</code> and <code>dev task add</code> take their brief from it. It resolves the pair against the loaded plugins, so a plugin verb runs even when its name matches a kernel command. A plugin whose name is itself a kernel verb is refused, even when the pair resolves to one of its commands. A kernel verb the named plugin does not declare (<code>serve</code>, <code>init</code>, <code>plugin ...</code>, <code>secret ...</code>, <code>http ...</code>, and the other commands the CLI owns), and any other verb it does not declare, is refused with a tool error.</p>
+<h3 id="act"><code>act</code><a class="anchor" href="#act" aria-label="Link to this section">#</a></h3>
+<p>Input:</p>
+<pre data-ui><code class="lang-json">{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;action&quot;],
+  &quot;additionalProperties&quot;: false,
+  &quot;properties&quot;: {
+    &quot;action&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A &lt;plugin&gt;:&lt;action&gt; name from show.&quot; },
+    &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The object id when the action targets one.&quot; },
+    &quot;args&quot;: { &quot;type&quot;: &quot;object&quot;, &quot;description&quot;: &quot;The action's arguments, as its schema names them.&quot; },
+    &quot;note&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;The note for an action whose schema declares one.&quot; }
+  }
+}</code></pre>
+<p>Result: the same action record <code>POST /v1/act</code> returns, with <code>plugin</code>, <code>action</code>, <code>name</code> and <code>value</code>. It runs through <code>views.act</code>, records the actor <code>{ &quot;via&quot;: &quot;mcp&quot;, &quot;id&quot;: &quot;lead&quot; }</code>, and records a person's answer for a run that waits. An action not named in <code>mcp.actions</code> is a tool error naming it and saying the owner runs it. An action with <code>confirm: true</code> is refused the same way unless <code>mcp.confirmActions</code> also names it.</p>
+<h2 id="errors">Errors<a class="anchor" href="#errors" aria-label="Link to this section">#</a></h2>
+<p>A JSON-RPC error is used for a malformed request, not for a view refusal:</p>
+<div class="table-wrap"><table><thead><tr><th>Code</th><th>When</th></tr></thead><tbody><tr><td><code>-32700</code></td><td>The line is not JSON.</td></tr><tr><td><code>-32600</code></td><td>The message is not a JSON-RPC 2.0 request.</td></tr><tr><td><code>-32601</code></td><td>The method is not one of the methods above.</td></tr><tr><td><code>-32602</code></td><td><code>tools/call</code> is malformed: an unknown tool, no <code>name</code>, non-object <code>arguments</code>, or arguments that do not match the tool's input schema.</td></tr><tr><td><code>-32603</code></td><td>An unexpected error happened while reading a view; the message is generic.</td></tr></tbody></table></div>
+<p>A view refusal is a successful <code>tools/call</code> response whose result has <code>&quot;isError&quot;: true</code> and one text block with the view's own message. This covers an unknown id, section or type. A tool error carries no <code>structuredContent</code>. The server writes no stack trace and no internal name.</p>
+<p>Example:</p>
+<pre data-ui><code class="lang-json">{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:3,&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;no object \&quot;task:nope\&quot;&quot;}],&quot;isError&quot;:true}}</code></pre>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/mcp.md">View this page's source</a></p>
+    <nav class="pn" aria-label="Previous and next">
+      <a class="prev" href="../http/"><small>Previous</small>The HTTP interface</a>
+      <a class="next" href="../chats-and-bots/"><small>Next</small>Chats and bots</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#setting-it-up">Setting it up</a></li><li class="l3"><a href="#turning-the-channel-on">Turning the channel on</a></li><li class="l2"><a href="#transport">Transport</a></li><li class="l2"><a href="#claude-code-channel">Claude Code channel</a></li><li class="l2"><a href="#lead-permissions">Lead permissions</a></li><li class="l2"><a href="#tools">Tools</a></li><li class="l3"><a href="#types">types</a></li><li class="l3"><a href="#list">list</a></li><li class="l3"><a href="#show">show</a></li><li class="l3"><a href="#section">section</a></li><li class="l3"><a href="#pending">pending</a></li><li class="l3"><a href="#answer">answer</a></li><li class="l3"><a href="#running">running</a></li><li class="l3"><a href="#history">history</a></li><li class="l3"><a href="#command">command</a></li><li class="l3"><a href="#act">act</a></li><li class="l2"><a href="#errors">Errors</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../">Home</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

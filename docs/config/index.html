@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>config.json · operad docs</title>
+<meta name="description" content="The config.json file: where the home is, every section and key, and every plugin's settings.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/docs/config/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="config.json · operad docs">
+<meta property="og:description" content="The config.json file: where the home is, every section and key, and every plugin's settings.">
+<meta property="og:url" content="https://operad.io/docs/config/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="config.json · operad docs">
+<meta name="twitter:description" content="The config.json file: where the home is, every section and key, and every plugin's settings.">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "config.json",
+ "description": "The config.json file: where the home is, every section and key, and every plugin's settings.",
+ "inLanguage": "en",
+ "url": "https://operad.io/docs/config/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../" aria-label="operad, home"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="../../">Home</a>
+    <a href="../" aria-current="true">Docs</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  </nav>
+  <a class="tile go" href="../../#install">Run it</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="Documentation">
+    <details class="side-nav" open>
+      <summary class="s3">Docs</summary>
+      <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../quickstart/">Quickstart</a></li>
+        <li><a href="../config/" aria-current="page">config.json</a></li>
+        <li><a href="../dev/">dev.json and the dev plugin</a></li>
+        <li><a href="../access/">Access</a></li>
+        <li><a href="../cli/">The command line</a></li>
+        <li><a href="../tui/">The terminal client</a></li>
+        <li><a href="../app/">The phone app</a></li>
+        <li><a href="../http/">The HTTP interface</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../notifications/">Notifications</a></li>
+        <li><a href="../checks/">Checks</a></li>
+        <li><a href="../environment/">Environment variables</a></li>
+        <li><a href="../troubleshooting/">Troubleshooting</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="configjson">config.json</h1>
+<p><code>config.json</code> configures <code>operad</code>. This page says where the home is, every key of the file, and every plugin's settings section. The <code>http</code> keys are also on <a href="../../docs/http/#the-http-section">the HTTP page</a>, the <code>notify</code> keys on <a href="../../docs/notifications/">notifications</a>, the <code>mcp</code> keys on <a href="../../docs/mcp/">the MCP page</a>, and the repository settings of <code>dev</code> on <a href="../../docs/dev/">the dev page</a>.</p>
+<h2 id="the-home">The home<a class="anchor" href="#the-home" aria-label="Link to this section">#</a></h2>
+<p><code>operad</code> keeps its state in one directory: <code>$OPERAD_HOME</code> when it is set, and <code>~/.operad</code> otherwise. The home holds <code>config.json</code>, the store, the secrets directory, <code>access-user.json</code>, <code>keys.json</code>, <code>triggers.json</code>, <code>tui.json</code> and the themes directory. A secret file is mode <code>0600</code> inside a <code>0700</code> directory; nothing in this manual prints a secret.</p>
+<h2 id="an-example">An example<a class="anchor" href="#an-example" aria-label="Link to this section">#</a></h2>
+<pre data-ui><code class="lang-json">{
+  &quot;plugins&quot;: {
+    &quot;shell&quot;: { &quot;module&quot;: &quot;@operad-io/shell&quot;, &quot;enabled&quot;: true },
+    &quot;cron&quot;: { &quot;module&quot;: &quot;@operad-io/source-cron&quot;, &quot;enabled&quot;: true },
+    &quot;chat&quot;: { &quot;module&quot;: &quot;@operad-io/chat&quot;, &quot;settings&quot;: { &quot;speaker&quot;: &quot;Operad Bot&quot; } },
+    &quot;dev&quot;: { &quot;module&quot;: &quot;@operad-io/dev&quot;, &quot;settings&quot;: { &quot;checks&quot;: 2 } },
+    &quot;pool&quot;: { &quot;module&quot;: &quot;@operad-io/pool&quot;, &quot;settings&quot;: { &quot;harnesses&quot;: { &quot;pi&quot;: 2 } } },
+    &quot;bot&quot;: {
+      &quot;module&quot;: &quot;@operad-io/bot&quot;,
+      &quot;settings&quot;: {
+        &quot;bots&quot;: {
+          &quot;default&quot;: {
+            &quot;harness&quot;: &quot;pi&quot;,
+            &quot;model&quot;: &quot;opencode-go/deepseek-v4.1-flash&quot;,
+            &quot;effort&quot;: &quot;medium&quot;,
+            &quot;cwd&quot;: &quot;~/work/assistant&quot;,
+            &quot;skills&quot;: [&quot;~/work/assistant/skills&quot;],
+            &quot;speaker&quot;: &quot;Assistant&quot;,
+            &quot;mcpAllow&quot;: [&quot;notes.search&quot;],
+            &quot;access&quot;: { &quot;readOnly&quot;: true, &quot;askCommands&quot;: [&quot;git push&quot;] }
+          }
+        }
+      }
+    },
+    &quot;claude&quot;: {
+      &quot;module&quot;: &quot;@operad-io/harness-claude&quot;,
+      &quot;settings&quot;: {
+        &quot;model&quot;: &quot;sonnet&quot;,
+        &quot;effort&quot;: &quot;high&quot;,
+        &quot;command&quot;: &quot;claude&quot;,
+        &quot;maxTurns&quot;: 40,
+        &quot;budgetUsd&quot;: 10,
+        &quot;bashTimeoutSecs&quot;: 1800,
+        &quot;wallTimeSecs&quot;: 3600,
+        &quot;stallSecs&quot;: 600,
+        &quot;concurrency&quot;: { &quot;sonnet&quot;: 2 }
+      }
+    },
+    &quot;pi&quot;: {
+      &quot;module&quot;: &quot;@operad-io/harness-pi&quot;,
+      &quot;settings&quot;: {
+        &quot;model&quot;: &quot;opencode-go/deepseek-v4.1-flash&quot;,
+        &quot;models&quot;: [&quot;opencode-go/deepseek-v4.1-flash&quot;, &quot;openai/gpt-5&quot;],
+        &quot;thinkingLevel&quot;: &quot;medium&quot;,
+        &quot;command&quot;: &quot;pi&quot;,
+        &quot;authPath&quot;: &quot;~/.pi/agent/auth.json&quot;,
+        &quot;modelsPath&quot;: &quot;~/.pi/agent/models.json&quot;,
+        &quot;wallTimeSecs&quot;: 3600,
+        &quot;stallSecs&quot;: 600,
+        &quot;bashTimeoutSecs&quot;: 1800,
+        &quot;concurrency&quot;: { &quot;opencode-go/deepseek-v4.1-flash&quot;: 2 }
+      }
+    },
+    &quot;radian&quot;: {
+      &quot;module&quot;: &quot;@operad-io/harness-radian&quot;,
+      &quot;settings&quot;: {
+        &quot;command&quot;: &quot;radian&quot;,
+        &quot;wallTimeSecs&quot;: 300,
+        &quot;stallSecs&quot;: 600,
+        &quot;concurrency&quot;: { &quot;anthropic/claude-sonnet-4&quot;: 1 }
+      }
+    }
+  },
+  &quot;store&quot;: { &quot;backend&quot;: &quot;sqlite&quot;, &quot;path&quot;: &quot;store/log.sqlite&quot; },
+  &quot;http&quot;: { &quot;enabled&quot;: true, &quot;port&quot;: 7480, &quot;listen&quot;: [&quot;127.0.0.1&quot;] },
+  &quot;notify&quot;: { &quot;command&quot;: &quot;sh ~/.operad/notify.sh&quot;, &quot;on&quot;: [&quot;waiting&quot;] },
+  &quot;mcp&quot;: {
+    &quot;channel&quot;: { &quot;notify&quot;: [&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;], &quot;loopAfter&quot;: 3 },
+    &quot;actions&quot;: [&quot;dev:rework&quot;, &quot;dev:reverify&quot;, &quot;dev:reject&quot;, &quot;dev:priority&quot;, &quot;dev:concurrency&quot;, &quot;chat:close&quot;],
+    &quot;confirmActions&quot;: [&quot;chat:close&quot;]
+  },
+  &quot;ask&quot;: { &quot;graceSecs&quot;: 600 }
+}</code></pre>
+<p><code>operad init</code> writes a <code>config.json</code> when the home has none: <code>shell</code>, <code>radian</code>, <code>chat</code> and <code>dev</code> installed, the store at <code>store/log.sqlite</code>, <code>http</code> on at <code>127.0.0.1:7480</code>, notifications off, the <code>mcp.actions</code> and <code>mcp.confirmActions</code> lists above and the ask grace of 600 seconds. All of it is written into the file; nothing in it is a hidden default. A home with no <code>config.json</code> at all has no plugins and allows no lead action.</p>
+<p>An existing home is never rewritten. <code>operad init</code> on a home that has a <code>config.json</code> keeps the file as it is; the one exception is a file with no <code>plugins</code> key, which gets the default plugins added and nothing else. A <code>config.json</code> without <code>mcp.actions</code> allows no lead action. A home made before this change lists its plugins already but may have no <code>mcp.actions</code>; to keep the lead's actions, add these lines to its <code>mcp</code> section and restart <code>operad mcp</code>:</p>
+<pre data-ui><code class="lang-json">&quot;mcp&quot;: {
+  &quot;actions&quot;: [&quot;dev:rework&quot;, &quot;dev:reverify&quot;, &quot;dev:reject&quot;, &quot;dev:priority&quot;, &quot;dev:concurrency&quot;, &quot;chat:close&quot;],
+  &quot;confirmActions&quot;: [&quot;chat:close&quot;]
+}</code></pre>
+<p>Enabling a plugin later does not add its actions to <code>mcp.actions</code>; add them by hand.</p>
+<p>Every top-level section is optional. The kernel reads only the keys it names: an unknown key at the top level, inside an engine section (<code>store</code>, <code>http</code>, <code>notify</code>, <code>mcp</code>, <code>ask</code>) or inside a <code>plugins</code> entry is ignored. The one place a typo is refused is <code>plugins.&lt;name&gt;.settings</code>, which is checked by that plugin's own schema; an unknown key there refuses the plugin with one line naming the plugin and the field.</p>
+<h2 id="the-sections">The sections<a class="anchor" href="#the-sections" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>plugins</code></td><td>object, or an array of module names</td><td>the four plugins <code>operad init</code> installs</td><td>plugin name to a module name, a path, or an options object</td><td>At every command start, and when a running <code>serve</code> reloads after a change</td><td>Refused: <code>plugins: must be an object of plugin options or an array of module names</code></td></tr><tr><td><code>store</code></td><td>object</td><td>sqlite at <code>&lt;home&gt;/store/log.sqlite</code></td><td>the keys below</td><td>At every command start</td><td>Refused: <code>store: must be an object</code></td></tr><tr><td><code>http</code></td><td>object</td><td>on, port <code>7480</code>, <code>127.0.0.1</code></td><td>the keys on <a href="../../docs/http/#the-http-section">the HTTP page</a></td><td>When <code>operad serve</code> starts; a reload when the new config loads</td><td>Refused: <code>http: must be an object</code>, or the field's own message</td></tr><tr><td><code>notify</code></td><td>object</td><td>command <code>null</code>, <code>on</code> <code>[&quot;waiting&quot;]</code></td><td>the keys on <a href="../../docs/notifications/">notifications</a></td><td>When <code>operad serve</code> starts; a reload when the new config loads</td><td>Refused: <code>notify: must be an object</code>, or the field's own message</td></tr><tr><td><code>mcp</code></td><td>object</td><td>the lists below</td><td>the keys below</td><td>When <code>operad mcp</code> starts</td><td>Refused: <code>mcp: must be an object</code>, or the field's own message</td></tr><tr><td><code>ask</code></td><td>object</td><td><code>{ &quot;graceSecs&quot;: 600 }</code></td><td>the keys below</td><td>When a step asks a person</td><td>Refused: <code>ask: must be an object</code>, or <code>ask.graceSecs: ...</code></td></tr></tbody></table></div>
+<p>The kernel reads <code>config.json</code> when a command starts. A running <code>serve</code> watches the file and reloads when the new file loads; when it does not load, the old configuration keeps running and the problem is logged. A one-shot command reads the file again on its next run.</p>
+<h3 id="plugins"><code>plugins</code><a class="anchor" href="#plugins" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>plugins</code></td><td>object or array</td><td><code>[]</code> in a file with no <code>plugins</code> section</td><td>plugin name to a module or an options object; an array entry is a module name</td><td>When plugins load</td><td>Refused: <code>plugins: must be an object of plugin options or an array of module names</code></td></tr><tr><td><code>plugins.&lt;name&gt;</code></td><td>string or object</td><td>none</td><td>a non-empty module name or path, or an object with the keys below</td><td>When plugins load</td><td>Refused: <code>plugins.&lt;name&gt;: must be a module name or an object of options</code></td></tr><tr><td><code>plugins.&lt;name&gt;.module</code></td><td>string</td><td>the key <code>&lt;name&gt;</code> itself</td><td>a module name, a path relative to the home, or a <code>file:</code> URL; the shipped packages are <code>@operad-io/&lt;name&gt;</code>, or <code>@operad-io/harness-&lt;name&gt;</code> for <code>claude</code>, <code>pi</code> and <code>radian</code></td><td>When plugins load</td><td>Refused: <code>plugins.&lt;name&gt;.module: must be a non-empty string</code></td></tr><tr><td><code>plugins.&lt;name&gt;.enabled</code></td><td>boolean</td><td><code>true</code></td><td><code>true</code> or <code>false</code></td><td>When plugins load; a disabled plugin's stored objects stay</td><td>Refused: <code>plugins.&lt;name&gt;.enabled: must be a boolean</code></td></tr><tr><td><code>plugins.&lt;name&gt;.settings</code></td><td>object</td><td><code>{}</code></td><td>the section that plugin's own settings schema accepts; see below</td><td>When plugins load</td><td>The plugin is refused, with one line <code>plugin &quot;&lt;name&gt;&quot;: ...</code> naming the field; a plugin that needs it is refused too</td></tr></tbody></table></div>
+<p>A plugin entry whose module fails to import, whose settings are not valid, or whose declared name does not match its key does not load. The rest of the file still loads, and <code>serve</code> and <code>operad plugin check</code> print the line that says why. <code>operad plugin list</code>, <code>operad plugin enable</code>, <code>operad plugin disable</code> and <code>operad plugin check</code> are on <a href="../../docs/cli/">the CLI page</a>.</p>
+<p><code>operad init</code> installs <code>shell</code>, <code>radian</code>, <code>chat</code> and <code>dev</code>. <code>pi</code>, <code>claude</code>, <code>codex</code>, <code>pool</code> and <code>bot</code> are shipped but not installed; enable one with <code>operad plugin enable &lt;name&gt;</code>.</p>
+<h3 id="store"><code>store</code><a class="anchor" href="#store" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>store.backend</code></td><td>string</td><td><code>&quot;sqlite&quot;</code></td><td><code>&quot;sqlite&quot;</code> only</td><td>At every command start</td><td>Refused: <code>store.backend: must be &quot;sqlite&quot;</code></td></tr><tr><td><code>store.path</code></td><td>string</td><td><code>&lt;home&gt;/store/log.sqlite</code></td><td>a non-empty path; a relative path resolves against the home</td><td>At every command start</td><td>Refused: <code>store.path: must be a non-empty string</code></td></tr></tbody></table></div>
+<p>The store is what the history and pending views read. Changing the path makes the new process read another history; it does not move the old file.</p>
+<h3 id="mcp"><code>mcp</code><a class="anchor" href="#mcp" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>mcp.channel</code></td><td>object</td><td><code>{ &quot;notify&quot;: [&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;], &quot;loopAfter&quot;: 3 }</code></td><td>the keys below</td><td>When <code>operad mcp</code> starts</td><td>Refused: <code>mcp.channel: must be an object</code></td></tr><tr><td><code>mcp.channel.notify</code></td><td>array of strings</td><td><code>[&quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;]</code></td><td><code>waiting</code>, <code>ended</code>, <code>loop</code>, <code>changes</code></td><td>When <code>operad mcp</code> starts</td><td>Refused: <code>mcp.channel.notify: unknown entry &lt;value&gt;; use &quot;waiting&quot;, &quot;ended&quot;, &quot;loop&quot;, &quot;changes&quot;</code></td></tr><tr><td><code>mcp.channel.loopAfter</code></td><td>integer</td><td><code>3</code></td><td><code>2</code> or more</td><td>When <code>operad mcp</code> starts</td><td>Refused: <code>mcp.channel.loopAfter: must be an integer of 2 or more</code></td></tr><tr><td><code>mcp.actions</code></td><td>array of strings</td><td><code>[]</code> (<code>operad init</code> writes the five <code>dev</code> lead actions and <code>chat:close</code> into a new file)</td><td><code>&lt;plugin&gt;:&lt;action&gt;</code> names</td><td>When <code>operad mcp</code> starts</td><td>Refused: <code>mcp.actions: must be an array of &quot;&lt;plugin&gt;:&lt;action&gt;&quot; names</code></td></tr><tr><td><code>mcp.confirmActions</code></td><td>array of strings</td><td><code>[]</code> (<code>operad init</code> writes <code>[&quot;chat:close&quot;]</code> into a new file)</td><td><code>&lt;plugin&gt;:&lt;action&gt;</code> names that are also in <code>mcp.actions</code> and ask to confirm</td><td>When <code>operad mcp</code> starts</td><td>Refused: <code>mcp.confirmActions: must be an array of &quot;&lt;plugin&gt;:&lt;action&gt;&quot; names</code></td></tr></tbody></table></div>
+<p><code>mcp.actions</code> is the list the MCP server may run for a lead. Every other action is refused for the owner to run. <code>mcp.confirmActions</code> is the smaller list of allowed actions that also need <code>confirm: true</code>; an action in <code>actions</code> but not here is refused even when the MCP call confirms it. The channel keys are explained on <a href="../../docs/mcp/#claude-code-channel">the MCP page</a>.</p>
+<h3 id="ask"><code>ask</code><a class="anchor" href="#ask" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>ask.graceSecs</code></td><td>number</td><td><code>600</code></td><td><code>0</code> to <code>2147483</code> seconds; <code>0</code> does not wait</td><td>When a step calls <code>ctx.ask</code> without a narrower grace</td><td>Refused: <code>ask.graceSecs: must be a number of seconds from 0 to 2147483</code></td></tr></tbody></table></div>
+<p>The step's own <code>askGraceSecs</code> param, or the call's own grace, can be narrower. There is no unlimited value; use the largest allowed number when a person may answer after a long time. Asking is described in <a href="https://github.com/operad-io/operad/blob/main/docs/plugins/asking.md">Asking a person from a step</a>.</p>
+<h2 id="plugin-settings">Plugin settings<a class="anchor" href="#plugin-settings" aria-label="Link to this section">#</a></h2>
+<p>Plugin settings sit under <code>plugins.&lt;name&gt;.settings</code>. A plugin with no settings schema has no keys: <code>shell</code> and the cron source (<code>cron</code>, the <code>@operad-io/source-cron</code> package) are configured entirely by their flow steps and by <code>triggers.json</code>. <code>review-grading</code> is a library that reads <code>&lt;repository&gt;/.operad/review.json</code>, documented on <a href="../../docs/dev/#reviewjson">the dev page</a>. The MCP server, the terminal client, the HTTP interface and notifications are configured by the sections above, not by plugin settings.</p>
+<p>Every setting is read when the plugin loads. A running <code>serve</code> reloads when <code>config.json</code> changes and the new file loads; a step that has already started keeps the settings it started with. The exceptions are named in each table.</p>
+<h3 id="bot"><code>bot</code><a class="anchor" href="#bot" aria-label="Link to this section">#</a></h3>
+<p>The <code>bot</code> section describes chats that belong to a bot. The default bot <code>default</code> exists even when it is not written. Names are lowercase letters, digits, <code>-</code> and <code>_</code>, and start with a letter or digit; any other name refuses the bot with <code>bot &quot;&lt;name&gt;&quot;: a name is lowercase letters, digits, &quot;-&quot; and &quot;_&quot;, and starts with a letter or digit</code>. A bot is read again at every reply, so an edit applies to the next reply. See <a href="../../docs/chats-and-bots/">Chats and bots</a>.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>bot.bots</code></td><td>object</td><td><code>{ &quot;default&quot;: {} }</code></td><td>bot name to a bot object</td><td>Next reply</td><td>Refused by the schema; a bad name refuses that bot</td></tr><tr><td><code>bot.bots.&lt;name&gt;</code></td><td>object</td><td><code>{}</code></td><td>the keys below</td><td>Next reply</td><td>Refused: <code>bot &quot;&lt;name&gt;&quot;: ...</code> or the schema's field message</td></tr><tr><td><code>bot.bots.&lt;name&gt;.cwd</code></td><td>string</td><td><code>~/.operad/bot</code> for <code>default</code>, <code>~/.operad/bot/&lt;name&gt;</code> for another bot</td><td>a directory inside <code>~/.operad/bot</code>, or outside the operad home entirely</td><td>Next reply and the next chat start</td><td>Refused: <code>bot &quot;&lt;name&gt;&quot;: the working directory &lt;path&gt; is inside the operad home but outside &lt;bot dir&gt;</code> or <code>... is the operad home or holds it</code></td></tr><tr><td><code>bot.bots.&lt;name&gt;.harness</code></td><td>string</td><td>the first loaded agent a chat offers</td><td>a loaded agent plugin name, such as <code>claude</code> or <code>pi</code></td><td>When a new chat starts</td><td>A name that is not an agent is refused when the chat starts</td></tr><tr><td><code>bot.bots.&lt;name&gt;.skills</code></td><td>array of strings</td><td><code>[]</code></td><td>directories that hold a <code>SKILL.md</code>; a relative path is under the working directory</td><td>Next reply</td><td>Refused: <code>skill &quot;&lt;path&gt;&quot;: there is no SKILL.md in &lt;path&gt;</code></td></tr><tr><td><code>bot.bots.&lt;name&gt;.model</code></td><td>string</td><td>the agent's default</td><td>a model the chat's agent lists</td><td>When a new chat starts</td><td>Refused at chat start when the agent does not list it</td></tr><tr><td><code>bot.bots.&lt;name&gt;.effort</code></td><td>string</td><td>the agent's default</td><td>an effort the chat's agent lists</td><td>When a new chat starts</td><td>Refused at chat start when the agent does not list it</td></tr><tr><td><code>bot.bots.&lt;name&gt;.speaker</code></td><td>string</td><td>the <code>chat.speaker</code> value</td><td>non-empty text</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers</code></td><td>object</td><td><code>{}</code></td><td>server name to a server object; add one with <code>operad bot mcp</code>, which a person approves</td><td>Next reply</td><td>Refused by the schema; a server whose tools changed is not mounted</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;</code></td><td>object</td><td>none</td><td>the keys below</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.command</code></td><td>string</td><td>none</td><td>the program that starts the server</td><td>Next reply</td><td>Refused by the schema; a missing command means the server cannot start</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.args</code></td><td>array of strings</td><td><code>[]</code></td><td>the program's arguments</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.package</code></td><td>string</td><td>none</td><td>the package the command runs, when it runs one</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.version</code></td><td>string</td><td>none</td><td>the pinned version of that package</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.secrets</code></td><td>array of strings</td><td><code>[]</code></td><td>variable names; each value is the bot plugin's secret <code>&lt;server&gt;.&lt;variable&gt;</code></td><td>When the server starts</td><td>Refused by the schema; a missing secret is given as empty</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools</code></td><td>array of objects</td><td><code>[]</code></td><td>the tools a person approved</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools.name</code></td><td>string</td><td>required</td><td>a tool name</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.tools.description</code></td><td>string</td><td><code>&quot;&quot;</code></td><td>the tool's description</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpServers.&lt;name&gt;.digest</code></td><td>string</td><td>none</td><td>the digest of the tool names and descriptions</td><td>Next reply</td><td>A chat that finds other tools does not mount the server</td></tr><tr><td><code>bot.bots.&lt;name&gt;.mcpAllow</code></td><td>array of strings</td><td><code>[]</code></td><td><code>&lt;server&gt;.&lt;tool&gt;</code> or <code>&lt;server&gt;.*</code></td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access</code></td><td>object</td><td><code>{}</code></td><td>the keys below; added to the default access profile</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.denyPaths</code></td><td>array of strings</td><td><code>[]</code></td><td>paths; appended to the default list</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.denyCommands</code></td><td>array of strings</td><td><code>[]</code></td><td>command rules; appended to the default list</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.askCommands</code></td><td>array of strings</td><td><code>[]</code></td><td>command rules; appended to the default list</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.askPaths</code></td><td>array of strings</td><td><code>[]</code></td><td>paths; appended to the default list</td><td>Next reply</td><td>Refused by the schema</td></tr><tr><td><code>bot.bots.&lt;name&gt;.access.readOnly</code></td><td>boolean</td><td><code>false</code></td><td><code>true</code> turns the bot's working directory read-only; a bot can tighten the default, never loosen it</td><td>Next reply</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p>The default profile and the meaning of each access field are on <a href="../../docs/access/">the access page</a>. <code>mcpAllow</code> has the same meaning as the profile's <code>allowMcp</code>; an unlisted MCP tool asks first.</p>
+<h3 id="chat"><code>chat</code><a class="anchor" href="#chat" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>chat.speaker</code></td><td>string</td><td><code>&quot;Operad Bot&quot;</code></td><td>non-empty text</td><td>When a chat transcript is rendered</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p>A bot chat uses its bot's <code>speaker</code> instead. See <a href="../../docs/chats-and-bots/">Chats and bots</a>.</p>
+<h3 id="dev"><code>dev</code><a class="anchor" href="#dev" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>dev.checks</code></td><td>integer</td><td><code>2</code></td><td><code>1</code> or more</td><td>When the next check takes a place; checks already waiting or running keep theirs</td><td>Refused by the schema; the plugin is refused and the log names <code>settings.checks</code></td></tr></tbody></table></div>
+<p><code>dev.checks</code> is the most checks (a task's verify, and the checks before a merge) that run at once in this home, across every repository. A repository can lower its own share with <code>gate.places</code> in <a href="../../docs/dev/#the-gate-and-its-checks">its dev.json</a>.</p>
+<h3 id="pool"><code>pool</code><a class="anchor" href="#pool" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>pool.harnesses</code></td><td>object</td><td><code>{}</code></td><td>harness plugin name to a count</td><td>When the next <code>pool/agent</code> step starts; steps already going keep their place</td><td>Refused by the schema; the plugin is refused and the log names <code>settings.harnesses</code></td></tr><tr><td><code>pool.harnesses.&lt;name&gt;</code></td><td>integer</td><td>no cap for that harness</td><td><code>1</code> or more</td><td>When the next <code>pool/agent</code> step starts</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p>The count covers every run through <code>pool/agent</code> in this home for that harness, across repositories and flows. A flow that calls a harness step directly does not count, but the harness's own <code>concurrency</code> still applies. See <a href="../../docs/dev/#sharing-agents-between-flows-the-pool-plugin">Sharing agents between flows</a>.</p>
+<h3 id="claude"><code>claude</code><a class="anchor" href="#claude" aria-label="Link to this section">#</a></h3>
+<p>The <code>claude</code> plugin runs Claude Code. Its step is <code>claude/agent</code>; see <a href="../../docs/dev/#long-commands-under-claude">the dev page</a>.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>claude.model</code></td><td>string</td><td>claude's default, <code>sonnet</code> for a new chat</td><td>a model name claude takes, such as <code>opus</code> or <code>sonnet</code></td><td>When an agent step or a new chat starts</td><td>Refused by the schema</td></tr><tr><td><code>claude.effort</code></td><td>string</td><td>claude's default</td><td><code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code></td><td>When an agent step or a new chat starts</td><td>Refused by the schema</td></tr><tr><td><code>claude.command</code></td><td>string</td><td><code>&quot;claude&quot;</code></td><td>a command name or path</td><td>When an agent step starts</td><td>Refused by the schema; a command that is not claude fails the plugin check</td></tr><tr><td><code>claude.maxTurns</code></td><td>integer</td><td>no limit</td><td><code>1</code> or more</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>claude.budgetUsd</code></td><td>number</td><td>no limit</td><td><code>0.01</code> or more</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>claude.bashTimeoutSecs</code></td><td>integer</td><td><code>1800</code></td><td><code>1</code> or more seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>claude.wallTimeSecs</code></td><td>number</td><td><code>3600</code></td><td><code>1</code> to <code>28500</code> seconds</td><td>When an agent step starts</td><td>Refused by the schema; a larger value also fails the step with <code>must be at most 28500</code></td></tr><tr><td><code>claude.stallSecs</code></td><td>number</td><td><code>600</code></td><td><code>1</code> or more seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>claude.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model name to a count of <code>1</code> or more</td><td>With the next agent step that starts, at most the count for that model</td><td>Refused by the schema; the count's key is named</td></tr><tr><td><code>claude.concurrency.&lt;name&gt;</code></td><td>integer</td><td>no limit for that model</td><td><code>1</code> or more</td><td>With the next agent step for that model</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p><code>maxTurns</code> and <code>budgetUsd</code> are limits for one run; unset means no limit. <code>budgetUsd</code> is for API-key logins. <code>bashTimeoutSecs</code> is the longest one Bash call may run, in the foreground. <code>concurrency</code> counts every run in the home, including the ones <code>dev</code> starts; a change does not stop runs already going.</p>
+<h3 id="codex"><code>codex</code><a class="anchor" href="#codex" aria-label="Link to this section">#</a></h3>
+<p>The <code>codex</code> plugin runs the user's own Codex through <code>codex-acp</code>. Its step is <code>codex/agent</code>; set-up is in <code>docs/dogfood.md</code> and the settings are also listed on <a href="../../docs/dev/#the-codex-settings">the dev page</a>.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>codex.model</code></td><td>string</td><td>Codex's default</td><td>a model name codex-acp offers</td><td>When an agent step starts</td><td>Refused by the schema; a model codex-acp does not offer fails the step</td></tr><tr><td><code>codex.effort</code></td><td>string</td><td>Codex's default</td><td><code>minimal</code>, <code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code></td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>codex.command</code></td><td>array of strings</td><td>the <code>bun</code> and the <code>codex-acp</code> of <code>PATH</code></td><td>the program and its arguments</td><td>When an agent step starts</td><td>Refused by the schema; a command that cannot start fails the plugin check</td></tr><tr><td><code>codex.wallTimeSecs</code></td><td>number</td><td><code>3600</code></td><td><code>1</code> to <code>28500</code> seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>codex.stallSecs</code></td><td>number</td><td><code>600</code></td><td><code>1</code> or more seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>codex.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model name to a count of <code>1</code> or more</td><td>With the next agent step that starts</td><td>Refused by the schema; the count's key is named</td></tr><tr><td><code>codex.concurrency.&lt;name&gt;</code></td><td>integer</td><td>no limit for that model</td><td><code>1</code> or more</td><td>With the next agent step for that model</td><td>Refused by the schema</td></tr></tbody></table></div>
+<h3 id="pi"><code>pi</code><a class="anchor" href="#pi" aria-label="Link to this section">#</a></h3>
+<p>The <code>pi</code> plugin runs pi. Its step is <code>pi/agent</code>; see <a href="../../docs/dev/#long-commands-under-pi">Long commands under pi</a>.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>pi.model</code></td><td>string</td><td>pi's default model</td><td><code>provider/id</code></td><td>When an agent step or a new chat starts</td><td>Refused by the schema</td></tr><tr><td><code>pi.models</code></td><td>array of strings</td><td>every model <code>pi --list-models</code> prints</td><td><code>provider/id</code> values</td><td>When a new chat lists its models</td><td>Refused by the schema</td></tr><tr><td><code>pi.thinkingLevel</code></td><td>string</td><td>pi's default</td><td><code>off</code>, <code>minimal</code>, <code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code></td><td>When an agent step or a new chat starts</td><td>Refused by the schema</td></tr><tr><td><code>pi.command</code></td><td>string</td><td><code>&quot;pi&quot;</code></td><td>a command name or path that leads into an installed <code>@earendil-works/pi-coding-agent</code></td><td>When the plugin loads and when an agent step starts</td><td>Refused by the schema; a missing or old install fails the plugin check</td></tr><tr><td><code>pi.authPath</code></td><td>string</td><td><code>&quot;~/.pi/agent/auth.json&quot;</code></td><td>pi's credentials file</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>pi.modelsPath</code></td><td>string</td><td><code>&quot;~/.pi/agent/models.json&quot;</code></td><td>pi's custom models file</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>pi.wallTimeSecs</code></td><td>number</td><td><code>3600</code></td><td><code>1</code> to <code>28500</code> seconds</td><td>When an agent step starts</td><td>Refused by the schema; a larger value also fails the step with <code>must be at most 28500</code></td></tr><tr><td><code>pi.stallSecs</code></td><td>number</td><td><code>600</code></td><td><code>1</code> or more seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>pi.bashTimeoutSecs</code></td><td>integer</td><td><code>1800</code></td><td><code>1</code> or more seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>pi.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model name to a count of <code>1</code> or more</td><td>With the next agent step that starts, at most the count for that model</td><td>Refused by the schema; the count's key is named</td></tr><tr><td><code>pi.concurrency.&lt;name&gt;</code></td><td>integer</td><td>no limit for that model</td><td><code>1</code> or more</td><td>With the next agent step for that model</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p><code>authPath</code> and <code>modelsPath</code> are read by pi; <code>~</code> is the user's home. A change to <code>concurrency</code> applies to the next step that starts; steps already going keep their place.</p>
+<h3 id="radian"><code>radian</code><a class="anchor" href="#radian" aria-label="Link to this section">#</a></h3>
+<p>The <code>radian</code> plugin runs radian. Its step is <code>radian/agent</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>radian.command</code></td><td>string</td><td><code>&quot;radian&quot;</code></td><td>the radian executable: a name on <code>PATH</code> or a path</td><td>When an agent step starts</td><td>Refused by the schema; a command that cannot be found fails the step</td></tr><tr><td><code>radian.wallTimeSecs</code></td><td>number</td><td><code>300</code></td><td>a positive number of seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>radian.stallSecs</code></td><td>number</td><td><code>600</code></td><td>a positive number of seconds</td><td>When an agent step starts</td><td>Refused by the schema</td></tr><tr><td><code>radian.concurrency</code></td><td>object</td><td><code>{}</code></td><td>model name to a count of <code>1</code> or more</td><td>With the next agent step that starts, at most the count for that model</td><td>Refused by the schema; the count's key is named</td></tr><tr><td><code>radian.concurrency.&lt;name&gt;</code></td><td>integer</td><td>no limit for that model</td><td><code>1</code> or more</td><td>With the next agent step for that model</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p>Radian has no <code>model</code> setting; a step is limited by the <code>--provider</code> and <code>--model</code> in its own arguments. A step without <code>--model</code> is not limited by <code>concurrency</code>.</p>
+<h2 id="triggersjson"><code>triggers.json</code><a class="anchor" href="#triggersjson" aria-label="Link to this section">#</a></h2>
+<p><code>triggers.json</code> in the home holds the rules that say which event starts which flow. It is a JSON array; a missing file means no rules of your own. A rule of yours replaces a plugin rule with the same <code>source</code> and <code>type</code>; a plugin rule for that pair is then not used.</p>
+<pre data-ui><code class="lang-json">[
+  {
+    &quot;source&quot;: &quot;operad&quot;,
+    &quot;type&quot;: &quot;dev.waiting&quot;,
+    &quot;start&quot;: { &quot;flow&quot;: &quot;dev&quot;, &quot;params&quot;: {} },
+    &quot;object&quot;: &quot;$event.object&quot;,
+    &quot;mode&quot;: &quot;observe&quot;
+  },
+  {
+    &quot;source&quot;: &quot;cron&quot;,
+    &quot;type&quot;: &quot;tick&quot;,
+    &quot;start&quot;: { &quot;flow&quot;: &quot;nightly&quot; },
+    &quot;object&quot;: &quot;flow:nightly&quot;,
+    &quot;mode&quot;: &quot;auto&quot;,
+    &quot;schedule&quot;: &quot;0 3 * * *&quot;
+  }
+]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>source</code></td><td>string</td><td>required</td><td>the source that sends the event, such as <code>cron</code> or <code>operad</code></td><td>When the file is read</td><td>Refused: <code>rule &lt;n&gt;: source: must be a non-empty string</code></td></tr><tr><td><code>type</code></td><td>string</td><td>required</td><td>the event type, such as <code>tick</code> or <code>run.done</code></td><td>When the file is read</td><td>Refused: <code>rule &lt;n&gt;: type: must be a non-empty string</code></td></tr><tr><td><code>start</code></td><td>object</td><td>required</td><td>the keys below</td><td>When the file is read</td><td>Refused: <code>rule &lt;n&gt;: start: must be an object</code></td></tr><tr><td><code>start.flow</code></td><td>string</td><td>required</td><td>a loaded flow name</td><td>When the file is read; an unknown flow is refused</td><td>Refused: <code>rule &lt;n&gt;: start.flow: unknown flow &quot;&lt;name&gt;&quot;</code></td></tr><tr><td><code>start.params</code></td><td>any JSON value</td><td>absent</td><td>the flow's fixed parameters</td><td>When the rule starts the flow</td><td>Refused if it is not plain JSON: <code>rule &lt;n&gt;: ... is not JSON</code></td></tr><tr><td><code>object</code></td><td>string</td><td>required</td><td>a fixed object id, or <code>$event.object</code></td><td>When the rule starts a run</td><td>Refused: <code>rule &lt;n&gt;: object: must be a non-empty string</code></td></tr><tr><td><code>mode</code></td><td>string</td><td>required</td><td><code>observe</code>, <code>candidate</code>, <code>auto</code></td><td>When the rule starts a run</td><td>Refused: <code>rule &lt;n&gt;: mode: must be &quot;observe&quot;, &quot;candidate&quot;, &quot;auto&quot;</code></td></tr><tr><td><code>schedule</code></td><td>string</td><td>absent</td><td>a five-field cron expression in the local time zone</td><td>When a cron rule is loaded; only rules with source <code>cron</code> use it</td><td>Refused: <code>rule &lt;n&gt;: schedule: &lt;why the cron expression is not valid&gt;</code></td></tr></tbody></table></div>
+<p>The cron source is the plugin named <code>cron</code> from <code>@operad-io/source-cron</code>. It emits one <code>tick</code> per due minute for each rule with <code>source</code> <code>cron</code> and a <code>schedule</code>; other rules ignore <code>schedule</code>. A rule may not name the reserved source <code>operad</code> when it is added by a command.</p>
+<p>If <code>triggers.json</code> is not valid, the whole file is refused, with the rule and field in the message. <code>operad serve</code> logs it and runs without sources until the file is fixed; a command that needs a rule reports it. A running <code>serve</code> watches the file and reloads when the new file loads.</p>
+<h2 id="settings-from-a-client">Settings from a client<a class="anchor" href="#settings-from-a-client" aria-label="Link to this section">#</a></h2>
+<p><code>operad settings</code> lists the settings a person may tune and <code>operad settings set &lt;name&gt; &lt;value&gt;</code> changes one; <code>--repo &lt;name&gt;</code> names a registered repository. A global setting is <code>&lt;plugin&gt;.&lt;path&gt;</code>. A project file whose name equals its plugin's name takes the plugin name alone, so <code>.operad/dev.json</code> is <code>dev.concurrency</code>, <code>dev.autoDefault</code>, <code>dev.gate.commands</code>, <code>dev.gate.commandTimeoutSecs</code>, <code>dev.reviewer.use</code>, <code>dev.reviewer.args</code>, <code>dev.reviewer.timeoutSecs</code> and <code>dev.reviewer.fixLevel</code>. Another file adds its name: <code>.operad/review.json</code> is <code>dev.review.default.levels</code>, <code>dev.review.default.rules</code> and <code>dev.review.default.fixLevel</code>. Changing what merges (<code>autoDefault</code>, a <code>fixLevel</code>, the levels and rules) asks for <code>--yes</code>.</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/config.md">View this page's source</a></p>
+    <nav class="pn" aria-label="Previous and next">
+      <a class="prev" href="../quickstart/"><small>Previous</small>Quickstart</a>
+      <a class="next" href="../dev/"><small>Next</small>dev.json and the dev plugin</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#the-home">The home</a></li><li class="l2"><a href="#an-example">An example</a></li><li class="l2"><a href="#the-sections">The sections</a></li><li class="l3"><a href="#plugins">plugins</a></li><li class="l3"><a href="#store">store</a></li><li class="l3"><a href="#mcp">mcp</a></li><li class="l3"><a href="#ask">ask</a></li><li class="l2"><a href="#plugin-settings">Plugin settings</a></li><li class="l3"><a href="#bot">bot</a></li><li class="l3"><a href="#chat">chat</a></li><li class="l3"><a href="#dev">dev</a></li><li class="l3"><a href="#pool">pool</a></li><li class="l3"><a href="#claude">claude</a></li><li class="l3"><a href="#codex">codex</a></li><li class="l3"><a href="#pi">pi</a></li><li class="l3"><a href="#radian">radian</a></li><li class="l2"><a href="#triggersjson">triggers.json</a></li><li class="l2"><a href="#settings-from-a-client">Settings from a client</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../">Home</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

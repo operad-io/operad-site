@@ -7,6 +7,24 @@
 - [operad.io (English)](https://operad.io/): the loop, the kernel, the terminal, Claude Code and iPhone clients, how to run it
 - [operad.io/zh (中文)](https://operad.io/zh/): the same page in Chinese
 
+## Documentation
+
+- [Overview](https://operad.io/docs/): The operad user manual: what operad is and a page for each subject.
+- [Quickstart](https://operad.io/docs/quickstart/): Start operad: create the home, start serve, open the client.
+- [config.json](https://operad.io/docs/config/): The config.json file: where the home is, every section and key, and every plugin's settings.
+- [dev.json and the dev plugin](https://operad.io/docs/dev/): dev.json and the dev plugin: its commands, the reviewer, workers and pools, usage and end results.
+- [Access](https://operad.io/docs/access/): Access profiles, the default profile, access-user.json, always allow, MCP tools and background runs.
+- [The command line](https://operad.io/docs/cli/): Every operad command and option, its arguments, output and exit code.
+- [The terminal client](https://operad.io/docs/tui/): The terminal client: themes, live updates, states and leaving.
+- [The phone app](https://operad.io/docs/app/): The phone app: pairing, tabs, notifications, chats, attachments, model and effort, and always allow.
+- [The HTTP interface](https://operad.io/docs/http/): The /v1 HTTP interface: the http section, the token, endpoints, events and errors.
+- [MCP server](https://operad.io/docs/mcp/): The MCP server for a lead agent: setup, transport, the Claude Code channel, tools and errors.
+- [Chats and bots](https://operad.io/docs/chats-and-bots/): Chats with an agent, bots, their commands, settings, MCP servers and proposals.
+- [Notifications](https://operad.io/docs/notifications/): The notify command: when it runs, what it gets, and an example script.
+- [Checks](https://operad.io/docs/checks/): Checking a change and reproducing a flaky test.
+- [Environment variables](https://operad.io/docs/environment/): Every OPERAD_ environment variable and the other variables operad reads, with defaults and when each applies.
+- [Troubleshooting](https://operad.io/docs/troubleshooting/): When something does not work: each message operad prints that you can act on, and what to do.
+
 ## Source
 
 - [GitHub](https://github.com/operad-io/operad): the operad repository

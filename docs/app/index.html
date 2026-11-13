@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The phone app · operad docs</title>
+<meta name="description" content="The phone app: pairing, tabs, notifications, chats, attachments, model and effort, and always allow.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/docs/app/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="The phone app · operad docs">
+<meta property="og:description" content="The phone app: pairing, tabs, notifications, chats, attachments, model and effort, and always allow.">
+<meta property="og:url" content="https://operad.io/docs/app/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The phone app · operad docs">
+<meta name="twitter:description" content="The phone app: pairing, tabs, notifications, chats, attachments, model and effort, and always allow.">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "The phone app",
+ "description": "The phone app: pairing, tabs, notifications, chats, attachments, model and effort, and always allow.",
+ "inLanguage": "en",
+ "url": "https://operad.io/docs/app/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../" aria-label="operad, home"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="../../">Home</a>
+    <a href="../" aria-current="true">Docs</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  </nav>
+  <a class="tile go" href="../../#install">Run it</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="Documentation">
+    <details class="side-nav" open>
+      <summary class="s3">Docs</summary>
+      <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../quickstart/">Quickstart</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json and the dev plugin</a></li>
+        <li><a href="../access/">Access</a></li>
+        <li><a href="../cli/">The command line</a></li>
+        <li><a href="../tui/">The terminal client</a></li>
+        <li><a href="../app/" aria-current="page">The phone app</a></li>
+        <li><a href="../http/">The HTTP interface</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../notifications/">Notifications</a></li>
+        <li><a href="../checks/">Checks</a></li>
+        <li><a href="../environment/">Environment variables</a></li>
+        <li><a href="../troubleshooting/">Troubleshooting</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="the-phone-app">The phone app</h1>
+<p>The app reaches <code>operad serve</code> over <a href="../../docs/http/">the HTTP interface</a> and shows the same objects, pending items and history as the command line. It does not know any plugin: a plugin's type gives a tab, an object page and actions, and the app renders them.</p>
+<h2 id="pairing-the-app">Pairing the app<a class="anchor" href="#pairing-the-app" aria-label="Link to this section">#</a></h2>
+<p><code>operad pair</code> shows what the app needs to reach this <code>serve</code>:</p>
+<pre data-ui><code class="lang-text">url http://192.168.1.20:7480
+token &lt;the token&gt;
+
+Scan this in the operad app:
+
+&lt;a QR code&gt;</code></pre>
+<p>The URL is <code>http://&lt;address&gt;:&lt;port&gt;</code> for the first non-loopback entry of <code>http.listen</code>. Pass <code>--url &lt;base url&gt;</code> to name another address, such as a Tailscale HTTPS name (<code>operad pair --url https://mac.tail1234.ts.net</code>); it must be an <code>http</code> or <code>https</code> URL without credentials or a query. The QR code encodes <code>operad://pair?url=&lt;url&gt;&amp;token=&lt;token&gt;</code>. It needs <code>http.enabled</code> true, and with no <code>--url</code> an address in <code>http.listen</code> that is not loopback. With the default <code>http</code> values, <code>pair</code> says that <code>http.listen</code> has only loopback addresses and asks for one or <code>--url</code>; it names <code>http.enabled</code> only when that is false.</p>
+<p><code>pair</code> is the one command that prints the token. It refuses when its output is not a terminal, so a pipe or a log never receives it; <code>--show-token</code> overrides that and prints <code>url</code>, <code>token</code> and the pairing <code>link</code> as plain lines, with no QR code. If you paste the token anywhere, rotate it with <code>operad http token rotate</code>; a running <code>serve</code> refuses the old token at once and closes the streams opened with it.</p>
+<p>The app reaches only addresses <code>serve</code> may listen on: loopback, a private (<code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>), link-local or Tailscale address. A phone on the same network uses the private address; a phone elsewhere uses Tailscale or <code>--url</code>. The token is required on every request; a missing or old token is <code>401</code>, and the app says the token was rotated.</p>
+<h2 id="tabs">Tabs<a class="anchor" href="#tabs" aria-label="Link to this section">#</a></h2>
+<p>The bottom tab bar is:</p>
+<ul><li><strong>Pending</strong>: everything that waits for a person.</li><li><strong>Running</strong>: every run in progress.</li><li>one tab per plugin's top-level object type: <strong>Repo</strong> for <code>dev</code>, <strong>Chat</strong> for <code>chat</code>.</li><li><strong>Settings</strong>: the server settings, and the objects a plugin puts under settings.</li></ul>
+<p>A type below the top level (a plan, a task) has no tab; it opens from its parent's page, from Pending or from Running. The <code>bot</code> plugin has no tab: a bot page is that bot's settings page, and bots appear under <strong>Settings</strong> in a section named <strong>Bots</strong>.</p>
+<p>An object page is the row (id, title, state, note, badge and mark), a progress bar when the object has a next level, the child list, then the section tabs. History is always the last section; there is no separate History tab. A live section follows its end and shows new content; the transcript of a chat is one. The bottom action bar has the first available action as the main button and a <code>⋯</code> menu for the rest; an action that needs a note opens an input box, and a <code>confirm: true</code> action asks in red. An action that opens an object (<code>opens</code>) takes the app to that object.</p>
+<h2 id="pending-and-notifications">Pending and notifications<a class="anchor" href="#pending-and-notifications" aria-label="Link to this section">#</a></h2>
+<p>Pending is <code>GET /v1/pending</code>: the same list as <code>operad pending</code>. Each item shows the object's title and row, the prompt, the choices and the actions it offers. Answering a question is <code>POST /v1/answer</code>; running an action is <code>POST /v1/act</code>. A choice that is also an action on the object runs the action, so its note and confirmation apply. A closed question is <code>409</code> and is not applied; the app shows the reason and refreshes.</p>
+<p>The app receives a push when something starts waiting for a person; the <code>notify</code> command is the command-line equivalent of that moment. Tapping it opens <code>OPERAD_LINK</code>, which is <code>operad://objects/&lt;id&gt;</code> and opens that object's page. The app does not receive a push for every state change; open the object or pull to refresh for those. A wait that a plugin answers automatically is not announced, so the phone does not buzz for a question that is about to answer itself.</p>
+<h2 id="running">Running<a class="anchor" href="#running" aria-label="Link to this section">#</a></h2>
+<p>Running is <code>GET /v1/running</code>: the object, its title, the flow and step, how long the step has run, how long the run has run, and whether it is queued. It is live through the event stream. A run with no object shows its run id; a step that has not started shows <code>-</code>.</p>
+<h2 id="chats">Chats<a class="anchor" href="#chats" aria-label="Link to this section">#</a></h2>
+<p>A chat is a long conversation with an agent. The <strong>Chat</strong> tab lists the chats that are open, grouped by their parent (a repository or a bot); the <code>open</code> filter is the default, and <code>closed</code> shows the closed ones.</p>
+<h3 id="starting-a-chat">Starting a chat<a class="anchor" href="#starting-a-chat" aria-label="Link to this section">#</a></h3>
+<p>The new-chat entry is on the Chat tab, not on a repository or bot page. It asks for the parent (a repository or a bot), the agent, the model, the effort and a title; the title is optional and is taken from the first message when it is left out. The first message is what creates the chat: opening the new-chat page and leaving without a message leaves no empty chat. The app calls the parent's creating action (<code>dev:chat</code> for a repository, <code>bot:chat</code> for a bot) with those arguments and the first message in one step, then opens the returned chat.</p>
+<ul><li><strong>Agent</strong>: <code>claude</code>, <code>pi</code> or <code>radian</code> when loaded. A repository chat offers only the agents that can stop a tool call before it starts (<code>claude</code> and <code>pi</code>), because it is read-only by default; <code>radian</code> is offered to a bot chat only. The agent cannot change after the chat starts; make a new chat to change it.</li><li><strong>Model</strong> and <strong>effort</strong>: the lists and defaults come from the chosen agent. An agent that lists none has no model or effort to pick, and the field is not shown. The chat can change its model or effort at any time; the change applies to the next reply.</li></ul>
+<p>The chat's row and page show the agent, and the model and effort when known. The page also shows the accumulated cost when the agent reports one.</p>
+<h3 id="the-transcript-and-sending">The transcript and sending<a class="anchor" href="#the-transcript-and-sending" aria-label="Link to this section">#</a></h3>
+<p>The chat page is the <code>transcript</code> section plus the input box. Each user message shows its text, its attachments and who sent it (<code>ios</code>, <code>telegram</code>, <code>cli</code>, ...). The agent's reply and its process are shown as Markdown lines: intermediate text, <code>Thinking</code>, tool calls with their result, duration and a short output, and the final reply. Tool output is cut in the transcript; the full file is available to the agent from the chat's directory. A run that is still replying shows its unfinished text and thinking as a tail that updates; the finished entries are already recorded, so reopening the chat does not lose them and a restart of <code>serve</code> does not repeat them.</p>
+<p>Sending is <code>chat:send</code> with <code>note</code> and the uploaded attachments. The app sends the message, records it and starts the reply; a chat that is closed refuses the message and says so. Closing a chat asks for confirmation (<code>chat:close</code>) and keeps the transcript readable, but the chat takes no more messages and offers no other actions.</p>
+<h3 id="a-repository-chat-is-read-only">A repository chat is read-only<a class="anchor" href="#a-repository-chat-is-read-only" aria-label="Link to this section">#</a></h3>
+<p>A chat on a repository works in the main clone, read-only. A shell command runs there only when it is on the short list of commands that only read (<code>git status</code>, <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sed -n</code>, <code>bun test</code>, ...); every other command, and every write or edit, becomes a question that names the command or the path. When the agent wants to change code it asks whether to open a worktree. A no tells the agent that the call was refused because the chat is read-only and that it should answer in the chat or use read-only commands. On yes, <code>dev</code> opens <code>work/chat-&lt;id&gt;</code> and the chat works there from then on, once; the main clone stays read-only. The worktree's changes reach main only through a task that points at it, through the normal gate and integrate.</p>
+<h3 id="a-bot-chat">A bot chat<a class="anchor" href="#a-bot-chat" aria-label="Link to this section">#</a></h3>
+<p>A chat on a bot uses the bot's working directory, skills and access profile; the bot's settings are read again at every reply, so tightening access or adding a skill applies without a new chat. A bot chat can use the local MCP servers the bot lists, if its agent takes MCP servers natively (<code>claude</code> and <code>radian</code> do; <code>pi</code> does not yet). A server whose tools changed is not mounted until a person approves the change in Pending.</p>
+<h2 id="attachments">Attachments<a class="anchor" href="#attachments" aria-label="Link to this section">#</a></h2>
+<p>The input box can send photos, camera images and files. The app uploads each one with <code>POST /v1/uploads</code>, then passes the returned <code>ref</code> in the message's <code>attachments</code>. A file is at most 20 MB; a larger one gets <code>413</code> with the limit. The uploaded file moves into the chat's own attachment directory under the operad home when the message is recorded, and the transcript links it through <code>GET /v1/attachments/...</code>.</p>
+<p>When the agent replies, an image the agent can read (<code>claude</code>, <code>pi</code>) is given as image input, up to 5 MB each; every other file is given as a path the agent can read. The chat's access profile gains read access to that chat's attachment directory and nothing else. A message may be only attachments with no text.</p>
+<h2 id="always-allow">Always allow<a class="anchor" href="#always-allow" aria-label="Link to this section">#</a></h2>
+<p>When an agent asks to run a command or touch a path its access profile does not allow, the question is a pending item on the chat. The choices are a one-time allow, a one-time rejection, and, when the step offers it, <code>allow_always</code>. Choosing <code>allow_always</code> writes an entry in <code>$OPERAD_HOME/access-user.json</code>:</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Value</th></tr></thead><tbody><tr><td><code>kind</code></td><td>string</td><td><code>command</code> or <code>path</code></td></tr><tr><td><code>value</code></td><td>string</td><td>The exact command text, or the path as the call wrote it; a tool call is <code>mcp &lt;server&gt;.&lt;tool&gt;</code></td></tr><tr><td><code>cwd</code></td><td>string</td><td>The working directory the call was allowed in</td></tr><tr><td><code>tool</code></td><td>string</td><td>For a <code>path</code> entry, the tool it allows, such as <code>write</code> or <code>edit</code></td></tr></tbody></table></div>
+<p>The next call is not asked again only when its kind, value and working directory match exactly. A run no person's message started does not see the always-allowed entries (see <a href="../../docs/access/">Access</a>). To revoke one, delete its line from <code>access-user.json</code>; a missing file is an empty list, and a file that cannot be read is reported and treated as empty.</p>
+<h2 id="settings">Settings<a class="anchor" href="#settings" aria-label="Link to this section">#</a></h2>
+<p>The Settings tab lists the server settings <code>GET /v1/settings</code> returns, with the current value, the default and whether it is editable. Changing one calls <code>POST /v1/settings</code>; a setting that asks to confirm asks in the app, and a refused value shows the server's reason and writes nothing. Settings that belong to a repository are shown when that repository is the open scope.</p>
+<p>Bots are under Settings, one page each. A bot page shows its working directory, default agent, speaker, skills and MCP servers; its settings are edited through a proposal, which appears in Pending and is applied only when a person approves it. MCP servers are added with <code>operad bot mcp</code> and approved in Pending.</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/app.md">View this page's source</a></p>
+    <nav class="pn" aria-label="Previous and next">
+      <a class="prev" href="../tui/"><small>Previous</small>The terminal client</a>
+      <a class="next" href="../http/"><small>Next</small>The HTTP interface</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#pairing-the-app">Pairing the app</a></li><li class="l2"><a href="#tabs">Tabs</a></li><li class="l2"><a href="#pending-and-notifications">Pending and notifications</a></li><li class="l2"><a href="#running">Running</a></li><li class="l2"><a href="#chats">Chats</a></li><li class="l3"><a href="#starting-a-chat">Starting a chat</a></li><li class="l3"><a href="#the-transcript-and-sending">The transcript and sending</a></li><li class="l3"><a href="#a-repository-chat-is-read-only">A repository chat is read-only</a></li><li class="l3"><a href="#a-bot-chat">A bot chat</a></li><li class="l2"><a href="#attachments">Attachments</a></li><li class="l2"><a href="#always-allow">Always allow</a></li><li class="l2"><a href="#settings">Settings</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../">Home</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

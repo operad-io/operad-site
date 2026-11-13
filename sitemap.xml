@@ -2,16 +2,76 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://operad.io/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/"/>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/quickstart/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/config/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/dev/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/access/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/cli/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/tui/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/app/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/http/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/mcp/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/chats-and-bots/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/notifications/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/checks/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/environment/</loc>
+    <lastmod>2026-11-13</lastmod>
+  </url>
+  <url>
+    <loc>https://operad.io/docs/troubleshooting/</loc>
+    <lastmod>2026-11-13</lastmod>
   </url>
 </urlset>

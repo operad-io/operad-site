@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environment variables · operad docs</title>
+<meta name="description" content="Every OPERAD_ environment variable and the other variables operad reads, with defaults and when each applies.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/docs/environment/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="Environment variables · operad docs">
+<meta property="og:description" content="Every OPERAD_ environment variable and the other variables operad reads, with defaults and when each applies.">
+<meta property="og:url" content="https://operad.io/docs/environment/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Environment variables · operad docs">
+<meta name="twitter:description" content="Every OPERAD_ environment variable and the other variables operad reads, with defaults and when each applies.">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "Environment variables",
+ "description": "Every OPERAD_ environment variable and the other variables operad reads, with defaults and when each applies.",
+ "inLanguage": "en",
+ "url": "https://operad.io/docs/environment/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../" aria-label="operad, home"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="../../">Home</a>
+    <a href="../" aria-current="true">Docs</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  </nav>
+  <a class="tile go" href="../../#install">Run it</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="Documentation">
+    <details class="side-nav" open>
+      <summary class="s3">Docs</summary>
+      <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../quickstart/">Quickstart</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json and the dev plugin</a></li>
+        <li><a href="../access/">Access</a></li>
+        <li><a href="../cli/">The command line</a></li>
+        <li><a href="../tui/">The terminal client</a></li>
+        <li><a href="../app/">The phone app</a></li>
+        <li><a href="../http/">The HTTP interface</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../notifications/">Notifications</a></li>
+        <li><a href="../checks/">Checks</a></li>
+        <li><a href="../environment/" aria-current="page">Environment variables</a></li>
+        <li><a href="../troubleshooting/">Troubleshooting</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="environment-variables">Environment variables</h1>
+<p>Every <code>OPERAD_*</code> variable that <code>operad</code> or its scripts read, or that a command it starts receives, and the other variables <code>operad</code> reads. <a href="../../docs/config/">config.json</a> holds the settings that belong in a file; use the environment for a value that changes per shell or per check host.</p>
+<p>The tables give the type, the default, the values accepted and when the value is read. A value outside the allowed set is either ignored or refused with the message named in the row.</p>
+<h2 id="what-you-set">What you set<a class="anchor" href="#what-you-set" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Variable</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th></tr></thead><tbody><tr><td><code>OPERAD_HOME</code></td><td>path</td><td><code>~/.operad</code></td><td>A directory path</td><td>Every command: the home that holds <code>config.json</code>, the store, the secrets directory, <code>tui.json</code>, <code>keys.json</code>, <code>serve.lock</code> and <code>access-user.json</code>. A relative path is resolved from the current directory.</td></tr><tr><td><code>OPERAD_SERVE_INTERVAL_MS</code></td><td>integer</td><td><code>1000</code></td><td>milliseconds, more than 0</td><td>When <code>operad serve</code> starts: the time between loop passes. A value that is not a finite positive number falls back to 1000.</td></tr><tr><td><code>OPERAD_BIND_RETRY_MS</code></td><td>integer</td><td><code>10000</code></td><td>milliseconds, more than 0</td><td>When a <code>serve</code> that took over from another one opens its addresses: how long it keeps trying. A first start fails at once. A value that is not a positive number falls back to 10000.</td></tr><tr><td><code>OPERAD_BIND_RETRY_STEP_MS</code></td><td>integer</td><td><code>250</code></td><td>milliseconds, more than 0</td><td>The wait between two tries of the same retry. A value that is not a positive number falls back to 250.</td></tr><tr><td><code>OPERAD_RELOAD_QUIET_MS</code></td><td>integer</td><td><code>1000</code></td><td>milliseconds, more than 0</td><td>How long the files must be quiet before <code>serve</code> checks that changed code loads (see <a href="../../docs/cli/#changed-code">Changed code</a>). A value that is not a positive number falls back to 1000.</td></tr><tr><td><code>OPERAD_RELOAD_POLL_MS</code></td><td>integer</td><td><code>5000</code></td><td>milliseconds, more than 0</td><td>How often <code>serve</code> looks at the files for a change, and how often a run's process waits for code that does not load. A value that is not a positive number falls back to 5000.</td></tr><tr><td><code>OPERAD_CHECK_BASE</code></td><td>commit</td><td>the merge base of <code>HEAD</code> and <code>origin/main</code></td><td>A commit name</td><td>When <code>check-changed.sh</code> picks the packages a change touches: the commit it compares with. A name git cannot resolve stops the script.</td></tr><tr><td><code>OPERAD_CHECK_HOST</code></td><td>ssh destination</td><td>unset: the check runs here</td><td><code>user@host</code></td><td>When <code>remote-check.sh</code> runs a command: with it set, the command runs on that host. Empty means here.</td></tr><tr><td><code>OPERAD_CHECK_SLOTS</code></td><td>integer</td><td><code>1</code></td><td>whole number, 1 or more</td><td>How many task checks run at once on the host; each slot has its own lock and tree. Any other value stops the script with a message that names the variable.</td></tr><tr><td><code>OPERAD_CHECK_LANE</code></td><td>string</td><td>unset</td><td><code>integration</code></td><td><code>integration</code> takes the one integration slot instead of a task slot; any other value stops the script with a message that names the variable.</td></tr><tr><td><code>OPERAD_CHECK_TREE</code></td><td>path</td><td><code>Code/operad</code></td><td>A path relative to the host's home</td><td>The clone on the host the checks run in; every other slot uses a worktree of it.</td></tr><tr><td><code>OPERAD_CHECK_PATH</code></td><td>list of directories</td><td><code>$HOME/.bun-operad/bin:$HOME/.bun/bin</code></td><td>Directories separated by <code>:</code></td><td>Put first on the host's <code>PATH</code> before the check line runs, expanded on the host.</td></tr><tr><td><code>OPERAD_CHECK_SSH</code></td><td>command</td><td><code>ssh -o BatchMode=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=4</code></td><td>An ssh command line</td><td>When a check connects to its host.</td></tr><tr><td><code>OPERAD_CHECK_SCP</code></td><td>command</td><td><code>scp -q -o BatchMode=yes</code></td><td>An scp command line</td><td>When a check copies the bundle to its host.</td></tr><tr><td><code>OPERAD_TEST_PARALLEL</code></td><td>integer</td><td><code>2</code></td><td>whole number, 1 or more</td><td>When <code>run-tests.sh</code> starts: how many worker processes run test files. Any other value stops the script with <code>run-tests: OPERAD_TEST_PARALLEL must be a whole number of 1 or more, not '&lt;value&gt;'</code>.</td></tr><tr><td><code>OPERAD_TEST_HEAVY_PARALLEL</code></td><td>integer</td><td><code>8</code></td><td>whole number, 1 or more</td><td>When <code>run-tests.sh</code> starts: how many worker processes run the heavy test files (under <code>test/heavy/</code>). Any other value stops the script with a message that names the variable.</td></tr><tr><td><code>OPERAD_TEST_OVERLAP</code></td><td>integer</td><td><code>1</code></td><td><code>1</code> runs the heavy step beside the light step; <code>0</code> runs it after the light step</td><td>When <code>run-tests.sh</code> starts.</td></tr><tr><td><code>OPERAD_TEST_TIMES</code></td><td>path</td><td><code>~/.operad-test-times</code></td><td>A file path</td><td>Where each full test run appends one line of timings (<code>run-tests.sh</code> and <code>test-times.ts</code>).</td></tr></tbody></table></div>
+<h2 id="what-operad-sets">What operad sets<a class="anchor" href="#what-operad-sets" aria-label="Link to this section">#</a></h2>
+<p>These are set for a command operad starts. Do not set them yourself; a value you set is replaced or removed.</p>
+<div class="table-wrap"><table><thead><tr><th>Variable</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th></tr></thead><tbody><tr><td><code>OPERAD_ID</code></td><td>string</td><td>always set</td><td>The waiting object's id, as <code>&lt;type&gt;:&lt;id&gt;</code></td><td>In the environment of the <a href="../../docs/notifications/">notify command</a>.</td></tr><tr><td><code>OPERAD_TITLE</code></td><td>string</td><td>always set</td><td>The object's title, or its id when the title cannot be read</td><td>In the environment of the notify command.</td></tr><tr><td><code>OPERAD_REASON</code></td><td>string</td><td>always set</td><td>The question or reason it waits</td><td>In the environment of the notify command.</td></tr><tr><td><code>OPERAD_LINK</code></td><td>string</td><td>always set</td><td>An <code>operad://objects/&lt;id&gt;</code> link</td><td>In the environment of the notify command (see <a href="../../docs/http/#links">Links</a>).</td></tr><tr><td><code>OPERAD_TASK</code></td><td>string</td><td>always set</td><td>A task id</td><td>In the environment of a <code>dev</code> cleanup or integration command.</td></tr><tr><td><code>OPERAD_WORKTREE</code></td><td>path</td><td>always set</td><td>The task's worktree</td><td>In the environment of a <code>dev</code> cleanup or integration command.</td></tr><tr><td><code>OPERAD_REMOTE</code></td><td>string</td><td>always set</td><td>The remote's name</td><td>In the environment of a <code>dev</code> cleanup or integration command.</td></tr><tr><td><code>OPERAD_RUN</code></td><td>string</td><td>always set</td><td><code>&lt;run id&gt;:&lt;step&gt;</code></td><td>In the environment of a step's process: it names the run and the step, so <code>serve</code> can find what a step left running. A child that removes it is not reaped.</td></tr><tr><td><code>OPERAD_RUN_HOME</code></td><td>path</td><td>always set</td><td>The home path</td><td>In the environment of a step's process, so two homes never meet.</td></tr><tr><td><code>OPERAD_SERVE_SUPERVISED</code></td><td>flag</td><td>not set</td><td><code>1</code></td><td>Set by the process that restarts <code>serve</code> on changed code; removed before the child sees its own environment. Do not set it yourself.</td></tr><tr><td><code>OPERAD_SERVE_REPLACES</code></td><td>flag</td><td>not set</td><td><code>1</code></td><td>Set on a <code>serve</code> that a stuck one started in its place; removed before the child sees its own environment. Do not set it yourself.</td></tr></tbody></table></div>
+<h2 id="other-variables-operad-reads">Other variables operad reads<a class="anchor" href="#other-variables-operad-reads" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Variable</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th></tr></thead><tbody><tr><td><code>EDITOR</code></td><td>command</td><td>unset</td><td>An editor command line</td><td><code>operad dev task edit</code>, when stdin is a terminal or carries no brief: the editor opens the current brief. It is run through <code>/bin/sh -c '&lt;editor&gt; &quot;$1&quot;'</code>. A non-zero exit fails the command with <code>&quot;&lt;editor&gt;&quot; exited with code &lt;n&gt;</code>.</td></tr><tr><td><code>VISUAL</code></td><td>command</td><td>unset</td><td>An editor command line</td><td>Used only when <code>EDITOR</code> is unset. <code>EDITOR</code> set to an empty or blank value does not fall back to <code>VISUAL</code>; the command reports that no editor is set.</td></tr><tr><td><code>HOME</code></td><td>path</td><td>the account's home</td><td>A directory path</td><td>The default home (<code>~/.operad</code>), <code>~</code> expansion, and the radian config path.</td></tr><tr><td><code>PATH</code></td><td>list of directories</td><td>the account's <code>PATH</code></td><td>Directories separated by <code>:</code></td><td>Finding <code>radian</code>, <code>pi</code>, <code>claude</code>, git and the other programs a command starts. A command named without a <code>/</code> must be on <code>PATH</code>.</td></tr><tr><td><code>RADIAN_CONFIG</code></td><td>path</td><td><code>$HOME/.radian/config/config.toml</code></td><td>A file path</td><td>The radian harness reads its own provider settings from this file.</td></tr><tr><td><code>BASH_ENV</code></td><td>path</td><td>unset</td><td>A file path</td><td>The pi worker deletes it from its own environment before it starts, so a shell startup file cannot change a tool call.</td></tr><tr><td><code>ENV</code></td><td>path</td><td>unset</td><td>A file path</td><td>Deleted by the pi worker for the same reason.</td></tr><tr><td><code>TMPDIR</code></td><td>path</td><td>the system temporary directory</td><td>A directory path</td><td>Passed to a bot's MCP server, so the server can find temporary files.</td></tr><tr><td><code>LANG</code></td><td>string</td><td>unset</td><td>A locale name</td><td>Passed to a bot's MCP server.</td></tr><tr><td><code>STRESS_LOCK</code></td><td>path</td><td><code>$HOME/.operad-stress.lock</code></td><td>A directory path</td><td><code>scripts/stress.sh</code>: the lock shared by every stress run on the machine. Only a run that knows it is alone passes <code>--no-lock</code>.</td></tr><tr><td><code>NODE_ENV</code></td><td>string</td><td>unset</td><td><code>test</code></td><td>Internal: the plugin registry leaves out a test-only check when it is <code>test</code>. Do not set it for normal use.</td></tr></tbody></table></div>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/environment.md">View this page's source</a></p>
+    <nav class="pn" aria-label="Previous and next">
+      <a class="prev" href="../checks/"><small>Previous</small>Checks</a>
+      <a class="next" href="../troubleshooting/"><small>Next</small>Troubleshooting</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#what-you-set">What you set</a></li><li class="l2"><a href="#what-operad-sets">What operad sets</a></li><li class="l2"><a href="#other-variables-operad-reads">Other variables operad reads</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../">Home</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

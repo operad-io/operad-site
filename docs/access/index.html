@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access · operad docs</title>
+<meta name="description" content="Access profiles, the default profile, access-user.json, always allow, MCP tools and background runs.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/docs/access/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="Access · operad docs">
+<meta property="og:description" content="Access profiles, the default profile, access-user.json, always allow, MCP tools and background runs.">
+<meta property="og:url" content="https://operad.io/docs/access/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Access · operad docs">
+<meta name="twitter:description" content="Access profiles, the default profile, access-user.json, always allow, MCP tools and background runs.">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "Access",
+ "description": "Access profiles, the default profile, access-user.json, always allow, MCP tools and background runs.",
+ "inLanguage": "en",
+ "url": "https://operad.io/docs/access/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../" aria-label="operad, home"><svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg></a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="../../">Home</a>
+    <a href="../" aria-current="true">Docs</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  </nav>
+  <a class="tile go" href="../../#install">Run it</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="Documentation">
+    <details class="side-nav" open>
+      <summary class="s3">Docs</summary>
+      <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../quickstart/">Quickstart</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json and the dev plugin</a></li>
+        <li><a href="../access/" aria-current="page">Access</a></li>
+        <li><a href="../cli/">The command line</a></li>
+        <li><a href="../tui/">The terminal client</a></li>
+        <li><a href="../app/">The phone app</a></li>
+        <li><a href="../http/">The HTTP interface</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../notifications/">Notifications</a></li>
+        <li><a href="../checks/">Checks</a></li>
+        <li><a href="../environment/">Environment variables</a></li>
+        <li><a href="../troubleshooting/">Troubleshooting</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="access">Access</h1>
+<p>An agent asks before it runs a command or touches a path its access profile does not allow. A person answers the question with an action; <code>allow_always</code> records the call so the question does not come again. The profile is a guard rail, not a boundary: it matches the text of a call, and a program that builds a path or command another way is outside what it can see.</p>
+<h2 id="the-profile">The profile<a class="anchor" href="#the-profile" aria-label="Link to this section">#</a></h2>
+<p>A profile is a JSON object. A bot's profile is its <a href="../../docs/config/#bot">bot settings</a> merged with the default below; a flow's profile is given to the steps that declare they enforce its fields. The matcher applies this order: <strong>deny wins over ask, and ask wins over allow</strong>. A call that matches a deny is refused whatever an ask rule says; a call that only matches an ask rule asks a person; every other call is allowed.</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>denyPaths</code></td><td>array of strings</td><td>the default list below</td><td>paths; a <code>*</code> stays within one path segment</td><td>When a step judges a call</td><td>Refused by the reader: <code>denyPaths must be an array of strings</code></td></tr><tr><td><code>denyCommands</code></td><td>array of strings</td><td>the default list below</td><td>command rules; word patterns with <code>*</code>, and <code>|</code> between pipeline parts</td><td>When a step judges a command</td><td>Refused by the reader: <code>denyCommands must be an array of strings</code></td></tr><tr><td><code>askCommands</code></td><td>array of strings</td><td>the default list below</td><td>command rules in the same shape as <code>denyCommands</code></td><td>When a step judges a command that no deny refused</td><td>Refused by the reader: <code>askCommands must be an array of strings</code></td></tr><tr><td><code>askPaths</code></td><td>array of strings</td><td>the default list below</td><td>paths a write asks about; <code>*</code> stays within one path segment</td><td>When a step judges a write or edit, or a <code>bash</code> redirect</td><td>Refused by the reader: <code>askPaths must be an array of strings</code></td></tr><tr><td><code>readOnly</code></td><td>boolean</td><td><code>false</code></td><td><code>true</code> or <code>false</code></td><td>When a step judges a call in the profile's working directory</td><td>Refused by the reader: <code>readOnly must be true or false</code></td></tr><tr><td><code>readPaths</code></td><td>array of strings</td><td><code>[]</code></td><td>directories a read may still reach under a denied ancestor</td><td>When a step judges a read, or a <code>bash</code> command that only reads</td><td>Refused by the reader: <code>readPaths must be an array of strings</code></td></tr><tr><td><code>allowMcp</code></td><td>array of strings</td><td>absent: MCP tools are not under the profile</td><td><code>&lt;server&gt;.&lt;tool&gt;</code> or <code>&lt;server&gt;.*</code></td><td>When a step judges an MCP call; having the field at all, even empty, puts MCP tools under the profile</td><td>Refused by the reader: <code>allowMcp must be an array of strings</code></td></tr><tr><td><code>alwaysAllow</code></td><td>array of entry objects</td><td>the entries in <a href="#access-userjson">access-user.json</a> for a run a person started; empty in a background run</td><td>the entries below</td><td>When a step judges a call that would otherwise ask</td><td>Refused by the reader: <code>alwaysAllow must be an array</code>, or an entry's own message</td></tr><tr><td><code>grants</code></td><td>array of grant objects</td><td><code>[]</code></td><td>one-time permissions a step carries for one exact call</td><td>When the step that was waiting continues</td><td>Refused by the reader: <code>grants must be an array</code>, or a grant's own message</td></tr></tbody></table></div>
+<p>The fields <code>cwd</code>, <code>outside</code> and <code>network</code> are not read by the matcher. The MCP entries say what a local or remote MCP tool may do; see <a href="#mcp-tool-entries">MCP tool entries</a>.</p>
+<p><code>denyPaths</code> and <code>askPaths</code> are matched against the path as the call wrote it, normalised with <code>~</code> as the user's home and relative paths joined to the call's working directory. A path under a <code>denyPaths</code> entry is refused. A write or edit under an <code>askPaths</code> entry asks; a <code>bash</code> redirect to one asks with the whole command.</p>
+<p><code>readOnly</code> makes the call's working directory read-only: a write or edit there asks, and a <code>bash</code> command asks unless it is on the short list of commands that only read. A deny still wins.</p>
+<p><code>readPaths</code> lets a read reach a directory under an ancestor in <code>denyPaths</code>. It does not allow a write: a write there asks.</p>
+<h2 id="the-default-profile">The default profile<a class="anchor" href="#the-default-profile" aria-label="Link to this section">#</a></h2>
+<p>The default profile is what a bot starts from. Its lists are added to the lists a bot writes; a bot can tighten them, never loosen them.</p>
+<div class="table-wrap"><table><thead><tr><th>List</th><th>Entries</th></tr></thead><tbody><tr><td><code>denyPaths</code></td><td><code>~/.ssh</code>, <code>~/.gnupg</code>, <code>~/.aws</code>, <code>~/.config/gh</code>, <code>~/.radian</code>, <code>~/Library/Keychains</code>, <code>~/Library/Application Support/Google/Chrome</code>, <code>~/Library/Application Support/Firefox</code>, <code>~/Library/Safari</code>, <code>.git/config</code>, <code>.git/hooks</code>, and every entry of the operad home except the bot's own directory (the names there now, and <code>store</code>, <code>secrets</code>, <code>config.json</code> and the MCP report directory)</td></tr><tr><td><code>denyCommands</code></td><td><code>operad</code>, <code>sudo</code>, <code>su</code>, <code>rm -rf /</code>, <code>rm -rf ~</code>, <code>mkfs</code>, <code>dd</code>, <code>diskutil</code>, <code>shutdown</code>, <code>reboot</code>, <code>launchctl</code>, <code>crontab -r</code>, <code>git push --force*</code>, <code>git push --delete</code>, <code>curl … | sh</code>, <code>wget … | sh</code>, <code>pkill</code>, <code>killall</code></td></tr><tr><td><code>askCommands</code></td><td><code>git push</code>, <code>brew install</code>, <code>npm install -g</code>, <code>pip install</code>, <code>osascript</code>, <code>open</code></td></tr><tr><td><code>askPaths</code></td><td><code>~/.zshrc</code>, <code>~/.*profile</code></td></tr><tr><td><code>readPaths</code>, <code>readOnly</code>, <code>allowMcp</code></td><td>absent</td></tr></tbody></table></div>
+<p>The home entries are absolute, so a home other than <code>~/.operad</code> is covered too. The bot's own working directory under <code>~/.operad/bot</code> is the one part of the home the agent may use. The path of a repository <code>dev</code> knows, and the path of a bot's skill directories, are added to <code>denyPaths</code>: the agent reaches a repository through <code>dev</code>'s actions, not by touching its files. A bot's own <code>access</code> lists are appended to these, and its <code>access.readOnly</code> can turn the working directory read-only.</p>
+<p>A rule is a pattern of words; <code>*</code> matches any characters in a word. <code>-rf</code> matches the same single-dash letters in any order, and <code>…</code> adds no condition. <code>git push --force*</code> therefore matches <code>git -C x push --force</code>. An inline command (such as <code>bash -c</code>, <code>python -c</code>, <code>bun -e</code>, <code>osascript -e</code>, <code>find -exec</code>, <code>xargs</code>, <code>eval</code>, a backtick or <code>$()</code>) is refused while <code>denyCommands</code> is set, and asks while only <code>askCommands</code> is set, because the matcher cannot see what it runs. The full rule tables are in <code>packages/access-match/REFERENCE.md</code>.</p>
+<h2 id="access-userjson"><code>access-user.json</code><a class="anchor" href="#access-userjson" aria-label="Link to this section">#</a></h2>
+<p><code>$OPERAD_HOME/access-user.json</code> (see <a href="../../docs/config/#the-home">the home</a>) holds the calls a person answered <code>allow_always</code> for. A missing file is an empty list. A file that cannot be read is reported by the step that reads it and treated as empty. A person adds an entry by answering <code>allow_always</code>; removing an entry is deleting its object from the array. The file is written under a lock and replaced whole, so a crash does not leave it half written.</p>
+<pre data-ui><code class="lang-json">[
+  { &quot;kind&quot;: &quot;command&quot;, &quot;value&quot;: &quot;git status --short&quot;, &quot;cwd&quot;: &quot;/Users/you/Code/example&quot; },
+  { &quot;kind&quot;: &quot;path&quot;, &quot;value&quot;: &quot;notes/todo.md&quot;, &quot;cwd&quot;: &quot;/Users/you/Code/example&quot;, &quot;tool&quot;: &quot;edit&quot; }
+]</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>kind</code></td><td>string</td><td>required</td><td><code>command</code>, <code>path</code></td><td>When a step asks about a call: an entry matches only a call of its kind</td><td>An entry without <code>command</code> or <code>path</code> makes the whole file count as empty; the step reports <code>entry &lt;i&gt; is not a command or path entry with a value and a working directory</code></td></tr><tr><td><code>value</code></td><td>string</td><td>required</td><td>the command text exactly as allowed (for an MCP tool, <code>mcp &lt;server&gt;.&lt;tool&gt;</code>), or the path as the call wrote it</td><td>When a step asks about a call: the call must match it exactly</td><td>An entry without a non-empty value makes the whole file count as empty</td></tr><tr><td><code>cwd</code></td><td>string</td><td>required</td><td>the working directory the call was allowed in</td><td>When a step asks about a call: the call must be in that directory; another directory is a new question</td><td>An entry without a non-empty working directory makes the whole file count as empty</td></tr><tr><td><code>tool</code></td><td>string</td><td>required for <code>path</code></td><td>a tool name such as <code>write</code> or <code>edit</code></td><td>A path entry allows that tool only, not another tool on the same path</td><td>A path entry without a tool, or a command entry with one, makes the whole file count as empty</td></tr></tbody></table></div>
+<p>An invalid file is treated as an empty list and the step logs <code>the user access file &quot;&lt;path&gt;&quot; ...; it is treated as empty</code>. An <code>allow_always</code> answer writes an entry only when the call was allowed once; a call that holds a secret value is never asked about and never written.</p>
+<h2 id="allow_always"><code>allow_always</code><a class="anchor" href="#allow_always" aria-label="Link to this section">#</a></h2>
+<p>When a call needs to ask, a person sees three choices in a run a person started (<code>allow_once</code>, <code>allow_always</code>, <code>reject_once</code>). <code>allow_always</code> lets this call run and appends its exact value and working directory to <code>access-user.json</code>; later calls with the same text in the same directory then run without asking. It does not lift a <code>denyPaths</code> or <code>denyCommands</code> match, and it does not cover a different command, a different path spelling, or the same command in another directory. A late answer may carry the write too; if the file cannot be written, the step logs that and lets the call run once.</p>
+<h2 id="mcp-tool-entries">MCP tool entries<a class="anchor" href="#mcp-tool-entries" aria-label="Link to this section">#</a></h2>
+<p><code>allowMcp</code> in the profile (or <code>mcpAllow</code> in a bot's settings) lists the MCP tools that run without asking, as <code>&lt;server&gt;.&lt;tool&gt;</code> or <code>&lt;server&gt;.*</code>. The field's presence, even as an empty list, puts MCP tools under the profile: a tool that is not listed counts as a write and asks first. A tool that is listed runs without asking; a deny path or command still wins when it covers the call.</p>
+<p>An answered MCP question is recorded like any other command: <code>kind</code> is <code>command</code>, <code>value</code> is <code>mcp &lt;server&gt;.&lt;tool&gt;</code> and <code>cwd</code> is the working directory. An entry matches only that server and tool, exactly.</p>
+<h2 id="background-runs">Background runs<a class="anchor" href="#background-runs" aria-label="Link to this section">#</a></h2>
+<p>A run is a <strong>background run</strong> when no person's message started it: a schedule, a webhook, an incoming message from another source, or an event a run emitted. Only a message from one of the chat's own client sources (<code>ios</code>, <code>telegram</code>, <code>cli</code>, <code>tui</code>, <code>other</code>) is a person's message for this rule.</p>
+<p>In a background run the existing <code>alwaysAllow</code> entries are not used, and <code>allow_always</code> is not offered: a question asks again every time, with <code>allow_once</code> and <code>reject_once</code> only. This is deliberate: a scheduled or incoming run is held to the profile afresh rather than inheriting a permission a person gave in an earlier conversation.</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/access.md">View this page's source</a></p>
+    <nav class="pn" aria-label="Previous and next">
+      <a class="prev" href="../dev/"><small>Previous</small>dev.json and the dev plugin</a>
+      <a class="next" href="../cli/"><small>Next</small>The command line</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#the-profile">The profile</a></li><li class="l2"><a href="#the-default-profile">The default profile</a></li><li class="l2"><a href="#access-userjson">access-user.json</a></li><li class="l2"><a href="#allow_always">allow_always</a></li><li class="l2"><a href="#mcp-tool-entries">MCP tool entries</a></li><li class="l2"><a href="#background-runs">Background runs</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../">Home</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>
