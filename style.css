@@ -105,7 +105,7 @@ pre code { font-size: inherit; }
 /* sections */
 .band { margin-top: clamp(80px, 10vw, 150px); }
 .band > h2 { margin-bottom: clamp(28px, 3.5vw, 48px); padding-left: 16px; }
-.band > h2 + .sub { margin-top: -28px; margin-bottom: 36px; padding-left: 16px; }
+.band > h2 + .sub { margin-top: -12px; margin-bottom: 36px; padding-left: 16px; }
 
 /* the bar */
 .bar { display: flex; gap: var(--gap); min-height: 46svh; align-items: stretch; }
@@ -270,8 +270,9 @@ html:not(.js) .r-open { display: block; background: var(--tile); }
   .links a:nth-child(n+2) { display: none; }
   .term pre { padding: 18px; font-size: 12.5px; }
   .mark { display: grid; grid-template-columns: repeat(3, 1fr); height: auto; min-height: 0; }
-  .mark span { height: 20svh; min-height: 130px; font-size: 30vw; padding-bottom: 5%; border-radius: var(--r); }
-  .mark span:nth-child(even) { height: 17svh; min-height: 112px; }
+  .mark span { height: 15svh; min-height: 100px; font-size: 26vw; padding-bottom: 5%; border-radius: var(--r); }
+  .mark span:nth-child(even) { height: 12svh; min-height: 84px; }
+  .foot { margin-top: 64px; }
   .mark { align-items: end; }
 }
 .acc pre { background: rgba(0,0,0,.22); border-radius: 6px; padding: 16px; }
