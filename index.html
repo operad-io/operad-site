@@ -291,7 +291,9 @@ Scan this in the operad app:</code></pre>
     <div class="tile soft edge reveal" aria-hidden="true"></div>
     <div class="tile acc cta-main reveal">
       <p class="s3">operad is in development. This is how its own repository runs on it.</p>
-<pre data-ui><code>operad init
+<pre data-ui><code>bun add -g @operad-io/cli
+
+operad init
 operad repo add .
 operad plan add --slug dogfood --title "Run operad on operad" &lt; request.md
 operad task add --plan P-0001-dogfood --slug switch --title "Switch" &lt; task.md
@@ -300,7 +302,7 @@ operad serve
 
 operad pending
 operad dev:merge T-0001-switch --yes</code></pre>
-      <p>You need git, a repository with a remote, the Bun runtime, and one of claude, pi or radian on your <code>PATH</code>. The commands and <code>config.json</code> keys are in <code>docs/manual.md</code> in the repository.</p>
+      <p>You need git, a repository with a remote, the Bun runtime (install it first; the <code>operad</code> command runs on it), and one of claude, pi or radian on your <code>PATH</code>. The commands and <code>config.json</code> keys are in <code>docs/manual.md</code> in the repository.</p>
       <p><a class="src" href="https://github.com/operad-io/operad">Source on GitHub</a></p>
     </div>
     <div class="tile dark edge reveal" aria-hidden="true"></div>
