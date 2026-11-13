@@ -1,0 +1,12 @@
+# operad
+
+> operad runs coding agents through verified flows: plan, work, verify, review, merge. The kernel has three words (flow, pending, history); everything else is a plugin. operad is in development.
+
+## Pages
+
+- [operad.io (English)](https://operad.io/): the loop, the kernel, the terminal, Claude Code and iPhone clients, how to run it
+- [operad.io/zh (中文)](https://operad.io/zh/): the same page in Chinese
+
+## Source
+
+- [GitHub](https://github.com/operad-io/operad): the operad repository

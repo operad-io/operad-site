@@ -20,3 +20,5 @@ Then open the address it prints. `index.html` also opens straight from the file 
 - `style.css` tokens and layout; colours are the iPhone app's neutrals with `#5672b3` as the primary
 - `board.js` tiles rise in on scroll; the example board opens one row at a time
 - `favicon.svg`
+- `og.png` the social preview image (1200x630)
+- `robots.txt`, `sitemap.xml`, `llms.txt` for crawlers and AI agents; canonical URLs assume the site is served at `https://operad.io`
