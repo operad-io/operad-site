@@ -100,7 +100,7 @@ and https://operad.io/llms.txt.
 
 2. Find this repo's checks. Read CI config (.github/workflows, .gitlab-ci.yml, ...),
    the Makefile, package.json scripts, pyproject, Cargo.toml or whatever applies.
-   Choose the commands that CI runs to decide a change is good: tests, typecheck,
+   Choose the commands that CI runs to judge whether a change is good: tests, typecheck,
    lint, build. Each must exit non-zero on failure. Order them fast to slow. Run each
    once on the current checkout; if one already fails on main, tell me instead of
    hiding it. If the repo has no checks, say so and leave `gate.commands` empty.
@@ -141,7 +141,7 @@ and https://operad.io/llms.txt.
 
 When I am ready, the next steps are `operad serve`, then
 `operad plan add --slug &lt;slug&gt; --title &quot;&lt;title&gt;&quot; &lt; request.md`.</code></pre>
-<p>Read what the agent wrote before you commit it. The checks in <code>gate.commands</code> decide whether a change is good enough to reach review, so they should be the ones you trust.</p>
+<p>Read what the agent wrote before you commit it. The checks in <code>gate.commands</code> judge whether a change is good enough to reach review, so they should be the ones you trust.</p>
     <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/setup-prompt.md">View this page's source</a></p>
     <nav class="pn" aria-label="Previous and next">
       <a class="prev" href="../quickstart/"><small>Previous</small>Quickstart</a>
