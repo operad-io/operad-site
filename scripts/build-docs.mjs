@@ -221,7 +221,7 @@ const GH_SVG =
 const X_SVG =
   '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
 const LOGO_SVG =
-  '<svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg>';
+  '<svg viewBox="5 2 38 42" width="30" height="33" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.15"><path d="M23.06 32.49L16.75 22.44M26.40 31.52L26.40 22.98M29.74 32.49L36.05 22.44M13.59 16.28L11.13 10.23M16.23 16.29L18.75 10.23"/><circle cx="26.4" cy="37.8" r="5.7"/><circle cx="14.9" cy="19.5" r="2.9"/><circle cx="26.4" cy="19.5" r="2.9"/><circle cx="37.9" cy="19.5" r="2.9"/><circle cx="9.9" cy="7.2" r="2.7"/><circle cx="20.0" cy="7.2" r="2.7"/></g></svg>';
 
 function pageHtml(L, page) {
   const pages = PAGES[L.code];
