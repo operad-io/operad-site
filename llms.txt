@@ -11,6 +11,7 @@
 
 - [Overview](https://operad.io/docs/): The operad user manual: what operad is and a page for each subject.
 - [Quickstart](https://operad.io/docs/quickstart/): Start operad: create the home, start serve, open the client.
+- [Set up operad with an agent](https://operad.io/docs/setup-prompt/): A prompt that has your coding agent write and check .operad/dev.json for a repository.
 - [config.json](https://operad.io/docs/config/): The config.json file: where the home is, every section and key, and every plugin's settings.
 - [dev.json and the dev plugin](https://operad.io/docs/dev/): dev.json and the dev plugin: its commands, the reviewer, workers and pools, usage and end results.
 - [Access](https://operad.io/docs/access/): Access profiles, the default profile, access-user.json, always allow, MCP tools and background runs.
