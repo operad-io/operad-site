@@ -6,6 +6,25 @@ description: 与 agent 的 chat、bot、它们的命令、设置、MCP server �
 
 chat 是与 agent 的一段长对话。bot 由一个工作目录、一个默认 agent、skill、一个 speaker 和一个访问 profile 组成；bot 上的 chat 使用这些，仓库上的 chat 则做该仓库的工作。两者都是来自插件的对象：`chat` 拥有所有 chat，`dev` 在仓库上打开 chat，`bot` 在 bot 上打开 chat。
 
+## 为什么需要它 {#why-it-exists}
+
+与 agent 合作通常是一段很长的交流，而不是一条命令。chat 把这段交流保存在 operad 里：你可以从命令行、终端 UI、iOS 或 Telegram 发消息，每一条都落在同一份 transcript 中。operad 自己保存消息的记录，所以 chat 的 history 不依赖 agent 的会话文件；会话被清理或压缩，也不会抹掉它。
+
+bot 用于与仓库无关的 chat。它把这类 chat 使用的工作目录、默认 agent、skill、speaker 和访问 profile 固定在一处，因此你可以保留几个权限不同的 bot，例如一个只读的。由于 chat 在每次回复时都会重新读取它的 bot，收紧 bot 的权限或加一个 skill 都不需要新建 chat。
+
+这两个插件刻意保持谨慎。仓库上的 chat 在你同意打开 worktree 之前是只读的。bot 不能自己修改自己的 skill、设置或 MCP server；它只能提出修改，在人批准之前磁盘上的内容不会改变。
+
+## 它如何工作 {#how-it-works}
+
+1. chat 由一个插件打开：仓库上用 `dev:chat`，bot 上用 `bot:chat`。agent 在此时选定，之后不再更换；模型和 effort 之后可以用 `chat:model` 和 `chat:effort` 修改。
+2. `chat:send` 记录一条消息。消息是一个事件，来源为 `ios`、`telegram`、`cli`、`tui` 或 `other`，`chat` 插件自带的规则会为它启动 `chat:reply`（见 [chat](#chats)）。
+3. `chat:reply` 从 chat 自己的记录中取出还没有被任何回复回答的消息，继续 agent 的会话，并记录回复。如果期间又来了新消息，就再来一轮，最多 20 轮。没有 `operad serve` 时消息只是被记录下来，等 `serve` 运行时再回答。
+4. agent 工作期间，`transcript` 部分显示消息、工具调用和当前回复尚未完成的文本。
+5. 每次工具调用都会对照 chat 的访问 profile 检查（见[访问](access.md)）。bot chat 的 profile 是默认 profile 加上 bot 自己的 `access` 设置；bot 的设置在每次回复时重新读取（见 [bot](#bots)）。
+6. 仓库上的 chat 在 main clone 中以只读开始。写入，或不确定只读的命令，会变成 worktree 问题；答应后，`dev` 打开 `work/chat-<id>`，chat 此后在那里工作。
+7. 当 bot 提出一个 skill、一项设置修改或一个 MCP server（`operad bot skill`、`bot setting`、`bot mcp`）时，一个 `bot-proposal` 对象会在 Pending 中等待。`bot:approve` 使它生效，`bot:reject` 放弃它（见 [bot 对象和 proposal](#bot-objects-and-proposals)）。
+8. `chat:close` 记录 `chat.closed`；transcript 仍然可读，`chat:send` 会被拒绝。
+
 ## chat {#chats}
 
 chat 属于打开它的插件。`dev` 在仓库上打开 chat：

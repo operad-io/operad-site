@@ -6,6 +6,20 @@ description: /v1 HTTP 接口：http 段、token、endpoint、事件和错误。
 
 `operad serve` 向 app 和终端客户端等客户端提供 `/v1` 接口。本页介绍 `http` 的键和 token，然后依次介绍每个 endpoint、行标记和链接、事件以及错误。手机配对见 [app 页](app.md)；终端客户端见[它自己的页面](tui.md)。
 
+## 为什么需要它 {#why-it-exists}
+
+app 和终端客户端运行在与 `operad serve` 不同的设备或进程上，它们需要命令行已有的那些东西：列表、对象的 section、pending 项、action 和设置。这个接口通过 HTTP 把这些提供给它们。接口不含任何插件的知识：客户端询问有哪些对象类型，读取每个对象的行、section 和当前可用的 action，然后把它们画出来，所以新插件出现在客户端里时无需改动客户端。因为它能从其他机器访问，所以默认只监听本机，只接受 loopback、私有、link-local 和 Tailscale 地址，并且每个请求都必须带 bearer token。
+
+## 它如何工作 {#how-it-works}
+
+1. 当 `http.enabled` 为 true 时，`operad serve` 在 `http.port` 上绑定 [`http.listen`](#the-http-section) 中的地址，并为每个地址打印 `http <url>`。第一次启动会在 `secrets/http.json` 中创建 bearer token。
+2. 客户端在每个请求里带上 `Authorization: Bearer <token>`，也可以在 `X-Operad-Client` 中给自己命名。token 错误或缺失会得到 `401`。
+3. 它先用 `GET /v1/types` 了解这个 home 的结构，再用 `GET /v1/objects?type=…` 列出行。每一行带有状态和可选的[标记](#row-marks)，由客户端渲染。
+4. 它用 `GET /v1/objects/<id>` 打开一个对象，返回行、section 目录、当前可用的 action 和一个[链接](#links)。每个 section 用 `GET /v1/objects/<id>/sections/<section>` 读取；见[读取 section](#reading-a-section)。
+5. 等待人处理的东西来自 `GET /v1/pending`。回答发到 `POST /v1/answer`，其他 action 发到 `POST /v1/act`。两者的记录方式与命令行 action 相同，由 `serve` 继续推进 run。需要确认的 action 要带 `"confirmed": true`。
+6. 客户端不轮询。它保持 `GET /v1/events` 打开，每个[事件](#events)指明一个发生了变化的对象，客户端再去重新读取它。带着 `Last-Event-ID` 重连后，服务器会补发它仍保留的事件，或发送 `reset`，客户端随后重新读取列表和已打开的 section。
+7. 设置走 `GET /v1/settings` 和 `POST /v1/settings`（[设置](#settings)），action 的文件走 `POST /v1/uploads`。失败时返回带 `error` 的 JSON 正文，状态码见[错误](#errors)表。
+
 ## `http` 段 {#the-http-section}
 
 | 键 | 类型 | 默认值 | 允许的值 | 何时生效 | 错误的值 |

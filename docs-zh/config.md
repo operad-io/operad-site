@@ -6,6 +6,21 @@ description: config.json 文件：home 在哪里、每个部分和每个键，�
 
 `config.json` 配置 `operad`。本页说明 home 在哪里、该文件的每个键，以及每个插件的设置部分。`http` 的键也在 [HTTP 页](http.md#the-http-section)中，`notify` 的键在 [notifications](notifications.md) 中，`mcp` 的键在 [MCP 页](mcp.md)中，`dev` 的仓库设置在 [dev 页](dev.md)中。
 
+## 为什么需要它 {#why-it-exists}
+
+operad 需要一个地方保存一个人的配置：安装了哪些插件、store 在哪里、开启了哪些接口。这个地方就是 home 目录及其 `config.json`。home 没有该文件时由 `operad init` 写入，之后可以手工修改，或用 `operad plugin enable` 和 `operad plugin disable` 修改。operad 不会重写已经有 `config.json` 的 home，对于 `operad init` 写入的文件，也没有任何隐藏的默认值。
+
+## 它如何工作 {#how-it-works}
+
+1. 命令先找到 home：设置了 `$OPERAD_HOME` 且不为空白时用它，否则用 `~/.operad`。它在那里读取 `config.json`；没有该文件就没有插件。
+2. kernel 只读取它指名的键：`plugins`、`store`、`http`、`notify`、`mcp` 和 `ask`。其中某一项的值有误，会以一行消息拒绝该文件；未知的键被忽略。
+3. 对 `plugins` 中每个未用 `"enabled": false` 禁用的条目，kernel 导入它的 `module`（未给出 `module` 时用键名），并用该插件自己的 schema 检查该条目的 `settings`。
+4. 导入失败、设置无效或声明了另一个名字的插件不会加载。其余的仍会加载，`serve` 和 `operad plugin check` 会打印说明原因的那一行。
+5. 被禁用的插件不会被导入；它已存储的对象保留。
+6. 一次性命令在下次运行时重新读取该文件。运行中的 `serve` 监视该文件，在新文件加载成功时 reload；加载失败时，旧配置继续运行，问题被记入日志。已经开始的 step 沿用它开始时的设置。
+
+各个键见[各个部分](#the-sections)，每个插件的设置见[插件设置](#plugin-settings)。
+
 ## home {#the-home}
 
 `operad` 把它的状态保存在一个目录中：设置了 `$OPERAD_HOME` 时用它，否则用 `~/.operad`。home 中有 `config.json`、store、secrets 目录、`access-user.json`、`keys.json`、`triggers.json`、`tui.json` 和 themes 目录。secret 文件的权限是 `0600`，位于权限为 `0700` 的目录内；本手册中没有任何地方会打印 secret。

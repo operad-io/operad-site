@@ -88,6 +88,12 @@
   <main class="tile paper doc" id="top">
 <h1 id="chats-and-bots">chat 和 bot</h1>
 <p>chat 是与 agent 的一段长对话。bot 由一个工作目录、一个默认 agent、skill、一个 speaker 和一个访问 profile 组成；bot 上的 chat 使用这些，仓库上的 chat 则做该仓库的工作。两者都是来自插件的对象：<code>chat</code> 拥有所有 chat，<code>dev</code> 在仓库上打开 chat，<code>bot</code> 在 bot 上打开 chat。</p>
+<h2 id="why-it-exists">为什么需要它<a class="anchor" href="#why-it-exists" aria-label="链接到本节">#</a></h2>
+<p>与 agent 合作通常是一段很长的交流，而不是一条命令。chat 把这段交流保存在 operad 里：你可以从命令行、终端 UI、iOS 或 Telegram 发消息，每一条都落在同一份 transcript 中。operad 自己保存消息的记录，所以 chat 的 history 不依赖 agent 的会话文件；会话被清理或压缩，也不会抹掉它。</p>
+<p>bot 用于与仓库无关的 chat。它把这类 chat 使用的工作目录、默认 agent、skill、speaker 和访问 profile 固定在一处，因此你可以保留几个权限不同的 bot，例如一个只读的。由于 chat 在每次回复时都会重新读取它的 bot，收紧 bot 的权限或加一个 skill 都不需要新建 chat。</p>
+<p>这两个插件刻意保持谨慎。仓库上的 chat 在你同意打开 worktree 之前是只读的。bot 不能自己修改自己的 skill、设置或 MCP server；它只能提出修改，在人批准之前磁盘上的内容不会改变。</p>
+<h2 id="how-it-works">它如何工作<a class="anchor" href="#how-it-works" aria-label="链接到本节">#</a></h2>
+<ol><li>chat 由一个插件打开：仓库上用 <code>dev:chat</code>，bot 上用 <code>bot:chat</code>。agent 在此时选定，之后不再更换；模型和 effort 之后可以用 <code>chat:model</code> 和 <code>chat:effort</code> 修改。</li><li><code>chat:send</code> 记录一条消息。消息是一个事件，来源为 <code>ios</code>、<code>telegram</code>、<code>cli</code>、<code>tui</code> 或 <code>other</code>，<code>chat</code> 插件自带的规则会为它启动 <code>chat:reply</code>（见 <a href="#chats">chat</a>）。</li><li><code>chat:reply</code> 从 chat 自己的记录中取出还没有被任何回复回答的消息，继续 agent 的会话，并记录回复。如果期间又来了新消息，就再来一轮，最多 20 轮。没有 <code>operad serve</code> 时消息只是被记录下来，等 <code>serve</code> 运行时再回答。</li><li>agent 工作期间，<code>transcript</code> 部分显示消息、工具调用和当前回复尚未完成的文本。</li><li>每次工具调用都会对照 chat 的访问 profile 检查（见<a href="../../../zh/docs/access/">访问</a>）。bot chat 的 profile 是默认 profile 加上 bot 自己的 <code>access</code> 设置；bot 的设置在每次回复时重新读取（见 <a href="#bots">bot</a>）。</li><li>仓库上的 chat 在 main clone 中以只读开始。写入，或不确定只读的命令，会变成 worktree 问题；答应后，<code>dev</code> 打开 <code>work/chat-&lt;id&gt;</code>，chat 此后在那里工作。</li><li>当 bot 提出一个 skill、一项设置修改或一个 MCP server（<code>operad bot skill</code>、<code>bot setting</code>、<code>bot mcp</code>）时，一个 <code>bot-proposal</code> 对象会在 Pending 中等待。<code>bot:approve</code> 使它生效，<code>bot:reject</code> 放弃它（见 <a href="#bot-objects-and-proposals">bot 对象和 proposal</a>）。</li><li><code>chat:close</code> 记录 <code>chat.closed</code>；transcript 仍然可读，<code>chat:send</code> 会被拒绝。</li></ol>
 <h2 id="chats">chat<a class="anchor" href="#chats" aria-label="链接到本节">#</a></h2>
 <p>chat 属于打开它的插件。<code>dev</code> 在仓库上打开 chat：</p>
 <pre data-ui><code class="lang-sh">operad dev:chat --repo operad --title &quot;The build&quot; [--agent pi]
@@ -120,7 +126,7 @@ operad show C-0001 --section transcript</code></pre>
       <a class="next" href="../notifications/"><small>下一页</small>通知</a>
     </nav>
   </main>
-  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#chats">chat</a></li><li class="l2"><a href="#bots">bot</a></li><li class="l3"><a href="#bot-objects-and-proposals">bot 对象和 proposal</a></li><li class="l3"><a href="#bot-commands">bot 命令</a></li></ul></nav></aside>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#why-it-exists">为什么需要它</a></li><li class="l2"><a href="#how-it-works">它如何工作</a></li><li class="l2"><a href="#chats">chat</a></li><li class="l2"><a href="#bots">bot</a></li><li class="l3"><a href="#bot-objects-and-proposals">bot 对象和 proposal</a></li><li class="l3"><a href="#bot-commands">bot 命令</a></li></ul></nav></aside>
 </div>
 
 <footer class="foot docs-foot">

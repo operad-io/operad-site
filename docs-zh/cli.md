@@ -6,6 +6,19 @@ description: operad 的每个命令和选项、它们的参数、输出和退出
 
 `operad help` 会打印命令表；本页说明每个命令做什么、接受哪些选项、打印什么。`dev` 插件的命令也在[它自己的页面](dev.md)；终端客户端在[它自己的页面](tui.md)，`pair` 在[应用页面](app.md)，`mcp` 在 [MCP 页面](mcp.md)，环境变量在[环境页面](environment.md)。
 
+## 为什么需要它 {#why-it-exists}
+
+`operad` 是在终端、脚本或 agent 里访问一个 home 的唯一入口：设置它、启动 `serve`、查看 pending、回答 pending，以及运行插件声明的命令。CLI 并不写死插件能做什么。插件声明自己的对象类型、action 和 verb，CLI 据此生成 `operad <plugin>:<action>` 及其选项，所以新插件无需改动 CLI 就能在命令行中使用。大多数命令直接读写 home，因此无论 `serve` 是否在运行都能工作；让 run 继续推进的是 `serve` 这个进程，CLI 自己不做这件事。
+
+## 它如何工作 {#how-it-works}
+
+1. 命令先找到 home：`$OPERAD_HOME`，否则是 `~/.operad`。它打开 store，并加载 `config.json` 中启用的插件。这一步不需要任何进程在运行。
+2. 它为这些词选择路由。内核命令（`pending`、`list`、`show`、`history`、`settings`、`plugin`、`secret`、`trigger`，以及[命令](#commands)表中的其余命令）由 CLI 处理。`<plugin>:<action> <id>` 对一个对象运行 action；`<plugin> <verb>` 运行该插件声明的 verb，只有一个插件声明它时可以只写 `<verb>`。见 [Actions](#actions)。
+3. 读取类命令打印插件产生的行和 section。输出是给终端看的文本，加 `--json` 则是 JSON；见[过滤列表](#filtering-a-list)和 [History section](#the-history-section)。
+4. 会改变状态的命令，例如 action 或对 pending 项的回答，会把记录写入 home。正在运行的 `serve` 读到记录后，继续 run 所请求的 step。没有 `serve` 时，回答会打印 `recorded; it runs when `operad serve` is running`。
+5. `operad serve` 在打开 store 或端口之前先取得 home 锁（`serve.lock`），所以同一个 home 的第二个 `serve` 会以退出码 `4` 退出，并且什么都不改。`operad serve stop` 向该锁中记录的进程发信号；见[停止 serve](#stopping-serve)。
+6. 每个命令都以某个[退出码](#exit-codes)结束，脚本因此能区分出错（`1`）、用法错误（`2`）和状态不允许（`3`）。
+
 ## 退出码 {#exit-codes}
 
 | 退出码 | 含义 |

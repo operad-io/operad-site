@@ -180,6 +180,21 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 
 ## `review.json` {#reviewjson}
 
+### 为什么需要 `review.json` {#why-reviewjson-exists}
+
+reviewer 会报告发现，每条发现有一个严重程度：`critical`、`major` 或 `minor`。当某条发现达到所选级别时，评审失败。`review.json` 是仓库写下这些内容的地方：三个级别各自的含义、reviewer 评级时遵循的额外规则，以及使评审失败的最低级别，可以针对某一个 flow，也可以针对全部 flow。它不改变 reviewer 被要求查看的内容，也不会启动评审；`dev` 插件在评审需要时读取它。没有该文件的仓库不会得到评级文本，级别由 `dev.reviewer.fixLevel`（默认 `major`）设定。
+
+### `review.json` 的评级如何工作 {#how-reviewjson-grading-works}
+
+1. review stage 用 `grading` 指定自己的条目；没有指定时，条目就是该 flow 自己的名字。该条目逐字段合并到 `default` 之上：`levels` 按级别合并，`rules` 整体替换。
+2. `dev` 读取仓库中的 `.operad/review.json` 并检查它。无效的文件会使 review step 失败，并指明该文件；不会去猜一个评级。
+3. 评审 prompt 带有一个 "Grading" 部分，逐字包含 `levels` 的文本和 `rules`，让 reviewer 用仓库自己的说法评级。
+4. reviewer 把报告写到 gate worktree 中 `.operad/review/` 下的一个新文件（见 [reviewer 在哪里写它的报告](#where-the-reviewer-writes-its-report)）。`dev` 检查该报告，并在 store 中保留自己的副本。
+5. 报告中的每条发现都有一个严重程度。修复级别是该 flow 条目的 `fixLevel`，没有则取 `default` 的，再没有则取 `dev.reviewer.fixLevel`。
+6. 当一条发现的严重程度等于或高于修复级别时，它才计数，顺序为 `critical`、`major`、`minor`。
+7. 没有计数发现的评审通过。有计数发现的评审失败，失败信息把每一条列为 `<file>:<line> <severity>: <summary>`；任务回到 worker 或进入等待，如[从需求到合并的路径](#how-a-task-goes-from-request-to-merge)中所述。
+8. 低于修复级别的发现不会使评审失败；它作为一条备注保留在任务上。
+
 `.operad/review.json` 保存 reviewer 读取的评级，以及使评审失败的最低级别的发现。它逐字段回退到 `default`。该文件在 review step 需要时读取；[评审一节](#reviewjson)说明 reviewer 如何使用它。
 
 <!-- schema: review.schema.json -->
@@ -235,6 +250,33 @@ field`。无效的文件会整个被拒绝，并指明该文件；review step �
 ## reviewer 在哪里写它的报告 {#where-the-reviewer-writes-its-report}
 
 reviewer 在任务的 gate worktree 中运行，而有些 agent（例如 radian）不能写到它们所运行的文件夹之外。因此每次 reviewer 调用都被告知，把报告写到该 worktree 内的 `.operad/review/<run>-attempt-<n>-review-<round>-try-<k>.json`，这个路径在每次调用中都是新的（`k` 是这一轮中在它之前的调用次数）。`dev` 在那里读取报告并检查它，在 store 的 `dev/reviews/<run>/` 下保留自己的副本；那份副本才是记录。`dev` 从不删除、截断或覆盖 review 工作区中的文件：它在 `.operad/review` 缺失时创建它，并拒绝通过链接或覆盖已有文件来写入，而是让评审失败并给出该路径。gate worktree 是可丢弃的，会被下一个 gate step 替换，报告随之被移除。没有写报告就结束的 reviewer 显示为 `could not write the report` 及其最后一条消息；没有通过检查的文件显示为 `wrote an invalid report`。
+
+## harness 插件：claude、codex、pi 和 radian {#the-harness-plugins-claude-codex-pi-and-radian}
+
+### 为什么需要它们 {#why-they-exist}
+
+operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`codex`、`pi` 和 `radian`。每个 agent 的登录、更新和额度都留在你自己的安装里：operad 不下载任何 agent，也不替你登录。harness 插件让 flow 能用同一种方式启动其中任何一个，即名为 `<plugin>/agent` 的 step，并读取同一种结果，不论运行的是哪个 agent。任务用哪个 agent 不由 harness 选择，而是由 flow 的 worker 和 pool 决定。
+
+### 它们如何工作 {#how-they-work}
+
+一个 `<plugin>/agent` step 依次：
+
+1. 在 step 的工作目录中启动你的 agent（`dev` 任务的工作目录是它的 worktree），启动方式见下面的说明。
+2. 把 prompt 交给它，模型取自 step 的 `--model` 参数（或插件的 `model` 设置，如果有的话）。
+3. 监视这次 run：当达到 wall time（`wallTimeSecs`）或静默上限（`stallSecs`），或 step 被停止时，run 结束。
+4. 在 agent 让 harness 看到调用的地方，按这次 run 拿到的 access profile 判断每次工具调用（见 [access](access.md)）。
+5. 把工具调用和消息写入 step 日志。
+6. 读取 agent 的最终结果，并以 `done`、`failed` 或 `interrupted` 结束。
+7. 把这次 run 的用量记录在 `usage` 中（见[用量和结束结果](#usage-and-end-results)）。
+
+这四个的不同之处：
+
+- `claude`：通过 Claude Agent SDK 运行你自己的 `claude`，使用 `claude` 已有的登录。一个 step 是一个前台回合。
+- `pi`：从 `PATH` 上的 `pi` 找到你安装的 pi 库，并在子进程中加载它。它需要 1.5.0 或更新版本的 pi。
+- `radian`：在该目录中运行 `radian exec`。radian 不能放行一次性权限，所以带有一次性权限的 profile 对它会被拒绝。它是 `dev.reviewer.use` 的默认值。
+- `codex`：启动你的 `codex-acp`，并通过 ACP 与它对话，使用你的 Codex 登录。在执行 `operad plugin enable codex` 之前它是关闭的。Codex 自己的 sandbox 保持开启，只允许写入 worktree，access profile 只会被问到离开 sandbox 的操作。订阅登录给不出费用，所以 `costMicros` 是 `null`。
+
+时间上限和按模型的上限见后面的几节。
 
 ## 限制同一模型的 run {#limiting-runs-of-one-model}
 
@@ -305,6 +347,24 @@ reviewer 在任务的 gate worktree 中运行，而有些 agent（例如 radian�
 - `claude`：claude 的 Bash 工具在每条命令之前 source 用户的 `~/.zshrc` 或 `~/.bashrc` 的一份快照，而 claude 没有受支持的开关（环境变量或设置）可以关闭该快照。`CLAUDE_CODE_SHELL` 只决定使用 zsh 还是 bash；快照是从主目录读取的。operad 不绕过这一点：如果用户的 rc 文件定义了会卡住（或改变输出）常用命令的 alias，应当在那里加以防护，例如在 alias 外面加 `[[ -o interactive ]]`，或者只在 agent 不读取的文件中定义它。上面的 `bashTimeoutSecs` 限制仍会在时间到后停止被卡住的命令。
 
 ## 在 flow 之间共享 agent：`pool` 插件 {#sharing-agents-between-flows-the-pool-plugin}
+
+### 为什么需要 pool 插件 {#why-the-pool-plugin-exists}
+
+agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex 登录服务于机器上的每个仓库。两个仓库各自允许同时三个 Claude run，就没有任何东西限制总数；而 harness 按模型的 `concurrency`（见[限制同一模型的 run](#limiting-runs-of-one-model)）限制的是一个模型，不是机器上同一个 harness 的 run 数。`pool` 插件给每个仓库和 flow 一组命名的 worker，并给 home 为每个 harness 定一个总上限。它不统计直接调用 harness step 的 run，也不由 `operad init` 安装。
+
+### pool 插件如何工作 {#how-the-pool-plugin-works}
+
+1. home 设置 `settings.harnesses`，即一个 harness 在所有仓库和 flow 中同时最多有多少个 run。
+2. flow 的设置定义 `workers`（一个 harness step、它的 `args` 和一个 `count`），并可以把它们分组为 `pools`；使用 `pool/agent` 的 flow（`dev` flow 就是）为每次 agent run 调用它。
+3. 调用方按顺序传入该 pool 的 worker，以及一个键 `<repository>/<pool>`，flow 的计数就记在这个键下。
+4. `pool/agent` 取第一个 worker：它在该键下自己的 `count` 有空位，且它的 harness 在 home 的上限也有空位。
+5. 占用的位置保存在 home 下的一个文件 `pool/places.json` 中，在锁文件的保护下修改，所以 home 里每个线程和进程看到的计数都相同。
+6. 没有 worker 有空位时，step 等待，并对每种原因各发送一次 `pool.waiting`：flow 的计数已满，或某个 harness 的 home 上限已满。
+7. 它用 params 以及该 worker 的 `args`、`wallTimeSecs` 和 `stallSecs` 运行该 worker 的 harness step。
+8. 它原样返回 harness 的结果，并在 `data` 中加上 `worker` 和 `harness`。
+9. 当模型不可用或其用量上限已到，或 harness 无法启动，并且该 worker 有 `fallback` 时，它只运行那个 worker 一次。超时从不触发 fallback。
+
+下面是各部分的参考。
 
 agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex 登录服务于机器上的每个仓库。`pool` 插件有一个 step，`pool/agent`，它选取一个有空位的 worker，运行该 worker 的 harness step，并把结果交回。使用它的 flow（`dev` flow 就是）描述自己的 worker；home 规定一个 harness 总共可以有多少个 run。
 

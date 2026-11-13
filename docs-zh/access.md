@@ -6,6 +6,21 @@ description: 访问 profile、默认 profile、access-user.json、always allow�
 
 当 agent 要运行的命令或要访问的路径不在其访问 profile 允许的范围内时，它会先询问。人用一个操作回答这个问题；`allow_always` 会记录这次调用，以后不再询问。profile 是护栏，不是边界：它匹配的是调用的文本，如果程序用别的方式构造路径或命令，就超出了它能看到的范围。
 
+## 为什么需要它 {#why-it-exists}
+
+agent 能运行 shell 命令、编辑文件，而你不会在每次调用运行前都去读它。访问 profile 让你事先写明：哪些路径和命令被拒绝，哪些要先问人，哪些可以直接运行。默认 profile 覆盖常见情形：凭据、operad home、破坏性命令，以及少数会改动本机的命令。
+
+profile 是护栏，不是边界。它匹配的是调用的文本，看不到程序运行起来之后做了什么，所以它并不声称能拦住一切。对于 `bash -c` 这类隐藏所运行内容的命令，它会询问或拒绝，而不是去猜。
+
+## 它如何工作 {#how-it-works}
+
+1. agent 运行工具之前，harness 把这次调用连同 profile 交给 `packages/access-match` 中的匹配器。一次调用由工具名、它的输入和工作目录组成。
+2. 匹配器按 **deny、然后 ask、然后 allow** 的顺序处理。匹配 `denyPaths` 或 `denyCommands` 的调用被拒绝。匹配 `askPaths` 或 `askCommands`，或在 `readOnly` 工作目录中写入的调用，会询问人。其余调用直接运行。见 [profile](#the-profile)。
+3. 路径会先规范化：`~` 视为用户的 home，相对路径接在调用的工作目录之后。命令会被拆成管道的各个部分，逐部分匹配。内联代码会被拒绝或询问，因为看不到它的内容。
+4. 对于 MCP 调用，只要有 `allowMcp` 字段，匹配器就会检查它：列出的工具直接运行，未列出的工具算作写入并先询问（见 [MCP 工具条目](#mcp-tool-entries)）。
+5. 问题交给人，人回答 `allow_once`、`allow_always` 或 `reject_once`。`allow_always` 把确切的命令或路径以及工作目录追加到 `access-user.json`，该目录中下一次相同的调用就不再询问直接放行（见 [`allow_always`](#allow_always)）。它不会解除 deny。
+6. 在[后台运行](#background-runs)中，没有人发起这次运行，所以 `alwaysAllow` 条目被忽略，每个问题都会重新询问。
+
 ## profile {#the-profile}
 
 profile 是一个 JSON 对象。bot 的 profile 是它的 [bot 设置](config.md#bot)与下面的默认值合并的结果；flow 的 profile 会交给声明要强制执行其字段的 step。匹配器按这个顺序处理：**deny 优先于 ask，ask 优先于 allow**。匹配 deny 的调用无论 ask 规则怎么写都会被拒绝；只匹配 ask 规则的调用会询问人；其余调用一律允许。

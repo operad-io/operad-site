@@ -89,6 +89,12 @@
 <h1 id="notifications">通知</h1>
 <p><code>config.json</code> 中的 <code>notify</code> 指定一个命令，当有事项开始等待人处理时，由 <code>serve</code> 运行它：</p>
 <pre data-ui><code class="lang-json">{ &quot;notify&quot;: { &quot;command&quot;: &quot;sh ~/.operad/notify.sh&quot;, &quot;on&quot;: [&quot;waiting&quot;] } }</code></pre>
+<h2 id="why-it-exists">为什么需要它<a class="anchor" href="#why-it-exists" aria-label="链接到本节">#</a></h2>
+<p>operad 中的 等待是需要人处理的对象：一个待 merge 的 task、review 发现的问题、失败的 gate。<code>serve</code> 会在你不在时持续运行，没有任何机制会在恰当的时刻让人去看 app 或 <code>operad pending</code>。<code>notify</code> 设置让你指定一条 shell 命令，在出现等待 时运行，这样你可以用已有的方式发送推送、消息或声音。</p>
+<p>operad 不提供投递服务。它运行你的命令，并通过环境变量传入详情，命令拿这些做什么由你来写。该命令也不是回答的途径：它只负责通知你，回答仍在 app 中或用命令完成。</p>
+<h2 id="how-it-works">它如何工作<a class="anchor" href="#how-it-works" aria-label="链接到本节">#</a></h2>
+<ol><li><code>operad serve</code> 在启动时以及新配置加载时从 <code>config.json</code> 读取 <code>notify</code>。<code>notify.command</code> 为 <code>null</code>，或 <code>notify.on</code> 中没有 <code>waiting</code> 时，什么都不会运行。</li><li>在其循环的每一轮（默认每秒一次），<code>serve</code> 检查活动的 run。对于每个状态为等待人的 run，它根据 run 和等待 生成一个标识，该标识指明 step 以及第几次到达该 step。</li><li>如果该等待 没有已记录的通知，<code>serve</code> 在 operad home 中用 <code>sh -c</code> 运行该命令，并设置 <code>OPERAD_ID</code>、<code>OPERAD_TITLE</code>、<code>OPERAD_REASON</code> 和 <code>OPERAD_LINK</code>。对象自己的插件会自动回答的等待 会被跳过；如果回答没有到来，之后的某一轮会重新考虑它。</li><li>命令最多可运行 30 秒。<code>serve</code> 的循环不会为它等待。</li><li>命令结束后，<code>serve</code> 记录该通知。失败或超时会连同退出码和输出的最后几行一起写入日志，同样会被记录，并且不会重试。该等待 不会再次通知，<code>serve</code> 重启之后也一样。</li><li>如果 <code>serve</code> 在命令仍在运行时被停止，命令会被取消且不记录任何内容，所以下一次 <code>serve</code> 会再次运行它。如果 <code>serve</code> 在命令结束之后、记录写入之前被杀掉，该等待 会多通知一次。</li><li>当你回答之后同一个 run 再次等待，那是一个新的等待，会产生新的通知。</li></ol>
+<h2 id="settings-and-variables">设置和变量<a class="anchor" href="#settings-and-variables" aria-label="链接到本节">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>notify</code></td><td>object</td><td><code>{ &quot;command&quot;: null, &quot;on&quot;: [&quot;waiting&quot;] }</code></td><td>一个带有下列键的对象；缺少该部分表示通知关闭</td><td><code>operad serve</code> 启动时；新配置加载时重新加载</td><td>被拒绝：<code>notify: must be an object</code></td></tr><tr><td><code>notify.command</code></td><td>string or <code>null</code></td><td><code>null</code></td><td>一个非空的 shell 命令行，在 operad home 中用 <code>sh -c</code> 运行；<code>null</code> 关闭通知</td><td><code>serve</code> 启动或重新加载时；该命令对每次新的等待运行</td><td>被拒绝：<code>notify.command: must be a non-empty string or null</code></td></tr><tr><td><code>notify.on</code></td><td>array of strings</td><td><code>[&quot;waiting&quot;]</code></td><td>只有 <code>waiting</code>：一个对象现在在等待人处理</td><td><code>serve</code> 启动或重新加载时；它决定哪些新的等待会通知</td><td>被拒绝：<code>notify.on: must be an array of &quot;waiting&quot;</code>；重复的 <code>waiting</code> 只保留一个</td></tr></tbody></table></div>
 <p><code>notify</code> 内的未知键会被忽略；只读取上面的键。该命令对每个事项和每次等待运行一次，环境中有以下变量：</p>
 <div class="table-wrap"><table><thead><tr><th>Variable</th><th>Value</th></tr></thead><tbody><tr><td><code>OPERAD_ID</code></td><td>对象，格式为 <code>&lt;type&gt;:&lt;id&gt;</code>。</td></tr><tr><td><code>OPERAD_TITLE</code></td><td>对象的标题；读不到标题时为它的 id。</td></tr><tr><td><code>OPERAD_REASON</code></td><td>它在等待什么：<code>operad pending</code> 中显示的提示。</td></tr><tr><td><code>OPERAD_LINK</code></td><td>对象链接，<code>operad://objects/&lt;id&gt;</code>。</td></tr></tbody></table></div>
@@ -110,7 +116,7 @@ curl -s \
       <a class="next" href="../checks/"><small>下一页</small>检查</a>
     </nav>
   </main>
-  
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#why-it-exists">为什么需要它</a></li><li class="l2"><a href="#how-it-works">它如何工作</a></li><li class="l2"><a href="#settings-and-variables">设置和变量</a></li></ul></nav></aside>
 </div>
 
 <footer class="foot docs-foot">

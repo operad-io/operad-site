@@ -4,7 +4,23 @@ description: 终端客户端：主题、实时更新、状态与退出。
 
 # 终端客户端 {#the-terminal-client}
 
-`operad tui` 是同一个 `/v1` 接口的终端客户端。在全新的 `~/.operad` 下，它不需要任何其他东西：不用改 config，不用在另一个终端里运行 `operad serve`，也不用 token。它从不打开 store，也从不加载插件。它按下面的方式找到或启动服务器：
+`operad tui` 是同一个 `/v1` 接口的终端客户端。在全新的 `~/.operad` 下，它不需要任何其他东西：不用改 config，不用在另一个终端里运行 `operad serve`，也不用 token。它从不打开 store，也从不加载插件。
+
+## 为什么需要它 {#why-it-exists}
+
+等你处理的事和正在进行的 run 都由 `operad serve` 持有。终端客户端让你不离开终端就能看到并处理它们：哪些 pending、哪些在运行、对象的各个部分和 history，以及对象提供的 action。它只通过 `/v1` 接口与 `serve` 通信，这与手机 app 用的是同一个接口，所以它显示的内容与 app 相同，也不认识任何插件。没有服务器在运行时，它会替你启动一个，所以第一次使用不需要任何设置。它自己从不打开 store，只通过运行对象提供的 action 来做出改动。
+
+## 它如何工作 {#how-it-works}
+
+1. `operad tui` 先找到地址和 token：给出 `--url` 和 `--token` 就用它们，否则用 `config.json` 中的 `http.listen` 和 `http.port`，以及 `$OPERAD_HOME/secrets/http.json` 中的 token。
+2. 它向该地址请求 `/v1/types`。如果没有 `serve` 响应，且没有 `serve` 持有此 home，它会启动 `operad serve`（除非给出 `--no-start`），并最多等待 15 秒。细节见下面的列表。
+3. 它从 `--theme` 或 `$OPERAD_HOME/tui.json` 读取主题和 layout（见 [tui.json 文件](#the-tuijson-file)和[主题](#themes)），并从 `GET /v1/keys` 读取按键绑定，其中包含你的 [`keys.json`](#keysjson)。
+4. 它绘制各个列表：先是 Pending 和 Running，然后是每个插件的顶层对象类型各一个 tab，数据来自 `GET /v1/pending`、`GET /v1/running` 和 `GET /v1/objects`。`enter` 用 `GET /v1/objects/<id>` 打开一行：该行、各个 section tab，以及该 section 的 Markdown。
+5. 它读取 `GET /v1/events`。某个对象的事件会让每个已打开的列表重新获取该对象；`reset` 会重新获取所有已打开的内容。服务器不可达时，它保留最后的列表并重试（见[实时更新、状态与退出](#live-updates-states-and-leaving)）。
+6. 按键或 `:` 面板中的条目用 `POST /v1/act` 运行 action；action 需要时，会先要求输入 note 或确认。被拒绝的 action 会在页脚显示服务器的消息。
+7. `q` 或 Ctrl-C 恢复终端并退出。由 TUI 启动的 `serve` 继续运行；用 `operad serve stop` 停止它。
+
+它按下面的方式找到或启动服务器：
 
 - 给出 `--url` 和 `--token` 时，它们优先于 home。给出 `--url` 时，从不启动任何东西。
 - 没有 `--url` 时，URL 是 `http://<address>:<port>`，其中 address 取自 `config.json` 中 `http.listen` 的第一项，port 取自 `http.port`；没有 `http` 部分时是 `http://127.0.0.1:7480`。

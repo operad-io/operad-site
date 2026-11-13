@@ -6,6 +6,20 @@ description: 手机 app：配对、tab、通知、chat、附件、model 和 effo
 
 app 通过 [HTTP 接口](http.md)连到 `operad serve`，显示的对象、pending 项和 history 与命令行相同。它不认识任何插件：插件的类型提供一个 tab、一个对象页和若干 action，由 app 渲染它们。
 
+## 为什么需要它 {#why-it-exists}
+
+operad 里的工作经常在等一个人：run 提出的问题、待批准的 review、chat 的回复。app 让你在手机上看到并回答，而不必守在运行 `operad serve` 的那台机器前。它显示的对象、pending 项和 history 与命令行相同，并且可以回答问题、运行 action、修改设置，以及与 agent 进行 chat。它不认识任何插件，所以你添加的插件无需 app 发新版就会出现在 app 里。本仓库只有服务器一侧，app 本身不在其中；本页只描述 app 通过接口所做的事。
+
+## 它如何工作 {#how-it-works}
+
+1. `operad serve` 监听 `http.listen` 中的地址，对它的每个请求都需要保存在 `$OPERAD_HOME/secrets/http.json` 中的 bearer token。
+2. `operad pair` 把该地址和 token 打印成二维码，内容是 `operad://pair?url=<url>&token=<token>`。你在 app 里扫描它，app 之后就用它们连到这个 `serve`。见[配对 app](#pairing-the-app)。
+3. app 读取 `GET /v1/types` 得知有哪些 tab，再用 `GET /v1/pending`、`GET /v1/running` 和 `GET /v1/objects` 填充它们。见 [Tab](#tabs)。
+4. 打开一行会调用 `GET /v1/objects/<id>`：该行、它的各个 section，以及它现在提供的 action。app 绘制插件返回的内容。
+5. `GET /v1/events` 让各个界面保持最新。有东西开始等人时，app 会收到推送；点开它会打开 `OPERAD_LINK`，即一个 `operad://objects/<id>` 链接。见 [Pending 与通知](#pending-and-notifications)。
+6. 回答和 action 以 `POST /v1/answer` 和 `POST /v1/act` 发回，文件用 `POST /v1/uploads`，设置用 `POST /v1/settings`；每一项是否生效由服务器判断，不生效时 app 会显示原因。
+7. 如果你用 `operad http token rotate` 轮换了 token，下一个请求会得到 `401`，app 会提示 token 已被轮换。
+
 ## 配对 app {#pairing-the-app}
 
 `operad pair` 显示 app 连到这个 `serve` 所需的信息：

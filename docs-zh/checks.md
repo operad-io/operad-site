@@ -6,6 +6,20 @@ description: 检查一项变更，以及复现不稳定的测试。
 
 一项变更在合并之前如何被检查，以及不稳定的测试如何复现。同样的检查也是 `dev` 插件任务的 gate（见[它的页面](dev.md)）。
 
+## 为什么需要它 {#why-it-exists}
+
+一项变更无论由人还是由 `dev` 任务做出，都应该以同样的方式检查，而且检查的代价不应超过这项变更所需。每次小改动都运行整个套件很慢，所以 `check-changed.sh` 只测试变更可能影响的包，完整的 `verify.sh` 则在 integration 时、merge 之前再运行一次。`remote-check.sh` 可以在另一台机器上的若干 slot 之一中运行检查，使同时运行的检查不共用一个工作树。只在 rerun 时才通过的测试不会被忽略：本页把它视为 bug，并给出复现它的办法 `stress.sh`。规则是不提高它的超时，也不在测试内部加入重试。
+
+## 它如何工作 {#how-it-works}
+
+1. 检查就是一条 shell 行。`bash scripts/verify.sh` 按 lockfile 安装、做类型检查，并用 `scripts/run-tests.sh` 运行每个包的测试。`bash scripts/check-changed.sh` 做同样的安装和类型检查，然后选出变更涉及的包以及加载了它们的包，打印所选结果（`all`、`none` 或名称），只测试这些包。
+2. `remote-check.sh` 在本机运行该行；设置了 `OPERAD_CHECK_HOST` 时，则把 `HEAD` 作为 git bundle 复制到该主机，占用一个 slot，检出该 commit 并在那里运行该行。输出和退出码原样返回，就是该行自己的输出和退出码。
+3. `dev` 任务针对它的 commit 运行 `gate.commands` 中的各行。某一行失败时，`dev` 用 `failed.match` 找出失败的测试名，并用 `failed.rerun` 逐个单独再运行，该命令使用 `remote-check.sh` 的 `--` 形式。见 [gate 及其设置](dev.md)。
+4. 只在 rerun 时才通过的测试会被记录。这样的通过达到 `check.flakyTask` 次（默认 2）之后，`dev` 会提出一个修复它的任务，附带来自 `failed.rule` 的规则和来自 `failed.stress` 的命令。
+5. 该任务在修复之前和之后各运行一次 `bash scripts/stress.sh`，见[复现不稳定的测试](#reproducing-a-flaky-test)：`--rerun-each N` 次运行，可选 `--load K` 个繁忙进程，并给出通过与失败的汇总。
+
+该行运行之前发生的失败，以及如何处理，见[检查失败时](#when-a-check-fails)。主机变量见[检查一项变更](#checking-a-change)中的表格。
+
 ## 检查一项变更 {#checking-a-change}
 
 ```sh

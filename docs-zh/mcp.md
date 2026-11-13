@@ -8,6 +8,28 @@ description: 面向 lead agent 的 MCP server：设置、传输、Claude Code ch
 
 该 server 实现 MCP JSON-RPC 2.0 传输，协议版本为 `2025-06-18`。除 `@operad-io/engine` 外，它没有运行时依赖。
 
+## 为什么需要它 {#why-it-exists}
+
+Claude Code 这类 lead agent 需要查看 operad 中的内容（对象、pending 项、运行中的项、history），有时还要对它们采取行动。没有这个 server，它只能运行 `operad` 命令并解析输出，或者自己调用 `/v1` 接口。该 server 以带类型的工具提供同样的数据和同样的 lead action，所以它读到和做到的与命令行和 app 一致。
+
+它刻意受到限制。它从不启动 step，也不做 owner 的决定：只有 `operad serve` 运行 step，只有列入 `mcp.actions` 的 action 才能从这里运行。可选的 channel 让 lead 在有变化时（例如一个等待打开）收到通知，而不必轮询；它是单向的，也不转发权限提示。
+
+## 它如何工作 {#how-it-works}
+
+1. 客户端根据 `.mcp.json` 中的条目启动 `operad mcp`（[设置](#setting-it-up)）。server 读取 `$OPERAD_HOME` 指定的 home，未设置时为 `~/.operad`，并在 stdio 上使用 JSON-RPC（[传输](#transport)）。
+2. 客户端发送 `initialize`，然后调用工具。只读工具（`types`、`list`、`show`、`section`、`pending`、`running`、`history`）返回与对应命令和 `/v1` 调用相同的数据（[工具](#tools)）。
+3. `command` 像 `operad <plugin> <verb>` 一样运行插件 verb，`input` 代替 stdin。`act` 通过与 `POST /v1/act` 相同的路径运行 action，并记录 actor `{ "via": "mcp", "id": "lead" }`。
+4. `act` 运行任何内容之前，server 会检查 `config.json` 中的 [`mcp.actions`](#lead-permissions)。未列出的 action 会被拒绝，消息说明由 owner 运行。要求确认的 action 还需要 `mcp.confirmActions`。`show` 把被拒绝的 action 列在 `ownerActions` 下，这样 lead 可以告诉你该运行什么。
+5. `answer` 回复一个正在等待的 run 的 pending 项。当每个选项同时也是该对象上的 action 时，回答通过该 action 运行，因此同样的允许列表和确认要求适用。
+6. 格式错误的请求得到 JSON-RPC 错误；来自数据本身的拒绝则作为普通结果返回，带 `"isError": true`（[错误](#errors)）。
+
+使用 `operad mcp --claude-channel` 时，server 还会发送 `notifications/claude/channel`：
+
+1. 启动时它读取所涉对象类型的当前行，并且不为它们发送任何内容。
+2. 之后它同时监视对象和 flow，因为打开的等待或启动的 step 不会改变任何对象。其他进程所做的变更由轮询发现。
+3. 客户端发送 `notifications/initialized` 之后，它为每个打开的等待、每个到达最终状态的对象、以及每个在没有等待或结束的情况下 `loopAfter` 次到达同一状态的对象发送一行内容。发送哪些由 `mcp.channel.notify` 设定（[Claude Code channel](#claude-code-channel)）。
+4. 客户端随后用 `show`、`section`、`pending` 或 `history` 读取详情。
+
 ## 设置 {#setting-it-up}
 
 `operad mcp` 在 stdio 上为 lead agent 运行一个 MCP server。它读取与各命令相同的对象、pending 项、运行中的项、section 和 history，并运行插件 verb 和 `config.json` 允许的 lead action。它从不启动 step，也不做 owner 的决定；只有 `operad serve` 运行 step，未列入 `mcp.actions` 的 action 仍留在命令行或 app 中。协议、工具和错误映射见下文；stdout 只承载 JSON-RPC，日志写到 stderr。
