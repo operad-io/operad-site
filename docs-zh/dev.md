@@ -190,7 +190,7 @@ reviewer 会报告发现，每条发现有一个严重程度：`critical`、`maj
 2. `dev` 读取仓库中的 `.operad/review.json` 并检查它。无效的文件会使 review step 失败，并指明该文件；不会去猜一个评级。
 3. 评审 prompt 带有一个 "Grading" 部分，逐字包含 `levels` 的文本和 `rules`，让 reviewer 用仓库自己的说法评级。
 4. reviewer 把报告写到 gate worktree 中 `.operad/review/` 下的一个新文件（见 [reviewer 在哪里写它的报告](#where-the-reviewer-writes-its-report)）。`dev` 检查该报告，并在 store 中保留自己的副本。
-5. 报告中的每条发现都有一个严重程度。修复级别是该 flow 条目的 `fixLevel`，没有则取 `default` 的，再没有则取 `dev.reviewer.fixLevel`。
+5. 报告中的每条发现都有一个严重程度。修复级别是该 flow 条目的 `fixLevel`，没有则取 `default` 的。两者都没有设置时，取 `dev.reviewer.fixLevel` 与 `review.json` 中为任何 flow 设置的每一个 `fixLevel` 之中最严格的那个，这样评审的评级绝不会比仓库在任何地方提出的要求更宽松。
 6. 当一条发现的严重程度等于或高于修复级别时，它才计数，顺序为 `critical`、`major`、`minor`。
 7. 没有计数发现的评审通过。有计数发现的评审失败，失败信息把每一条列为 `<file>:<line> <severity>: <summary>`；任务回到 worker 或进入等待，如[从需求到合并的路径](#how-a-task-goes-from-request-to-merge)中所述。
 8. 低于修复级别的发现不会使评审失败；它作为一条备注保留在任务上。
