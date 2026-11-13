@@ -67,7 +67,7 @@ pre code { font-size: inherit; }
 /* top row */
 .top { grid-template-columns: 60px 1fr auto; margin-bottom: var(--gap); }
 .top .tile { display: flex; align-items: center; padding: 0 22px; height: 60px; margin: 0; }
-.logo { background: var(--dark); color: var(--on-dark); justify-content: center; padding: 0 !important; }
+.logo { background: #292d65; color: var(--on-dark); justify-content: center; padding: 0 !important; }
 .links { gap: 28px; }
 .links a { padding: 8px 0; margin: 0; white-space: nowrap; }
 .links > * + * { margin-top: 0; }
