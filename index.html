@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>operad: an open orchestration layer for coding agents</title>
+<meta name="description" content="operad runs coding agents through verified flows: plan, work, verify, review, merge. Three words in the kernel (flow, pending, history), everything else a plugin.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="#top" aria-label="operad, top of page">
+    <svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg>
+  </a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="#loop">The loop</a>
+    <a href="#kernel">Kernel</a>
+    <a href="#clients">Clients</a>
+    <a href="#install">Install</a>
+  </nav>
+  <a class="tile go" href="#install">Run it</a>
+</header>
+
+<main id="top">
+
+<section class="hero board" aria-label="operad">
+  <div class="tile paper name">
+    <p class="state s3">An open orchestration layer for coding agents.</p>
+    <h1>operad</h1>
+  </div>
+
+  <div class="tile term shutter" aria-label="Output of operad pending">
+    <div class="shutter-in">
+<pre data-ui><code>$ operad pending
+4c1e9a02  dev  confirm
+  Rotate the http token
+  waiting: ready to merge
+  actions: dev:merge, dev:reject, dev:rework,
+           dev:reverify, dev:cancel
+
+$ operad dev:merge T-0022-token-rotate --yes</code></pre>
+    </div>
+  </div>
+
+  <div class="tile soft phone-tile" aria-label="The pending list in the iPhone app">
+    <div class="phone" data-ui>
+      <div class="ph-head"><b>Pending</b><span>3</span></div>
+      <ul>
+        <li><i class="mk acc" aria-hidden="true"></i><div><b>Rotate the http token</b><small>T-0022-token-rotate</small></div><em>ready to merge</em></li>
+        <li><i class="mk acc" aria-hidden="true"></i><div><b>Stop serve cleanly</b><small>T-0023-serve-stop</small></div><em>review findings</em></li>
+        <li><i class="mk acc" aria-hidden="true"></i><div><b>Channel for Claude Code</b><small>T-0024-mcp-channel</small></div><em>work did nothing</em></li>
+        <li><i class="mk run" aria-hidden="true"></i><div><b>Theme files for the TUI</b><small>T-0021-tui-themes</small></div><em>running</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pair">
+    <div class="tile dark"><p class="s3">A kernel with three words: flow, pending, history.</p></div>
+    <div class="tile acc"><p class="s3">Everything else is a plugin.</p></div>
+  </div>
+</section>
+
+<section id="loop" class="band" aria-labelledby="loop-h">
+  <h2 id="loop-h">Plan, work, verify, review, merge.</h2>
+  <div class="bar board" data-ui>
+    <div class="seg c1 reveal"><p class="s3">You ask</p><p class="clause">Describe a request with <code>operad plan add</code>, split it into tasks with <code>operad task add</code>, then confirm the plan.</p></div>
+    <div class="seg c2 reveal"><p class="s3">An agent works</p><p class="clause">Each task gets its own git worktree and a brief. The worker commits there.</p></div>
+    <div class="seg c3 reveal"><p class="s3">Checks run</p><p class="clause">The commands you list in <code>.operad/dev.json</code> run against the commit.</p></div>
+    <div class="seg c4 reveal"><p class="s3">An agent reviews</p><p class="clause">A reviewer reads the change and writes a report. Findings send the task back for rework, up to a limit.</p></div>
+    <div class="seg c5 reveal"><p class="s3">You merge</p><p class="clause">The task waits in pending. Merge lands it on main; reject sends it back with your note.</p></div>
+  </div>
+
+  <div class="board workers">
+    <div class="tile paper reveal">
+      <p class="s3">Any agent can work, and any agent can review.</p>
+      <p>claude, pi and radian are the workers the repository has plugins for. Each is a plugin you enable; pick them per repository, one for the worker and another for the reviewer.</p>
+    </div>
+    <div class="tile dark reveal">
+<pre data-ui><code>// .operad/dev.json
+{
+  "worker":   { "use": "claude/agent",
+                "args": ["--model", "sonnet"] },
+  "reviewer": { "use": "pi/agent",
+                "args": ["--thinking", "medium"] }
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<section id="kernel" class="band" aria-labelledby="kernel-h">
+  <div class="board mosaic">
+    <div class="tile paper m-head reveal"><h2 id="kernel-h">The kernel is three words.</h2></div>
+    <div class="tile acc m-flow reveal">
+      <p class="s3">flow</p>
+      <p>The path a piece of work follows: steps, a wait for you, a wait for time, an end. <code>operad flows</code> lists the ones that are loaded.</p>
+    </div>
+    <div class="tile paper m-pending reveal">
+      <p class="s3">pending</p>
+      <p>Everything that waits for you, in one list, with the actions each item offers. The terminal, Claude Code and the app all read the same list.</p>
+    </div>
+    <div class="tile dark m-history reveal">
+<pre data-ui><code>## dev run · started 21:38
+**2026-11-08**
+- 21:38:41  worktree  ready  1s
+- 21:38:44  work  done  41m
+- 22:20:01  review  fail  58s
+- 22:21:01  work  attempt 2  after fail
+- 22:22:02  confirm  reverify  8m
+- 22:30:02  you chose merge</code></pre>
+      <p class="s3">history</p>
+    </div>
+    <div class="tile soft m-fig reveal">
+      <p class="fig">3</p>
+      <p>words you learn. Every other word belongs to a plugin, so you never meet the ones you don't use.</p>
+    </div>
+    <div class="tile paper m-list reveal">
+      <ul class="plug">
+        <li><b>dev</b> plan, task, review, merge</li>
+        <li><b>chat</b> a long conversation with an agent</li>
+        <li><b>bot</b> a directory, an agent, skills</li>
+        <li><b>pool</b> shared limits for each agent</li>
+      </ul>
+    </div>
+    <div class="tile dark m-write reveal">
+      <p class="s3">Plugins are TypeScript files, loaded without a build step, small enough for an agent to write on the spot.</p>
+    </div>
+    <div class="tile acc m-check reveal">
+      <p class="s3"><code>operad plugin check</code> type-checks one.</p>
+    </div>
+  </div>
+</section>
+
+<section id="board" class="band" aria-labelledby="board-h">
+  <h2 id="board-h">What waits for you is one list.</h2>
+  <p class="sub">Example tasks. Choose a row; merge or reject the ones waiting.</p>
+  <ul class="rows board" id="rows" data-ui>
+    <li class="row-wrap" data-state="merged">
+      <button class="row" aria-expanded="false"><span class="r-name">Add the http interface</span><span class="r-f">T-0019-http-api</span><span class="r-f">claude</span><span class="r-st st-ok">merged</span></button>
+      <div class="r-open"><p>Landed on main. The task's worktree and branch are cleaned up.</p><pre><code>- 20:12:09  merge  done  4s
+- 20:12:14  cleanup  done  1s</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="checking">
+      <button class="row" aria-expanded="false"><span class="r-name">Pair the app with a QR code</span><span class="r-f">T-0020-pair-qr</span><span class="r-f">pi</span><span class="r-st st-run">checking</span></button>
+      <div class="r-open"><p>The checks are running on the worker's commit.</p><pre><code>- 21:40:31  verify  running  2m</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="running">
+      <button class="row" aria-expanded="false"><span class="r-name">Theme files for the TUI</span><span class="r-f">T-0021-tui-themes</span><span class="r-f">radian</span><span class="r-st st-run">running</span></button>
+      <div class="r-open"><p>A worker is committing in the task's worktree.</p><pre><code>- 21:38:44  work  running  11m</code></pre></div>
+    </li>
+    <li class="row-wrap is-open" data-state="ready" id="live">
+      <button class="row" aria-expanded="true"><span class="r-name">Rotate the http token</span><span class="r-f">T-0022-token-rotate</span><span class="r-f">claude</span><span class="r-st st-acc" id="live-st">ready to merge</span></button>
+      <div class="r-open">
+        <p>Verify passed and the reviewer found nothing that blocks. It waits for you.</p>
+        <pre><code id="live-log">- 22:20:01  verify  pass  8m
+- 22:28:40  review  pass  58s
+- 22:28:41  waiting: ready to merge</code></pre>
+        <div class="acts" id="live-acts"><button class="btn" data-do="merge">Merge</button><button class="btn ghost" data-do="reject">Reject</button></div>
+      </div>
+    </li>
+    <li class="row-wrap" data-state="findings">
+      <button class="row" aria-expanded="false"><span class="r-name">Stop serve cleanly</span><span class="r-f">T-0023-serve-stop</span><span class="r-f">pi</span><span class="r-st st-acc">review findings</span></button>
+      <div class="r-open"><p>The reviewer's findings wait for your choice: rework, reject or merge anyway.</p><pre><code>- 22:01:12  review  fail  58s</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="nothing">
+      <button class="row" aria-expanded="false"><span class="r-name">Channel for Claude Code</span><span class="r-f">T-0024-mcp-channel</span><span class="r-f">claude</span><span class="r-st st-acc">work did nothing</span></button>
+      <div class="r-open"><p>The worker added no commit. Send it back with a note, or cancel.</p><pre><code>- 22:03:50  work  done  3m</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="blocked">
+      <button class="row" aria-expanded="false"><span class="r-name">Share agent limits between flows</span><span class="r-f">T-0025-pool-caps</span><span class="r-f">pi</span><span class="r-st st-weak">blocked</span></button>
+      <div class="r-open"><p>Waiting for T-0022-token-rotate to merge.</p></div>
+    </li>
+  </ul>
+</section>
+
+<section id="clients" class="band" aria-labelledby="clients-h">
+  <h2 id="clients-h">Terminal, Claude Code, iPhone.</h2>
+  <div class="board clients">
+    <div class="tile dark c-tui reveal">
+      <p class="s3">The terminal client, <code>operad tui</code>.</p>
+      <p>It finds <code>operad serve</code> or starts it, lists what is pending and running, and opens an object beside the list. <code>a</code> runs the main action, <code>:</code> opens the palette, <code>q</code> quits.</p>
+    </div>
+    <div class="tile paper c-mcp reveal">
+      <p class="s3">Claude Code, over MCP.</p>
+      <p><code>operad mcp</code> is an MCP server on stdio. A lead agent reads pending, running and history, runs plugin commands, and takes the actions <code>config.json</code> allows. It never takes your decision: merge stays with you.</p>
+<pre data-ui><code>// .mcp.json
+{ "mcpServers": {
+    "operad": { "command": "operad",
+                "args": ["mcp"] } } }</code></pre>
+    </div>
+    <div class="tile acc c-app reveal">
+      <p class="s3">The iPhone app.</p>
+      <p>Run <code>operad pair</code> and scan the code. The app shows pending, running, each object's sections and its history, and asks before it merges. The server listens on this machine unless you give it a LAN or Tailscale address.</p>
+    </div>
+    <div class="tile soft c-pair reveal">
+<pre data-ui><code>$ operad pair
+url http://192.168.1.20:7480
+token &lt;the token&gt;
+
+Scan this in the operad app:</code></pre>
+    </div>
+  </div>
+</section>
+
+<section id="install" class="band" aria-labelledby="install-h">
+  <h2 id="install-h">Run it on your own machine.</h2>
+  <div class="board cta">
+    <div class="tile soft edge reveal" aria-hidden="true"></div>
+    <div class="tile acc cta-main reveal">
+      <p class="s3">operad is in development. This is how its own repository runs on it.</p>
+<pre data-ui><code>operad init
+operad repo add .
+operad plan add --slug dogfood --title "Run operad on operad" &lt; request.md
+operad task add --plan P-0001-dogfood --slug switch --title "Switch" &lt; task.md
+operad dev:confirm P-0001-dogfood
+operad serve
+
+operad pending
+operad dev:merge T-0001-switch --yes</code></pre>
+      <p>You need git, a repository with a remote, the Bun runtime, and one of claude, pi or radian on your <code>PATH</code>. The commands and <code>config.json</code> keys are in <code>docs/manual.md</code> in the repository.</p>
+    </div>
+    <div class="tile dark edge reveal" aria-hidden="true"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="mark" aria-hidden="true">
+    <span style="--h:100%;--c:var(--acc)">o</span>
+    <span style="--h:78%;--c:var(--dark)">p</span>
+    <span style="--h:92%;--c:var(--deep)">e</span>
+    <span style="--h:64%;--c:var(--light)">r</span>
+    <span style="--h:86%;--c:var(--acc)">a</span>
+    <span style="--h:100%;--c:var(--dark)">d</span>
+  </div>
+  <div class="board foot-cols">
+    <ul class="tile-less">
+      <li><a href="#loop">The loop</a></li>
+      <li><a href="#kernel">Kernel</a></li>
+      <li><a href="#board">Pending</a></li>
+    </ul>
+    <ul class="tile-less">
+      <li><a href="#clients">Terminal</a></li>
+      <li><a href="#clients">Claude Code</a></li>
+      <li><a href="#clients">iPhone</a></li>
+    </ul>
+    <p class="fnote">operad.io<br>An open orchestration layer for coding agents.</p>
+  </div>
+</footer>
+
+<script src="board.js" defer></script>
+</body>
+</html>
