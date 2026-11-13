@@ -162,8 +162,8 @@ $ operad history T-0022-token-rotate
     <div class="tile dark reveal">
 <pre data-ui><code>// .operad/dev.json
 {
-  "worker":   { "use": "claude/agent",
-                "args": ["--model", "sonnet"] },
+  "workers":  { "claude": { "use": "claude/agent",
+                            "args": ["--model", "sonnet"] } },
   "reviewer": { "use": "pi/agent",
                 "args": ["--thinking", "medium"] }
 }</code></pre>
