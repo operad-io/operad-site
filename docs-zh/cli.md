@@ -231,7 +231,7 @@ is running`，前提是没有 `serve` 持有该 home。
 
 ## dev 命令 {#dev-commands}
 
-`operad dev repo add <path> [--name <name>]` 注册一个目录，该目录必须是带有 remote 的 git work tree。当目录没有 remote 时，它不写入任何内容，并打印原因。`operad dev repo list` 打印 `no repositories`，或每个仓库一行 `<name>  <path>`。`operad dev repo remove <name>` 打印 `removed <name>`。
+`operad dev repo add <path> [--name <name>]` 注册一个目录，该目录必须是带有 remote 的 git work tree。对于不是 git work tree 根目录、没有 remote 或已经注册过的目录，它会拒绝，不写入任何内容，并打印原因。仓库没有 `.operad/dev.json` 时，它会写入一个。`operad init` 会对每个已注册的仓库检查其 remote 能否连通、主分支是否已发布；它只以只读方式询问 remote，不会推送任何内容。`operad dev repo list` 打印 `no repositories`，或每个仓库一行 `<name>  <path>`。`operad dev repo remove <name>` 打印 `removed <name>`。如果仓库有未完成的任务，它会拒绝（`repository "<name>" has <n> open task(s)`）；请先 merge 或取消这些任务。
 
 `operad dev plan add --slug <slug> --title <title> [--concurrency <n>]
 [--flow <name>] [--repo <name>]` 创建一个计划并打印它的 id。

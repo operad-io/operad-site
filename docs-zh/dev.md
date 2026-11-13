@@ -117,7 +117,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.reviewer.first.args` | array of strings | `reviewer.args` | 传给该 step 的参数 | 首次评审开始时 | 拒绝：`reviewer.first.args: must be an array of strings` |
 | `dev.reviewer.first.timeoutSecs` | number | `reviewer.timeoutSecs` | 大于 `0` 秒 | 首次评审开始时 | 拒绝：`reviewer.first.timeoutSecs: must be a positive number of seconds` |
 | `dev.reviewer.first.stallSecs` | number | `reviewer.stallSecs` | 大于 `0` 秒 | 首次评审开始时 | 拒绝：`reviewer.first.stallSecs: must be a positive number of seconds` |
-| `dev.reviewer.fallback` | object | 未设置 | `use` 和可选的 `args`；主 reviewer 不可用时使用 | 评审发现主 reviewer 不可用时 | 拒绝：`reviewer.fallback: must be an object`、`reviewer.fallback.use: must be a non-empty string` 或 `reviewer.fallback.<key>: is not a fallback setting` |
+| `dev.reviewer.fallback` | object 或 object 列表 | 未设置 | `use` 和可选的 `args`，或按顺序尝试的一组这样的对象；主 reviewer 不可用时使用。某个 fallback 不可用或没有写出报告时，运行列表中的下一个 | 评审发现主 reviewer 不可用时 | 拒绝：`reviewer.fallback: must be an object`、`reviewer.fallback: must not be an empty list`、`reviewer.fallback.use: must be a non-empty string`（列表时为 `reviewer.fallback[1].use`）或 `reviewer.fallback.<key>: is not a fallback setting` |
 | `dev.reviewer.fallback.use` | string | 必填 | 一个 step 名称 | fallback 评审开始时 | 拒绝：`reviewer.fallback.use: must be a non-empty string` |
 | `dev.reviewer.fallback.args` | array of strings | `[]` | 传给该 step 的参数 | fallback 评审开始时 | 拒绝：`reviewer.fallback.args: must be an array of strings` |
 | `dev.reviewer.timeoutSecs` | number | `600` | 大于 `0` 秒 | 评审开始时 | 拒绝：`reviewer.timeoutSecs: must be a positive number of seconds` |
@@ -247,6 +247,28 @@ field`。无效的文件会整个被拒绝，并指明该文件；review step �
 
 `dev` 命令从所在目录、从 `--repo <name>`，或从限定 id（例如 `operad/T-0045-shell-hang-guards`）确定它的仓库；在仓库之外，裸 id 只在只有一个仓库拥有它时有效。规则见 [packages/dev/REFERENCE.md](../../packages/dev/REFERENCE.md#where-a-command-runs-and-ids)。
 
+## 当 reviewer 不可用时 {#when-the-reviewer-is-unavailable}
+
+harness 报告模型错误（`unavailable` 或 `usage_limit`），或其错误输出中有 `HTTP 429` 的评审，不会丢掉这次 attempt。`.operad/dev.json` 设置了 `reviewer.fallback` 时，同一轮评审会在它上面运行一次。没有 fallback，或 fallback 也不可用时，任务等待 `reviewer.retrySecs`（默认 120 秒；之后每次等待加倍，最多 30 分钟），然后再次运行评审。它不会启动 worker，也不计入 rework。一轮最多使用一次 fallback，所以重试时若发现主 reviewer 又不可用，就继续等待，而不是第二次调用 fallback。
+
+一轮最多等待 6 次（按默认值约 90 分钟）。之后任务带着说明 `review did not finish (model unavailable)` 等待人处理。如果评审在三小时的 step 时间内放不下再一次运行，也会这样处理，说明为 `review did not finish (out of time)`。等待期间不提供 merge、reject、rework 和 reverify。超时的评审会用相同的参数重试一次；第二次超时则带着说明 `review timed out twice` 等待人处理。评审期间发生崩溃时，会恢复同一轮，并复用 reviewer 已经给出的答案，所以 fallback 不会被调用两次。`operad history <task>` 会写出每一轮由哪个模型评审，以及为什么发生了 fallback 或重试。
+
+## 当任务在等待或卡住时 {#when-a-task-waits-or-is-stuck}
+
+1. `operad pending`：它在等你吗？需要人处理的任务会一直留在那里，直到你 merge、reject 或取消它。
+2. `operad running`：run 还在推进吗？没有存活进程的 run 会在 `serve` 的下一次轮询中被重新启动。
+3. `operad show <task>`：阅读它的各节，尤其是 `changes` 和各次 attempt，了解所处的阶段和最后记录的失败。`operad show <task> --section brief` 显示 brief。
+4. `operad history <task>`（或用 `operad history <run id>` 查看某一次 run）：读最后几行，了解 step 和原因。失败的检查或评审会写出命令、日志文件和发现。
+5. 如果 `serve` 没有运行，用 `operad serve` 重新启动它。不要杀掉 run 进程：被中断的 run 会在下一次轮询中恢复，没有被中断的 run 则不会被动。
+6. 如果 `operad init` 报告了失败的检查，修好它指出的问题，再运行一次。
+7. 一个任务反复在同一个 step 失败，会在多次 attempt 之后停下来等人处理。`operad dev:cancel <task> --yes` 会让它彻底停止；`operad dev:reject <task> --note "what to change"` 会把它退回给 worker。
+8. 因检查失败，或因 worker 什么也没返回或失败（模型 429，检查被外部杀掉）而等待的任务：
+   - `operad dev:reverify <task>` 先把当前的 main 合并到分支，然后在没有 worker 的情况下再次运行检查和评审。失败是不稳定造成的时候用它。
+   - `operad dev:rework <task> --note "what to do"` 会把你自己的 `## Rework <n> (lead)` 写进 brief，并再次运行 worker。两者都不计入 `maxAutoRework`。
+9. `operad dev:pause <task> --yes` 让任务停一段时间：它保留自己的分支、提交和 attempt，不占用位置，也不会被启动。`operad dev:resume <task> --yes` 让它变为 ready；下次启动时在它的分支上继续。
+
+操作需要 `--yes`，因为这是你的决定；在终端中不带 `--yes` 时，它会先询问。不要手动删除 `.operad-worktrees` 下的任何内容：合并之后，清理会移除任务的 worktree 和分支。如果清理报告了失败，任务仍然已经合并；用该行指出的命令移除遗留的内容。
+
 ## reviewer 在哪里写它的报告 {#where-the-reviewer-writes-its-report}
 
 reviewer 在任务的 gate worktree 中运行，而有些 agent（例如 radian）不能写到它们所运行的文件夹之外。因此每次 reviewer 调用都被告知，把报告写到该 worktree 内的 `.operad/review/<run>-attempt-<n>-review-<round>-try-<k>.json`，这个路径在每次调用中都是新的（`k` 是这一轮中在它之前的调用次数）。`dev` 在那里读取报告并检查它，在 store 的 `dev/reviews/<run>/` 下保留自己的副本；那份副本才是记录。`dev` 从不删除、截断或覆盖 review 工作区中的文件：它在 `.operad/review` 缺失时创建它，并拒绝通过链接或覆盖已有文件来写入，而是让评审失败并给出该路径。gate worktree 是可丢弃的，会被下一个 gate step 替换，报告随之被移除。没有写报告就结束的 reviewer 显示为 `could not write the report` 及其最后一条消息；没有通过检查的文件显示为 `wrote an invalid report`。
@@ -325,6 +347,95 @@ operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`
 | `codex.stallSecs` | number，1 或更大 | `600` | 没有打开的 tool call 时，一次 run 可以沉默多久。图像生成算作打开的 tool call。 |
 | `codex.concurrency` | object，模型名到 integer | `{}` | 上面描述的限制。 |
 | `codex.concurrency.<name>` | integer，1 或更大 | 无 | 模型 `<name>` 的 run 可以同时进行多少个。 |
+
+### `pi` 的设置 {#the-pi-settings}
+
+`pi` 运行 pi coding agent，而不是 radian。它不在默认 config 里：用 `operad plugin enable pi` 启用它。
+
+**安装 pi。** operad 自己不带 pi：它使用你安装的那一个，用 bun（`bun add -g @earendil-works/pi-coding-agent`）或 npm（`npm i -g @earendil-works/pi-coding-agent`）安装，使 `pi` 在 `PATH` 上。它接受的最旧的 pi 是 `1.5.0`；你的版本更旧时，`operad plugin check` 会同时指出两个版本，没有 `pi` 时则失败。要使用另一个 pi，把 `config.json` 的 `pi` 一节中的 `command` 设为它的路径。是 shell 包装脚本的 `pi` 会被拒绝，并指出它的路径；请把 `command` 指向该包的 bin（`.../@earendil-works/pi-coding-agent/dist/bundle/cli.js`）。
+
+**登录 pi。** 运行 `pi`，输入 `/login`，然后选择 provider。operad 使用你自己的 pi 登录，即凭据文件 `~/.pi/agent/auth.json`（`authPath` 可指定另一个文件）。operad 从不读取该文件，只把路径交给 pi。pi 和 operad 可能同时刷新同一个登录；pi 会为此给文件加锁。
+
+**用哪个模型。** 模型是 pi 自己的默认值，即 `pi` 为你启动时用的那个，除非 `model` 设置（`provider/id`）指名了一个。`thinkingLevel` 的作用方式相同。pi 的自定义模型在 `~/.pi/agent/models.json`（`modelsPath`）中。
+
+**session 在哪里。** session 文件在 `~/.operad/harness/pi/sessions` 中，与你自己的 pi session 分开，所以 `pi --continue` 看不到它们。
+
+| 设置 | 类型 | 默认值 | 作用 |
+|---|---|---|---|
+| `pi.model` | string `provider/id` | pi 自己的默认值 | 模型；step 的 `--model` 优先。 |
+| `pi.models` | `provider/id` 的列表 | `pi --list-models` 打印的每个模型 | chat 可以选用的模型。 |
+| `pi.thinkingLevel` | `off`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max` | pi 自己的默认值 | 推理级别；step 的 `--thinking` 优先。 |
+| `pi.command` | string | `pi` | `PATH` 上的命令名或一个路径；它必须通向已安装的 `1.5.0` 或更新版本的 `@earendil-works/pi-coding-agent`。 |
+| `pi.authPath` | string | `~/.pi/agent/auth.json` | pi 的凭据文件。 |
+| `pi.modelsPath` | string | `~/.pi/agent/models.json` | pi 的自定义模型文件。 |
+| `pi.wallTimeSecs` | number，1 到 28500 | `3600` | 一次 run 最长可以用多久。 |
+| `pi.stallSecs` | number，1 或更大 | `600` | 没有打开的 tool call 时，一次 run 可以沉默多久。 |
+| `pi.bashTimeoutSecs` | integer，1 或更大 | `1800` | 一次 bash 调用最长可以运行多久；见 [pi 下的长命令](#long-commands-under-pi)。 |
+| `pi.concurrency` | object，模型名到 integer | `{}` | 上面描述的限制。 |
+
+**切换 worker 和 reviewer。** 在 `.operad/dev.json` 中把某个 worker（或 `reviewer`）的 `use` 设为 `pi/agent`。pi 只从 `args` 中读取 `--model <provider/id>` 和 `--thinking <level>`，其中的标志优先于含义相同的设置。任何其他条目都会使该 step 以 `invalid_args` 失败。例如，worker 用一个模型，reviewer 用另一个：
+
+```json
+{
+  "worker":   { "use": "pi/agent", "args": ["--model", "opencode-go/deepseek-v4.1-flash"] },
+  "reviewer": { "use": "pi/agent", "args": ["--model", "openai-codex/gpt-5.6-terra", "--thinking", "medium"] }
+}
+```
+
+当它们的 harness 是 pi 时，`reviewer.fallback.args` 和 `reviewer.firstArgs` 遵循同样的规则。
+
+**切换回去。** 把 `use` 改回 `"radian/agent"` 并带上它的 `args`（`--provider`、`--model`）。不需要停用 `pi`；`operad plugin disable pi` 会移除它。
+
+该 step 的结果和模型错误的规则见 [pi 参考](../../packages/harness/pi/REFERENCE.md)。
+
+### `claude` 的设置 {#the-claude-settings}
+
+`claude` 运行 `claude`，即 Anthropic 的 coding agent，而不是 radian。它不在默认 config 里：用 `operad plugin enable claude` 启用它。
+
+在 workspace checkout 之外，启用时会把 `@operad-io/harness-claude` 和它需要的 Agent SDK 客户端安装到 `~/.operad/plugins` 下的一个 Bun 项目中，跳过 SDK 的可选平台包。它不会安装 `claude` 本身。第一次启用需要能访问 npm registry 的网络。当该包没有安装时，`operad plugin check claude` 会指出安装它的命令。
+
+**安装 claude 并登录。** operad 自己不带 claude：它使用你安装的那一个（见 https://code.claude.com），所以 `PATH` 上必须有 `claude` 命令。运行一次 `claude` 并登录。operad 使用你自己的登录，不传入任何自己的凭据。`operad plugin check` 会运行 `claude --version` 和 `claude auth status`，并报告 claude 版本、Agent SDK 版本和登录方式（例如 `claude.ai (max)`）。没有 `claude`、claude 比 `2.1.319` 更旧或没有登录时，它会失败并说明该怎么做。SDK 版本只做报告。要使用另一个 claude，把 `config.json` 的 `claude` 一节中的 `command` 设为它的路径。
+
+**没有浏览器的机器。** 在可以登录的机器上运行 `claude setup-token`；它会打印一个代表你的 claude 订阅的 token，有效期一年。在没有浏览器的机器上，把它作为 `CLAUDE_CODE_OAUTH_TOKEN` 放进 `operad serve` 的环境中。operad 把整个环境原样交给 claude，从不读取、记录或保存该 token。把它当作密码对待，不要放进 `config.json`。
+
+**谁的订阅。** operad 在你自己的机器上用你自己的 claude 登录运行你自己的工具。除非得到批准，Anthropic 不允许产品向其他人提供 claude.ai 登录或它的速率限制，所以分发给他人的 operad 副本不会提供 claude.ai 登录，而会使用 API key。
+
+**计费的是哪个凭据。** claude 会先使用环境中的 `ANTHROPIC_API_KEY`，然后才使用你的订阅登录。因为 operad 把整个环境交给 claude，在 `operad serve` 的环境中设置的 `ANTHROPIC_API_KEY` 会让 claude 对该 key 计费，而不是对订阅计费。要检查一次 run 用了哪一个，读 step 日志开头的 `session` 行：订阅登录时 `apiKeySource` 是 `none`，设置了该变量时是 `ANTHROPIC_API_KEY`（其他值指的是其他 key 来源）。`operad plugin check` 也会报告登录方式；请在与 `operad serve` 相同的环境中运行它。step 记录的成本，订阅登录时是 `estimated`（按 API 费率算出的 token 价格，不是你被收取的费用），key 时是 `exact`。
+
+**用哪个模型。** 模型是 claude 自己的默认值，除非 `model` 设置或 step 的 `--model` 指名了一个（claude 接受的名称，例如 `opus` 或 `sonnet`）。
+
+**设置、参数和环境。** 它们是 `config.json` 的 `claude` 一节、step 的 `args` 以及环境的输入。完整的表见 [claude 参考](../../packages/harness/claude/REFERENCE.md)。
+
+| 输入 | 类型 | 默认值 | 值 |
+|---|---|---|---|
+| `command`（设置） | string | `claude` | `PATH` 上的命令名或一个路径 |
+| `model`（设置） | string | 未设置：claude 的默认值 | claude 接受的模型名 |
+| `effort`（设置） | string | 未设置：claude 的默认值 | `low`, `medium`, `high`, `xhigh`, `max` |
+| `maxTurns`（设置） | integer | 未设置：没有限制 | 1 或更大 |
+| `budgetUsd`（设置） | number | 未设置：没有限制 | 0.01 或更大，单位为美元；用于 API key 登录 |
+| `bashTimeoutSecs`（设置） | integer | `1800` | 1 或更大；一次 Bash 调用最长可以运行多少秒；没有任何东西在后台运行 |
+| `wallTimeSecs`（设置） | number | `3600` | 1 到 28500；一次 run 最长可以用多久 |
+| `stallSecs`（设置） | number | `600` | 1 或更大；没有打开的 tool call 时，一次 run 可以沉默多久 |
+| `concurrency`（设置） | object | `{}` | 模型名到 1 或更大的数量 |
+| `--model <name>`（参数） | string | `model` 设置 | 优先于设置 |
+| `--effort <level>`（参数） | string | `effort` 设置 | `low`, `medium`, `high`, `xhigh`, `max`；优先于设置 |
+| `CLAUDE_CODE_OAUTH_TOKEN`（环境） | string | 未设置 | `claude setup-token` 打印的 token |
+| `ANTHROPIC_API_KEY`（环境） | string | 未设置 | 一个 API key；设置后 claude 对它计费 |
+
+**session 在哪里。** claude 把它的 session 文件保存在 `~/.claude/projects/` 下，放在以工作目录命名的文件夹中，所以它们与你自己的 `claude` 使用的是同一批文件。step 记录的 `sessionId` 就是 session 的 id；在同一个工作目录中运行 `claude --resume <id>`，可以手动继续该 session。
+
+**claude 被告知什么。** claude 在没有你的设置、hooks、插件、skills 或 `CLAUDE.md` 文件，也没有它的自动记忆的情况下运行。access profile（`denyPaths`、`denyCommands` 和一次性权限）会应用到它的 tool call 上，`askCommands` 匹配的调用会先询问人。
+
+**切换 worker 和 reviewer。** 在 `.operad/dev.json` 中把某个 worker（或 `reviewer`）的 `use` 设为 `claude/agent`。claude 只从 `args` 中读取 `--model <name>` 和 `--effort <level>`；任何其他条目都会使该 step 以 `invalid_args` 失败。例如：
+
+```json
+{
+  "worker":   { "use": "claude/agent", "args": ["--model", "sonnet"] },
+  "reviewer": { "use": "claude/agent", "args": ["--model", "opus", "--effort", "medium"] }
+}
+```
+
+**切换回去。** 把 `use` 改回 `"radian/agent"` 并带上它的 `args`。不需要停用 `claude`；`operad plugin disable claude` 会移除它。
 
 ### claude 下的长命令 {#long-commands-under-claude}
 
