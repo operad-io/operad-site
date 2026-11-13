@@ -42,7 +42,11 @@
   actions: dev:merge, dev:reject, dev:rework,
            dev:reverify, dev:cancel
 
-$ operad dev:merge T-0022-token-rotate --yes</code></pre>
+$ operad dev:merge T-0022-token-rotate --yes
+
+$ operad history T-0022-token-rotate
+- 22:28:40  review  pass  58s
+- 22:30:02  you chose merge</code></pre>
     </div>
   </div>
 
@@ -100,7 +104,7 @@ $ operad dev:merge T-0022-token-rotate --yes</code></pre>
     </div>
     <div class="tile paper m-pending reveal">
       <p class="s3">pending</p>
-      <p>Everything that waits for you, in one list, with the actions each item offers. The terminal, Claude Code and the app all read the same list.</p>
+      <p>Everything that waits for you, in one list, with the actions each item offers.</p>
     </div>
     <div class="tile dark m-history reveal">
 <pre data-ui><code>## dev run · started 21:38
@@ -129,7 +133,8 @@ $ operad dev:merge T-0022-token-rotate --yes</code></pre>
       <p class="s3">Plugins are TypeScript files, loaded without a build step, small enough for an agent to write on the spot.</p>
     </div>
     <div class="tile acc m-check reveal">
-      <p class="s3"><code>operad plugin check</code> type-checks one.</p>
+      <p class="s3">A plugin is type-checked before it runs.</p>
+      <p><code>operad plugin check</code></p>
     </div>
   </div>
 </section>
@@ -180,12 +185,13 @@ $ operad dev:merge T-0022-token-rotate --yes</code></pre>
   <h2 id="clients-h">Terminal, Claude Code, iPhone.</h2>
   <div class="board clients">
     <div class="tile dark c-tui reveal">
-      <p class="s3">The terminal client, <code>operad tui</code>.</p>
-      <p>It finds <code>operad serve</code> or starts it, lists what is pending and running, and opens an object beside the list. <code>a</code> runs the main action, <code>:</code> opens the palette, <code>q</code> quits.</p>
+      <p class="s3">The terminal client.</p>
+      <p><code>operad tui</code> finds <code>operad serve</code> or starts it, lists what is pending and running, and opens an object beside the list. <code>a</code> runs the main action, <code>:</code> opens the palette, <code>q</code> quits.</p>
     </div>
     <div class="tile paper c-mcp reveal">
       <p class="s3">Claude Code, over MCP.</p>
       <p><code>operad mcp</code> is an MCP server on stdio. A lead agent reads pending, running and history, runs plugin commands, and takes the actions <code>config.json</code> allows. It never takes your decision: merge stays with you.</p>
+      <p>Its tools are <code>list</code>, <code>show</code>, <code>section</code>, <code>pending</code>, <code>answer</code>, <code>running</code>, <code>history</code>, <code>command</code> and <code>act</code>.</p>
 <pre data-ui><code>// .mcp.json
 { "mcpServers": {
     "operad": { "command": "operad",
@@ -194,8 +200,6 @@ $ operad dev:merge T-0022-token-rotate --yes</code></pre>
     <div class="tile acc c-app reveal">
       <p class="s3">The iPhone app.</p>
       <p>Run <code>operad pair</code> and scan the code. The app shows pending, running, each object's sections and its history, and asks before it merges. The server listens on this machine unless you give it a LAN or Tailscale address.</p>
-    </div>
-    <div class="tile soft c-pair reveal">
 <pre data-ui><code>$ operad pair
 url http://192.168.1.20:7480
 token &lt;the token&gt;
@@ -231,9 +235,9 @@ operad dev:merge T-0001-switch --yes</code></pre>
 <footer class="foot">
   <div class="mark" aria-hidden="true">
     <span style="--h:100%;--c:var(--acc)">o</span>
-    <span style="--h:78%;--c:var(--dark)">p</span>
+    <span style="--h:84%;--c:var(--dark)">p</span>
     <span style="--h:92%;--c:var(--deep)">e</span>
-    <span style="--h:64%;--c:var(--light)">r</span>
+    <span style="--h:82%;--c:var(--light)">r</span>
     <span style="--h:86%;--c:var(--acc)">a</span>
     <span style="--h:100%;--c:var(--dark)">d</span>
   </div>
