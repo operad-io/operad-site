@@ -6,7 +6,7 @@ description: 开始使用 operad：创建 home，启动 serve，打开客户端�
 
 `operad init` 创建 home 并检查插件。`operad serve` 为该 home 运行循环；`operad tui` 打开[终端客户端](tui.md)，并在没有 `serve` 应答时启动它。`operad pending` 列出等待人处理的事项，`operad list <type>` 列出对象。
 
-要让你的编码 agent 为某个仓库编写 `.operad/dev.json`，请使用 [the setup prompt](setup-prompt.md)。在仓库上的完整工作流（一个计划、若干任务、由人负责 merge）见 [Running operad on operad](../dogfood.md)。设置见 [config.json](config.md)，命令见[命令行](cli.md)，出问题时怎么办见 [troubleshooting](troubleshooting.md)。
+要让你的编码 agent 为某个仓库编写 `.operad/dev.json`，请使用 [the setup prompt](setup-prompt.md)。设置见 [config.json](config.md)，命令见[命令行](cli.md)，出问题时怎么办见 [troubleshooting](troubleshooting.md)。
 
 ## 非 JavaScript 的仓库 {#a-repository-that-is-not-javascript}
 

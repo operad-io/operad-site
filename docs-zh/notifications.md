@@ -25,7 +25,7 @@ description: notify 命令：何时运行、能拿到什么，以及一个示例
 | `OPERAD_REASON` | 它在等待什么：`operad pending` 中显示的提示。 |
 | `OPERAD_LINK` | 对象链接，`operad://objects/<id>`。 |
 
-对于 `dev` 插件的任务，提示会写明它停在哪个 step；具体原因（`ready to merge`、`review findings` 等）在该任务的 `dev.waiting` 通知中，[Running operad on operad](../dogfood.md) 列出了这些通知。
+对于 `dev` 插件的任务，提示会写明它停在哪个 step；具体原因在该任务的 `dev.waiting` 通知中：`ready to merge`、`review findings`、`gate failed`、`rework limit`、`review timed out twice`、`review did not finish`、`work did nothing`、`work failed`、`run stopped during <step>`、`conflict`、`no verified commit`、`merge refused` 或 `dependency cancelled`。
 
 token 从不在环境中。一个命令最多运行 30 秒，之后会被停止。任何不为 0 的退出、超时，或无法启动的命令，都会由 `serve` 连同退出码和输出的最后几行记入日志，并且不会重试。
 

@@ -88,7 +88,7 @@
   <main class="tile paper doc" id="top">
 <h1 id="quickstart">快速上手</h1>
 <p><code>operad init</code> 创建 home 并检查插件。<code>operad serve</code> 为该 home 运行循环；<code>operad tui</code> 打开<a href="../../../zh/docs/tui/">终端客户端</a>，并在没有 <code>serve</code> 应答时启动它。<code>operad pending</code> 列出等待人处理的事项，<code>operad list &lt;type&gt;</code> 列出对象。</p>
-<p>要让你的编码 agent 为某个仓库编写 <code>.operad/dev.json</code>，请使用 <a href="../../../zh/docs/setup-prompt/">the setup prompt</a>。在仓库上的完整工作流（一个计划、若干任务、由人负责 merge）见 <a href="https://github.com/operad-io/operad/blob/main/docs/dogfood.md">Running operad on operad</a>。设置见 <a href="../../../zh/docs/config/">config.json</a>，命令见<a href="../../../zh/docs/cli/">命令行</a>，出问题时怎么办见 <a href="../../../zh/docs/troubleshooting/">troubleshooting</a>。</p>
+<p>要让你的编码 agent 为某个仓库编写 <code>.operad/dev.json</code>，请使用 <a href="../../../zh/docs/setup-prompt/">the setup prompt</a>。设置见 <a href="../../../zh/docs/config/">config.json</a>，命令见<a href="../../../zh/docs/cli/">命令行</a>，出问题时怎么办见 <a href="../../../zh/docs/troubleshooting/">troubleshooting</a>。</p>
 <h2 id="a-repository-that-is-not-javascript">非 JavaScript 的仓库<a class="anchor" href="#a-repository-that-is-not-javascript" aria-label="链接到本节">#</a></h2>
 <p>仓库不需要 <code>package.json</code>、不需要 <code>scripts/</code> 目录，也不需要任何特定语言的工具。它的 <code>.operad/dev.json</code> 写明 dev 运行的 shell 命令行，dev 不使用仓库的其他任何内容。下面是一个小型 shell 项目：<code>sh check.sh</code> 运行它的测试，失败的测试会打印 <code>FAIL: &lt;name&gt;</code>，<code>sh check.sh &lt;name&gt;</code> 运行单个测试。</p>
 <pre data-ui><code class="lang-json">{

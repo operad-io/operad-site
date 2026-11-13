@@ -4,7 +4,7 @@ description: dev.json 和 dev 插件：它的命令、reviewer、worker 与 pool
 
 # dev.json 和 dev 插件 {#devjson-and-the-dev-plugin}
 
-`dev` 插件在仓库上运行计划和任务。它的项目设置在 `.operad/dev.json` 中；它的命令及作用见下面各节。完整的工作流见 [Running operad on operad](../dogfood.md)；客户端可以修改的设置见 [config.json](config.md#settings-from-a-client)。
+`dev` 插件在仓库上运行计划和任务。它的项目设置在 `.operad/dev.json` 中；它的命令及作用见下面各节。客户端可以修改的设置见 [config.json](config.md#settings-from-a-client)。
 
 ## 一个任务如何从需求走到合并 {#how-a-task-goes-from-request-to-merge}
 
@@ -25,7 +25,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 7. **等你处理。** 通过检查和评审的任务会在 `operad pending` 里以 `ready to merge` 等待，可用的操作有 `dev:merge`、`dev:reject`、`dev:rework`、`dev:reverify` 和 `dev:cancel`。需要人介入的情况下任务也会等待：评审有意见、gate 失败、达到返工上限、worker 没有新增提交。
 8. **合并和清理。** `dev:merge` 把验证过的提交放到 main 上（按 `integration.style`），运行 `integration.keyCommands`，然后推送到 remote。接着清理会删除任务的 worktree 和分支。同一个仓库的任务一次只集成一个。如果 remote 拒绝推送，什么都不会写入，任务带着一条说明继续等待。
 
-每一步都有记录：`operad history <task>` 显示运行了什么、检查或评审发现了什么、你选了什么。进程已死的运行会从它最后记录的步骤重新开始。计划可以在没有你的情况下走得更远：`operad dev:auto <plan> --level run` 会在检查通过后合并已评审的工作，`autoDefault` 为新计划设置这一点。
+每一步都有记录：`operad history <task>` 显示运行了什么、检查或评审发现了什么、你选了什么。进程已死的运行会从它最后记录的步骤重新开始。计划可以在没有你的情况下走得更远：`operad dev:auto <plan> --level merge` 会在检查通过后合并已评审的工作，`--level run` 不需要你就会启动计划里的任务，但每个任务在合并时仍然会停下来等你，`--level off` 则在每次启动和合并时都等你。`autoDefault` 为新计划设置这个级别。
 
 各部分的键见下面几节：[仓库和它的 worker](#the-repository-and-its-workers)、[gate 和它的检查](#the-gate-and-its-checks)、[开发、评审、集成和清理](#work-review-integration-and-cleanup)，以及 [flow 和它们的 stage](#flows-and-their-stages)。
 
@@ -272,7 +272,7 @@ reviewer 在任务的 gate worktree 中运行，而有些 agent（例如 radian�
 
 ### `codex` 的设置 {#the-codex-settings}
 
-`codex` 通过 `codex-acp` 运行用户自己的 Codex；设置方法见 `docs/dogfood.md`。它的设置在 `config.json` 的 `codex` 一节中：
+`codex` 通过 `codex-acp` 运行用户自己的 Codex。它不在默认 config 里：用 `operad plugin enable codex` 启用它。operad 自己不带 `codex-acp`：把 `codex-acp`（`bun add -g @agentclientprotocol/codex-acp`）和 `bun` 放进 `PATH`，再运行一次 `codex login`；operad 使用你自己的 Codex 登录。`operad plugin check codex` 会报告版本和登录方式，并在 `codex-acp` 无法启动或 Codex 没有登录时说明该怎么做。它的设置在 `config.json` 的 `codex` 一节中：
 
 | 设置 | 类型 | 默认值 | 作用 |
 |---|---|---|---|

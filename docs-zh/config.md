@@ -247,7 +247,7 @@ bot chat 使用它的 bot 的 `speaker`。见 [Chats and bots](chats-and-bots.md
 
 ### `codex` {#codex}
 
-`codex` 插件通过 `codex-acp` 运行用户自己的 Codex。它的 step 是 `codex/agent`；设置方法见 `docs/dogfood.md`，这些设置也列在 [dev 页](dev.md#the-codex-settings)中。
+`codex` 插件通过 `codex-acp` 运行用户自己的 Codex。它的 step 是 `codex/agent`；设置方法和这些设置见 [dev 页](dev.md#the-codex-settings)。
 
 | Key | Type | Default | Allowed values | When it takes effect | Wrong value |
 |---|---|---|---|---|---|

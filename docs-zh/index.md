@@ -24,4 +24,4 @@ operad 是面向编码 agent 的开放编排层。它让 agent（radian、Claude
 - [environment](environment.md)：每个环境变量。
 - [troubleshooting](troubleshooting.md)：出问题时怎么办。
 
-完整的工作流见 [Running operad on operad](../dogfood.md)。插件作者从 [Writing a plugin](../plugins/index.md) 开始。
+插件作者从 [Writing a plugin](../plugins/index.md) 开始。
