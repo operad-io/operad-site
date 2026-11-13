@@ -26,6 +26,11 @@
     if (!open) { li.classList.add('is-open'); b.setAttribute('aria-expanded', 'true'); }
   });
 
+  var zh = /^zh/i.test(document.documentElement.lang);
+  var T = zh
+    ? { merged: '已合并', rejected: '已退回', chose: '你选择了 ', back: '：退回给 worker', mergedMsg: '已合并到 main，接下来清理。', backMsg: '已退回给 worker。' }
+    : { merged: 'merged', rejected: 'rejected', chose: 'you chose ', back: ': sent back to the worker', mergedMsg: 'Merged to main. Cleanup runs next.', backMsg: 'Back with the worker.' };
+
   var live = document.getElementById('live');
   var acts = document.getElementById('live-acts');
   if (!live || !acts) return;
@@ -34,11 +39,11 @@
     if (!d) return;
     var st = document.getElementById('live-st'), log = document.getElementById('live-log');
     var merged = d === 'merge';
-    st.textContent = merged ? 'merged' : 'rejected';
+    st.textContent = merged ? T.merged : T.rejected;
     st.className = 'r-st ' + (merged ? 'st-ok' : 'st-weak');
     var t = new Date().toTimeString().slice(0, 8);
-    log.textContent += '\n- ' + t + '  you chose ' + d + (merged ? '' : ': sent back to the worker');
-    acts.innerHTML = '<span>' + (merged ? 'Merged to main. Cleanup runs next.' : 'Back with the worker.') + '</span>';
+    log.textContent += '\n- ' + t + '  ' + T.chose + d + (merged ? '' : T.back);
+    acts.innerHTML = '<span>' + (merged ? T.mergedMsg : T.backMsg) + '</span>';
     live.setAttribute('data-state', merged ? 'done' : 'rejected');
   });
 })();

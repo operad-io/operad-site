@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>operad：编码 agent 的开放编排层</title>
+<meta name="description" content="operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），其余都是插件。">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="alternate" hreflang="en" href="/">
+<link rel="alternate" hreflang="zh" href="/zh/">
+<link rel="stylesheet" href="../style.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="#top" aria-label="operad，回到顶部">
+    <svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 38V14M24 38 10 16M24 38 38 16"/><circle cx="10" cy="14" r="4"/><circle cx="24" cy="12" r="4"/><circle cx="38" cy="14" r="4"/></g><circle cx="24" cy="38" r="5" fill="currentColor"/></svg>
+  </a>
+  <nav class="tile links" aria-label="章节">
+    <a href="#loop">流程</a>
+    <a href="#kernel">内核</a>
+    <a href="#clients">客户端</a>
+    <a href="#install">安装</a>
+    <a class="gh end" href="https://github.com/operad-io/operad"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a>
+    <a class="gh" href="https://x.com/zyinghai"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X</a>
+  </nav>
+  <a class="tile go" href="#install">开始用</a>
+</header>
+
+<main id="top">
+
+<section class="hero board" aria-label="operad">
+  <div class="tile paper name">
+    <p class="state s3">编码 agent 的开放编排层。</p>
+    <h1>operad</h1>
+  </div>
+
+  <div class="tile term shutter" aria-label="operad pending 的输出">
+    <div class="shutter-in">
+<pre data-ui><code>$ operad pending
+4c1e9a02  dev  confirm
+  Rotate the http token
+  waiting: ready to merge
+  actions: dev:merge, dev:reject, dev:rework,
+           dev:reverify, dev:cancel
+
+$ operad dev:merge T-0022-token-rotate --yes
+
+$ operad history T-0022-token-rotate
+- 22:28:40  review  pass  58s
+- 22:30:02  you chose merge</code></pre>
+    </div>
+  </div>
+
+  <div class="tile soft phone-tile" aria-label="iPhone app 里的待办列表">
+    <div class="phone" data-ui>
+      <div class="ph-head"><b>待办</b><span>3</span></div>
+      <ul>
+        <li><i class="mk acc" aria-hidden="true"></i><div><b>轮换 http token</b><small>T-0022-token-rotate</small></div><em>待合并</em></li>
+        <li><i class="mk acc" aria-hidden="true"></i><div><b>让 serve 干净退出</b><small>T-0023-serve-stop</small></div><em>评审有意见</em></li>
+        <li><i class="mk acc" aria-hidden="true"></i><div><b>给 Claude Code 的 channel</b><small>T-0024-mcp-channel</small></div><em>开发没有产出</em></li>
+        <li><i class="mk run" aria-hidden="true"></i><div><b>TUI 的主题文件</b><small>T-0021-tui-themes</small></div><em>运行中</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pair">
+    <div class="tile dark"><p class="s3">内核只有三个词：flow、pending、history。</p></div>
+    <div class="tile acc"><p class="s3">其余都是插件。</p></div>
+  </div>
+</section>
+
+<section id="loop" class="band" aria-labelledby="loop-h">
+  <h2 id="loop-h">计划、开发、检查、评审、合并。</h2>
+  <div class="bar board" data-ui>
+    <div class="seg c1 reveal"><p class="s3">你提需求</p><p class="clause">用 <code>operad plan add</code> 写下需求，用 <code>operad task add</code> 拆成任务，再确认计划。</p></div>
+    <div class="seg c2 reveal"><p class="s3">agent 开发</p><p class="clause">每个任务有自己的 git worktree 和一份说明。worker 在里面提交。</p></div>
+    <div class="seg c3 reveal"><p class="s3">跑检查</p><p class="clause">你在 <code>.operad/dev.json</code> 里列的命令，会在这次提交上跑一遍。</p></div>
+    <div class="seg c4 reveal"><p class="s3">agent 评审</p><p class="clause">reviewer 读改动，写一份报告。有意见就退回返工，次数有上限。</p></div>
+    <div class="seg c5 reveal"><p class="s3">你来合并</p><p class="clause">任务停在 pending 里等你。merge 合进 main；reject 带上你的批注退回去。</p></div>
+  </div>
+
+  <div class="board workers">
+    <div class="tile paper reveal">
+      <p class="s3">谁都能开发，谁都能评审。</p>
+      <p>仓库里有插件的 worker 是 claude、pi 和 radian。每个都是要你自己启用的插件；按仓库来选，worker 用一个，reviewer 换另一个。</p>
+    </div>
+    <div class="tile dark reveal">
+<pre data-ui><code>// .operad/dev.json
+{
+  "worker":   { "use": "claude/agent",
+                "args": ["--model", "sonnet"] },
+  "reviewer": { "use": "pi/agent",
+                "args": ["--thinking", "medium"] }
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<section id="kernel" class="band" aria-labelledby="kernel-h">
+  <div class="board mosaic">
+    <div class="tile paper m-head reveal"><h2 id="kernel-h">内核就三个词。</h2></div>
+    <div class="tile acc m-flow reveal">
+      <p class="s3">flow</p>
+      <p>一件事要走的路：若干步骤，等你，等时间，结束。<code>operad flows</code> 列出已加载的 flow。</p>
+    </div>
+    <div class="tile paper m-pending reveal">
+      <p class="s3">pending</p>
+      <p>所有在等你的事，放在一个列表里，每一项带着它能做的操作。</p>
+    </div>
+    <div class="tile dark m-history reveal">
+<pre data-ui><code>## dev run · started 21:38
+**2026-11-08**
+- 21:38:41  worktree  ready  1s
+- 21:38:44  work  done  41m
+- 22:20:01  review  fail  58s
+- 22:21:01  work  attempt 2  after fail
+- 22:22:02  confirm  reverify  8m
+- 22:30:02  you chose merge</code></pre>
+      <p class="s3">history</p>
+    </div>
+    <div class="tile soft m-fig reveal">
+      <p class="fig">3</p>
+      <p>个词要学。其余的词都归插件，用不到的你根本不会遇到。</p>
+    </div>
+    <div class="tile paper m-list reveal">
+      <ul class="plug">
+        <li><b>dev</b> 计划、任务、评审、合并</li>
+        <li><b>chat</b> 和 agent 的长对话</li>
+        <li><b>bot</b> 一个目录、一个 agent、一组 skill</li>
+        <li><b>pool</b> 每个 agent 共用的额度</li>
+      </ul>
+    </div>
+    <div class="tile dark m-write reveal">
+      <p class="s3">插件是 TypeScript 文件，不用构建就能加载，小到让 agent 当场就能写出来。</p>
+    </div>
+    <div class="tile acc m-check reveal">
+      <p class="s3">插件运行前先做类型检查。</p>
+      <p><code>operad plugin check</code></p>
+    </div>
+  </div>
+</section>
+
+<section id="board" class="band" aria-labelledby="board-h">
+  <h2 id="board-h">等你的事，就是一个列表。</h2>
+  <p class="sub">下面是示例任务。点一行展开；在等你的可以 merge 或 reject。</p>
+  <ul class="rows board" id="rows" data-ui>
+    <li class="row-wrap" data-state="merged">
+      <button class="row" aria-expanded="false"><span class="r-name">加上 http 接口</span><span class="r-f">T-0019-http-api</span><span class="r-f">claude</span><span class="r-st st-ok">已合并</span></button>
+      <div class="r-open"><p>已合进 main。任务的 worktree 和分支已清理。</p><pre><code>- 20:12:09  merge  done  4s
+- 20:12:14  cleanup  done  1s</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="checking">
+      <button class="row" aria-expanded="false"><span class="r-name">用二维码配对 app</span><span class="r-f">T-0020-pair-qr</span><span class="r-f">pi</span><span class="r-st st-run">检查中</span></button>
+      <div class="r-open"><p>检查正在 worker 的提交上运行。</p><pre><code>- 21:40:31  verify  running  2m</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="running">
+      <button class="row" aria-expanded="false"><span class="r-name">TUI 的主题文件</span><span class="r-f">T-0021-tui-themes</span><span class="r-f">radian</span><span class="r-st st-run">运行中</span></button>
+      <div class="r-open"><p>worker 正在任务的 worktree 里提交。</p><pre><code>- 21:38:44  work  running  11m</code></pre></div>
+    </li>
+    <li class="row-wrap is-open" data-state="ready" id="live">
+      <button class="row" aria-expanded="true"><span class="r-name">轮换 http token</span><span class="r-f">T-0022-token-rotate</span><span class="r-f">claude</span><span class="r-st st-acc" id="live-st">待合并</span></button>
+      <div class="r-open">
+        <p>检查通过，reviewer 也没发现要拦住的问题。现在等你。</p>
+        <pre><code id="live-log">- 22:20:01  verify  pass  8m
+- 22:28:40  review  pass  58s
+- 22:28:41  waiting: ready to merge</code></pre>
+        <div class="acts" id="live-acts"><button class="btn" data-do="merge">合并</button><button class="btn ghost" data-do="reject">退回</button></div>
+      </div>
+    </li>
+    <li class="row-wrap" data-state="findings">
+      <button class="row" aria-expanded="false"><span class="r-name">让 serve 干净退出</span><span class="r-f">T-0023-serve-stop</span><span class="r-f">pi</span><span class="r-st st-acc">评审有意见</span></button>
+      <div class="r-open"><p>reviewer 的意见等你定：返工、reject，或者照样 merge。</p><pre><code>- 22:01:12  review  fail  58s</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="nothing">
+      <button class="row" aria-expanded="false"><span class="r-name">给 Claude Code 的 channel</span><span class="r-f">T-0024-mcp-channel</span><span class="r-f">claude</span><span class="r-st st-acc">开发没有产出</span></button>
+      <div class="r-open"><p>worker 没有加任何提交。带上批注退回去，或者取消。</p><pre><code>- 22:03:50  work  done  3m</code></pre></div>
+    </li>
+    <li class="row-wrap" data-state="blocked">
+      <button class="row" aria-expanded="false"><span class="r-name">在 flow 之间共用 agent 额度</span><span class="r-f">T-0025-pool-caps</span><span class="r-f">pi</span><span class="r-st st-weak">被阻塞</span></button>
+      <div class="r-open"><p>等 T-0022-token-rotate 合并。</p></div>
+    </li>
+  </ul>
+</section>
+
+<section id="clients" class="band" aria-labelledby="clients-h">
+  <h2 id="clients-h">终端、Claude Code、iPhone。</h2>
+  <div class="board clients">
+    <div class="tile dark c-tui reveal">
+      <p class="s3">终端客户端。</p>
+      <p><code>operad tui</code> 会找到 <code>operad serve</code>，找不到就启动它，列出待办和运行中的东西，在列表旁边打开某一项。<code>a</code> 执行主操作，<code>:</code> 打开命令面板，<code>q</code> 退出。</p>
+    </div>
+    <div class="tile paper c-mcp reveal">
+      <p class="s3">Claude Code，走 MCP。</p>
+      <p><code>operad mcp</code> 是一个走 stdio 的 MCP server。主 agent 可以读 pending、running 和 history，运行插件命令，做 <code>config.json</code> 允许的操作。它不会替你做决定：merge 始终归你。</p>
+      <p>它的工具有 <code>list</code>, <code>show</code>, <code>section</code>, <code>pending</code>, <code>answer</code>, <code>running</code>, <code>history</code>, <code>command</code> and <code>act</code>。</p>
+<pre data-ui><code>// .mcp.json
+{ "mcpServers": {
+    "operad": { "command": "operad",
+                "args": ["mcp"] } } }</code></pre>
+    </div>
+    <div class="tile acc c-app reveal">
+      <p class="s3">iPhone app。</p>
+      <p>运行 <code>operad pair</code>，扫码。app 里能看到 pending、running、每个对象的各个部分和它的 history，merge 之前会再问你一次。server 默认只监听本机，除非你给它一个局域网或 Tailscale 地址。</p>
+<pre data-ui><code>$ operad pair
+url http://192.168.1.20:7480
+token &lt;你的 token&gt;
+
+在 operad app 里扫这个：</code></pre>
+    </div>
+  </div>
+</section>
+
+<section id="install" class="band" aria-labelledby="install-h">
+  <h2 id="install-h">在你自己的机器上跑。</h2>
+  <div class="board cta">
+    <div class="tile soft edge reveal" aria-hidden="true"></div>
+    <div class="tile acc cta-main reveal">
+      <p class="s3">operad 还在开发中。下面是它自己的仓库怎么用 operad 跑的。</p>
+<pre data-ui><code>operad init
+operad repo add .
+operad plan add --slug dogfood --title "Run operad on operad" &lt; request.md
+operad task add --plan P-0001-dogfood --slug switch --title "Switch" &lt; task.md
+operad dev:confirm P-0001-dogfood
+operad serve
+
+operad pending
+operad dev:merge T-0001-switch --yes</code></pre>
+      <p>你需要 git、一个带 remote 的仓库、Bun 运行时，以及 <code>PATH</code> 里有 claude、pi 或 radian 其中之一。命令和 <code>config.json</code> 的各个 key 写在仓库的 <code>docs/manual.md</code> 里。</p>
+      <p><a class="src" href="https://github.com/operad-io/operad">源码在 GitHub</a></p>
+    </div>
+    <div class="tile dark edge reveal" aria-hidden="true"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="mark" aria-hidden="true">
+    <span style="--h:100%;--c:var(--acc)">o</span>
+    <span style="--h:84%;--c:var(--dark)">p</span>
+    <span style="--h:92%;--c:var(--deep)">e</span>
+    <span style="--h:82%;--c:var(--light)">r</span>
+    <span style="--h:86%;--c:var(--acc)">a</span>
+    <span style="--h:100%;--c:var(--dark)">d</span>
+  </div>
+  <div class="board foot-cols">
+    <ul class="tile-less">
+      <li><a href="#loop">流程</a></li>
+      <li><a href="#kernel">内核</a></li>
+      <li><a href="#board">待办</a></li>
+    </ul>
+    <ul class="tile-less">
+      <li><a href="#clients">终端</a></li>
+      <li><a href="#clients">Claude Code</a></li>
+      <li><a href="#clients">iPhone</a></li>
+    </ul>
+    <ul class="tile-less">
+      <li><a href="https://github.com/operad-io/operad">GitHub</a></li>
+      <li><a href="https://x.com/zyinghai">X</a></li>
+      <li><a href="/" hreflang="en" lang="en">English</a></li>
+    </ul>
+    <p class="fnote">operad.io<br>编码 agent 的开放编排层。</p>
+  </div>
+</footer>
+
+<script src="../board.js" defer></script>
+</body>
+</html>
