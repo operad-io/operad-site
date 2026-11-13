@@ -69,7 +69,7 @@ pre code { font-size: inherit; }
 .top .tile { display: flex; align-items: center; padding: 0 22px; height: 60px; margin: 0; }
 .logo { background: var(--dark); color: var(--on-dark); justify-content: center; padding: 0 !important; }
 .links { gap: 28px; }
-.links a { padding: 8px 0; margin: 0; }
+.links a { padding: 8px 0; margin: 0; white-space: nowrap; }
 .links > * + * { margin-top: 0; }
 .links .gh { display: inline-flex; align-items: center; gap: 7px; }
 .links a:hover { color: var(--acc-ink); }
@@ -268,7 +268,9 @@ html:not(.js) .r-open { display: block; background: var(--tile); }
   .pair { order: 1; }
   .name { order: 0; }
   .pair .tile { aspect-ratio: 1; display: flex; align-items: flex-start; }
-  .links a:nth-child(n+2):not(.gh) { display: none; }
+  .links a:not(.gh) { display: none; }
+  .links { gap: 14px; }
+  .top .links { padding: 0 16px; }
   .term pre { padding: 18px; font-size: 12.5px; }
   .mark { display: grid; grid-template-columns: repeat(3, 1fr); height: auto; min-height: 0; }
   .mark span { height: 15svh; min-height: 100px; font-size: 26vw; padding-bottom: 5%; border-radius: var(--r); }
