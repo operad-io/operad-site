@@ -8,7 +8,7 @@ chat 是与 agent 的一段长对话。bot 由一个工作目录、一个默认 
 
 ## 为什么需要它 {#why-it-exists}
 
-与 agent 合作通常是一段很长的交流，而不是一条命令。chat 把这段交流保存在 operad 里：你可以从命令行、终端 UI、iOS 或 Telegram 发消息，每一条都落在同一份 transcript 中。operad 自己保存消息的记录，所以 chat 的 history 不依赖 agent 的会话文件；会话被清理或压缩，也不会抹掉它。
+与 agent 合作通常是一段很长的交流，而不是一条命令。chat 把这段交流保存在 operad 里：你可以从命令行、终端 UI、iOS 或 Telegram（见 [Telegram](telegram.md)）发消息，每一条都落在同一份 transcript 中。operad 自己保存消息的记录，所以 chat 的 history 不依赖 agent 的会话文件；会话被清理或压缩，也不会抹掉它。
 
 bot 用于与仓库无关的 chat。它把这类 chat 使用的工作目录、默认 agent、skill、speaker 和访问 profile 固定在一处，因此你可以保留几个权限不同的 bot，例如一个只读的。由于 chat 在每次回复时都会重新读取它的 bot，收紧 bot 的权限或加一个 skill 都不需要新建 chat。
 

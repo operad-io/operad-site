@@ -76,6 +76,7 @@
         <li><a href="../http/">The HTTP interface</a></li>
         <li><a href="../mcp/">MCP server</a></li>
         <li><a href="../chats-and-bots/" aria-current="page">Chats and bots</a></li>
+        <li><a href="../telegram/">Telegram</a></li>
         <li><a href="../notifications/">Notifications</a></li>
         <li><a href="../checks/">Checks</a></li>
         <li><a href="../environment/">Environment variables</a></li>
@@ -89,7 +90,7 @@
 <h1 id="chats-and-bots">Chats and bots</h1>
 <p>A chat is a long conversation with an agent. A bot is a working directory, a default agent, skills, a speaker and an access profile; a chat on a bot uses them, and a chat on a repository does the repository's work. Both are objects from plugins: <code>chat</code> owns every chat, <code>dev</code> opens one on a repository, and <code>bot</code> opens one on a bot.</p>
 <h2 id="why-it-exists">Why it exists<a class="anchor" href="#why-it-exists" aria-label="Link to this section">#</a></h2>
-<p>Working with an agent is usually a long exchange, not one command. A chat keeps that exchange in operad: you send messages from the command line, the terminal UI, iOS or Telegram, and every one lands in the same transcript. operad keeps its own record of the messages, so the history of a chat does not depend on the agent's session files; a cleaned or compacted session does not erase it.</p>
+<p>Working with an agent is usually a long exchange, not one command. A chat keeps that exchange in operad: you send messages from the command line, the terminal UI, iOS or Telegram (see <a href="../../docs/telegram/">Telegram</a>), and every one lands in the same transcript. operad keeps its own record of the messages, so the history of a chat does not depend on the agent's session files; a cleaned or compacted session does not erase it.</p>
 <p>A bot exists for chats that are not about a repository. It fixes, in one place, the working directory, default agent, skills, speaker and access profile that such a chat uses, so you can keep several bots with different permissions, for example a read-only one. Because a chat reads its bot at every reply, tightening a bot or adding a skill does not need a new chat.</p>
 <p>The plugins are deliberately cautious. A chat on a repository is read-only until you agree to open a worktree. A bot cannot change its own skills, settings or MCP servers; it can only propose a change, and nothing on disk changes until a person approves.</p>
 <h2 id="how-it-works">How it works<a class="anchor" href="#how-it-works" aria-label="Link to this section">#</a></h2>
@@ -123,7 +124,7 @@ operad show C-0001 --section transcript</code></pre>
     <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/chats-and-bots.md">View this page's source</a></p>
     <nav class="pn" aria-label="Previous and next">
       <a class="prev" href="../mcp/"><small>Previous</small>MCP server</a>
-      <a class="next" href="../notifications/"><small>Next</small>Notifications</a>
+      <a class="next" href="../telegram/"><small>Next</small>Telegram</a>
     </nav>
   </main>
   <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#why-it-exists">Why it exists</a></li><li class="l2"><a href="#how-it-works">How it works</a></li><li class="l2"><a href="#chats">Chats</a></li><li class="l2"><a href="#bots">Bots</a></li><li class="l3"><a href="#bot-objects-and-proposals">Bot objects and proposals</a></li><li class="l3"><a href="#bot-commands">Bot commands</a></li></ul></nav></aside>

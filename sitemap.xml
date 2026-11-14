@@ -2,238 +2,252 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://operad.io/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/quickstart/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/quickstart/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/quickstart/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/quickstart/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/quickstart/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/quickstart/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/quickstart/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/quickstart/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/setup-prompt/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/setup-prompt/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/setup-prompt/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/setup-prompt/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/setup-prompt/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/setup-prompt/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/setup-prompt/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/setup-prompt/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/config/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/config/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/config/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/config/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/config/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/config/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/config/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/config/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/dev/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/dev/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/dev/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/dev/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/dev/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/dev/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/dev/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/dev/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/access/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/access/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/access/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/access/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/access/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/access/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/access/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/access/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/cli/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/cli/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/cli/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/cli/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/cli/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/cli/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/cli/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/cli/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/tui/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/tui/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/tui/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/tui/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/tui/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/tui/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/tui/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/tui/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/app/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/app/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/app/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/app/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/app/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/app/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/app/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/app/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/http/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/http/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/http/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/http/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/http/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/http/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/http/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/http/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/mcp/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/mcp/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/mcp/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/mcp/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/mcp/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/mcp/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/mcp/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/mcp/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/chats-and-bots/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/chats-and-bots/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/chats-and-bots/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/chats-and-bots/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/chats-and-bots/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/chats-and-bots/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/chats-and-bots/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/chats-and-bots/"/>
   </url>
   <url>
+    <loc>https://operad.io/docs/telegram/</loc>
+    <lastmod>2026-11-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/telegram/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/telegram/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/telegram/"/>
+  </url>
+  <url>
+    <loc>https://operad.io/zh/docs/telegram/</loc>
+    <lastmod>2026-11-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/telegram/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/telegram/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/telegram/"/>
+  </url>
+  <url>
     <loc>https://operad.io/docs/notifications/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/notifications/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/notifications/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/notifications/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/notifications/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/notifications/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/notifications/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/notifications/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/checks/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/checks/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/checks/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/checks/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/checks/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/checks/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/checks/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/checks/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/environment/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/environment/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/environment/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/environment/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/environment/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/environment/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/environment/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/environment/"/>
   </url>
   <url>
     <loc>https://operad.io/docs/troubleshooting/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/troubleshooting/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/troubleshooting/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/troubleshooting/"/>
   </url>
   <url>
     <loc>https://operad.io/zh/docs/troubleshooting/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://operad.io/docs/troubleshooting/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/troubleshooting/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://operad.io/docs/troubleshooting/"/>

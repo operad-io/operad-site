@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telegram · operad docs</title>
+<meta name="description" content="The Telegram plugin: talk to a bot chat from Telegram and answer what waits for you there.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/docs/telegram/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/telegram/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/telegram/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/telegram/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="Telegram · operad docs">
+<meta property="og:description" content="The Telegram plugin: talk to a bot chat from Telegram and answer what waits for you there.">
+<meta property="og:url" content="https://operad.io/docs/telegram/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Telegram · operad docs">
+<meta name="twitter:description" content="The Telegram plugin: talk to a bot chat from Telegram and answer what waits for you there.">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "Telegram",
+ "description": "The Telegram plugin: talk to a bot chat from Telegram and answer what waits for you there.",
+ "inLanguage": "en",
+ "url": "https://operad.io/docs/telegram/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../" aria-label="operad, home"><svg viewBox="5 2 38 42" width="30" height="33" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.15"><path d="M23.06 32.49L16.75 22.44M26.40 31.52L26.40 22.98M29.74 32.49L36.05 22.44M13.59 16.28L11.13 10.23M16.23 16.29L18.75 10.23"/><circle cx="26.4" cy="37.8" r="5.7"/><circle cx="14.9" cy="19.5" r="2.9"/><circle cx="26.4" cy="19.5" r="2.9"/><circle cx="37.9" cy="19.5" r="2.9"/><circle cx="9.9" cy="7.2" r="2.7"/><circle cx="20.0" cy="7.2" r="2.7"/></g></svg></a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="../../">Home</a>
+    <a href="../" aria-current="true">Docs</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../zh/docs/telegram/" hreflang="zh-CN" lang="zh-CN" aria-label="中文" title="中文"><b>EN</b><i>/</i><span>中</span></a>
+  </nav>
+  <a class="tile go" href="../../#install">Run it</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="Documentation">
+    <details class="side-nav" open>
+      <summary class="s3">Docs</summary>
+      <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../quickstart/">Quickstart</a></li>
+        <li><a href="../setup-prompt/">Set up operad with an agent</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json and the dev plugin</a></li>
+        <li><a href="../access/">Access</a></li>
+        <li><a href="../cli/">The command line</a></li>
+        <li><a href="../tui/">The terminal client</a></li>
+        <li><a href="../app/">The phone app</a></li>
+        <li><a href="../http/">The HTTP interface</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../telegram/" aria-current="page">Telegram</a></li>
+        <li><a href="../notifications/">Notifications</a></li>
+        <li><a href="../checks/">Checks</a></li>
+        <li><a href="../environment/">Environment variables</a></li>
+        <li><a href="../troubleshooting/">Troubleshooting</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="telegram">Telegram</h1>
+<p>The <code>telegram</code> plugin lets you write to a bot from Telegram and answer there what waits for a person. A message you send opens a <a href="../../docs/chats-and-bots/">chat</a> on a bot; the bot's replies come back to Telegram; a question the agent asks arrives as a message with one button per choice. It is optional and works only while <code>operad serve</code> runs.</p>
+<h2 id="why-it-exists">Why it exists<a class="anchor" href="#why-it-exists" aria-label="Link to this section">#</a></h2>
+<p>The phone app and the terminal are not always at hand, and Telegram is. The plugin puts the same chat and the same pending items in a conversation you already keep open. Nothing is a copy: the chat is the chat the app shows, and an item answered in Telegram is answered everywhere.</p>
+<h2 id="set-it-up">Set it up<a class="anchor" href="#set-it-up" aria-label="Link to this section">#</a></h2>
+<ol><li>In Telegram, talk to BotFather and create a <strong>new bot</strong> for operad. Do not reuse a bot some other program already uses: Telegram lets only one client pull updates for a token, so two programs on one token take messages from each other and one of them stops working.</li><li>Find your own numeric Telegram user id. A bot that reports it (such as <code>userinfobot</code>) is run by a third party, who sees what you send it; the id is also in the <code>from</code> field of any update the Bot API gives your own bot.</li><li>Enable the plugin and store the token as the plugin's secret:</li></ol>
+<p>``<code>sh operad plugin enable telegram operad secret set telegram token </code>``</p>
+<p>The token never reaches history, a log line or an error.</p>
+<ol><li>Write your user id in <code>config.json</code> (see <a href="#settings">Settings</a>) and start <code>operad serve</code>.</li><li>Send the bot a message in a private chat. A chat opens on the bot named by <code>telegram.bot</code> (<code>default</code> unless you change it) and the reply arrives in the same Telegram chat.</li></ol>
+<pre data-ui><code class="lang-json">{
+  &quot;plugins&quot;: {
+    &quot;telegram&quot;: {
+      &quot;settings&quot;: {
+        &quot;users&quot;: [123456789],
+        &quot;bot&quot;: &quot;default&quot;,
+        &quot;pending&quot;: [&quot;dev&quot;]
+      }
+    }
+  }
+}</code></pre>
+<h2 id="settings">Settings<a class="anchor" href="#settings" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>telegram.users</code></td><td>array of integers</td><td><code>[]</code></td><td>Telegram user ids</td><td>When <code>operad serve</code> starts</td><td>Refused by the schema; an unlisted user is recorded and starts nothing</td></tr><tr><td><code>telegram.bot</code></td><td>string</td><td><code>&quot;default&quot;</code></td><td>a bot name from the <code>bot</code> section</td><td>When <code>operad serve</code> starts; used when a listed user writes first, and again after their chat is closed</td><td>Refused by the schema; a bot that is not written is refused when the message opens the chat</td></tr><tr><td><code>telegram.pending</code></td><td>array of strings</td><td><code>[]</code></td><td>plugin names, such as <code>dev</code></td><td>When <code>operad serve</code> starts</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p>The secret is <code>token</code>, set with <code>operad secret set telegram token</code>.</p>
+<h2 id="what-a-listed-user-can-do">What a listed user can do<a class="anchor" href="#what-a-listed-user-can-do" aria-label="Link to this section">#</a></h2>
+<p>A user whose id is in <code>telegram.users</code>, writing in a private chat with the bot:</p>
+<ul><li>Writes to a chat. The first message opens a chat on the <code>telegram.bot</code> bot and binds it to that Telegram chat; later messages go to the same chat. Each listed user has a chat of their own. When the chat is closed, the next message opens a new one. The message is yours: it counts as written by you, with your Telegram user id as the sender, and the history of a run says which Telegram message started it.</li><li>Answers a question by tapping a button. A tap counts as your answer, given as your Telegram user id, and as the confirmation when the action asks to confirm.</li><li>Answers an item that needs words, such as a reject or a question with no choices, by replying to its message. With several such actions, begin the reply with the action's name and a colon, such as <code>reject:</code>. Text that is not a reply to such an item is an ordinary message to the chat.</li><li>Answers the items of the plugins in <code>telegram.pending</code>. With <code>[&quot;dev&quot;]</code> the <code>dev</code> plugin's merge and confirm items are answerable from Telegram.</li></ul>
+<p>Everyone else can do nothing. A message from a user who is not listed, and every message in a group, is recorded and answered with nothing: no chat opens and nothing starts. A tap from an unlisted user counts for nothing.</p>
+<h2 id="what-is-sent">What is sent<a class="anchor" href="#what-is-sent" aria-label="Link to this section">#</a></h2>
+<ul><li>Each reply of a chat bound to Telegram. Markdown is cut down to what Telegram shows (bold, italic, code, links; headings and lists become plain lines), and a long reply goes out as several messages. A failed send is tried again with growing waits. Replies written before the plugin first ran are not sent.</li><li>Each item waiting in a chat bound to Telegram, and each item of a plugin listed in <code>telegram.pending</code> (to every listed user). It is one message with a button for each choice. After an answer from anywhere (Telegram, the app, the command line) the buttons go and the message ends <code>answered: X</code>, X being the choice. A tap on an item that was already answered says so and changes nothing.</li></ul>
+<p>Tool calls and the live text of a reply are not sent. The chat shows them in the app.</p>
+<h2 id="restarting">Restarting<a class="anchor" href="#restarting" aria-label="Link to this section">#</a></h2>
+<p>The plugin keeps what it has read and sent under <code>&lt;home&gt;/telegram/</code>. If <code>serve</code> is stopped and started, no message is written twice, no reply is sent twice and none is skipped.</p>
+<h2 id="when-it-does-not-work">When it does not work<a class="anchor" href="#when-it-does-not-work" aria-label="Link to this section">#</a></h2>
+<ul><li><code>the telegram plugin has no token</code>: run <code>operad secret set telegram token</code>.</li><li>The bot answers nobody: the id is not in <code>telegram.users</code>, or the message was in a group.</li><li>Messages from the bot stop coming and another program uses the same token: make a bot of its own for operad.</li></ul>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/telegram.md">View this page's source</a></p>
+    <nav class="pn" aria-label="Previous and next">
+      <a class="prev" href="../chats-and-bots/"><small>Previous</small>Chats and bots</a>
+      <a class="next" href="../notifications/"><small>Next</small>Notifications</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#why-it-exists">Why it exists</a></li><li class="l2"><a href="#set-it-up">Set it up</a></li><li class="l2"><a href="#settings">Settings</a></li><li class="l2"><a href="#what-a-listed-user-can-do">What a listed user can do</a></li><li class="l2"><a href="#what-is-sent">What is sent</a></li><li class="l2"><a href="#restarting">Restarting</a></li><li class="l2"><a href="#when-it-does-not-work">When it does not work</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../">Home</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

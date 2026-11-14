@@ -73,6 +73,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.gate` | object | `{ "commands": [], "commandTimeoutSecs": 1800 }` | 下面的键 | 检查开始时 | 拒绝：`gate: must be an object` 或 `gate.<key>: is not a gate setting` |
 | `dev.gate.commands` | array | `[]`：不运行任何检查 | 一行 shell，或一个检查命令对象 | 检查 step 开始时 | 拒绝：`gate.commands: must be an array of commands` 或该命令自己的错误 |
 | `dev.gate.commandTimeoutSecs` | number | `1800` | 大于 `0` 秒 | gate 命令开始时 | 拒绝：`gate.commandTimeoutSecs: must be a positive number of seconds` |
+| `dev.gate.stallSecs` | number | 未设置：没有停滞限制 | 大于 `0` 秒 | gate 或 integration 关键命令运行期间 | 拒绝：`gate.stallSecs: must be a positive number of seconds`；命令在这么长时间内没有任何输出就会被停止，并以原因 `stall` 失败，它的最后几行交给 worker |
 | `dev.gate.places` | integer | 未设置：该仓库没有限制 | `1` 或更大 | 检查寻找位置时 | 拒绝：`gate.places: must be an integer of 1 or more` |
 | `dev.check` | object | `{ "rerun": 1, "flakyTask": 2 }` | 下面的键 | 判定失败的检查时 | 拒绝：`check: must be an object` 或 `check.<key>: is not a check setting` |
 | `dev.check.rerun` | integer | `1` | `0` 或更大；`0` 表示关闭 rerun | 检查行列表失败时；超时从不 rerun | 拒绝：`check.rerun: must be zero or a positive integer` |
@@ -118,8 +119,8 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.reviewer.first.timeoutSecs` | number | `reviewer.timeoutSecs` | 大于 `0` 秒 | 首次评审开始时 | 拒绝：`reviewer.first.timeoutSecs: must be a positive number of seconds` |
 | `dev.reviewer.first.stallSecs` | number | `reviewer.stallSecs` | 大于 `0` 秒 | 首次评审开始时 | 拒绝：`reviewer.first.stallSecs: must be a positive number of seconds` |
 | `dev.reviewer.fallback` | object 或 object 列表 | 未设置 | `use` 和可选的 `args`，或按顺序尝试的一组这样的对象；主 reviewer 不可用时使用。某个 fallback 不可用或没有写出报告时，运行列表中的下一个 | 评审发现主 reviewer 不可用时 | 拒绝：`reviewer.fallback: must be an object`、`reviewer.fallback: must not be an empty list`、`reviewer.fallback.use: must be a non-empty string`（列表时为 `reviewer.fallback[1].use`）或 `reviewer.fallback.<key>: is not a fallback setting` |
-| `dev.reviewer.fallback.use` | string | 必填 | 一个 step 名称 | fallback 评审开始时 | 拒绝：`reviewer.fallback.use: must be a non-empty string` |
-| `dev.reviewer.fallback.args` | array of strings | `[]` | 传给该 step 的参数 | fallback 评审开始时 | 拒绝：`reviewer.fallback.args: must be an array of strings` |
+| `dev.reviewer.fallback.use`、`dev.reviewer.fallback[i].use` | string | 必填 | 一个 step 名称 | fallback 评审开始时 | 拒绝：`reviewer.fallback.use: must be a non-empty string`（列表的第 `i` 项为 `reviewer.fallback[i].use`） |
+| `dev.reviewer.fallback.args`、`dev.reviewer.fallback[i].args` | array of strings | `[]` | 传给该 step 的参数 | fallback 评审开始时 | 拒绝：`reviewer.fallback.args: must be an array of strings`（列表的第 `i` 项为 `reviewer.fallback[i].args`） |
 | `dev.reviewer.timeoutSecs` | number | `600` | 大于 `0` 秒 | 评审开始时 | 拒绝：`reviewer.timeoutSecs: must be a positive number of seconds` |
 | `dev.reviewer.stallSecs` | number | 未设置：harness 自己的限制 | 大于 `0` 秒 | 评审开始时 | 拒绝：`reviewer.stallSecs: must be a positive number of seconds` |
 | `dev.reviewer.fixLevel` | string | `"major"` | `critical`, `major`, `minor` | 评审被评级时 | 拒绝：`reviewer.fixLevel: must be "critical", "major" or "minor"`；`review.json` 中的值优先 |

@@ -19,6 +19,7 @@ operad 是面向编码 agent 的开放编排层。它让 agent（radian、Claude
 - [http](http.md)：`/v1` 端点、事件和错误。
 - [mcp](mcp.md)：供 lead agent 使用的 MCP server。
 - [chats-and-bots](chats-and-bots.md)：与 agent 的 chat，以及 bot。
+- [telegram](telegram.md)：从 Telegram 给 bot 写消息，并回答等待你的事项。
 - [notifications](notifications.md)：notify 命令。
 - [checks](checks.md)：检查一项变更，以及复现不稳定的测试。
 - [environment](environment.md)：每个环境变量。

@@ -144,7 +144,7 @@ operad 需要一个地方保存一个人的配置：安装了哪些插件、stor
 
 如果某个插件条目的模块导入失败、设置无效，或它声明的名称与它的键不匹配，它就不会加载。文件的其余部分仍会加载，`serve` 和 `operad plugin check` 会打印说明原因的那一行。`operad plugin list`、`operad plugin enable`、`operad plugin disable` 和 `operad plugin check` 见 [CLI 页](cli.md)。
 
-`operad init` 安装 `shell`、`radian`、`chat` 和 `dev`。`pi`、`claude`、`codex`、`pool` 和 `bot` 随附但未安装；用 `operad plugin enable <name>` 启用。
+`operad init` 安装 `shell`、`radian`、`chat` 和 `dev`。`pi`、`claude`、`codex`、`pool`、`bot` 和 `telegram` 随附但未安装；用 `operad plugin enable <name>` 启用。
 
 ### `store` {#store}
 
@@ -223,6 +223,10 @@ step 自己的 `askGraceSecs` 参数，或该调用自己的 grace，可以更�
 | `chat.speaker` | string | `"Operad Bot"` | 非空文本 | 渲染 chat 记录时 | 被 schema 拒绝 |
 
 bot chat 使用它的 bot 的 `speaker`。见 [Chats and bots](chats-and-bots.md)。
+
+### `telegram` {#telegram}
+
+Telegram 插件是可选的；它的 `users`、`bot` 和 `pending` 设置以及密钥 `token` 见 [Telegram 页](telegram.md)。
 
 ### `dev` {#dev}
 

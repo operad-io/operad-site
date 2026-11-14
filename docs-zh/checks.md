@@ -50,7 +50,7 @@ shell`），它只运行这些包的测试。`check-changed.sh` 以同样的方�
 
 ## 检查失败时 {#when-a-check-fails}
 
-该行运行之前发生的失败（缺少 clone、bundle 或复制失败、连接、fetch 或 checkout 失败）以 1 退出，并输出一行指明出错 step 的消息；修复该 step 后再次运行检查。已运行的行以它自己的退出码退出，输出在写出时即返回。`dev` 插件的任务会记录失败的行、它的退出码和最后的输出；消息和处理办法见 [Troubleshooting](troubleshooting.md#checks-and-tests)。
+该行运行之前发生的失败（缺少 clone、bundle 或复制失败、连接、fetch 或 checkout 失败）以 1 退出，并输出一行指明出错 step 的消息；修复该 step 后再次运行检查。已运行的行以它自己的退出码退出，输出在写出时即返回。`dev` 插件的任务会记录失败的行、它的退出码和最后的输出；消息和处理办法见 [Troubleshooting](troubleshooting.md#checks-and-tests)。如果检查命令在仓库的 `gate.stallSecs` 内没有任何输出，它会被停止，连同它的进程组；本地 `remote-check.sh` 被停止时，远程命令也一并结束。`run-tests.sh` 只在某个 step 的报告或输出增长时，才每隔 `OPERAD_TEST_HEARTBEAT_SECS` 秒打印一行 heartbeat，所以静默挂起仍会触发该限制。
 
 一个失败后在 rerun 时通过的测试，在证明并非如此之前就是一个 bug。不要提高它的超时，也不要在测试内部加重试。brief 是修复不稳定测试的任务会运行两次 `scripts/stress.sh`：一次在修复之前复现，一次在修复之后确认，并在最终答复中说明命令、运行次数和结果。本仓库通过 `.operad/dev.json` 中的 `failed.rule`（`.operad/flaky.md`）和 `failed.stress` 把这条规则和命令交给 `dev`；见 [dev settings](dev.md)。其他每个任务的检查都是 `bash scripts/check-changed.sh`；完整的 `bash scripts/verify.sh` 在合并之前的 integration 时再运行一次。
 

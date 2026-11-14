@@ -29,6 +29,7 @@ description: 所有 OPERAD_ 环境变量，以及 operad 读取的其他变量�
 | `OPERAD_TEST_PARALLEL` | integer | `2` | 整数，1 或更大 | `run-tests.sh` 启动时：有多少个 worker 进程运行测试文件。其他任何值都会使脚本停止，并输出 `run-tests: OPERAD_TEST_PARALLEL must be a whole number of 1 or more, not '<value>'`。 |
 | `OPERAD_TEST_HEAVY_PARALLEL` | integer | `8` | 整数，1 或更大 | `run-tests.sh` 启动时：有多少个 worker 进程运行 heavy 测试文件（位于 `test/heavy/` 下）。其他任何值都会使脚本停止，并给出指明该变量的消息。 |
 | `OPERAD_TEST_OVERLAP` | integer | `1` | `1` 让 heavy step 与 light step 同时运行；`0` 让它在 light step 之后运行 | `run-tests.sh` 启动时。 |
+| `OPERAD_TEST_HEARTBEAT_SECS` | integer | `60` | 整数秒数，或 `0` 表示关闭 | `run-tests.sh` 启动时：它多久检查一次某个 step 的报告或输出是否增长，增长时打印一行 heartbeat。静默的 step 不打印任何内容。 |
 | `OPERAD_TEST_TIMES` | path | `~/.operad-test-times` | 文件路径 | 每次完整的测试运行在此追加一行耗时记录（`run-tests.sh` 和 `test-times.ts`）。 |
 
 ## operad 设置的变量 {#what-operad-sets}

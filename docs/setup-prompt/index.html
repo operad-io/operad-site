@@ -76,6 +76,7 @@
         <li><a href="../http/">The HTTP interface</a></li>
         <li><a href="../mcp/">MCP server</a></li>
         <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../telegram/">Telegram</a></li>
         <li><a href="../notifications/">Notifications</a></li>
         <li><a href="../checks/">Checks</a></li>
         <li><a href="../environment/">Environment variables</a></li>
@@ -134,7 +135,7 @@ and https://operad.io/llms.txt.
    - Do not invent model names or flags. Leave `args` empty unless I give you some.
 
 5. Register and verify. Run `operad plugin enable pool` (the dev flow needs it), then
-   `operad init` and `operad repo add .`. Read every line they print. If a command
+   `operad init` and `operad dev repo add .`. Read every line they print. If a command
    refuses a field, fix the file using the field path in the message and run it again.
    `operad pending` must not show an invalid-settings item for this repo.
 
@@ -144,7 +145,7 @@ and https://operad.io/llms.txt.
    commit, push, start `operad serve` or create plans yourself.
 
 When I am ready, the next steps are `operad serve`, then
-`operad plan add --slug &lt;slug&gt; --title &quot;&lt;title&gt;&quot; &lt; request.md`.</code></pre>
+`operad dev plan add --slug &lt;slug&gt; --title &quot;&lt;title&gt;&quot; &lt; request.md`.</code></pre>
 <p>Read what the agent wrote before you commit it. The checks in <code>gate.commands</code> judge whether a change is good enough to reach review, so they should be the ones you trust.</p>
     <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/setup-prompt.md">View this page's source</a></p>
     <nav class="pn" aria-label="Previous and next">

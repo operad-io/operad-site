@@ -36,7 +36,7 @@ CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 
 
 | 命令 | 参数 | 作用与输出 |
 |---|---|---|
-| `operad init` | 无 | 在 `config.json` 缺失时创建它，并检查每个已加载的插件。打印 `created <file>` 或 `using <file>`，然后每项检查打印一行 `<plugin>: <result>`。检查失败时退出码为 `1`。 |
+| `operad init` | 无 | 在 `config.json` 缺失时创建它，并检查每个已加载的插件。打印 `created <file>` 或 `using <file>`，然后每项检查打印一行 `<plugin>: <result>`。这些检查是：`shell` 就绪，`radian` 在 `PATH` 中找到 `radian`，`dev` 连通每个已注册仓库的 remote（见 [dev 命令](#dev-commands)）。`pi` 和 `claude` 是可选的，`init` 不会安装它们；启用其中一个后，`init` 也会检查它，检查失败时退出码为 `1`。检查失败时退出码为 `1`。 |
 | `operad serve` | 无 | 运行此 home 的循环：启动等待、运行 step、提供 HTTP 服务并运行 notify。为每个监听地址打印 `http <url>`，最后打印 `serving <home>`。另一个 `serve` 持有该 home 时退出码为 `4`。 |
 | `operad serve stop` | `--timeout <secs>` | 用 SIGTERM 停止此 home 的 `serve`；见[停止 serve](#stopping-serve)。 |
 | `operad pending` | `--json` | 列出等待人处理的事项：run、step、对象的标题、提示、选项和 action。为空时打印 `nothing is waiting`。 |

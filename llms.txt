@@ -21,6 +21,7 @@
 - [The HTTP interface](https://operad.io/docs/http/): The /v1 HTTP interface: the http section, the token, endpoints, events and errors.
 - [MCP server](https://operad.io/docs/mcp/): The MCP server for a lead agent: setup, transport, the Claude Code channel, tools and errors.
 - [Chats and bots](https://operad.io/docs/chats-and-bots/): Chats with an agent, bots, their commands, settings, MCP servers and proposals.
+- [Telegram](https://operad.io/docs/telegram/): The Telegram plugin: talk to a bot chat from Telegram and answer what waits for you there.
 - [Notifications](https://operad.io/docs/notifications/): The notify command: when it runs, what it gets, and an example script.
 - [Checks](https://operad.io/docs/checks/): Checking a change and reproducing a flaky test.
 - [Environment variables](https://operad.io/docs/environment/): Every OPERAD_ environment variable and the other variables operad reads, with defaults and when each applies.

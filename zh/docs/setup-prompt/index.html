@@ -76,6 +76,7 @@
         <li><a href="../http/">HTTP 接口</a></li>
         <li><a href="../mcp/">MCP server</a></li>
         <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../telegram/">Telegram</a></li>
         <li><a href="../notifications/">通知</a></li>
         <li><a href="../checks/">检查</a></li>
         <li><a href="../environment/">环境变量</a></li>
@@ -134,7 +135,7 @@ and https://operad.io/llms.txt.
    - Do not invent model names or flags. Leave `args` empty unless I give you some.
 
 5. Register and verify. Run `operad plugin enable pool` (the dev flow needs it), then
-   `operad init` and `operad repo add .`. Read every line they print. If a command
+   `operad init` and `operad dev repo add .`. Read every line they print. If a command
    refuses a field, fix the file using the field path in the message and run it again.
    `operad pending` must not show an invalid-settings item for this repo.
 
@@ -144,7 +145,7 @@ and https://operad.io/llms.txt.
    commit, push, start `operad serve` or create plans yourself.
 
 When I am ready, the next steps are `operad serve`, then
-`operad plan add --slug &lt;slug&gt; --title &quot;&lt;title&gt;&quot; &lt; request.md`.</code></pre>
+`operad dev plan add --slug &lt;slug&gt; --title &quot;&lt;title&gt;&quot; &lt; request.md`.</code></pre>
 <p>请先检查 agent 写下的内容，再 commit。<code>gate.commands</code> 中的检查用来判断一项变更是否好到可以进入评审，所以它们应当是你信任的那些。</p>
     <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/setup-prompt.md">查看英文原文</a></p>
     <nav class="pn" aria-label="上一页和下一页">
