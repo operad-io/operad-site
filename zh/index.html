@@ -148,7 +148,7 @@ $ operad history T-0022-token-rotate
 <section id="loop" class="band" aria-labelledby="loop-h">
   <h2 id="loop-h">计划、开发、检查、评审、合并。</h2>
   <div class="bar board" data-ui>
-    <div class="seg c1 reveal"><p class="s3">你提需求</p><p class="clause">用 <code>operad plan add</code> 写下需求，用 <code>operad task add</code> 拆成任务，再确认计划。</p></div>
+    <div class="seg c1 reveal"><p class="s3">你提需求</p><p class="clause">用 <code>operad dev plan add</code> 写下需求，用 <code>operad dev task add</code> 拆成任务，再确认计划。</p></div>
     <div class="seg c2 reveal"><p class="s3">agent 开发</p><p class="clause">每个任务有自己的 git worktree 和一份说明。worker 在里面提交。</p></div>
     <div class="seg c3 reveal"><p class="s3">跑检查</p><p class="clause">你在 <code>.operad/dev.json</code> 里列的命令，会在这次提交上跑一遍。</p></div>
     <div class="seg c4 reveal"><p class="s3">agent 评审</p><p class="clause">reviewer 读改动，写一份报告。有意见就退回返工，次数有上限。</p></div>
@@ -295,9 +295,9 @@ token &lt;你的 token&gt;
 <pre data-ui><code>bun add -g @operad-io/cli
 
 operad init
-operad repo add .
-operad plan add --slug hello --title "Add a greeting" &lt; request.md
-operad task add --plan P-0001-hello --slug greet --title "Print the greeting" &lt; task.md
+operad dev repo add .
+operad dev plan add --slug hello --title "Add a greeting" &lt; request.md
+operad dev task add --plan P-0001-hello --slug greet --title "Print the greeting" &lt; task.md
 operad dev:confirm P-0001-hello
 operad serve
 

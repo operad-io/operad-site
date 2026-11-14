@@ -54,7 +54,7 @@ and https://operad.io/llms.txt.
    - Do not invent model names or flags. Leave `args` empty unless I give you some.
 
 5. Register and verify. Run `operad plugin enable pool` (the dev flow needs it), then
-   `operad init` and `operad repo add .`. Read every line they print. If a command
+   `operad init` and `operad dev repo add .`. Read every line they print. If a command
    refuses a field, fix the file using the field path in the message and run it again.
    `operad pending` must not show an invalid-settings item for this repo.
 
@@ -64,7 +64,7 @@ and https://operad.io/llms.txt.
    commit, push, start `operad serve` or create plans yourself.
 
 When I am ready, the next steps are `operad serve`, then
-`operad plan add --slug <slug> --title "<title>" < request.md`.
+`operad dev plan add --slug <slug> --title "<title>" < request.md`.
 ```
 
 请先检查 agent 写下的内容，再 commit。`gate.commands` 中的检查用来判断一项变更是否好到可以进入评审，所以它们应当是你信任的那些。

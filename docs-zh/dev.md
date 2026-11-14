@@ -16,7 +16,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
                                                +-------+--------+  rework
 ```
 
-1. **计划和任务。** 计划是一个需求（`operad plan add`）。其中每个任务有一份 brief，也就是给 worker 的说明（`operad task add`）。任务可以用 `--after` 等另一个任务。`operad dev:confirm <plan>` 把计划里处于草稿的任务变成 ready；`operad serve` 调度的就是已确认的计划。
+1. **计划和任务。** 计划是一个需求（`operad dev plan add`）。其中每个任务有一份 brief，也就是给 worker 的说明（`operad dev task add`）。任务可以用 `--after` 等另一个任务。`operad dev:confirm <plan>` 把计划里处于草稿的任务变成 ready；`operad serve` 调度的就是已确认的计划。
 2. **启动。** `serve` 启动 ready 的任务，数量受仓库的 `concurrency` 和各个 pool 的上限限制。每个任务有自己的 git worktree 和分支，所以任务之间、任务与你自己的检出之间互不影响。
 3. **开发。** 一个 worker 通过 pool 从 `workers` 中选出，带着 brief 在任务的 worktree 里运行并提交。worker 的模型不可用时，可以把工作交给它的 `fallback`。
 4. **检查。** `gate.commands` 里的命令在这次提交上运行。失败的测试会先单独再跑一次，用来区分不稳定的测试和真正的失败。

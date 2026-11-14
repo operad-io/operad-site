@@ -114,9 +114,9 @@ kernel 的 `waiting` 和 `running` 标志保持不变。客户端按这个顺序
 
 `after` 列出对象所等待的同级（`parent` 相同的行）的 id，采用行 id 的形式；它是由非空字符串组成的数组，否则该行是错误行。它在 list、get 和 pending 的行中原样传递，`operad list` 和 `operad show` 不打印它。`dev` 插件用任务所等待的任务 id 填写任务的 `after`，按存储的形式给出：其他仓库的任务显示为 `<repository>/<task id>`。
 
-`operad task add` 和 `operad task update` 用 `--after <task>` 指同一仓库（任何计划）的任务，用 `--after <repository>/<task>` 指任何已注册仓库的任务。在它所跟随的每个任务都合并之前，该任务一直被阻塞，无论那些任务在哪里，它的 note 会说明它在等什么（对另一个仓库是 `waiting for operad/T-0188`）。被指名的任务必须存在，任务不能跟随自己，也不能构成环。
+`operad dev task add` 和 `operad dev task update` 用 `--after <task>` 指同一仓库（任何计划）的任务，用 `--after <repository>/<task>` 指任何已注册仓库的任务。在它所跟随的每个任务都合并之前，该任务一直被阻塞，无论那些任务在哪里，它的 note 会说明它在等什么（对另一个仓库是 `waiting for operad/T-0188`）。被指名的任务必须存在，任务不能跟随自己，也不能构成环。
 
-`operad plan add` 和 `operad task add` 接受 `--flow <name>`，取该仓库 `.operad/dev.json` 定义的 flow 之一。没有 `--flow` 的任务采用它所在计划的 flow，没有 flow 的计划采用 `default`。`operad task update <id> --flow <name>` 只能在任务的第一次 attempt 之前更改它的 flow；之后该命令会拒绝。flow 在 dev.json 中没有定义的任务保持 ready，它的行和它所在计划的行显示 `flow <name> is not defined in .operad/dev.json`。当仓库定义了不止一个 flow 时，任务行的 note 和 Brief section 会写出任务的 flow，History 会在每个 run 开始处写出 flow。
+`operad dev plan add` 和 `operad dev task add` 接受 `--flow <name>`，取该仓库 `.operad/dev.json` 定义的 flow 之一。没有 `--flow` 的任务采用它所在计划的 flow，没有 flow 的计划采用 `default`。`operad dev task update <id> --flow <name>` 只能在任务的第一次 attempt 之前更改它的 flow；之后该命令会拒绝。flow 在 dev.json 中没有定义的任务保持 ready，它的行和它所在计划的行显示 `flow <name> is not defined in .operad/dev.json`。当仓库定义了不止一个 flow 时，任务行的 note 和 Brief section 会写出任务的 flow，History 会在每个 run 开始处写出 flow。
 
 `badge` 是客户端原样显示的一小段文本，放在 state 之后：一行，最多 16 个字符，否则该行是错误行。`dev` 插件把任务的 badge 设为 `#<attempt>`（第一次 attempt 之前为 `#0`），并根据阶段、attempt 已到达的 step 和调度器记录的 hold 来标记它的任务和计划。`operad list` 和 `operad show` 的前几行会在 state 之后打印行的 badge；没有 badge 的行与没有 badge 功能时的打印相同。
 

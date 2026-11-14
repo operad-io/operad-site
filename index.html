@@ -148,7 +148,7 @@ $ operad history T-0022-token-rotate
 <section id="loop" class="band" aria-labelledby="loop-h">
   <h2 id="loop-h">Plan, work, verify, review, merge.</h2>
   <div class="bar board" data-ui>
-    <div class="seg c1 reveal"><p class="s3">You ask</p><p class="clause">Describe a request with <code>operad plan add</code>, split it into tasks with <code>operad task add</code>, then confirm the plan.</p></div>
+    <div class="seg c1 reveal"><p class="s3">You ask</p><p class="clause">Describe a request with <code>operad dev plan add</code>, split it into tasks with <code>operad dev task add</code>, then confirm the plan.</p></div>
     <div class="seg c2 reveal"><p class="s3">An agent works</p><p class="clause">Each task gets its own git worktree and a brief. The worker commits there.</p></div>
     <div class="seg c3 reveal"><p class="s3">Checks run</p><p class="clause">The commands you list in <code>.operad/dev.json</code> run against the commit.</p></div>
     <div class="seg c4 reveal"><p class="s3">An agent reviews</p><p class="clause">A reviewer reads the change and writes a report. Findings send the task back for rework, up to a limit.</p></div>
@@ -295,9 +295,9 @@ Scan this in the operad app:</code></pre>
 <pre data-ui><code>bun add -g @operad-io/cli
 
 operad init
-operad repo add .
-operad plan add --slug hello --title "Add a greeting" &lt; request.md
-operad task add --plan P-0001-hello --slug greet --title "Print the greeting" &lt; task.md
+operad dev repo add .
+operad dev plan add --slug hello --title "Add a greeting" &lt; request.md
+operad dev task add --plan P-0001-hello --slug greet --title "Print the greeting" &lt; task.md
 operad dev:confirm P-0001-hello
 operad serve
 
