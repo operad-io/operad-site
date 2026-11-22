@@ -56,9 +56,9 @@ bot chat 把 memory 索引和人的指示放在它的消息上，而不是放在
 
 ## 夜间整理 {#the-nightly-tidy}
 
-每晚一次，在 bot 的 `tidyTime`（默认 `03:30`），bot 检查自上次整理以来它的 memory 有没有变化，以及 `index.md` 是否超过了上限。这次检查不花费任何模型调用。没有事可做的夜晚到此为止。
+每晚一次，在 bot 的 `bot.bots.<name>.tidyTime`（默认 `03:30`），bot 检查自上次整理以来它的 memory 有没有变化，以及 `index.md` 是否超过了上限。这次检查不花费任何模型调用。没有事可做的夜晚到此为止。
 
-有工作要做时，bot 有一个 pending 项，写明有多少笔记和 chat 需要检查，以及索引是否超过上限。Run（运行）开始整理；Skip（跳过）关闭它，直到下一次检查发现有工作为止。打开 `runWithoutAsking` 时，整理不经过这个 pending 项直接运行。bot 的任何 chat 正在写回复时，整理会等待。
+有工作要做时，bot 有一个 pending 项，写明有多少笔记和 chat 需要检查，以及索引是否超过上限。Run（运行）开始整理；Skip（跳过）关闭它，直到下一次检查发现有工作为止。打开 `bot.bots.<name>.runWithoutAsking` 时，整理不经过这个 pending 项直接运行。bot 的任何 chat 正在写回复时，整理会等待。
 
 从 Run 开始的整理完成后不留下 pending 项。和自动运行一样，它通过配置的 [`notify` 命令](notifications.md)发送一行。这一行写明是哪个 bot、它改动的文件和行数（或者 memory 没有变化）、费用，以及当一次重写丢掉了索引中太多内容时只保留了新增部分。bot 的回复不在这一行里；完整结果留在这次 memory 整理的页面上。失败的整理保留一个 pending 项，带有 Run 和 Skip，以及简短的一行说明失败原因。
 
@@ -93,7 +93,7 @@ app 通过与其他每个插件相同的对象接口读取 wiki，所以 wiki �
 
 folder 的标题是它的目录名。frontmatter 写着 `untrusted: true` 的 note 和其他 note 一样列出，带有搜索结果所带的同一个 `(untrusted)` 标记。行没有状态标记。
 
-note 的页面有一个 **Note** 部分，里面是它的 Markdown 内容；有其他 note 链接到它时，还有一个 **Backlinks** 部分。反向链接遵循与 `memory read` 相同的链接规则：每一条都打开链接过来的 note 的对象。没有反向链接时，Backlinks 部分被省略。超过一页的内容用部分的游标分页，和其他任何长的部分一样。
+note 的页面有一个 **Note** 部分，里面是它的 Markdown 内容；有其他 note 链接到它时，还有一个 **Backlinks** 部分。反向链接遵循与读取的 Backlinks 相同的规则（见[搜索](#search)）：每一条都打开链接过来的 note 的对象。没有反向链接时，Backlinks 部分被省略。超过一页的内容用部分的游标分页，和其他任何长的部分一样。
 
 内容部分还会写明其中的链接指向哪些 note，所以客户端可以跟随 `[[links]]` 和相对的 Markdown 链接。指向还没有人写的页面的链接保持未解析；Markdown 本身不会被改写。
 

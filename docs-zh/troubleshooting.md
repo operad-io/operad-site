@@ -20,7 +20,7 @@ description: 出问题时：operad 打印的每条需要你处理的消息，以
 | `operad: no run "<id>"` | `run-internal` 指名了一个不存在的 run。 | 该命令是内部命令；请通过 `serve` 和 `pending` 启动工作。 |
 | `operad: run "<id>": flow "<flow>" is not loaded` | 该 run 使用的 flow，其插件被禁用或缺失。 | `operad plugin list`，启用该插件，然后 `operad serve`。 |
 | `operad: plugin "<name>" is disabled` | 该命令或 action 属于一个被禁用的插件。 | `operad plugin enable <name>`。 |
-| `operad: plugins.<name>: no such plugin` | `plugin enable` 或 `disable` 指名了配置不认识的名称。 | 使用已配置的名称，或随附的可选插件（`pi`、`claude`、`codex`、`pool`、`bot`、`telegram`、`memory`）。 |
+| `operad: plugins.<name>: no such plugin` | `plugin enable` 或 `disable` 指名了配置不认识的名称。 | 使用已配置的名称，或一个随附、尚未在配置中、且 `plugin enable` 可以添加的插件：`shell`、`dev`、`pool`、`pi`、`claude`、`codex` 和 `telegram`，以及对于在新 home 启用它们之前创建的 home 而言的 `bot` 和 `memory`。 |
 | `operad: cannot disable "<name>": run "<id>" (<step>) is active` | 有 run 正在使用该插件的 step。 | 等该 run 结束，或取消它，然后禁用该插件。 |
 | `operad: lock <path>: run <pid> is still alive`（退出码 4） | 另一个进程持有 home 或某个 run 的锁。 | 等它结束，或用 `operad serve stop` 停止持有它的 `serve`。 |
 | `operad: secret set: no value was read` | 终端或 stdin 没有给出值。 | 再运行一次并输入值，或通过管道传入一行。 |

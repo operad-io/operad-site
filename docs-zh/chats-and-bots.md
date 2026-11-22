@@ -48,6 +48,7 @@ chat 有这些 action：
 | `chat:edit` | `message`、`text` | 在任何运行取走之前修改一条排队消息的文本；它的附件保留。已被某次运行取走的消息会被拒绝。输出 `changed message <id>`。 |
 | `chat:model` | `model` | 更改下一次回复使用的模型。该模型必须是 chat 的 agent 所列出的；输出 `chat <id> now uses <model>; the next reply uses it`。 |
 | `chat:effort` | `effort` | 从 agent 的列表中更改下一次回复使用的 effort；输出 `chat <id> now uses effort <effort>; the next reply uses it`。 |
+| `chat:access` | `level`（`plan`、`ask`、`edits` 或 `full`） | 更改 chat 的访问级别；此后每次工具调用都使用它，包括已经在写的回复。输出 `chat <id> now uses access level <level>; replies follow it`。见[访问级别](#access-level)。 |
 | `chat:stop` | 无 | 停止正在写的回复。已经写出的内容留在 transcript 中，标记为已停止。期间到达的消息保持未回答，也不会自动开始新的回复；输出会说明这一点并指向 `/retry`。没有回复在运行时，它会说明这一点，不做任何改动。客户端按钮上的词是 **Stop**。 |
 | `chat:retry` | 无 | 在回复失败、被停止或被中断之后，重新回答最后一条消息。它只在确实会回答时出现：chat 是打开的，有消息在等回复，并且没有回复正在写。失败或被停止的那次尝试留在记录中，agent 的会话继续。其他情况下输入它会说明原因，不启动任何东西。 |
 | `chat:status` | 无 | 显示 agent、当前生效的模型和 effort、是否有回复正在写以及从何时开始、有多少条消息在等、会话的费用和 token 用量，以及上一次回复的用量和到首次输出的时间。它只读取，不花费 token，回复正在写时也能用。不报告费用的 agent 会让费用显示为 `unknown`。 |
@@ -55,7 +56,7 @@ chat 有这些 action：
 
 一条消息从发出到被某次运行取走之前都在排队：一次运行第一个提示中的消息在它开始时被取走，运行中途交给 agent 的消息在交出时被取走。chat 的行和它的 `transcript` 部分在 `data.queued` 中按发送顺序带着排队的消息，并带有 `data.queuedCount`；没有排队消息时，行和部分都没有这两个字段。客户端在输入框上方显示“N queued”，并在每条排队消息上提供 `chat:withdraw` 和 `chat:edit`。已被运行取走的消息不再改变，这两个 action 都会拒绝它，并用一行指明是哪条消息。
 
-以 `/` 开头并写出 chat 某个 action 名称的一行，会运行该 action，而不是发给 agent：`/model sonnet`、`/effort high`、`/stop`、`/retry`、`/status`、`/close`、`/help`。`chat:withdraw` 和 `chat:edit` 是排队消息的 action，不是 chat 命令。这一行余下的部分是 action 的参数，按它的字段声明的顺序排列；只有一个字段时它取余下的全部，多于一个时最后一个字段取剩下的部分。不对应任何 action 的 `/xxx`，或者出现在行中靠后位置的斜杠，都是普通消息。`/close` 要求 action 的确认：单独的 `/close` 什么也不做，并提示发送 `/close yes`。`/help` 列出这个 chat 接受的 action，每个带一行描述，然后列出可以按名称输入的 skill。每次尝试都在 transcript 中留下一条记录，写明是谁输入的、这一行的内容，以及发生了什么或为什么被拒绝；这条记录不是消息，所以 agent 永远看不到它。回复正在写的时候，命令也会立即运行，并且不会自己开始一次回复。命令在每个客户端上都可用，因为处理它的是 `chat:send`。
+以 `/` 开头并写出 chat 某个 action 名称的一行，会运行该 action，而不是发给 agent：`/model sonnet`、`/effort high`、`/access edits`、`/stop`、`/retry`、`/status`、`/close`、`/help`。`chat:withdraw` 和 `chat:edit` 是排队消息的 action，不是 chat 命令。这一行余下的部分是 action 的参数，按它的字段声明的顺序排列；只有一个字段时它取余下的全部，多于一个时最后一个字段取剩下的部分。不对应任何 action 的 `/xxx`，或者出现在行中靠后位置的斜杠，都是普通消息。`/close` 要求 action 的确认：单独的 `/close` 什么也不做，并提示发送 `/close yes`。`/help` 列出这个 chat 接受的 action，每个带一行描述，然后列出可以按名称输入的 skill。每次尝试都在 transcript 中留下一条记录，写明是谁输入的、这一行的内容，以及发生了什么或为什么被拒绝；这条记录不是消息，所以 agent 永远看不到它。回复正在写的时候，命令也会立即运行，并且不会自己开始一次回复。命令在每个客户端上都可用，因为处理它的是 `chat:send`。
 
 chat 的 skill 也以 `/name rest` 的形式输入。bot chat 可以输入它的 bot 的 skill；仓库 chat 可以输入它的 `dev.json` 给它的 skill。当这个名称不是 operad 的命令时，这一行是发给 agent 的普通消息：自己加载 skill 的 agent 会原样收到 `/name rest`，其他 agent 则在提示中收到该 skill 的 `SKILL.md` 正文，位于一行指明 skill 名称的文字之后、`rest` 之前。transcript 保留输入时的原样。名称与 operad 命令相同的 skill 让位于命令。chat 的视图在它的 action 旁边带有 `skills: [{ name, description? }]`，所以客户端通过一次 `GET /v1/objects/<id>`（或 MCP 的 `show`）就能显示 skill 和命令；每条描述来自 `SKILL.md`。
 
@@ -117,6 +118,10 @@ bot 由某个已有 bot 上的 `bot:create` action 创建。它接受新 bot 的
 | `bot.bots.<name>.access.askCommands` | 字符串数组 | `[]` | 命令模式 | 追加到默认 ask 列表之后；匹配时运行前会询问。 |
 | `bot.bots.<name>.access.askPaths` | 字符串数组 | `[]` | 路径 | 追加到默认 ask 列表之后。 |
 | `bot.bots.<name>.access.readOnly` | 布尔值 | `false` | `true`、`false` | 每次回复：`true` 会拒绝每次写入，以及每条不确定只读的命令。 |
+| `bot.bots.<name>.accessLevel` | 字符串 | `ask` | `plan`、`ask`、`edits`、`full` | 该 bot 上新 chat 开始时所用的级别。对没有选定级别的 chat 在下一次回复生效，对每个新 chat 也一样。与 `access` 不同，它可以放宽 profile：`full` 除 deny 规则外什么都不问。定时任务打开的 chat 从 `full` 开始；用 `/access` 选定了级别的 chat 保持该级别。见[访问级别](#access-level)。 |
+| `bot.bots.<name>.writeWiki` | 布尔值 | `default` 为 `true`，其他每个 bot 为 `false` | `true`、`false` | 下一次回复：`true` 让 bot 写共享的 wiki；读取权限始终都有。见[记忆和 wiki](memory.md)。 |
+| `bot.bots.<name>.tidyTime` | 字符串 | `03:30` | `HH:MM`，从 `00:00` 到 `23:59`，按本机本地时区 | bot 的下一次夜间记忆检查。 |
+| `bot.bots.<name>.runWithoutAsking` | 布尔值 | `false` | `true`、`false` | 下一次夜间检查：`true` 会运行 bot 的记忆整理，不产生 pending 条目；`false` 等待 Run 或 Skip。 |
 | `chat.speaker` | 字符串 | `"Operad Bot"` | 任何非空字符串 | 每次不使用 bot 的 `speaker` 的 chat 的回复；可用 `operad settings set chat.speaker <value>` 编辑。 |
 
 默认访问 profile 拒绝凭据和秘密（`~/.ssh`、`~/.gnupg`、`~/.aws`、`~/.config/gh`、钥匙串和浏览器 profile）、operad home（bot 自己的目录除外）、`.git/config`、`.git/hooks`，以及 `sudo`、`operad`、`mkfs`、`dd`、`shutdown`、`pkill` 和 `killall` 之类的命令；在 `git push`、`brew install`、`npm install -g`、`pip install`、`osascript` 和 `open` 之前会询问。`access-user.json` 和 always allow 见[访问](access.md)。
@@ -178,7 +183,7 @@ operad bot:schedule-remove default --name Morning
 | `bot:schedule-resume` | `name` | 让它在下一个计划时间再次触发。 |
 | `bot:schedule-remove` | `name` | 删除它。 |
 
-条目触发时，bot 在自己之下打开一个新 chat，标题是条目的名称加日期，并把提示作为第一条消息发出。这个 chat 以该 bot 的身份运行，带着它的 skill、MCP server 和访问 profile，并从 `full` 开始：只有 profile 的 deny 规则、`readOnly` 和 `readPaths` 之下的写入能拦下一次调用；ask 规则和对外写入都不询问。之后人可以用 `/access` 更改级别。它的第一条消息没有人的来源，所以这次回复仍然是后台运行；低于 `full` 时，这个标记仍然会在对外写入之前询问。你可以在这个新 chat 里继续对话。
+条目触发时，bot 在自己之下打开一个新 chat，标题是条目的名称加日期，并把提示作为第一条消息发出。这个 chat 以该 bot 的身份运行，带着它的 skill、MCP server 和访问 profile，并从 `full` 开始：只有 profile 的 deny 规则、`readOnly` 和 `readPaths` 之下的写入能拦下一次调用；ask 规则和对外写入都不询问。之后人可以用 `/access` 更改级别。它的第一条消息没有人的来源，所以那次回复是后台运行：在低于 `full` 的级别（可用 `/access` 设置）下，其中的对外写入会询问。你可以在这个新 chat 里继续对话。
 
 `serve` 停过或机器休眠过之后，最近七天内最新的一次错过的运行会触发一次；更早的被跳过。补跑的运行会在提示中加一行，说明它原定的时间和晚了多久。
 

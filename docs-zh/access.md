@@ -46,7 +46,7 @@ profile 是一个 JSON 对象。每个 chat 和每个生成的 step 都从下面
 
 `readOnly` 使调用的工作目录变为只读：在那里的写入或编辑会询问，`bash` 命令也会询问，除非它在只读命令的短名单上。读取命令可以以 `cd <dir>` 开头，不写入任何地方的重定向（`2>/dev/null`、`2>&1`）是允许的；重定向到文件仍会询问。deny 仍然优先。
 
-`level` 是 chat 的访问级别。`plan` 是只读的；`ask` 对每次写入和每条不确定只读的命令都询问；`edits` 放行工作目录内的写入，而工作目录外的写入和不确定只读的命令会询问；`full` 什么都不问。在 `full` 下，匹配器跟不上的命令（内联代码、shell 展开、切换目录后它跟不上的路径）会运行，除非明确匹配某条 deny，而 `plan`、`ask` 和 `edits` 仍会就它询问。在 `full` 下只剩 `denyPaths`、`denyCommands`、`readOnly` 和 `readPaths` 之下的写入还起作用：deny 会拒绝，只读的工作目录会就写入或不确定只读的命令询问，`readPaths` 之下的写入会询问。`askCommands`、`askPaths` 和未列出的 MCP 工具在 `full` 下不询问；它们在 `plan`、`ask` 和 `edits` 下仍然适用。对外写入的问题在 `full` 下不适用，在低于它的级别的后台运行中仍会询问。chat 在仓库上从 `plan` 开始，在 bot 上从 bot 的 `accessLevel` 设置开始（未设置时为 `ask`；`full` 除 deny 规则外什么都不问），但定时 prompt 打开的 chat 例外，它从 `full` 开始；`/access <level>` 可以更改它；见 [chat 和 bot](chats-and-bots.md#access-level)。
+`level` 是 chat 的访问级别。`plan` 是只读的；`ask` 对每次写入和每条不确定只读的命令都询问；`edits` 放行工作目录内的写入，而工作目录外的写入和不确定只读的命令会询问；`full` 什么都不问。在 `full` 下，匹配器跟不上的命令（内联代码、shell 展开、切换目录后它跟不上的路径）会运行，除非明确匹配某条 deny，而 `plan`、`ask` 和 `edits` 仍会就它询问。在 `full` 下只剩 `denyPaths`、`denyCommands`、`readOnly` 和 `readPaths` 之下的写入还起作用：deny 会拒绝，只读的工作目录会就写入或不确定只读的命令询问，`readPaths` 之下的写入会询问。`askCommands`、`askPaths` 和未列出的 MCP 工具在 `full` 下不询问；它们在 `plan`、`ask` 和 `edits` 下仍然适用。对外写入的问题在 `full` 下不适用；在 `plan`、`ask` 或 `edits` 的后台运行中仍会询问。chat 在仓库上从 `plan` 开始，在 bot 上从 bot 的 `accessLevel` 设置开始（未设置时为 `ask`；`full` 除 deny 规则外什么都不问），但定时 prompt 打开的 chat 例外，它从 `full` 开始；`/access <level>` 可以更改它；见 [chat 和 bot](chats-and-bots.md#access-level)。
 
 `readPaths` 允许读取位于 `denyPaths` 某个上级条目之下的目录。它不允许写入：在那里写入会询问。
 
@@ -123,7 +123,7 @@ bot 会加上 operad home 和 `operad` 命令：home 中除 bot 自己的目录�
 | `flows` | flow 身份数组 | `[]` | 最近一次见到的各个 flow 定义 | 每次判断一次后台对外写入时：digest 与上一次不同就生成新的 id | 缺少 flow、digest 或 id 的条目会使整个文件被视为空 |
 | `flows.flow` | 字符串 | 必填 | flow 的名称 | 指明这个身份属于哪个 flow | 空值会使整个文件被视为空 |
 | `flows.digest` | 字符串 | 必填 | 最近一次见到的定义的 digest | 用来区分定义被改过还是没变 | 空值会使整个文件被视为空 |
-| `flows.id` | 字符串 | 必填 | 生成的身份，从不重复使用 | grant 只与带有这个身份的 grant 匹配 | 空值会使整个文件被视为空 |
+| `flows.id` | 字符串 | 必填 | 生成的身份，从不重复使用 | grant 的 `definition` 只与带有这个身份的 flow 定义匹配 | 空值会使整个文件被视为空 |
 | `grants` | 目标 grant 数组 | `[]` | 人允许过的目标 | 向匹配的目标进行的后台对外写入不询问 | 有字段缺失或错误的条目会使整个文件被视为空 |
 | `grants.flow` | 字符串 | 必填 | flow 的名称 | grant 只解除这个 flow 的问题 | 空值会使整个文件被视为空 |
 | `grants.definition` | 字符串 | 必填 | 人回答时所针对的定义身份 | 定义改动后不再匹配 | 空值会使整个文件被视为空 |

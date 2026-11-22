@@ -221,7 +221,7 @@ server 只能运行 `mcp.actions` 列出的 action；其他所有 action 都属�
 }
 ```
 
-结果：对象 `{ "id", "type", "link", "row", "sections", "actions", "ownerActions" }`。`row` 是列表中的行。`sections` 是 section 目录。`actions` 是 lead 现在可以运行的可用 action，每个都带有 `name`、`on`、`args` JSON Schema、`note` 字段名、`noteRequired`、`confirm`，以及当 chat 可以在 `/` 之后运行它时的 `command` 描述。`ownerActions` 只包含 lead 不可以运行的可用 action 的名称，其中包括 `mcp.confirmActions` 没有列出的 `confirm: true` action。Markdown 显示行、section 目录、带参数的允许 action，以及一份 Owner actions 列表。未知的 id 是带有该视图消息的工具错误。
+结果：对象 `{ "id", "type", "link", "row", "sections", "actions", "ownerActions" }`，有 skill 的对象（chat）再加 `skills`。`row` 是列表中的行。`skills` 是 chat 可以输入为 `/name` 的那些，每个是 `{ name, description? }`。`sections` 是 section 目录。`actions` 是 lead 现在可以运行的可用 action，每个都带有 `name`、`on`、`args` JSON Schema、`note` 字段名、`noteRequired`、`confirm`，以及当 chat 可以在 `/` 之后运行它时的 `command` 描述。`ownerActions` 只包含 lead 不可以运行的可用 action 的名称，其中包括 `mcp.confirmActions` 没有列出的 `confirm: true` action。Markdown 显示行、section 目录、带参数的允许 action，以及一份 Owner actions 列表。未知的 id 是带有该视图消息的工具错误。
 
 ### `section` {#section}
 
@@ -278,6 +278,8 @@ server 只能运行 `mcp.actions` 列出的 action；其他所有 action 都属�
 ```
 
 结果：`{ "runId", "waitId", "choice" }`，给出 note 时再加 `note`。它记录 actor `{ "via": "mcp", "id": "lead" }`。已经关闭的问题，或问题没有提供的 choice，是带有该视图消息的工具错误。当每个 choice 同时也是该项对象上的 action 时（`dev` 的等待），该 choice 通过那个 action 运行，因此它的确认和 `mcp.actions` 允许列表仍然适用，结果是 action 记录。需要确认的 action 要带 `"confirmed": true`。
+
+这个工具只接受一个 `choice`；它没有 `answers` 字段，那是 [`POST /v1/answer`](http.md) 的形式。只有一个带选项的问题的表单，会把该问题的标签列为该项的 `choices`，所以 `answer` 可以用其中一个来回答它。有多个问题的表单，或由人用自己的话回答的表单，要在 app 中或通过 HTTP 回答。
 
 ### `running` {#running}
 

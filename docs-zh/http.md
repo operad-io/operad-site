@@ -160,7 +160,9 @@ memory 插件把 wiki 作为两种只读的对象类型提供：`wiki`（标题 
 
 `POST /v1/settings` 修改一项。请求体是 `{ "name": "<plugin>.<path>", "value": <any>, "scope"?: "<repo>", "confirmed"?: true }`。`name` 和 `value` 必需；`value` 可以是 `null`。答复是改动后的那一项。不是设置的名称是 `404`；schema 拒绝的值是 `422`，附 schema 给出的原因；只读的设置，或要求确认却没有收到 `confirmed` 的设置，是 `409`。成功的修改以原子方式写入文件，并保留其他所有键。
 
-对于持有 map 或对象且可编辑的设置（`bot.bots`），`name` 可以更深一层：`bot.bots.<name>` 设置一个条目，`bot.bots.<name>.<field>` 设置它的一个字段。服务器在同一把锁下读取文件并写入该条目，所以其他客户端在此期间改动的条目会被保留；写入整个 map 的客户端会覆盖它，所以请优先使用更深的名称。值按该条目的 schema 检查，并适用父设置的 `editable` 和 `confirm` 规则。schema 中没有对应条目的路径是 `404`。更深名称上的 `null` 值会删除该条目或字段。仓库的 flow 也是设置。`dev.flows`（scope：该仓库）可编辑，可以整体编辑，也可以按名称编辑（`dev.flows.<name>`，`null` 删除一个），`dev` 在写入之前会按将要写入的样子检查整个 `dev.json`：schema、flow 的两条硬性规则，以及与某个 TypeScript flow 重复的名称。`dev` 拒绝的修改是 `422`，附 `dev` 自己的原因，一字不差，并且不写入任何内容；客户端不必重复这些规则。`dev.flowList` 是只读设置，它的值列出仓库的每个 flow，包括 TypeScript 的：`[{ "name", "source": "dev.json" | "typescript" | "built-in",
+对于持有 map 或对象且可编辑的设置（`bot.bots`），`name` 可以更深一层：`bot.bots.<name>` 设置一个条目，`bot.bots.<name>.<field>` 设置它的一个字段。服务器在同一把锁下读取文件并写入该条目，所以其他客户端在此期间改动的条目会被保留；写入整个 map 的客户端会覆盖它，所以请优先使用更深的名称。值按该条目的 schema 检查，并适用父设置的 `editable` 和 `confirm` 规则。schema 中没有对应条目的路径是 `404`。更深名称上的 `null` 值会删除该条目或字段。
+
+仓库的 flow 也是设置。`dev.flows`（scope：该仓库）可编辑，可以整体编辑，也可以按名称编辑（`dev.flows.<name>`，`null` 删除一个），`dev` 在写入之前会按将要写入的样子检查整个 `dev.json`：schema、flow 的两条硬性规则，以及没有哪个 flow 的名称同时也是仓库 `.operad/flows` 中某个 TypeScript flow 的名称（原因写作 `flow "<name>" is defined in dev.json and in .operad/flows/<name>.flow.ts; keep one`）。`dev` 拒绝的修改是 `422`，附 `dev` 自己的原因，一字不差，并且不写入任何内容；客户端不必重复这些规则。`dev.flowList` 是只读设置，它的值列出仓库的每个 flow，包括 TypeScript 的：`[{ "name", "source": "dev.json" | "typescript" | "built-in",
 "stages"?, "steps"?, "refused"? }]`。`dev.json` 的 flow 和内置的 `default` 带有它们的 `stages`；内置 default 的 stage 带有仓库的 `worker`、`reviewer` 和 `gate` 设置。TypeScript flow 带有 `dev` 加载该文件时读到的 `steps`（`id`、`kind`、`use`），文件违反规则时则带有 `refused` 和 `dev` 的原因。TypeScript flow 仍然保存为文件。`dev.json` 完全读不了时，列表保留一个 `dev.json` 条目，它的 `refused` 就是原因，与 TypeScript flow 和内置 flow 并列。
 
 ## 插件 {#plugins}
@@ -335,8 +337,8 @@ data: {"id":"C-0042","type":"chat","section":"transcript","tail":"Retrying the m
 | `400` | 参数错误、未知的 filter、格式错误的 cursor，或有歧义的 id。 |
 | `401` | 缺少 bearer token 或 token 错误。 |
 | `404` | 没有这个对象、section 或 action，或没有这个 endpoint。 |
-| `409` | action 现在不可用、需要确认，或它的插件未加载。 |
 | `405` | endpoint 存在，但不支持该 method；消息体为 `this endpoint takes GET` 或 `this endpoint takes POST`。 |
+| `409` | action 现在不可用、需要确认，或它的插件未加载。 |
 | `413` | 请求体大于 1 MiB，或上传大于 20 MB。 |
 | `422` | action 的插件拒绝了它，或 schema 拒绝了某项设置的值；`message` 是插件自己的原因或 schema 的原因。 |
 | `504` | section 没有在规定时间内加载。 |

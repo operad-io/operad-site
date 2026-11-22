@@ -89,7 +89,7 @@ plan -> tasks (draft) -> confirm -> ready -> code -> test -> review -> you merge
 | `dev.check.loadLimit` | number | 未设置：核心数 | 大于 `0`，一个 1 分钟平均负载 | 检查超时或被外部杀掉时 | 拒绝：`check.loadLimit: must be a positive number` |
 | `dev.check.flakyLoadLimit` | number | 未设置：核心数的两倍 | 大于 `0`，一个 1 分钟平均负载 | 某个测试失败后在 rerun 时通过时 | 拒绝：`check.flakyLoadLimit: must be a positive number` |
 
-测试主机是 home 的设置，不是 `dev.json` 的：`dev.testHost`（一个 ssh 目标）和 `dev.testSlots`（在它上面同时运行多少个检查），在 [config.json](config.md#dev) 中。gate、integration 或 rerun 命令以 `OPERAD_CHECK_HOST` 和 `OPERAD_CHECK_SLOTS` 的形式得到它们；`serve` 自己的环境中显式设置的变量优先。当某个仓库的检查命令使用 `scripts/remote-check.sh`，而两者都没有指明主机时，`serve` 在启动时向日志写入一行，该仓库得到一个 pending 项，它的 Overview 会说明这些命令在本机运行。见 [Checks](checks.md)。
+测试主机是 home 的设置，不是 `dev.json` 的：`dev.testHost`（一个 ssh 目标）和 `dev.testSlots`（在它上面同时运行多少个检查），在 [config.json](config.md#dev) 中。gate、integration 或 rerun 命令以 `OPERAD_CHECK_HOST` 和 `OPERAD_CHECK_SLOTS` 的形式得到它们；`serve` 自己的环境中显式设置的变量优先。当某个仓库的检查命令使用 `scripts/remote-check.sh`，而 `dev.testHost` 和 `serve` 环境中的 `OPERAD_CHECK_HOST` 都没有指明主机时，`serve` 在启动时向日志写入一行，该仓库得到一个 pending 项，它的 Overview 会说明这些命令在本机运行。见 [Checks](checks.md)。
 
 ### 检查命令 {#a-check-command}
 
@@ -134,7 +134,7 @@ plan -> tasks (draft) -> confirm -> ready -> code -> test -> review -> you merge
 | `dev.reviewer.stallSecs` | number | 未设置：harness 自己的限制 | 大于 `0` 秒 | 评审开始时 | 拒绝：`reviewer.stallSecs: must be a positive number of seconds` |
 | `dev.reviewer.fixLevel` | string | `"major"` | `critical`, `major`, `minor` | 评审被评级时 | 拒绝：`reviewer.fixLevel: must be "critical", "major" or "minor"`；`review.json` 中的值优先 |
 | `dev.reviewer.followups` | boolean | `true` | `true` 或 `false` | 评审通过但带有未使其失败的发现时 | 拒绝：`reviewer.followups: must be true or false` |
-| `dev.reviewer.retrySecs` | number | `120` | 大于 `0` 秒 | 模型不可用后，评审等待再次运行时 | 拒绝：`reviewer.retrySecs: must be a positive number of seconds` |
+| `dev.reviewer.retrySecs` | number | `120` | 大于 `0` 秒 | 模型不可用后，评审或 worker 的 run 等待再次运行时；这个设置以 reviewer 命名，但 work step 也使用它 | 拒绝：`reviewer.retrySecs: must be a positive number of seconds` |
 | `dev.reviewer.maxFileDiffBytes` | integer | `200000` | `1` 或更大 | 构建评审提示时 | 拒绝：`reviewer.maxFileDiffBytes: must be a positive integer`；更大的文件会被省略并列出 |
 | `dev.reviewer.maxDiffBytes` | integer | `1000000` | `1` 或更大 | 构建评审提示时 | 拒绝：`reviewer.maxDiffBytes: must be a positive integer`；整个被删除的文件按名称和行数列出，更大的改动会在 reviewer 启动之前使评审失败 |
 | `dev.integration` | object | `{ "style": "merge", "keyCommands": [], "batch": 1 }` | 下面的键 | integrate step 开始时 | 拒绝：`integration: must be an object` 或 `integration.<key>: is not an integration setting` |
@@ -389,7 +389,7 @@ Codex 自己的 sandbox 保持开启（`workspace-write`），它的 approval po
 
 `pi` 运行 pi coding agent，而不是 radian。`pi` 在 `PATH` 上时，新的 home 会启用它；`PATH` 上没有任何 agent 命令时，新的 home 会启用它并安装 operad 自己的 pi。之后可以用 `operad plugin enable pi` 启用它。
 
-**安装 pi。** `pi` 在 `PATH` 上时，operad 使用你安装的 pi，用 bun（`bun add -g @earendil-works/pi-coding-agent`）或 npm（`npm i -g @earendil-works/pi-coding-agent`）安装。没有时，operad 在首次使用时把 `@earendil-works/pi-coding-agent` `1.6.0` 安装到 home 的插件项目中；这需要联网一次，下载失败时会说明，再运行一次 enable 或 `operad init` 就会重试。它接受的最旧的 pi 是 `1.5.0`；你的版本更旧时，`operad plugin check` 会同时指出两个版本，没有 `pi` 时则失败。要使用另一个 pi，把 `config.json` 的 `pi` 一节中的 `command` 设为它的路径。是 shell 包装脚本的 `pi` 会被拒绝，并指出它的路径；请把 `command` 指向该包的 bin（`.../@earendil-works/pi-coding-agent/dist/bundle/cli.js`）。
+**安装 pi。** `pi` 在 `PATH` 上时，operad 使用你安装的 pi，用 bun（`bun add -g @earendil-works/pi-coding-agent`）或 npm（`npm i -g @earendil-works/pi-coding-agent`）安装。没有时，operad 在首次使用时把 `@earendil-works/pi-coding-agent` `1.6.0` 安装到 home 的插件项目中；这需要联网一次，下载失败时会说明，再运行一次 enable 或 `operad init` 就会重试。它接受的最旧的 pi 是 `1.5.0`；你的版本更旧时，`operad plugin check` 会同时指出两个版本，在 `PATH` 上和 operad 安装在 home 中的 `pi` 都找不到时则失败（首次安装之前，没有 `pi` 的 home 会一直通不过检查，直到你运行 `operad plugin enable pi` 或 `operad init`）。要使用另一个 pi，把 `config.json` 的 `pi` 一节中的 `command` 设为它的路径。是 shell 包装脚本的 `pi` 会被拒绝，并指出它的路径；请把 `command` 指向该包的 bin（`.../@earendil-works/pi-coding-agent/dist/bundle/cli.js`）。
 
 **登录 pi。** 要用你的 ChatGPT 套餐，运行 pi 自己的登录 `pi auth login openai-codex`；operad 不运行这个登录。`pi` 不在你的 `PATH` 上时，用 operad 安装的那个 pi 的完整路径运行同一条命令（登录提问会打印它）。登录完成后 operad 就会用上它，不需要重启 `serve`。要用 API key，回答 operad 的登录提问，或者运行 `pi` 并输入 `/login`。operad 使用你自己的 pi 登录，即凭据文件 `~/.pi/agent/auth.json`（`authPath` 可指定另一个文件）。operad 从不读取该文件，只把路径交给 pi。pi 和 operad 可能同时刷新同一个登录；pi 会为此给文件加锁。
 
@@ -510,13 +510,9 @@ agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex �
 6. 没有 worker 有空位时，step 等待，并对每种原因各发送一次 `pool.waiting`：flow 的计数已满，或某个 harness 的 home 上限已满。
 7. 它用 params 以及该 worker 的 `args`、`wallTimeSecs` 和 `stallSecs` 运行该 worker 的 harness step。
 8. 它原样返回 harness 的结果，并在 `data` 中加上 `worker` 和 `harness`。
-9. 当模型不可用或其用量上限已到，或 harness 无法启动，并且该 worker 有 `fallback` 时，它只运行那个 worker 一次。超时从不触发 fallback。
+9. 当模型不可用或其用量上限已到，或 harness 进程无法启动（它以 `failed` 结束，原因为 `missing` 或 `spawn`），并且该 worker 有 `fallback` 时，它只运行那个 worker 一次。超时从不触发 fallback，抛出异常的 step 也不会。
 
 下面是各部分的参考。
-
-agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex 登录服务于机器上的每个仓库。`pool` 插件有一个 step，`pool/agent`，它选取一个有空位的 worker，运行该 worker 的 harness step，并把结果交回。使用它的 flow（`dev` flow 就是）描述自己的 worker；home 规定一个 harness 总共可以有多少个 run。
-
-`operad init` 不启用它；用 `operad plugin enable pool` 打开它。
 
 ### home：`settings.harnesses` {#home-settingsharnesses}
 
@@ -616,7 +612,7 @@ worker 有这些字段；任何其他字段都会被拒绝。
 
 出现在两个 pool 中的 worker 只有一个 `count`：它的位置由两个 pool 共享。任务始终计入它开始时所在 flow 的 pool，即使 `dev.json` 在它运行期间发生了变化。
 
-worker 没有 `fallback` 的 pool 从不把它的工作交给另一个 pool 的 worker：当模型不可用时，如果模型给出了 `retry_after_secs`，工作从模型报告它的时刻起等待这么久，否则等待 `reviewer.retrySecs`，用完允许的等待次数之后交给人处理。用量上限，或超过半小时的 retry-after，会立即交给人处理，并带上模型的消息和它重置的时间。用 `task add --flow <name>`（MCP 的 `command` 工具像 CLI 一样传递它）或 `task update <id> --flow <name>` 选择任务的 flow；任务一旦开始了它的第一次 attempt，该更新就会被拒绝。
+worker 没有 `fallback` 的 pool 从不把它的工作交给另一个 pool 的 worker：当模型不可用时，如果模型给出了 `retry_after_secs`，工作从模型报告它的时刻起等待这么久，否则等待 `dev.reviewer.retrySecs`（唯一的等待设置，与评审共用；见[当 reviewer 不可用时](#when-the-reviewer-is-unavailable)），用完允许的等待次数之后交给人处理。用量上限，或超过半小时的 retry-after，会立即交给人处理，并带上模型的消息和它重置的时间。用 `task add --flow <name>`（MCP 的 `command` 工具像 CLI 一样传递它）或 `task update <id> --flow <name>` 选择任务的 flow；任务一旦开始了它的第一次 attempt，该更新就会被拒绝。
 
 **用哪个 worker。** work step 把该 stage 的 pool（`default`，除非该 stage 指名了另一个）和键 `<repository>/<pool>` 传给 `pool/agent`。attempt 记录运行的 `worker`（fallback 之后，是 fallback 的 worker，`fallbackFrom` 指名失败的那个），work 结果写 `work: claude` 或 `work: pi (fallback from claude)`。在 rework 或 reject 之后，下一次 work attempt 请求上一次 attempt 的 worker，所以在 harness 支持时它会恢复该 worker 的 session。如果那个 worker 忙，work 会等它；不会由另一个 worker 接手。如果该 worker 已不在该 stage 的 pool 中，pool 会选任何有空位的 worker，结果写 `work: pi; claude is no longer in the pool`。
 

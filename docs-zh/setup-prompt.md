@@ -6,7 +6,7 @@ description: Setup Dev：让你的 bot 读取一个仓库，并提议为它打�
 
 Setup Dev（配置开发流程）为一个仓库打开 operad 的 dev。新 home 一开始是个人助理，`dev`、`shell` 和 `pool` 都是关闭的；Setup Dev 让你的 bot 读取仓库的 CI 和脚本，并提议要打开什么。在你批准之前什么都不会改变。
 
-可以用下面两种方式之一启动它：
+可以用下面三种方式之一启动它：
 
 - 在 bot chat 中说出来："set up dev for ~/code/myrepo"。bot 的 agent 知道如何提议。
 - 在 bot chat 中输入 `/setup dev ~/code/myrepo`。每个带有设置指南的插件都以这种方式拥有自己的 Setup <name>；`dev` 是第一个。

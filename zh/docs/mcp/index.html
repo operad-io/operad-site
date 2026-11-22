@@ -190,7 +190,7 @@
     &quot;id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;minLength&quot;: 1, &quot;description&quot;: &quot;A bare id or type:id.&quot; }
   }
 }</code></pre>
-<p>结果：对象 <code>{ &quot;id&quot;, &quot;type&quot;, &quot;link&quot;, &quot;row&quot;, &quot;sections&quot;, &quot;actions&quot;, &quot;ownerActions&quot; }</code>。<code>row</code> 是列表中的行。<code>sections</code> 是 section 目录。<code>actions</code> 是 lead 现在可以运行的可用 action，每个都带有 <code>name</code>、<code>on</code>、<code>args</code> JSON Schema、<code>note</code> 字段名、<code>noteRequired</code>、<code>confirm</code>，以及当 chat 可以在 <code>/</code> 之后运行它时的 <code>command</code> 描述。<code>ownerActions</code> 只包含 lead 不可以运行的可用 action 的名称，其中包括 <code>mcp.confirmActions</code> 没有列出的 <code>confirm: true</code> action。Markdown 显示行、section 目录、带参数的允许 action，以及一份 Owner actions 列表。未知的 id 是带有该视图消息的工具错误。</p>
+<p>结果：对象 <code>{ &quot;id&quot;, &quot;type&quot;, &quot;link&quot;, &quot;row&quot;, &quot;sections&quot;, &quot;actions&quot;, &quot;ownerActions&quot; }</code>，有 skill 的对象（chat）再加 <code>skills</code>。<code>row</code> 是列表中的行。<code>skills</code> 是 chat 可以输入为 <code>/name</code> 的那些，每个是 <code>{ name, description? }</code>。<code>sections</code> 是 section 目录。<code>actions</code> 是 lead 现在可以运行的可用 action，每个都带有 <code>name</code>、<code>on</code>、<code>args</code> JSON Schema、<code>note</code> 字段名、<code>noteRequired</code>、<code>confirm</code>，以及当 chat 可以在 <code>/</code> 之后运行它时的 <code>command</code> 描述。<code>ownerActions</code> 只包含 lead 不可以运行的可用 action 的名称，其中包括 <code>mcp.confirmActions</code> 没有列出的 <code>confirm: true</code> action。Markdown 显示行、section 目录、带参数的允许 action，以及一份 Owner actions 列表。未知的 id 是带有该视图消息的工具错误。</p>
 <h3 id="section"><code>section</code><a class="anchor" href="#section" aria-label="链接到本节">#</a></h3>
 <p>输入：</p>
 <pre data-ui><code class="lang-json">{
@@ -229,6 +229,7 @@
   }
 }</code></pre>
 <p>结果：<code>{ &quot;runId&quot;, &quot;waitId&quot;, &quot;choice&quot; }</code>，给出 note 时再加 <code>note</code>。它记录 actor <code>{ &quot;via&quot;: &quot;mcp&quot;, &quot;id&quot;: &quot;lead&quot; }</code>。已经关闭的问题，或问题没有提供的 choice，是带有该视图消息的工具错误。当每个 choice 同时也是该项对象上的 action 时（<code>dev</code> 的等待），该 choice 通过那个 action 运行，因此它的确认和 <code>mcp.actions</code> 允许列表仍然适用，结果是 action 记录。需要确认的 action 要带 <code>&quot;confirmed&quot;: true</code>。</p>
+<p>这个工具只接受一个 <code>choice</code>；它没有 <code>answers</code> 字段，那是 <a href="../../../zh/docs/http/"><code>POST /v1/answer</code></a> 的形式。只有一个带选项的问题的表单，会把该问题的标签列为该项的 <code>choices</code>，所以 <code>answer</code> 可以用其中一个来回答它。有多个问题的表单，或由人用自己的话回答的表单，要在 app 中或通过 HTTP 回答。</p>
 <h3 id="running"><code>running</code><a class="anchor" href="#running" aria-label="链接到本节">#</a></h3>
 <p>输入：</p>
 <pre data-ui><code class="lang-json">{

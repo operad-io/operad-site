@@ -18,14 +18,14 @@ operad 不提供投递服务。它运行你的命令，并通过环境变量传�
 
 ## 它如何工作 {#how-it-works}
 
-1. `operad serve` 在启动时以及新配置加载时从 `config.json` 读取 `notify`。`notify.command` 为 `null`，或 `notify.on` 中没有 `waiting` 时，什么都不会运行。
+1. `operad serve` 在启动时以及新配置加载时从 `config.json` 读取 `notify`。`notify.command` 为 `null` 时，什么都不会运行。`notify.on` 中没有 `waiting` 时，没有任何等待会运行该命令；第 8 步与 `notify.on` 无关。
 2. 在其循环的每一轮（默认每秒一次），`serve` 检查活动的 run。对于每个状态为等待人的 run，它根据 run 和等待生成一个标识，该标识指明 step 以及第几次到达该 step。
 3. 如果该等待没有已记录的通知，`serve` 在 operad home 中用 `sh -c` 运行该命令，并设置 `OPERAD_ID`、`OPERAD_TITLE`、`OPERAD_REASON` 和 `OPERAD_LINK`。对象自己的插件会自动回答的等待会被跳过；如果回答没有到来，之后的某一轮会重新考虑它。
 4. 命令最多可运行 30 秒。`serve` 的循环不会为它等待。
 5. 命令结束后，`serve` 记录该通知。失败或超时会连同退出码和输出的最后几行一起写入日志，同样会被记录，并且不会重试。该等待不会再次通知，`serve` 重启之后也一样。
 6. 如果 `serve` 在命令仍在运行时被停止，命令会被取消且不记录任何内容，所以下一次 `serve` 会再次运行它。如果 `serve` 在命令结束之后、记录写入之前被杀掉，该等待会多通知一次。
 7. 当你回答之后同一个 run 再次等待，那是一个新的等待，会产生新的通知。
-8. bot 的定时 prompt 在它的回复结束时也会运行一次该命令。`OPERAD_ID`、`OPERAD_TITLE` 和 `OPERAD_LINK` 指向新建的 chat，`OPERAD_REASON` 是回复的简短摘要（或它的失败行）。即使 `notify.on` 中没有 `waiting`，这也会发生：该命令是告诉你一次定时运行已结束的现有途径。
+8. bot 的定时 prompt 在它的回复结束时也会运行一次该命令。`OPERAD_ID`、`OPERAD_TITLE` 和 `OPERAD_LINK` 指向新建的 chat，`OPERAD_REASON` 是回复的简短摘要（或它的失败行）。这里 `notify.on` 不起作用，只看 `notify.command`：该命令是告诉你一次定时运行已结束的途径。安静结束的回复（`NOTHING_TO_REPORT`）不会运行它；见[定时任务](chats-and-bots.md#scheduled-prompts)。
 
 ## 设置和变量 {#settings-and-variables}
 

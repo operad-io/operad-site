@@ -110,8 +110,8 @@
 <h2 id="what-a-reply-carries">一次回复带着什么<a class="anchor" href="#what-a-reply-carries" aria-label="链接到本节">#</a></h2>
 <p>bot chat 把 memory 索引和人的指示放在它的消息上，而不是放在 agent 的系统提示里。新会话的第一条消息，以及 agent 压缩上下文之后的第一条消息，会完整带上这两个文件。此后，每次回复把每个文件与会话上次看到的内容比较：在别处被改动的文件（同一个 bot 的另一个 chat、一次定时运行、一次整理）会再完整发一次，而 chat 自己的运行写下的改动不会重复。索引在大约 8,000 个字符处截断，并有一行说明它被截断了；把细节移到主题笔记里，让这个文件保持在这个长度以内。这些附注不是 transcript 的一部分，也不会改变你发出的消息。</p>
 <h2 id="the-nightly-tidy">夜间整理<a class="anchor" href="#the-nightly-tidy" aria-label="链接到本节">#</a></h2>
-<p>每晚一次，在 bot 的 <code>tidyTime</code>（默认 <code>03:30</code>），bot 检查自上次整理以来它的 memory 有没有变化，以及 <code>index.md</code> 是否超过了上限。这次检查不花费任何模型调用。没有事可做的夜晚到此为止。</p>
-<p>有工作要做时，bot 有一个 pending 项，写明有多少笔记和 chat 需要检查，以及索引是否超过上限。Run（运行）开始整理；Skip（跳过）关闭它，直到下一次检查发现有工作为止。打开 <code>runWithoutAsking</code> 时，整理不经过这个 pending 项直接运行。bot 的任何 chat 正在写回复时，整理会等待。</p>
+<p>每晚一次，在 bot 的 <code>bot.bots.&lt;name&gt;.tidyTime</code>（默认 <code>03:30</code>），bot 检查自上次整理以来它的 memory 有没有变化，以及 <code>index.md</code> 是否超过了上限。这次检查不花费任何模型调用。没有事可做的夜晚到此为止。</p>
+<p>有工作要做时，bot 有一个 pending 项，写明有多少笔记和 chat 需要检查，以及索引是否超过上限。Run（运行）开始整理；Skip（跳过）关闭它，直到下一次检查发现有工作为止。打开 <code>bot.bots.&lt;name&gt;.runWithoutAsking</code> 时，整理不经过这个 pending 项直接运行。bot 的任何 chat 正在写回复时，整理会等待。</p>
 <p>从 Run 开始的整理完成后不留下 pending 项。和自动运行一样，它通过配置的 <a href="../../../zh/docs/notifications/"><code>notify</code> 命令</a>发送一行。这一行写明是哪个 bot、它改动的文件和行数（或者 memory 没有变化）、费用，以及当一次重写丢掉了索引中太多内容时只保留了新增部分。bot 的回复不在这一行里；完整结果留在这次 memory 整理的页面上。失败的整理保留一个 pending 项，带有 Run 和 Skip，以及简短的一行说明失败原因。</p>
 <h2 id="the-memory-skill">memory skill<a class="anchor" href="#the-memory-skill" aria-label="链接到本节">#</a></h2>
 <p>插件启用期间，每个 bot 都会在它列出的 skill 旁边挂载 <code>memory</code> skill（<code>SKILL.md</code>）。这个 skill 告诉 bot memory 是用来做什么的：记它查不到的东西，例如某个人的偏好、他们做过的一次纠正，以及他们核实过的一条规则。它指向 operad 自己的 history 和 wiki，而不是复制它们。它还说明，bot 必须遵守的规则不属于 memory：它们在 bot 的指示和它的访问 profile 里，修改其中一条是交给人的 proposal。</p>
@@ -127,7 +127,7 @@
 <p>顶层是 wiki 的根：没有父级的列表显示直接位于根下的 folder 和 note。打开一个 folder 会列出它的子 folder 和 note，note 打开后显示它的内容。</p>
 <div class="table-wrap"><table><thead><tr><th>对象</th><th>行</th></tr></thead><tbody><tr><td>folder</td><td>以它的名称为标题，以及它之下有多少 note，包括它的子 folder 中的</td></tr><tr><td>note</td><td>以第一个标题为标题，否则用去掉 <code>.md</code> 的文件名，以及修改时间</td></tr></tbody></table></div>
 <p>folder 的标题是它的目录名。frontmatter 写着 <code>untrusted: true</code> 的 note 和其他 note 一样列出，带有搜索结果所带的同一个 <code>(untrusted)</code> 标记。行没有状态标记。</p>
-<p>note 的页面有一个 <strong>Note</strong> 部分，里面是它的 Markdown 内容；有其他 note 链接到它时，还有一个 <strong>Backlinks</strong> 部分。反向链接遵循与 <code>memory read</code> 相同的链接规则：每一条都打开链接过来的 note 的对象。没有反向链接时，Backlinks 部分被省略。超过一页的内容用部分的游标分页，和其他任何长的部分一样。</p>
+<p>note 的页面有一个 <strong>Note</strong> 部分，里面是它的 Markdown 内容；有其他 note 链接到它时，还有一个 <strong>Backlinks</strong> 部分。反向链接遵循与读取的 Backlinks 相同的规则（见<a href="#search">搜索</a>）：每一条都打开链接过来的 note 的对象。没有反向链接时，Backlinks 部分被省略。超过一页的内容用部分的游标分页，和其他任何长的部分一样。</p>
 <p>内容部分还会写明其中的链接指向哪些 note，所以客户端可以跟随 <code>[[links]]</code> 和相对的 Markdown 链接。指向还没有人写的页面的链接保持未解析；Markdown 本身不会被改写。</p>
 <h2 id="what-a-bot-wrote-is-recorded-in-git">bot 写了什么都记录在 git 中<a class="anchor" href="#what-a-bot-wrote-is-recorded-in-git" aria-label="链接到本节">#</a></h2>
 <p>bot 的一次回复改动了它的 memory 目录或 wiki 之后，插件在这次回复改动过的每个仓库中各做一次提交。提交信息写明 bot 和它当时对话所在的 chat，例如：</p>

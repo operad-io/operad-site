@@ -104,7 +104,7 @@ operad 需要一个地方保存一个人的配置：安装了哪些插件、stor
 }
 ```
 
-当 home 中没有 `config.json` 时，`operad init` 会写入一个：`chat`、`bot` 和 `memory`，再加上 `radian`、`claude` 和 `pi` 中命令在 `PATH` 上的每一个所对应的 harness 插件，按这个顺序。一个 agent 都找不到时它写入 `radian`，并且 `operad init` 失败，消息中列出这三个 agent 以及如何安装其中一个。`shell`、`dev` 和 `pool` 在新 home 中是关闭的；要在仓库上工作的 home 会把它们打开。它写入位于 `store/log.sqlite` 的 store，在 `127.0.0.1:8765` 上开启的 `http`，关闭的通知，上面带有 `chat:close` 的 `mcp.actions` 列表，内容为 `["chat:close"]` 的 `mcp.confirmActions` 列表，以及 600 秒的 ask grace。这些全部写入文件；其中没有任何隐藏的默认值。完全没有 `config.json` 的 home 没有插件，也不允许任何 lead action。
+当 home 中没有 `config.json` 时，`operad init` 会写入一个：`chat`、`bot` 和 `memory`，再加上 `radian`、`claude` 和 `pi` 中命令在 `PATH` 上的每一个所对应的 harness 插件，按这个顺序。一个 agent 都找不到时它写入 `pi`，并在 home 中安装 operad 自己固定的 pi（这需要联网一次；再运行一次 `operad init` 会重试）。`shell`、`dev` 和 `pool` 在新 home 中是关闭的；要在仓库上工作的 home 会把它们打开。它写入位于 `store/log.sqlite` 的 store，在 `127.0.0.1:8765` 上开启的 `http`，关闭的通知，上面带有 `chat:close` 的 `mcp.actions` 列表，内容为 `["chat:close"]` 的 `mcp.confirmActions` 列表，以及 600 秒的 ask grace。这些全部写入文件；其中没有任何隐藏的默认值。完全没有 `config.json` 的 home 没有插件，也不允许任何 lead action。
 
 已有的 home 不会被重写。在已有 `config.json` 的 home 上运行 `operad init` 会保持该文件不变；唯一的例外是没有 `plugins` 键的文件，它会被加上默认插件，其他什么都不改。没有 `mcp.actions` 的 `config.json` 不允许任何 lead action。在这次变更之前创建的 home 已经列出了它的插件，但可能没有 `mcp.actions`；要保留 lead 的 action，请把下面几行加入它的 `mcp` 部分，然后重启 `operad mcp`：
 
@@ -123,7 +123,7 @@ operad 需要一个地方保存一个人的配置：安装了哪些插件、stor
 
 | Key | Type | Default | Allowed values | When it takes effect | Wrong value |
 |---|---|---|---|---|---|
-| `plugins` | object，或模块名数组 | `chat`、`bot` 和 `memory`，再加上 `radian`、`claude` 和 `pi` 中在 `PATH` 上找到的每一个的 harness（一个都找不到时为 `radian`）；`shell`、`dev` 和 `pool` 关闭 | 插件名对应模块名、路径或选项对象 | 每次命令启动时，以及运行中的 `serve` 在变更后重新加载时 | 被拒绝：`plugins: must be an object of plugin options or an array of module names` |
+| `plugins` | object，或模块名数组 | `chat`、`bot` 和 `memory`，再加上 `radian`、`claude` 和 `pi` 中在 `PATH` 上找到的每一个的 harness（一个都找不到时为 `pi`，并安装 operad 自己的 pi）；`shell`、`dev` 和 `pool` 关闭 | 插件名对应模块名、路径或选项对象 | 每次命令启动时，以及运行中的 `serve` 在变更后重新加载时 | 被拒绝：`plugins: must be an object of plugin options or an array of module names` |
 | `store` | object | 位于 `<home>/store/log.sqlite` 的 sqlite | 下面的键 | 每次命令启动时 | 被拒绝：`store: must be an object` |
 | `http` | object | 开启，端口 `8765`，`127.0.0.1` | [HTTP 页](http.md#the-http-section)中的键 | `operad serve` 启动时；新配置加载时重新加载 | 被拒绝：`http: must be an object`，或该字段自己的信息 |
 | `notify` | object | command 为 `null`，`on` 为 `["waiting"]` | [notifications](notifications.md) 中的键 | `operad serve` 启动时；新配置加载时重新加载 | 被拒绝：`notify: must be an object`，或该字段自己的信息 |

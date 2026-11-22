@@ -91,7 +91,7 @@
   <main class="tile paper doc" id="top">
 <h1 id="setup-dev">Setup Dev</h1>
 <p>Setup Dev（配置开发流程）为一个仓库打开 operad 的 dev。新 home 一开始是个人助理，<code>dev</code>、<code>shell</code> 和 <code>pool</code> 都是关闭的；Setup Dev 让你的 bot 读取仓库的 CI 和脚本，并提议要打开什么。在你批准之前什么都不会改变。</p>
-<p>可以用下面两种方式之一启动它：</p>
+<p>可以用下面三种方式之一启动它：</p>
 <ul><li>在 bot chat 中说出来：&quot;set up dev for ~/code/myrepo&quot;。bot 的 agent 知道如何提议。</li><li>在 bot chat 中输入 <code>/setup dev ~/code/myrepo</code>。每个带有设置指南的插件都以这种方式拥有自己的 Setup &lt;name&gt;；<code>dev</code> 是第一个。</li><li>从新建对象的入口运行 bot 的 Setup Dev action，并给出仓库的目录，这会打开一个以下面准备好的 prompt 开头的 bot chat。在命令行上：<code>operad bot:setup-dev &lt;bot&gt; --path &lt;repository directory&gt;</code>。</li></ul>
 <p>bot 在 chat 的访问级别之下读取仓库并运行它的检查，所以它和任何 chat 一样会询问（见 <a href="../../../zh/docs/access/">access</a>）；Setup Dev 不给它额外的权限。它自己不写 <code>.operad/dev.json</code>。它提出提议，你会看到该仓库的一个 pending 项。<code>Review</code> 显示将要打开的插件（<code>dev</code>、<code>shell</code> 和 <code>pool</code> 中处于关闭状态的那些）、将要写入的 <code>.operad/dev.json</code>，以及它所替换的文件（如果有的话）。<code>approve</code> 打开这些插件、写入文件并注册仓库，所以稍后在 <code>serve</code> reload 之后，<code>operad dev repo list</code> 就会显示它。<code>reject</code> 不改变任何东西。</p>
 <p>仓库必须是带有 remote 的 git work tree 的根目录。bot 可能写入的每个键都在 <a href="../../../zh/docs/dev/">dev</a> 中说明。批准之前请先阅读它的提议：<code>gate.commands</code> 中的检查用来判断一项变更是否好到可以进入评审，所以它们应当是你信任的那些。之后请 commit <code>.operad/dev.json</code>；operad 从主 clone 读取它。</p>
