@@ -295,15 +295,17 @@ token &lt;你的 token&gt;
 <pre data-ui><code>bun add -g @operad-io/cli
 
 operad init
+operad plugin enable dev
 operad dev repo add .
 operad dev plan add --slug hello --title "Add a greeting" &lt; request.md
 operad dev task add --plan P-0001-hello --slug greet --title "Print the greeting" &lt; task.md
 operad dev:confirm P-0001-hello
+operad dev:auto P-0001-hello --level run
 operad serve
 
 operad pending
 operad dev:merge T-0001-greet --yes</code></pre>
-      <p>你需要 git、一个带 remote 的仓库、Bun 运行时（先装好它，<code>operad</code> 命令跑在它上面），以及 <code>PATH</code> 里有 claude、pi 或 radian 其中之一。命令和 <code>config.json</code> 的各个 key 写在仓库的 <code>docs/manual.md</code> 里。</p>
+      <p>你需要 git、一个带 remote 的仓库和 Bun 运行时（先装好它，<code>operad</code> 命令跑在它上面）。<code>PATH</code> 里没有 claude、pi 或 radian 时，operad 会装一份自己的 pi；<code>operad doctor</code> 会给出让它登录模型的命令。不带任何命令直接敲 <code>operad</code>，会打开和你的 bot 的聊天。命令和 <code>config.json</code> 的各个 key 写在<a href="docs/">手册</a>里。</p>
       <p><a class="src" href="docs/setup-prompt/">不确定 <code>.operad/dev.json</code> 怎么写？用这段 setup prompt。</a></p>
       <p><a class="src" href="https://github.com/operad-io/operad">源码在 GitHub</a></p>
     </div>

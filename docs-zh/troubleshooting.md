@@ -10,7 +10,7 @@ description: 出问题时：operad 打印的每条需要你处理的消息，以
 
 | 消息 | 含义 | 处理 |
 |---|---|---|
-| `operad: unknown command "<command>"` | 没有命令或插件 verb 叫这个名字。 | `operad help` 列出命令；插件 verb 写作 `<plugin> <verb>`，只有一个插件声明它时可用简写。 |
+| `operad: unknown command "<command>"` | 没有命令或插件 verb 叫这个名字。 | 附近有相近的命令时，消息会指出最接近的那个；`operad --help` 列出每个命令，插件 verb 写作 `<plugin> <verb>`，只有一个插件声明它时可用简写。 |
 | `operad: <option> needs a value` | 需要值的 flag 位于行尾。 | 把值放在它后面，或使用 `--flag=value`。 |
 | `operad: action "<name>" needs a note; pass --note <text>` | 该 action 需要 note，而 stdin 不是终端。 | 传入 `--note <text>`；在终端里它会询问。 |
 | `operad: action "<name>" needs confirmation; pass --yes` | 该 action 要求确认，而 stdin 不是终端。 | 读过该 action 的作用后传入 `--yes`。 |
@@ -20,7 +20,7 @@ description: 出问题时：operad 打印的每条需要你处理的消息，以
 | `operad: no run "<id>"` | `run-internal` 指名了一个不存在的 run。 | 该命令是内部命令；请通过 `serve` 和 `pending` 启动工作。 |
 | `operad: run "<id>": flow "<flow>" is not loaded` | 该 run 使用的 flow，其插件被禁用或缺失。 | `operad plugin list`，启用该插件，然后 `operad serve`。 |
 | `operad: plugin "<name>" is disabled` | 该命令或 action 属于一个被禁用的插件。 | `operad plugin enable <name>`。 |
-| `operad: plugins.<name>: no such plugin` | `plugin enable` 或 `disable` 指名了配置不认识的名称。 | 使用已配置的名称，或随附的可选插件（`pi`、`claude`、`pool`、`bot`）。 |
+| `operad: plugins.<name>: no such plugin` | `plugin enable` 或 `disable` 指名了配置不认识的名称。 | 使用已配置的名称，或随附的可选插件（`pi`、`claude`、`codex`、`pool`、`bot`、`telegram`、`memory`）。 |
 | `operad: cannot disable "<name>": run "<id>" (<step>) is active` | 有 run 正在使用该插件的 step。 | 等该 run 结束，或取消它，然后禁用该插件。 |
 | `operad: lock <path>: run <pid> is still alive`（退出码 4） | 另一个进程持有 home 或某个 run 的锁。 | 等它结束，或用 `operad serve stop` 停止持有它的 `serve`。 |
 | `operad: secret set: no value was read` | 终端或 stdin 没有给出值。 | 再运行一次并输入值，或通过管道传入一行。 |
@@ -74,7 +74,8 @@ description: 出问题时：operad 打印的每条需要你处理的消息，以
 | `the token was rotated: run the TUI again or pass --token` | 同上，出现在终端客户端中。 | 再次运行客户端，或传入新 token。 |
 | `pair prints the token and needs a terminal; pass --show-token to print it anyway` | `pair` 拒绝把 token 写入管道。 | 在终端里运行，或仅在安全的场合传入 `--show-token`。 |
 | `pair needs "http.enabled" in config.json` | HTTP 已关闭。 | 把 `http.enabled` 设为 `true` 并重启 `serve`。 |
-| `http.listen has only loopback addresses, which a phone cannot reach; add one or pass --url` | app 无法连到 loopback 地址。 | 在 `http.listen` 中加入私有或 Tailscale 地址，或传入 `--url`。 |
+| `http.listen has only loopback addresses, which a phone cannot reach; add one or pass --url` | app 无法连到 loopback 地址。 | 在 `http.listen` 中加入私有地址，或通过 Tailscale 提供 HTTPS，并用 `--url` 传入它的 `https://<machine>.<tailnet>.ts.net` 名称；见 [Tailscale](tailscale.md)。 |
+| `the server cannot be reached at http://100.x.y.z:<port>`，且该地址是 Tailscale 地址 | app 连不到纯 HTTP 的 Tailscale 地址，即使 `serve` 在它上面监听。 | 用 `tailscale serve` 提供 HTTPS，并用 `https://<machine>.<tailnet>.ts.net` 名称配对；见 [Tailscale](tailscale.md)。 |
 | `http.port is 0; set a port in config.json or pass --url` | 所选端口是动态的。 | 设置固定的 `http.port`，或传入 `--url`。 |
 | `--url must be an http or https URL` | 缺少协议或协议有误。 | 使用 `http://…` 或 `https://…`。 |
 | `--url must be an http or https URL without credentials or a query` | URL 带有用户、密码、query 或 fragment。 | 只传入基础 URL。 |
@@ -106,7 +107,9 @@ description: 出问题时：operad 打印的每条需要你处理的消息，以
 | 消息 | 含义 | 处理 |
 |---|---|---|
 | `run-tests: OPERAD_TEST_PARALLEL must be a whole number of 1 or more, not '<value>'` | 该变量有误。 | 设为 1 或更大的整数，或取消设置。 |
-| `remote-check: no clone at ~/<tree>` | 检查主机在 `OPERAD_CHECK_TREE` 处没有 clone。 | 在那里 clone 该仓库，或设置 `OPERAD_CHECK_TREE`。 |
+| `remote-check: no clone at ~/<tree>` | 测试主机在 `OPERAD_CHECK_TREE` 处没有 clone。 | 在那里 clone 该仓库，或设置 `OPERAD_CHECK_TREE`。 |
+| `remote-check: no test host set; running the check here` | `OPERAD_CHECK_HOST` 未设置或为空，且 home 没有 `dev.testHost`。 | 检查应当在主机上运行时，在 `~/.operad/config.json` 中设置 `dev.testHost`（或设置 `OPERAD_CHECK_HOST`）；否则检查在本机运行。 |
+| `dev: check commands use scripts/remote-check.sh but no test host is set, so they run here (...)` | 某个仓库的 gate 或 integration 命令使用 `scripts/remote-check.sh`，但 home 的 `dev.testHost` 和 `OPERAD_CHECK_HOST` 都没有指明主机。 | 用 `operad settings set dev.testHost <user@host>` 设置 `dev.testHost`，或在 `serve` 启动之前设置该变量；该仓库的 pending 列表和 Overview 也会说明同样的事。 |
 | `remote-check: fetch of the bundle failed` | 主机无法读取复制过去的 bundle。 | 检查 ssh 目标和主机磁盘；重试。 |
 | 检查在其命令行运行之前就失败，退出码为 1 | bundle、复制、连接、fetch 或 checkout 失败。 | 那一行会指出失败的步骤；修复主机或网络，然后重试。 |
 | 压力测试失败 | 某个测试在重复或负载下失败。 | 日志会指出每个失败的测试；修正测试或代码，然后 rerun。不要调大超时，也不要在测试内部加重试。 |
@@ -116,7 +119,7 @@ description: 出问题时：operad 打印的每条需要你处理的消息，以
 | 消息 | 含义 | 处理 |
 |---|---|---|
 | `no repository "<name>"` | 该仓库没有注册。 | `operad dev repo add <path> [--name <name>]`。 |
-| `repository "<name>" was removed` | 该仓库已被移除。 | 用它的路径重新添加。 |
+| `repository "<name>" was removed` | 该仓库已被移除。 | 需要的话先移动文件夹，然后运行 `operad dev repo add <path> --name <name>`；见 [dev](dev.md#moving-a-repositorys-folder)。 |
 | `<path> has no remote` | `repo add` 需要一个 remote。 | 添加一个 `origin` remote，然后重试。 |
 | `no plan "<plan>"` | 计划 id 有误，或不在这个仓库中。 | `operad list plan --repo <name>`。 |
 | `no task "<task>"` | 任务 id 有误。 | `operad list task --repo <name>`。 |

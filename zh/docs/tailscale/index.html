@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tailscale · operad 文档</title>
+<meta name="description" content="通过 Tailscale 网络访问 operad：HTTPS 名称、配对手机 app，以及哪些做法行不通。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/tailscale/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/tailscale/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/tailscale/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/tailscale/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="Tailscale · operad 文档">
+<meta property="og:description" content="通过 Tailscale 网络访问 operad：HTTPS 名称、配对手机 app，以及哪些做法行不通。">
+<meta property="og:url" content="https://operad.io/zh/docs/tailscale/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tailscale · operad 文档">
+<meta name="twitter:description" content="通过 Tailscale 网络访问 operad：HTTPS 名称、配对手机 app，以及哪些做法行不通。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "Tailscale",
+ "description": "通过 Tailscale 网络访问 operad：HTTPS 名称、配对手机 app，以及哪些做法行不通。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/tailscale/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="5 2 38 42" width="30" height="33" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.15"><path d="M23.06 32.49L16.75 22.44M26.40 31.52L26.40 22.98M29.74 32.49L36.05 22.44M13.59 16.28L11.13 10.23M16.23 16.29L18.75 10.23"/><circle cx="26.4" cy="37.8" r="5.7"/><circle cx="14.9" cy="19.5" r="2.9"/><circle cx="26.4" cy="19.5" r="2.9"/><circle cx="37.9" cy="19.5" r="2.9"/><circle cx="9.9" cy="7.2" r="2.7"/><circle cx="20.0" cy="7.2" r="2.7"/></g></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/tailscale/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">Setup Dev</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../tailscale/" aria-current="page">Tailscale</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../memory/">memory 和 wiki</a></li>
+        <li><a href="../telegram/">Telegram</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="tailscale">Tailscale</h1>
+<p><a href="https://tailscale.com">Tailscale</a> 把你的机器连成一个私有网络，即 tailnet。本页说明如何从手机 app 或另一台电脑通过这个网络访问 <code>operad serve</code>。</p>
+<h2 id="the-app-needs-the-https-name">app 需要 HTTPS 名称<a class="anchor" href="#the-app-needs-the-https-name" aria-label="链接到本节">#</a></h2>
+<p>iOS app 连不到纯 <code>http://100.x.y.z:&lt;port&gt;</code> 形式的 Tailscale 地址，即使该地址在 <code>http.listen</code> 中，并且 <code>serve</code> 在它上面监听。app 会显示 <code>the server cannot be reached at http://100.x.y.z:&lt;port&gt;</code>。同一部手机上的 Safari 能访问该地址并得到 <code>401</code> 的 JSON，所以网络没有问题：是 app 拒绝向该地址使用纯 HTTP。iOS 很可能不把 <code>100.64.0.0/10</code> 算作本地网络。请使用 <code>tailscale serve</code> 给出的 <code>https://&lt;machine&gt;.&lt;tailnet&gt;.ts.net</code> 名称，设置方法见下一节。</p>
+<h2 id="serve-https-on-the-tailnet">在 tailnet 上提供 HTTPS<a class="anchor" href="#serve-https-on-the-tailnet" aria-label="链接到本节">#</a></h2>
+<p>在运行 <code>operad serve</code> 的机器上执行这些步骤。</p>
+<ol><li>在 Tailscale 管理控制台的 DNS 下，为 tailnet 启用 HTTPS 证书。这一步只需做一次。启用之前，<code>tailscale status --json</code> 显示 <code>&quot;CertDomains&quot;: null</code>；启用之后，列表中会有这台机器的名称。</li><li>把 <code>serve</code> 监听的端口提供出去：</li></ol>
+<p>``<code>sh tailscale serve --bg 8765 </code>``</p>
+<p><code>8765</code> 是默认值；如果你设置过端口，请使用 <code>config.json</code> 中的 <code>http.port</code>。<code>--bg</code> 让代理在命令返回之后继续运行。它会打印 HTTPS 名称和它代理到的地址：</p>
+<p>``<code>text https://mac.tail1234.ts.net/ |-- proxy http://127.0.0.1:8765 </code>``</p>
+<p><code>http.listen</code> 不需要改动：Tailscale 代理到 <code>127.0.0.1</code>，默认配置就在它上面监听。</p>
+<ol><li>用这个名称配对 app：</li></ol>
+<p>``<code>sh operad pair --url https://mac.tail1234.ts.net </code>``</p>
+<p>在 app 中扫描二维码。配对的细节见<a href="../../../zh/docs/app/#pairing-the-app">应用页面</a>；它需要 <code>http.enabled</code> 为 true。</p>
+<ol><li>要停止提供 HTTPS，运行 <code>tailscale serve --https=443 off</code>。</li></ol>
+<h2 id="always-pass---url-to-pair">配对时始终传入 <code>--url</code><a class="anchor" href="#always-pass---url-to-pair" aria-label="链接到本节">#</a></h2>
+<p>不带 <code>--url</code> 的 <code>operad pair</code> 会打印 <code>http.listen</code> 中第一个非 loopback 的条目，有局域网地址时就是它，所以排在它后面的 Tailscale 地址永远不会显示。每次通过 Tailscale 配对时，都请用 <code>--url</code> 传入 <code>https://&lt;machine&gt;.&lt;tailnet&gt;.ts.net</code> 名称。</p>
+<h2 id="the-terminal-client">终端客户端<a class="anchor" href="#the-terminal-client" aria-label="链接到本节">#</a></h2>
+<p>另一台电脑上的终端客户端可以直接使用 Tailscale 地址：把它写进 <code>http.listen</code>，并连同 token 一起传入。</p>
+<pre data-ui><code class="lang-sh">operad tui --url http://100.x.y.z:&lt;port&gt; --token &lt;token&gt;</code></pre>
+<p><code>operad pair --show-token</code> 会打印可供复制的 URL 和 token。纯 HTTP 在这里没有 app 那样的限制，所以这条路径预计可以工作，但没有测试过。<code>--url</code>、<code>--token</code> 及其他选项见<a href="../../../zh/docs/tui/">终端客户端</a>。</p>
+<h2 id="what-was-checked">检查过什么<a class="anchor" href="#what-was-checked" aria-label="链接到本节">#</a></h2>
+<p>2026-11-15 在 macOS 上用 iOS app 检查过：上面的 HTTPS 步骤、用 <code>https://&lt;machine&gt;.&lt;tailnet&gt;.ts.net</code> 名称配对，以及在 app 中扫描二维码。还检查过：app 在纯 <code>http://100.x.y.z:&lt;port&gt;</code> 地址上失败，而同一部手机上的 Safari 能访问它。</p>
+<p>没有检查过：从另一台电脑运行 <code>operad tui --url http://100.x.y.z:&lt;port&gt; --token &lt;token&gt;</code>，按上一节所说它预计可以工作；以及用 Linux 或 Windows 作为运行 <code>serve</code> 的机器。本页描述的是 macOS。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/tailscale.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../http/"><small>上一页</small>HTTP 接口</a>
+      <a class="next" href="../mcp/"><small>下一页</small>MCP server</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-app-needs-the-https-name">app 需要 HTTPS 名称</a></li><li class="l2"><a href="#serve-https-on-the-tailnet">在 tailnet 上提供 HTTPS</a></li><li class="l2"><a href="#always-pass---url-to-pair">配对时始终传入 --url</a></li><li class="l2"><a href="#the-terminal-client">终端客户端</a></li><li class="l2"><a href="#what-was-checked">检查过什么</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

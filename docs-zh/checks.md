@@ -8,11 +8,11 @@ description: 检查一项变更，以及复现不稳定的测试。
 
 ## 为什么需要它 {#why-it-exists}
 
-一项变更无论由人还是由 `dev` 任务做出，都应该以同样的方式检查，而且检查的代价不应超过这项变更所需。每次小改动都运行整个套件很慢，所以 `check-changed.sh` 只测试变更可能影响的包，完整的 `verify.sh` 则在 integration 时、merge 之前再运行一次。`remote-check.sh` 可以在另一台机器上的若干 slot 之一中运行检查，使同时运行的检查不共用一个工作树。只在 rerun 时才通过的测试不会被忽略：本页把它视为 bug，并给出复现它的办法 `stress.sh`。规则是不提高它的超时，也不在测试内部加入重试。
+一项变更无论由人还是由 `dev` 任务做出，都应该以同样的方式检查，而且检查的代价不应超过这项变更所需。每次小改动都运行整个套件很慢，所以 `check-changed.sh` 测试变更可能影响的包，并且总是测试 `scripts/test` 下的测试，完整的 `verify.sh` 则在 integration 时、merge 之前再运行一次。`remote-check.sh` 可以在另一台机器上的若干 slot 之一中运行检查，使同时运行的检查不共用一个工作树。失败一次、rerun 时又通过的测试不会被忽略：本页把它视为 bug，并给出复现它的办法 `stress.sh`。规则是不提高它的超时，也不在测试内部加入重试。
 
 ## 它如何工作 {#how-it-works}
 
-1. 检查就是一条 shell 行。`bash scripts/verify.sh` 按 lockfile 安装、做类型检查，并用 `scripts/run-tests.sh` 运行每个包的测试。`bash scripts/check-changed.sh` 做同样的安装和类型检查，然后选出变更涉及的包以及加载了它们的包，打印所选结果（`all`、`none` 或名称），只测试这些包。
+1. 检查就是一条 shell 行。`bash scripts/verify.sh` 按 lockfile 安装、做类型检查，并用 `scripts/run-tests.sh` 运行每个包的测试。`bash scripts/check-changed.sh` 做同样的安装和类型检查，然后选出变更涉及的包以及加载了它们的包，打印所选结果（`all`、`none` 或名称），测试这些包以及 `scripts/test` 下的测试。
 2. `remote-check.sh` 在本机运行该行；设置了 `OPERAD_CHECK_HOST` 时，则把 `HEAD` 作为 git bundle 复制到该主机，占用一个 slot，检出该 commit 并在那里运行该行。输出和退出码原样返回，就是该行自己的输出和退出码。
 3. `dev` 任务针对它的 commit 运行 `gate.commands` 中的各行。某一行失败时，`dev` 用 `failed.match` 找出失败的测试名，并用 `failed.rerun` 逐个单独再运行，该命令使用 `remote-check.sh` 的 `--` 形式。见 [gate 及其设置](dev.md)。
 4. 只在 rerun 时才通过的测试会被记录。这样的通过达到 `check.flakyTask` 次（默认 2）之后，`dev` 会提出一个修复它的任务，附带来自 `failed.rule` 的规则和来自 `failed.stress` 的命令。
@@ -30,11 +30,11 @@ bash scripts/remote-check.sh -- <word>...
 ```
 
 `verify.sh` 按 lockfile 安装、做类型检查，并用 `scripts/run-tests.sh` 运行整个测试套件。该脚本在并行的 worker 进程中运行测试文件（`bun test --parallel`），之后再依次运行 `tui` 包的测试，一个文件接一个文件，因为它的终端库无法在并行 worker 中加载。`OPERAD_TEST_PARALLEL`（1 或更大的整数，默认 `2`）是 worker 进程的数量；其他任何值都会使脚本停止，并给出指明该变量的消息。会启动真实进程、构建真实 git 仓库、打开端口或占用大量内存的测试放在其包的 `test/heavy/` 下，在它们自己的 step 中运行，与 light step 同时进行，使用 `OPERAD_TEST_HEAVY_PARALLEL` 个 worker（默认 `8`；`OPERAD_TEST_OVERLAP=0` 让该 step 在 light step 之后运行）。给定包名时（`bash scripts/run-tests.sh dev
-shell`），它只运行这些包的测试。`check-changed.sh` 以同样的方式安装和做类型检查，然后只测试一项变更涉及的包：自 `HEAD` 与 `origin/main` 的 merge base 以来有文件改动的每个包（已提交、已暂存、未暂存或未跟踪），以及代码直接或经由其他包加载了其中某个包的每个包。测试（而非代码）加载了已改动包的包，它的测试也会运行；到此为止，不再向外扩展。`packages/` 之外的变更（lockfile、根 manifest、`scripts/`、`docs/`、`.operad/`）会测试每个包。它在测试之前打印所选的包（`all`、`none` 或名称）。`OPERAD_CHECK_BASE`（一个 commit，默认是 merge base）改变它的比较对象。本仓库的任务检查运行 `check-changed.sh`，它的 integration 运行 `verify.sh`。
+shell`），它只运行这些包的测试。`check-changed.sh` 以同样的方式安装和做类型检查，然后测试一项变更涉及的包：自 `HEAD` 与 `origin/main` 的 merge base 以来有文件改动的每个包（已提交、已暂存、未暂存或未跟踪），以及代码直接或经由其他包加载了其中某个包的每个包。测试（而非代码）加载了已改动包的包，它的测试也会运行；到此为止，不再向外扩展。`packages/` 之外的变更（lockfile、根 manifest、`scripts/`、`docs/`、`.operad/`）会测试每个包。每一种选择，包括 `none`，还会运行 `scripts/test` 下的测试。它在测试之前打印所选的包（`all`、`none` 或名称）。`OPERAD_CHECK_BASE`（一个 commit，默认是 merge base）改变它的比较对象。本仓库的任务检查运行 `check-changed.sh`，它的 integration 运行 `verify.sh`。
 
-`remote-check.sh` 在本机或（设置了 `OPERAD_CHECK_HOST` 时）在检查主机上、于同一个 commit 运行一条命令。它接受作为一个参数的命令（一条 shell 命令行），或在 `--` 之后作为分开的 word，这些 word 原样传递：途中没有 shell 把它们当作代码读取，因此 word 中可以含有引号、反引号或 `$`。失败测试的 rerun（`.operad/dev.json` 中的 `failed.rerun`）使用 `--` 形式，因此它在检查运行的地方运行。
+`remote-check.sh` 在本机或（设置了 `OPERAD_CHECK_HOST` 时）在测试主机上、于同一个 commit 运行一条命令。它接受作为一个参数的命令（一条 shell 命令行），或在 `--` 之后作为分开的 word，这些 word 原样传递：途中没有 shell 把它们当作代码读取，因此 word 中可以含有引号、反引号或 `$`。失败测试的 rerun（`.operad/dev.json` 中的 `failed.rerun`）使用 `--` 形式，因此它在检查运行的地方运行。
 
-`remote-check.sh` 把一条命令（一条 shell 行）作为检查运行。`OPERAD_CHECK_HOST` 未设置或为空时，它在仓库根目录于本机运行该行。设为 ssh destination（`user@host`）时，它把 `HEAD` 作为 git bundle 复制到该主机，并在那里占用 `OPERAD_CHECK_SLOTS` 个 slot 中的一个（锁为 `~/.operad-check-<i>.lock`；只有全部被占用时才等待），获取 `origin` 和该 bundle，以 detached 方式检出 `HEAD` 的 commit，除 `node_modules` 外移除未跟踪的文件，然后运行该行。每个 slot 有自己的 tree，因此在一个 slot 中的 checkout 或 clean 绝不会碰到另一个：slot 1 使用 clone `OPERAD_CHECK_TREE`（`~/Code/operad`），其他每个 slot 使用该 clone 在首次使用时创建的 git worktree，`<tree>-slot<i>`（例如 `~/Code/operad-slot2`），在该行安装之后拥有自己的 `node_modules`。带 `OPERAD_CHECK_LANE=integration` 时，检查改为占用唯一的 integration slot（锁 `~/.operad-check-integration.lock`，worktree `<tree>-integration`）：integration 从不等待任务检查，任务检查也从不占用该 slot。该行在主机上能看到 `OPERAD_CHECK_SLOTS`，因此检查可以使用 `cores / (N + 1)` 个测试 worker。输出在写出时即返回，退出码是该行的退出码；该行运行之前发生的失败（bundle、复制、连接、fetch、checkout）以 1 退出，并输出一行指明出错 step 的消息。主机需要有仓库的 clone 和 Bun。
+`remote-check.sh` 把一条命令（一条 shell 行）作为检查运行。`OPERAD_CHECK_HOST` 未设置或为空时，它在 stderr 上打印 `remote-check: no test host set; running the check here`，并在仓库根目录于本机运行该行。设为 ssh destination（`user@host`）时，它把 `HEAD` 作为 git bundle 复制到该主机，并在那里占用 `OPERAD_CHECK_SLOTS` 个 slot 中的一个（锁为 `~/.operad-check-<i>.lock`；只有全部被占用时才等待），获取 `origin` 和该 bundle，以 detached 方式检出 `HEAD` 的 commit，除 `node_modules` 外移除未跟踪的文件，然后运行该行。每个 slot 有自己的 tree，因此在一个 slot 中的 checkout 或 clean 绝不会碰到另一个：slot 1 使用 clone `OPERAD_CHECK_TREE`（`~/Code/operad`），其他每个 slot 使用该 clone 在首次使用时创建的 git worktree，`<tree>-slot<i>`（例如 `~/Code/operad-slot2`），在该行安装之后拥有自己的 `node_modules`。带 `OPERAD_CHECK_LANE=integration` 时，检查改为占用唯一的 integration slot（锁 `~/.operad-check-integration.lock`，worktree `<tree>-integration`）：integration 从不等待任务检查，任务检查也从不占用该 slot。该行在主机上能看到 `OPERAD_CHECK_SLOTS`，因此检查可以使用 `cores / (N + 1)` 个测试 worker。输出在写出时即返回，退出码是该行的退出码；该行运行之前发生的失败（bundle、复制、连接、fetch、checkout）以 1 退出，并输出一行指明出错 step 的消息。在该行开始和结束时，它还会打印主机的负载和核心数，这样 `dev` 判断的是检查实际运行的那台机器；读不到负载的主机则打印 `load unknown`。主机需要有仓库的 clone 和 Bun。
 
 | 变量 | 类型 | 默认值 | 作用 |
 |---|---|---|---|
@@ -47,6 +47,8 @@ shell`），它只运行这些包的测试。`check-changed.sh` 以同样的方�
 | `OPERAD_CHECK_SCP` | command | `scp -q -o BatchMode=yes` | scp 命令。 |
 
 每个变量都在脚本启动时读取。
+
+`dev` 任务的 gate、integration 和 rerun 命令还会从 home 的 `dev.testHost` 和 `dev.testSlots` 设置中得到主机和 slot，所以重启 `serve` 不会丢失它们。`serve` 自己的环境中显式设置的 `OPERAD_CHECK_HOST` 或 `OPERAD_CHECK_SLOTS` 优先于这项设置。当某个仓库的检查命令使用 `scripts/remote-check.sh` 而没有设置主机时，`serve` 在启动时在日志中说明这一点，dev 会把它列在该仓库的 pending 项和 Overview 中。见 [config.json](config.md#dev)。
 
 ## 检查失败时 {#when-a-check-fails}
 

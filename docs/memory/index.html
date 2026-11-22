@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory and the wiki · operad docs</title>
+<meta name="description" content="The memory plugin: the shared wiki, a bot's memory and the git history of what a bot wrote.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/docs/memory/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/memory/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/memory/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/memory/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="Memory and the wiki · operad docs">
+<meta property="og:description" content="The memory plugin: the shared wiki, a bot's memory and the git history of what a bot wrote.">
+<meta property="og:url" content="https://operad.io/docs/memory/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Memory and the wiki · operad docs">
+<meta name="twitter:description" content="The memory plugin: the shared wiki, a bot's memory and the git history of what a bot wrote.">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "Memory and the wiki",
+ "description": "The memory plugin: the shared wiki, a bot's memory and the git history of what a bot wrote.",
+ "inLanguage": "en",
+ "url": "https://operad.io/docs/memory/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../" aria-label="operad, home"><svg viewBox="5 2 38 42" width="30" height="33" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.15"><path d="M23.06 32.49L16.75 22.44M26.40 31.52L26.40 22.98M29.74 32.49L36.05 22.44M13.59 16.28L11.13 10.23M16.23 16.29L18.75 10.23"/><circle cx="26.4" cy="37.8" r="5.7"/><circle cx="14.9" cy="19.5" r="2.9"/><circle cx="26.4" cy="19.5" r="2.9"/><circle cx="37.9" cy="19.5" r="2.9"/><circle cx="9.9" cy="7.2" r="2.7"/><circle cx="20.0" cy="7.2" r="2.7"/></g></svg></a>
+  <nav class="tile links" aria-label="Sections">
+    <a href="../../">Home</a>
+    <a href="../" aria-current="true">Docs</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../zh/docs/memory/" hreflang="zh-CN" lang="zh-CN" aria-label="中文" title="中文"><b>EN</b><i>/</i><span>中</span></a>
+  </nav>
+  <a class="tile go" href="../../#install">Run it</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="Documentation">
+    <details class="side-nav" open>
+      <summary class="s3">Docs</summary>
+      <ul>
+        <li><a href="../">Overview</a></li>
+        <li><a href="../quickstart/">Quickstart</a></li>
+        <li><a href="../setup-prompt/">Setup Dev</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json and the dev plugin</a></li>
+        <li><a href="../access/">Access</a></li>
+        <li><a href="../cli/">The command line</a></li>
+        <li><a href="../tui/">The terminal client</a></li>
+        <li><a href="../app/">The phone app</a></li>
+        <li><a href="../http/">The HTTP interface</a></li>
+        <li><a href="../tailscale/">Tailscale</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">Chats and bots</a></li>
+        <li><a href="../memory/" aria-current="page">Memory and the wiki</a></li>
+        <li><a href="../telegram/">Telegram</a></li>
+        <li><a href="../notifications/">Notifications</a></li>
+        <li><a href="../checks/">Checks</a></li>
+        <li><a href="../environment/">Environment variables</a></li>
+        <li><a href="../troubleshooting/">Troubleshooting</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="memory-and-the-wiki">Memory and the wiki</h1>
+<p>The <code>memory</code> plugin gives a bot two places to keep what it knows:</p>
+<ul><li>the <strong>wiki</strong>, one shared knowledge base every bot reads and some bots write;</li><li>the bot's <strong>memory</strong>, a directory of its own inside its working directory.</li></ul>
+<p>A new home enables it; a home made before needs <code>operad plugin enable memory</code>:</p>
+<pre data-ui><code class="lang-sh">operad plugin enable memory</code></pre>
+<p>The plugin owns one setting, one skill and one index. The wiki is a Markdown directory with a git history; the bot's memory has the same history, one repository per bot.</p>
+<h2 id="the-wiki">The wiki<a class="anchor" href="#the-wiki" aria-label="Link to this section">#</a></h2>
+<p>The wiki is a reserved directory that every bot shares. It is meant for notes about the world that outlive a chat: a person may point it at their own notes library, such as an Obsidian vault, and edit it there.</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>memory.wikiDir</code></td><td>string</td><td><code>wiki</code> in the operad home, so <code>~/.operad/wiki</code> for the usual home</td><td>a directory; <code>~</code> is your home directory and a relative path is under the operad home</td><td>At the next bot reply and at the next <code>serve</code> start</td><td>Refused by the settings call with the schema's reason</td></tr></tbody></table></div>
+<p>The directory is created when it is missing and made a git repository when it is not one. A directory that is already a git repository is used as it is: it is never initialised again and its files are never restructured. So pointing the setting at an existing vault keeps that vault's history, branches and layout.</p>
+<p>Who may write the wiki is each bot's access profile, not a global switch (see <a href="../../docs/access/">Access</a>). By default the <code>default</code> bot writes it and every other bot only reads it. A bot's own setting changes that:</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>bot.bots.&lt;name&gt;.writeWiki</code></td><td>boolean</td><td><code>true</code> for <code>default</code>, <code>false</code> for every other bot</td><td><code>true</code> or <code>false</code></td><td>At the next bot reply</td><td>Refused by the schema</td></tr></tbody></table></div>
+<p>Read access is always there. A bot that may not write the wiki has the directory refused for writing, not merely questioned, so a misreading cannot change a person's notes by accident.</p>
+<h2 id="a-bots-memory">A bot's memory<a class="anchor" href="#a-bots-memory" aria-label="Link to this section">#</a></h2>
+<p>A bot's memory lives in <code>memory/</code> inside its working directory, so <code>default</code>'s is <code>~/.operad/bot/default/memory/</code>. It is not shared: another bot cannot read it. The directory is a git repository of its own, created when it is missing, so one bot's history stays apart from every other bot's. A working directory that is already inside a repository keeps that repository: the plugin commits only the <code>memory/</code> part.</p>
+<p>The layout has three layers and one file:</p>
+<div class="table-wrap"><table><thead><tr><th>Path</th><th>What it holds</th></tr></thead><tbody><tr><td><code>memory/index.md</code></td><td>the index: one line per entry, a link and a few words. It stays small; the detail belongs in a topic note</td></tr><tr><td><code>memory/log/YYYY-MM-DD.md</code></td><td>an append-only daily log of what happened</td></tr><tr><td><code>memory/topics/&lt;name&gt;.md</code></td><td>topic notes, linked from the index</td></tr><tr><td><code>memory/instructions.md</code></td><td>a person's long-standing instructions to that bot</td></tr></tbody></table></div>
+<p>The plugin creates <code>index.md</code>, <code>instructions.md</code> and <code>log/</code> when they are missing and never overwrites them.</p>
+<h2 id="what-a-reply-carries">What a reply carries<a class="anchor" href="#what-a-reply-carries" aria-label="Link to this section">#</a></h2>
+<p>A bot chat puts the memory index and the person's instructions on its message, not in the agent's system prompt. The first message of a new session, and the first after the agent compacts its context, carries both files whole. After that, a reply compares each file with what the session last saw: a file changed elsewhere (another chat of the same bot, a scheduled run, a tidy step) goes again in full, while a change the chat's own run wrote is not repeated. The index is cut at about 8,000 characters, with a line saying it was cut; keep the file shorter than that by moving detail into topic notes. These notes are not part of the transcript and do not change the message you sent.</p>
+<h2 id="the-nightly-tidy">The nightly tidy<a class="anchor" href="#the-nightly-tidy" aria-label="Link to this section">#</a></h2>
+<p>Once a night, at the bot's <code>tidyTime</code> (<code>03:30</code> by default), the bot checks whether its memory changed since the last tidy and whether <code>index.md</code> is over its limit. The check costs no model call. A night with nothing to do ends there.</p>
+<p>When there is work, the bot has one pending item with how many notes and chats need checking and whether the index is over its limit. Run (运行) starts it; Skip (跳过) closes it until the next check finds work. With <code>runWithoutAsking</code> on, the tidy runs without the item. A tidy waits while any chat of the bot is writing a reply.</p>
+<p>A tidy started from Run leaves no pending item when it finishes. Like an automatic run, it sends one line through the configured <a href="../../docs/notifications/"><code>notify</code> command</a>. The line names the bot, the files and lines it changed (or that memory did not change), the cost, and that only additions were kept when a rewrite dropped too much of the index. The bot's reply is not in the line; the full result stays on the memory tidy's page. A failed tidy keeps one pending item, with Run and Skip, and one short line saying why it failed.</p>
+<h2 id="the-memory-skill">The memory skill<a class="anchor" href="#the-memory-skill" aria-label="Link to this section">#</a></h2>
+<p>While the plugin is enabled, every bot mounts the <code>memory</code> skill (<code>SKILL.md</code>) next to the skills it lists. The skill tells the bot what a memory is for: the things it cannot look up, such as a person's preferences, a correction they made and a rule they verified. It points at operad's own history and the wiki instead of copying them. It also says that rules the bot must obey do not belong in memory: they live in the bot's instructions and its access profile, and changing one is a proposal for a person.</p>
+<p>The skill asks the bot to read its memory before answering, to write without asking, and to keep the index short. A person reviews what changed afterwards in the git history rather than approving each write.</p>
+<h2 id="search">Search<a class="anchor" href="#search" aria-label="Link to this section">#</a></h2>
+<p>The plugin keeps a full-text index of the wiki, each bot's memory and the chat records. It lives in <code>~/.operad/store/search.sqlite</code>. The index is a cache: anything it holds is rebuilt from the Markdown files and the chats, so deleting the file costs one rebuild and loses no note.</p>
+<p>A bot searches it with the <code>search</code> tool, which comes with the other operad tools. A search can cover the wiki, the bot's own memory or the bot's own chats; the wiki is shared, the memory and chats are not. A result names the document, its line range and a snippet. The <code>read</code> tool returns the document, or the range of lines a result points at. Frontmatter fields can narrow a search, and a directory's <code>_about.md</code> comes back with the hits found inside that directory.</p>
+<p>A read also shows the notes that link to the one you read. When there are any, it ends with a <code>Backlinks</code> section: each linking note's path, the line of the link and a short excerpt around it. A linking note whose frontmatter says <code>untrusted: true</code> is marked, just as a search result is. The note's own outgoing links are already in its text, so they are not listed again. With no backlinks the section is left out. The <code>read</code> command prints this text; <code>--json</code> gives the same list as a <code>backlinks</code> array instead.</p>
+<p>The index uses SQLite FTS5's <code>trigram</code> tokenizer, which works on Chinese as well as English: a two-character Chinese word inside a sentence is found by a substring fallback because trigram needs three characters. <code>unicode61</code>, the FTS5 default, treats a whole run of Chinese characters as one word. On the repository fixture <code>unicode61</code> found 3 of 9 relevant documents and <code>trigram</code> found 9 of 9.</p>
+<p>A note a person edits in their own editor is found on the next search. A long-running <code>serve</code> also watches the wiki and memory directories and the store, so its index follows along between searches.</p>
+<h2 id="the-wiki-in-the-app">The wiki in the app<a class="anchor" href="#the-wiki-in-the-app" aria-label="Link to this section">#</a></h2>
+<p>The app reads the wiki through the same object interface as every other plugin, so the wiki has a list page and an object page without a separate file API. There are two read-only object types: a wiki <strong>folder</strong> and a wiki <strong>note</strong>. They have no actions. Only the directory in <code>memory.wikiDir</code> is shown; a bot's own memory directory is not.</p>
+<p>The top level is the wiki root: a list without a parent shows the folders and notes directly in it. Opening a folder lists its subfolders and notes, and a note opens on its content.</p>
+<div class="table-wrap"><table><thead><tr><th>Object</th><th>Row</th></tr></thead><tbody><tr><td>folder</td><td>its name as the title, and how many notes are under it, including its subfolders</td></tr><tr><td>note</td><td>the first heading as the title, else the file name without <code>.md</code>, and the modification time</td></tr></tbody></table></div>
+<p>A folder's title is its directory name. A note whose frontmatter says <code>untrusted: true</code> is listed like any other note, with the same <code>(untrusted)</code> mark a search result carries. A row has no state mark.</p>
+<p>A note's page has a <strong>Note</strong> section with its Markdown content, and a <strong>Backlinks</strong> section when other notes link to it. Backlinks follow the same link rules as <code>memory read</code>: each one opens the linking note's object. The Backlinks section is left out when there are none. Content longer than one page is paged with the section cursor, like any other long section.</p>
+<p>The content section also names the notes its links point at, so a client can follow <code>[[links]]</code> and relative Markdown links. A link to a page nobody wrote yet stays unresolved; the Markdown itself is not rewritten.</p>
+<h2 id="what-a-bot-wrote-is-recorded-in-git">What a bot wrote is recorded in git<a class="anchor" href="#what-a-bot-wrote-is-recorded-in-git" aria-label="Link to this section">#</a></h2>
+<p>After a bot reply that changed its memory directory or the wiki, the plugin makes one commit in each repository the reply changed. The message names the bot and the chat it was talking in, for example:</p>
+<pre data-ui><code>memory: bot default, chat C-12
+wiki: bot default, chat C-12</code></pre>
+<p>A reply that wrote nothing makes no commit. The commits are ordinary commits in ordinary repositories: review them with <code>git log</code>, or in an editor that shows them, and revert one like any other commit. Nothing is pushed anywhere.</p>
+<p>The plugin cannot tell your own uncommitted edit from the bot's: when a reply ends, every change under the wiki at that moment is committed with the bot and the chat in the message. Commit your own edits before a bot writes, or commit them separately afterwards.</p>
+<h2 id="notes-a-bot-found-outside">Notes a bot found outside<a class="anchor" href="#notes-a-bot-found-outside" aria-label="Link to this section">#</a></h2>
+<p>A note written after a bot read a web page, mail or an item a source plugin fetched can come from content someone else controls. The skill asks the bot to mark such a note in its frontmatter:</p>
+<pre data-ui><code class="lang-md">---
+untrusted: true
+---</code></pre>
+<p>A note marked that way is never linked from <code>memory/index.md</code>: the plugin removes an index line that points at it before it commits, and the note itself stays where it was written. The nightly tidy also leaves such a note out of its link lists, so it is never suggested for linking. The bot is asked to keep it out of the index in the first place.</p>
+<p>operad cannot yet tell by itself that a bot run read such content: the agent's reads and the text a local MCP server returns are not recorded per run. Until they are, the mark depends on the bot writing it, and a note the bot does not mark stays as it is.</p>
+<h2 id="not-here-yet">Not here yet<a class="anchor" href="#not-here-yet" aria-label="Link to this section">#</a></h2>
+<p>No capture or review flow yet. Vector search is not built; the index is built so another search engine can replace it without changing the tools. The wiki, the memory layout and the nightly tidy are usable now.</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/memory.md">View this page's source</a></p>
+    <nav class="pn" aria-label="Previous and next">
+      <a class="prev" href="../chats-and-bots/"><small>Previous</small>Chats and bots</a>
+      <a class="next" href="../telegram/"><small>Next</small>Telegram</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="On this page"><p class="s3">On this page</p><ul><li class="l2"><a href="#the-wiki">The wiki</a></li><li class="l2"><a href="#a-bots-memory">A bot's memory</a></li><li class="l2"><a href="#what-a-reply-carries">What a reply carries</a></li><li class="l2"><a href="#the-nightly-tidy">The nightly tidy</a></li><li class="l2"><a href="#the-memory-skill">The memory skill</a></li><li class="l2"><a href="#search">Search</a></li><li class="l2"><a href="#the-wiki-in-the-app">The wiki in the app</a></li><li class="l2"><a href="#what-a-bot-wrote-is-recorded-in-git">What a bot wrote is recorded in git</a></li><li class="l2"><a href="#notes-a-bot-found-outside">Notes a bot found outside</a></li><li class="l2"><a href="#not-here-yet">Not here yet</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../">Home</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>

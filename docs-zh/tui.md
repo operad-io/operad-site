@@ -6,6 +6,8 @@ description: 终端客户端：主题、实时更新、状态与退出。
 
 `operad tui` 是同一个 `/v1` 接口的终端客户端。在全新的 `~/.operad` 下，它不需要任何其他东西：不用改 config，不用在另一个终端里运行 `operad serve`，也不用 token。它从不打开 store，也从不加载插件。
 
+不带命令的 `operad` 是进入的捷径：home 不存在时创建它，没有 `serve` 响应时启动它，并打开默认 bot 的新 chat，光标位于输入框中。第一条消息会创建该 chat。
+
 ## 为什么需要它 {#why-it-exists}
 
 等你处理的事和正在进行的 run 都由 `operad serve` 持有。终端客户端让你不离开终端就能看到并处理它们：哪些 pending、哪些在运行、对象的各个部分和 history，以及对象提供的 action。它只通过 `/v1` 接口与 `serve` 通信，这与手机 app 用的是同一个接口，所以它显示的内容与 app 相同，也不认识任何插件。没有服务器在运行时，它会替你启动一个，所以第一次使用不需要任何设置。它自己从不打开 store，只通过运行对象提供的 action 来做出改动。
@@ -23,7 +25,7 @@ description: 终端客户端：主题、实时更新、状态与退出。
 它按下面的方式找到或启动服务器：
 
 - 给出 `--url` 和 `--token` 时，它们优先于 home。给出 `--url` 时，从不启动任何东西。
-- 没有 `--url` 时，URL 是 `http://<address>:<port>`，其中 address 取自 `config.json` 中 `http.listen` 的第一项，port 取自 `http.port`；没有 `http` 部分时是 `http://127.0.0.1:7480`。
+- 没有 `--url` 时，URL 是 `http://<address>:<port>`，其中 address 取自 `config.json` 中 `http.listen` 的第一项，port 取自 `http.port`；没有 `http` 部分时是 `http://127.0.0.1:8765`。
 - 它向该地址请求 `/v1/types`。如果有 `serve` 响应，就继续。
 - 如果没有任何东西响应，且没有 `serve` 持有此 home，它会为这个 `OPERAD_HOME` 启动 `operad serve`，打印 `starting operad serve (log: <path>)`，最多等待 15 秒（探测时间也计入）让它响应，然后打开界面。这个 `serve` 使用与你所输入命令相同的运行时和 `operad` 入口，以 `$OPERAD_HOME` 作为工作目录，把输出追加到 `$OPERAD_HOME/serve.log`，并且在你退出 TUI 之后继续运行，因为 hub 要继续运行 flow。用 `operad serve stop` 停止它（见 "Stopping serve"），或者在你自己运行 `operad serve` 的终端里按 Ctrl-C。如果它立即退出或始终不响应，`operad tui` 会以一条点明 `serve.log` 的错误失败，并显示它的最后几行；`serve.log` 可能包含插件的输出，所以粘贴之前请先阅读这些行。如果是另一个 `operad tui` 先启动了这个 `serve`，那么本次会在同样的 15 秒内等待该 `serve` 响应。
 - 如果已有 `serve` 持有此 home，但该地址没有任何东西响应（`http.enabled` 为 false，或 `http.port`/`http.listen` 不同），它不启动任何东西并说明这一点，同时点明 `http.enabled` 和 `http.port`。
@@ -33,15 +35,17 @@ description: 终端客户端：主题、实时更新、状态与退出。
 - `--no-start` 关闭启动：界面照常打开，并在页脚显示失败信息。
 - 没有 `--token` 时，token 是 `operad pair` 从 `$OPERAD_HOME/secrets/http.json` 读取的那一个。`operad pair --show-token` 会把它打印出来。
 
+要通过 Tailscale 网络从另一台电脑使用终端客户端，见 [Tailscale](tailscale.md#the-terminal-client)。
+
 | 输入 | 类型 | 默认值 | 允许的值 |
 |---|---|---|---|
-| `--url` | 字符串 | `http://<first http.listen address>:<http.port>`，没有 `http` 部分时即 `http://127.0.0.1:7480` | 不带凭据、query 或 fragment 的 `http` 或 `https` URL。 |
+| `--url` | 字符串 | `http://<first http.listen address>:<http.port>`，没有 `http` 部分时即 `http://127.0.0.1:8765` | 不带凭据、query 或 fragment 的 `http` 或 `https` URL。 |
 | `--no-start` | flag | 关闭 | 即使没有任何东西响应，也从不启动 `operad serve`。 |
 | `--theme` | 字符串 | `$OPERAD_HOME/tui.json` 中的 `theme`，否则为 `auto` | `auto`、`light`、`dark`、`terminal`、一个 family 或内置主题（见 Themes），或你自己的主题文件的名称。本次会话中优先于 `tui.json`。 |
 | `--token` | 字符串 | `$OPERAD_HOME/secrets/http.json` 中的 token | 正在运行的 `serve` 的 bearer token。 |
 | `OPERAD_HOME` | 环境变量 | `~/.operad` | 存放 `config.json`、`secrets/http.json`、`serve.lock` 以及被启动的 `serve` 所写的 `serve.log` 的目录。 |
 | `http.listen` | `config.json` 中的字符串数组 | `["127.0.0.1"]` | `serve` 可以监听的 IP 字面量；第一个是 TUI 的默认地址。 |
-| `http.port` | `config.json` 中的整数 | `7480` | `0` 到 `65535`；TUI 需要 `serve` 实际使用的端口，所以 `0` 需要配合 `--url`。 |
+| `http.port` | `config.json` 中的整数 | `8765` | `0` 到 `65535`；TUI 需要 `serve` 实际使用的端口，所以 `0` 需要配合 `--url`。 |
 
 ## tui.json 文件 {#the-tuijson-file}
 
@@ -161,7 +165,8 @@ TUI 监视 `tui.json` 和主题目录，其中任何一个变化时都会重绘�
 | `a` | 键 | 无 | 运行打开的对象的主 action，即该对象当前提供的第一个 action（页脚会连同它的键一起写出它的名称）。绑定到某个 action 的键（见下）优先于 `a`。在 Pending 上，当所选项的选项不是其对象上的 action 时，`a` 会打开这些选项并回答问题。没有 action 时，页脚会用一行说明这一点。 |
 | 已绑定的键 | 键 | `GET /v1/keys` | 在打开的对象上运行那个 action。`keys.json` 中的用户绑定优先于同一个键上的插件默认值。保留键不能被绑定：`enter`、`return`、`escape`、`esc`、`tab`、方向键（`up`、`down`、`left`、`right`）、`pageup`、`pagedown`、`home`、`end`、`space`、`[`、`]`、`:`、`?`、`/`、`b`、`f`、`g`、`j`、`k`、`n`、`p`、`q`、`r`、`t`（字母大小写均可）和 `1`–`9`，以及 Ctrl-C 和任何 Ctrl 或 Meta 组合键。保留键上的插件默认值或 `keys.json` 条目会被丢弃；启动时页脚会用一行写出每个被丢弃的键及其 action 和来源。该 action 仍可通过 `:` palette 使用，不显示键。如果对象当前不提供该 action，页脚会用一行说明它不可用。 |
 | `:` | 键 | 无 | 打开 palette：输入即可对打开的对象所提供的 `plugin:action` 名称做模糊匹配，每个都带有它的键以及“需要 note”或“要求确认”，也包括 TUI 自己的命令和设置。对象归在设置之下的插件会在这里列出它们，每个类型一个以类型命名的分组；`enter` 打开该对象的页面。`↑` / `↓`（或 Ctrl-P / Ctrl-N）移动，`enter` 运行，`escape` 关闭。没有打开对象时，它只列出 "no object is selected"。 |
-| note 输入 | 键 | 无 | 带有 note 字段的 action 会打开一个文本输入框。键入会添加文本，`backspace` 删除，`shift-enter` 或 `Ctrl-J` 换行，`enter` 发送，`escape` 取消。必填的 note 不能为空发送。 |
+| `/` | 键 | 无 | 在 chat 的页面上，打开它的输入框并列出该 chat 的命令。输入框打开时，以 `/` 开头的一行会列出这些命令：键入即可过滤，`↑` / `↓` 移动，`enter` 把命令填入该行，`escape` 关闭列表。没有指名任何命令的一行会按原样发送。在其他地方 `/` 不做任何事。 |
+| note 输入 | 键 | 无 | 带有 note 字段的 action 会打开一个文本输入框。键入会添加文本，`backspace` 删除，`shift-enter` 或 `Ctrl-J` 换行，`enter` 发送，`escape` 取消。以 `/` 开头的一行会像上面那样列出该 chat 的命令；选中一个只是填入该行，并不运行它，这一行通过 chat 的 send action 发送。必填的 note 不能为空发送。 |
 | 确认 | 键 | 无 | 要求确认的 action 会以红色显示 `<action> <id>? [y/N]`。`y` 以 `confirmed: true` 发送它；其他任何键都会取消。 |
 | `?` | 键 | 无 | 显示或隐藏键列表。 |
 | `q` | 键 | 无 | 退出。 |

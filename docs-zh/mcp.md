@@ -150,7 +150,7 @@ server 只能运行 `mcp.actions` 列出的 action；其他所有 action 都属�
 | 键 | 类型 | 默认值 | 允许的值 | 何时生效 |
 |---|---|---|---|---|
 | `mcp` | object | 见下面的各个键 | `channel`、`actions`、`confirmActions` | `operad mcp` 启动时。 |
-| `mcp.actions` | 字符串数组 | `[]`（`operad init` 会把五个 `dev` lead action 和 `chat:close` 写入新文件） | `plugin:action` 名称 | `operad mcp` 启动时：lead 可以运行的 action。其他任何 action 都会被拒绝，消息中指出该 action 并说明由 owner 运行。 |
+| `mcp.actions` | 字符串数组 | `[]`（`operad init` 会把 `["chat:close"]` 写入新文件） | `plugin:action` 名称 | `operad mcp` 启动时：lead 可以运行的 action。其他任何 action 都会被拒绝，消息中指出该 action 并说明由 owner 运行。 |
 | `mcp.confirmActions` | 字符串数组 | `[]`（`operad init` 会把 `["chat:close"]` 写入新文件） | `plugin:action` 名称 | `operad mcp` 启动时：同时带有 `confirm: true` 的被允许 action。只在 `actions` 中且要求确认的 action 会被拒绝；只在此列表中的也会被拒绝。 |
 | `mcp.channel` | object | 见下面的两个键 | `notify`、`loopAfter` | `operad mcp --claude-channel` 启动时。 |
 | `mcp.channel.notify` | 字符串数组 | `["waiting", "ended", "loop"]` | `waiting`、`ended`、`loop`、`changes` | channel 启动时：什么情况会发送 block。`waiting` 是等待打开；`ended` 是最终状态；`loop` 是在没有等待或结束介入的情况下到达同一状态 `loopAfter` 次；`changes` 是每一次状态变化。未知的值是指出该值的配置错误。 |
@@ -166,7 +166,7 @@ server 只能运行 `mcp.actions` 列出的 action；其他所有 action 都属�
 |---|---|---|
 | `types` | 无 | `{ "types": [...] }`，与 `GET /v1/types` 的列表相同。 |
 | `list` | 无；`type`、`root`、`parent` 需要给出其中之一 | `{ "rows": [...], "next": "<c>" }`，与 `GET /v1/objects` 的页相同。 |
-| `show` | `id` | 对象及其行、section、允许的 action 和 `ownerActions`。 |
+| `show` | `id` | 对象及其行、section、skill、允许的 action 和 `ownerActions`。chat 的 `skills` 是它可以用 `/name` 输入的 skill，每个为 `{ name, description? }`，与客户端已经读取的 action 并列。 |
 | `section` | `id`、`section` | `{ "markdown", "next", "mark", "tail", "delta" }`，与 HTTP section 调用的读取相同；可选 `cursor`、`after`、`full`。 |
 | `pending` | 无 | `{ "items": [...] }`，只含 lead 可以运行的 action。 |
 | `answer` | `runId`、`waitId`、`choice` | `{ "runId", "waitId", "choice" }`；可选 `note`、`confirmed`。 |
@@ -221,7 +221,7 @@ server 只能运行 `mcp.actions` 列出的 action；其他所有 action 都属�
 }
 ```
 
-结果：对象 `{ "id", "type", "link", "row", "sections", "actions", "ownerActions" }`。`row` 是列表中的行。`sections` 是 section 目录。`actions` 是 lead 现在可以运行的可用 action，每个都带有 `name`、`on`、`args` JSON Schema、`note` 字段名、`noteRequired` 和 `confirm`。`ownerActions` 只包含 lead 不可以运行的可用 action 的名称，其中包括 `mcp.confirmActions` 没有列出的 `confirm: true` action。Markdown 显示行、section 目录、带参数的允许 action，以及一份 Owner actions 列表。未知的 id 是带有该视图消息的工具错误。
+结果：对象 `{ "id", "type", "link", "row", "sections", "actions", "ownerActions" }`。`row` 是列表中的行。`sections` 是 section 目录。`actions` 是 lead 现在可以运行的可用 action，每个都带有 `name`、`on`、`args` JSON Schema、`note` 字段名、`noteRequired`、`confirm`，以及当 chat 可以在 `/` 之后运行它时的 `command` 描述。`ownerActions` 只包含 lead 不可以运行的可用 action 的名称，其中包括 `mcp.confirmActions` 没有列出的 `confirm: true` action。Markdown 显示行、section 目录、带参数的允许 action，以及一份 Owner actions 列表。未知的 id 是带有该视图消息的工具错误。
 
 ### `section` {#section}
 
@@ -256,7 +256,7 @@ server 只能运行 `mcp.actions` 列出的 action；其他所有 action 都属�
 }
 ```
 
-结果：`{ "items": [...] }`，与 `operad pending` 和 `GET /v1/pending` 的列表相同，只含 lead 现在可以运行的 action。问题带有 `waitId`。每个关于某个对象的项都带有它的 `row`，与 `GET /v1/pending` 中一样。`mcp.actions` 之外的 action，或 `mcp.confirmActions` 没有列出的 `confirm: true` action，在结构化内容和 Markdown 中都会被省略。Markdown 列出每个 pending 项、它的提示、choice 和 action。要查看 owner action，对该项的对象调用 `show`。
+结果：`{ "items": [...] }`，与 `operad pending` 和 `GET /v1/pending` 的列表相同，只含 lead 现在可以运行的 action。问题带有 `waitId`，还可以带有 `choiceInfo`，它以选项为键，含可选的 `label`、`hint`、`role` 和 `note`。每个关于某个对象的项都带有它的 `row`，与 `GET /v1/pending` 中一样。`mcp.actions` 之外的 action，或 `mcp.confirmActions` 没有列出的 `confirm: true` action，在结构化内容和 Markdown 中都会被省略。Markdown 列出每个 pending 项、它的提示、choice 和 action。要查看 owner action，对该项的对象调用 `show`。
 
 ### `answer` {#answer}
 

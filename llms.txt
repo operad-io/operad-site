@@ -11,16 +11,18 @@
 
 - [Overview](https://operad.io/docs/): The operad user manual: what operad is and a page for each subject.
 - [Quickstart](https://operad.io/docs/quickstart/): Start operad: create the home, start serve, open the client.
-- [Set up operad with an agent](https://operad.io/docs/setup-prompt/): A prompt that has your coding agent write and check .operad/dev.json for a repository.
+- [Setup Dev](https://operad.io/docs/setup-prompt/): Setup Dev: have your bot read a repository and propose the settings that turn dev on for it.
 - [config.json](https://operad.io/docs/config/): The config.json file: where the home is, every section and key, and every plugin's settings.
 - [dev.json and the dev plugin](https://operad.io/docs/dev/): dev.json and the dev plugin: its commands, the reviewer, workers and pools, usage and end results.
-- [Access](https://operad.io/docs/access/): Access profiles, the default profile, access-user.json, always allow, MCP tools and background runs.
+- [Access](https://operad.io/docs/access/): Access profiles, the default profile, access-user.json, always allow, target grants, MCP tools and background runs.
 - [The command line](https://operad.io/docs/cli/): Every operad command and option, its arguments, output and exit code.
 - [The terminal client](https://operad.io/docs/tui/): The terminal client: themes, live updates, states and leaving.
 - [The phone app](https://operad.io/docs/app/): The phone app: pairing, tabs, notifications, chats, attachments, model and effort, and always allow.
 - [The HTTP interface](https://operad.io/docs/http/): The /v1 HTTP interface: the http section, the token, endpoints, events and errors.
+- [Tailscale](https://operad.io/docs/tailscale/): Reaching operad over a Tailscale network: the HTTPS name, pairing the phone app, and what does not work.
 - [MCP server](https://operad.io/docs/mcp/): The MCP server for a lead agent: setup, transport, the Claude Code channel, tools and errors.
 - [Chats and bots](https://operad.io/docs/chats-and-bots/): Chats with an agent, bots, their commands, settings, MCP servers and proposals.
+- [Memory and the wiki](https://operad.io/docs/memory/): The memory plugin: the shared wiki, a bot's memory and the git history of what a bot wrote.
 - [Telegram](https://operad.io/docs/telegram/): The Telegram plugin: talk to a bot chat from Telegram and answer what waits for you there.
 - [Notifications](https://operad.io/docs/notifications/): The notify command: when it runs, what it gets, and an example script.
 - [Checks](https://operad.io/docs/checks/): Checking a change and reproducing a flaky test.

@@ -4,7 +4,7 @@ description: 所有 OPERAD_ 环境变量，以及 operad 读取的其他变量�
 
 # 环境变量 {#environment-variables}
 
-`operad` 或它的脚本读取的、或它启动的命令会收到的每个 `OPERAD_*` 变量，以及 `operad` 读取的其他变量。适合放进文件的设置在 [config.json](config.md) 中；对于每个 shell 或每台检查主机各不相同的值，请使用环境变量。
+`operad` 或它的脚本读取的、或它启动的命令会收到的每个 `OPERAD_*` 变量，以及 `operad` 读取的其他变量。适合放进文件的设置在 [config.json](config.md) 中；对于每个 shell 或每台测试主机各不相同的值，请使用环境变量。
 
 表中给出类型、默认值、接受的值以及值何时被读取。超出允许范围的值要么被忽略，要么被拒绝，并给出该行所指明的消息。
 
@@ -12,16 +12,20 @@ description: 所有 OPERAD_ 环境变量，以及 operad 读取的其他变量�
 
 | 变量 | 类型 | 默认值 | 允许的值 | 何时生效 |
 |---|---|---|---|---|
-| `OPERAD_HOME` | path | `~/.operad` | 目录路径 | 每个命令：存放 `config.json`、store、secrets 目录、`tui.json`、`keys.json`、`serve.lock` 和 `access-user.json` 的 home。相对路径从当前目录解析。 |
+| `OPERAD_HOME` | path | `~/.operad` | 目录路径 | 每个命令：存放 `config.json`、store、secrets 目录、`tui.json`、`keys.json`、`serve.lock`、`access-user.json` 和 `access-grants.json` 的 home。相对路径从当前目录解析。 |
 | `OPERAD_SERVE_INTERVAL_MS` | integer | `1000` | 毫秒，大于 0 | `operad serve` 启动时：loop 两次之间的间隔。不是有限正数的值会回退到 1000。 |
 | `OPERAD_BIND_RETRY_MS` | integer | `10000` | 毫秒，大于 0 | 接替另一个 serve 的 `serve` 打开它的地址时：持续重试多久。第一次启动会立即失败。不是正数的值会回退到 10000。 |
 | `OPERAD_BIND_RETRY_STEP_MS` | integer | `250` | 毫秒，大于 0 | 同一次重试中两次尝试之间的等待。不是正数的值会回退到 250。 |
 | `OPERAD_RELOAD_QUIET_MS` | integer | `1000` | 毫秒，大于 0 | 文件需要保持多久不变，`serve` 才检查变更后的代码能否加载（见 [Changed code](cli.md#changed-code)）。不是正数的值会回退到 1000。 |
 | `OPERAD_RELOAD_POLL_MS` | integer | `5000` | 毫秒，大于 0 | `serve` 多久查看一次文件是否有变化，以及 run 的进程多久等待一次无法加载的代码。不是正数的值会回退到 5000。 |
+| `OPERAD_RELOAD_CHECK_MS` | integer | `90000` | 毫秒，大于 0 | `serve` 为一次变更代码的检查等待多久，之后它保留旧代码、说明这一点并再次尝试（见 [Changed code](cli.md#changed-code)）。不是正数的值会回退到 90000。 |
+| `OPERAD_RELOAD_PROBE_MS` | integer | `60000` | 毫秒，大于 0 | 加载变更代码的新进程最长可以运行多久，之后 `serve` 结束它并保留旧代码。不是正数的值会回退到 60000。 |
+| `OPERAD_RELOAD_RETRY_MS` | integer | `300000` | 毫秒，大于 0 | 没有文件变化时，`serve` 多久再次尝试一项被它搁置的变更，这样一时的故障不会让它一直停留在旧代码上。不是正数的值会回退到 300000。 |
 | `OPERAD_CHECK_BASE` | commit | `HEAD` 与 `origin/main` 的 merge base | commit 名称 | `check-changed.sh` 选取一项变更涉及的包时：用来比较的 commit。git 无法解析的名称会使脚本停止。 |
 | `OPERAD_CHECK_HOST` | ssh destination | 未设置：检查在本机运行 | `user@host` | `remote-check.sh` 运行命令时：设置后，命令在该主机上运行。为空表示在本机。 |
 | `OPERAD_CHECK_SLOTS` | integer | `1` | 整数，1 或更大 | 主机上同时运行多少个任务检查；每个 slot 有自己的锁和 tree。其他任何值都会使脚本停止，并给出指明该变量的消息。 |
 | `OPERAD_CHECK_LANE` | string | 未设置 | `integration` | `integration` 占用唯一的 integration slot，而不是任务 slot；其他任何值都会使脚本停止，并给出指明该变量的消息。 |
+| `OPERAD_CHECK_WAIT_SECS` | integer | `60` | 整数秒数，1 或更大 | `remote-check.sh` 在主机上等待 slot 期间：它多久打印一次说明自己正在等待的那一行。其他任何值会回退到 60。 |
 | `OPERAD_CHECK_TREE` | path | `Code/operad` | 相对于主机 home 的路径 | 主机上运行检查所用的 clone；其他每个 slot 使用它的一个 worktree。 |
 | `OPERAD_CHECK_PATH` | 目录列表 | `$HOME/.bun-operad/bin:$HOME/.bun/bin` | 用 `:` 分隔的目录 | 在检查行运行之前放到主机 `PATH` 的最前面，在主机上展开。 |
 | `OPERAD_CHECK_SSH` | command | `ssh -o BatchMode=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=4` | ssh 命令行 | 检查连接它的主机时。 |
@@ -31,6 +35,8 @@ description: 所有 OPERAD_ 环境变量，以及 operad 读取的其他变量�
 | `OPERAD_TEST_OVERLAP` | integer | `1` | `1` 让 heavy step 与 light step 同时运行；`0` 让它在 light step 之后运行 | `run-tests.sh` 启动时。 |
 | `OPERAD_TEST_HEARTBEAT_SECS` | integer | `60` | 整数秒数，或 `0` 表示关闭 | `run-tests.sh` 启动时：它多久检查一次某个 step 的报告或输出是否增长，增长时打印一行 heartbeat。静默的 step 不打印任何内容。 |
 | `OPERAD_TEST_TIMES` | path | `~/.operad-test-times` | 文件路径 | 每次完整的测试运行在此追加一行耗时记录（`run-tests.sh` 和 `test-times.ts`）。 |
+
+当 `serve` 自己的环境中还没有 `OPERAD_CHECK_HOST` 和 `OPERAD_CHECK_SLOTS` 时，`dev` 任务的 gate、integration 和 rerun 命令会从 home 的 `dev.testHost` 和 `dev.testSlots` 设置中得到它们。显式设置的变量优先，包括空的 `OPERAD_CHECK_HOST`，它让检查在本机运行。两项设置默认都未设置。见 [config.json](config.md#dev)。
 
 ## operad 设置的变量 {#what-operad-sets}
 

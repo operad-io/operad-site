@@ -4,9 +4,9 @@ description: 开始使用 operad：创建 home，启动 serve，打开客户端�
 
 # 快速上手 {#quickstart}
 
-`operad init` 创建 home 并检查插件。`operad serve` 为该 home 运行循环；`operad tui` 打开[终端客户端](tui.md)，并在没有 `serve` 应答时启动它。`operad pending` 列出等待人处理的事项，`operad list <type>` 列出对象。
+`operad init` 创建 home 并检查插件。新 home 一开始是个人助理，带有 `chat`、`bot`、`memory` 和它找到的 agent；`shell`、`dev` 和 `pool` 是关闭的，[the Quickstart](../../README.md#quickstart) 会为仓库把它们打开。`operad serve` 为该 home 运行循环；`operad tui` 打开[终端客户端](tui.md)，并在没有 `serve` 应答时启动它。不带命令的 `operad` 一次完成最初的几步：home 不存在时创建它，启动 `serve`，并打开默认 bot 的新 chat。`operad pending` 列出等待人处理的事项，`operad list <type>` 列出对象。
 
-要让你的编码 agent 为某个仓库编写 `.operad/dev.json`，请使用 [the setup prompt](setup-prompt.md)。设置见 [config.json](config.md)，命令见[命令行](cli.md)，出问题时怎么办见 [troubleshooting](troubleshooting.md)。
+要让你的 bot 为某个仓库提议 `.operad/dev.json` 并打开 `dev`，请使用 [Setup Dev](setup-prompt.md)。设置见 [config.json](config.md)，命令见[命令行](cli.md)，出问题时怎么办见 [troubleshooting](troubleshooting.md)。
 
 ## 非 JavaScript 的仓库 {#a-repository-that-is-not-javascript}
 

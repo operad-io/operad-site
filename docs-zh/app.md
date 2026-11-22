@@ -25,7 +25,7 @@ operad 里的工作经常在等一个人：run 提出的问题、待批准的 re
 `operad pair` 显示 app 连到这个 `serve` 所需的信息：
 
 ```text
-url http://192.168.1.20:7480
+url http://192.168.1.20:8765
 token <the token>
 
 Scan this in the operad app:
@@ -33,11 +33,11 @@ Scan this in the operad app:
 <a QR code>
 ```
 
-URL 是 `http://<address>:<port>`，其中地址取 `http.listen` 中第一个非 loopback 的条目。传入 `--url <base url>` 可以指定另一个地址，例如 Tailscale 的 HTTPS 名称（`operad pair --url https://mac.tail1234.ts.net`）；它必须是不带凭据和 query 的 `http` 或 `https` URL。QR 码编码的是 `operad://pair?url=<url>&token=<token>`。它要求 `http.enabled` 为 true，没有 `--url` 时还要求 `http.listen` 中有非 loopback 的地址。在默认的 `http` 值下，`pair` 会指出 `http.listen` 只有 loopback 地址，并要求提供一个地址或 `--url`；只有它为 false 时才会提到 `http.enabled`。
+URL 是 `http://<address>:<port>`，其中地址取 `http.listen` 中第一个非 loopback 的条目。传入 `--url <base url>` 可以指定另一个地址，例如 `tailscale serve` 在 Tailscale 网络上给出的 HTTPS 名称（`operad pair --url https://mac.tail1234.ts.net`；见 [Tailscale](tailscale.md)）；它必须是不带凭据和 query 的 `http` 或 `https` URL。QR 码编码的是 `operad://pair?url=<url>&token=<token>`。它要求 `http.enabled` 为 true，没有 `--url` 时还要求 `http.listen` 中有非 loopback 的地址。在默认的 `http` 值下，`pair` 会指出 `http.listen` 只有 loopback 地址，并要求提供一个地址或 `--url`；只有它为 false 时才会提到 `http.enabled`。
 
 `pair` 是唯一会打印 token 的命令。当它的输出不是终端时它会拒绝，因此管道或日志永远收不到 token；`--show-token` 会覆盖这一点，把 `url`、`token` 和配对的 `link` 作为普通行打印，不带 QR 码。如果你把 token 粘贴到了任何地方，请用 `operad http token rotate` 轮换它；运行中的 `serve` 会立即拒绝旧 token，并关闭用它打开的流。
 
-app 只能连到 `serve` 可以监听的地址：loopback、私有地址（`10.0.0.0/8`、`172.16.0.0/12`、`192.168.0.0/16`）、link-local 或 Tailscale 地址。同一网络中的手机使用私有地址；在别处的手机使用 Tailscale 或 `--url`。每个请求都需要 token；缺少或过期的 token 会得到 `401`，app 会提示 token 已被轮换。
+app 只能连到 `serve` 可以监听的地址：loopback、私有地址（`10.0.0.0/8`、`172.16.0.0/12`、`192.168.0.0/16`）、link-local 或 Tailscale 地址。同一网络中的手机使用私有地址。在别处的手机需要 `tailscale serve` 给出的 HTTPS 名称，用 `--url` 传入（见 [Tailscale](tailscale.md)）；app 连不到普通的 `http://100.x.y.z:<port>` Tailscale 地址，即使 `serve` 在监听它。每个请求都需要 token；缺少或过期的 token 会得到 `401`，app 会提示 token 已被轮换。
 
 ## Tab {#tabs}
 
@@ -45,7 +45,7 @@ app 只能连到 `serve` 可以监听的地址：loopback、私有地址（`10.0
 
 - **Pending**：所有在等待用户的内容。
 - **Running**：每一个进行中的 run。
-- 每个插件的顶层对象类型各有一个 tab：`dev` 是 **Repo**，`chat` 是 **Chat**。
+- 每个插件的顶层对象类型各有一个 tab：`dev` 是 **Projects**（项目），`chat` 是 **Chat**。
 - **Settings**：服务器设置，以及插件放在 settings 之下的对象。
 
 顶层以下的类型（计划、任务）没有 tab；它从父对象的页面、Pending 或 Running 中打开。`bot` 插件没有 tab：bot 页就是该 bot 的设置页，bot 出现在 **Settings** 下名为 **Bots** 的 section 中。
@@ -77,17 +77,21 @@ chat 的行和页面显示 agent，已知时还显示 model 和 effort。agent �
 
 ### transcript 和发送 {#the-transcript-and-sending}
 
-chat 页由 `transcript` section 加上输入框组成。每条用户消息显示它的文本、附件和发送者（`ios`、`telegram`、`cli` 等）。agent 的回复及其过程以 Markdown 行显示：中间文本、`Thinking`、带结果的工具调用、耗时和一小段输出，以及最终回复。transcript 中的工具输出会被截断；agent 可以从 chat 的目录中读取完整文件。仍在回复的 run 把它未完成的文本和思考显示为一个会更新的 tail；已完成的条目已经被记录，因此重新打开 chat 不会丢失它们，`serve` 重启也不会重复它们。
+chat 页由 `transcript` section 加上输入框组成。每条用户消息显示它的文本、附件和发送者（`ios`、`telegram`、`cli` 等）。agent 的回复及其过程以 Markdown 行显示：中间文本、`Thinking`、带结果的工具调用、耗时和一小段输出，以及最终回复。回复在书写过程中接收的消息，按它到达的时间出现在这些行之间；启动该回复的消息始终在它们之上。回复没有接收的消息（因为它的 agent 不在 run 中途接收消息，或消息带有附件）会等到下一轮，显示在已完成的回复下面。较早的 chat 若其各行记录时没有时间，则保持记录时的顺序。失败的回复留下一行，说明它失败了以及原因。transcript 中的工具输出会被截断；agent 可以从 chat 的目录中读取完整文件。仍在书写的回复把它未完成的文本和思考显示为一个会更新的 tail；已完成的条目已经被记录，因此重新打开 chat 不会丢失它们，`serve` 重启也不会重复它们。
 
-发送是带 `note` 和已上传附件的 `chat:send`。app 发送消息、记录它并开始回复；已关闭的 chat 会拒绝消息并说明原因。关闭 chat 需要确认（`chat:close`），之后 transcript 仍可阅读，但 chat 不再接收消息，也不提供其他 action。
+发送是带 `note` 和已上传附件的 `chat:send`。app 发送消息、记录它并开始回复；已关闭的 chat 会拒绝消息并说明原因。**Stop**（`chat:stop`）停止正在书写的回复，并保留已写出的内容；**Retry**（`chat:retry`）在回复失败、被停止或被中断之后重新回答最后一条消息，只在它确实会这样做时才提供。关闭 chat 需要确认（`chat:close`），之后 transcript 仍可阅读，但 chat 不再接收消息，也不提供其他 action。
 
 ### 仓库 chat 是只读的 {#a-repository-chat-is-read-only}
 
-仓库上的 chat 在主 clone 中以只读方式工作。shell 命令只有在属于那份只读命令的短名单（`git status`、`ls`、`cat`、`grep`、`sed -n`、`bun test` 等）时才会在那里运行；其他所有命令以及每一次写入或编辑，都会变成一个指出该命令或路径的问题。agent 想修改代码时，会询问是否打开一个 worktree。回答否，会告诉 agent 该调用因为 chat 是只读的而被拒绝，它应该在 chat 里回答，或使用只读命令。回答是，`dev` 会打开 `work/chat-<id>`，此后 chat 在那里工作，仅此一次；主 clone 仍然是只读的。worktree 中的改动只能通过指向它的任务，经过正常的 gate 和 integrate 进入 main。
+仓库上的 chat 在主 clone 中以只读方式工作。shell 命令只有在属于那份只读命令的短名单（`git status`、`ls`、`cat`、`grep`、`sed -n`、`bun test` 等）时才会在那里运行；其他所有命令以及每一次写入或编辑，都会变成一个指出该命令或路径的问题。这个问题提供 **Allow once**（只允许这一次调用）、**Always allow**（把确切的调用和工作目录写入 `access-user.json`，此后任何 chat 中都不再询问）、**Deny**，以及打开一个 worktree。Deny 会告诉 agent 该调用因为 chat 是只读的而被拒绝，它应该在 chat 里回答，或使用只读命令。选择打开 worktree 会打开 `work/chat-<id>`，结束提出该问题的回复，并在那里重新回答同一条消息，此后 chat 在那里工作，仅此一次；除此之外主 clone 仍然是只读的。transcript 会写一次 `This chat now works in a worktree.`。worktree 中的改动只能通过指向它的任务，经过正常的 gate 和 integrate 进入 main。
 
 ### bot chat {#a-bot-chat}
 
 bot 上的 chat 使用该 bot 的工作目录、skill 和访问 profile；bot 的设置在每次回复时都会重新读取，因此收紧访问权限或添加 skill 无需新建 chat 即可生效。如果 agent 原生支持 MCP 服务器（`claude` 和 `radian` 支持；`pi` 暂不支持），bot chat 可以使用该 bot 列出的本地 MCP 服务器。工具发生变化的服务器，在用户于 Pending 中批准该变化之前不会被挂载。
+
+### 访问级别 {#access-level}
+
+每个 chat 都有一个访问级别，显示在 **Access** 菜单中：**Plan only**、**Ask each time**、**Accept edits** 或 **Full access**。仓库 chat 从 Plan only 开始，bot chat 从 Ask each time 开始，但定时 prompt 打开的 chat 除外，它从 Full access 开始；选择一个级别会为该 chat 及之后的每次回复更改它。把仍在主 clone 中工作的仓库 chat 提升到 Accept edits 或 Full access 时，会先打开它的 worktree，失败时级别保持原样并说明原因；bot chat 在任何级别下都在自己的目录中工作。profile 的 deny 列表仍然有效，只读的工作目录仍然会询问；Full access 会用一行说明它跳过该级别的问题，而 deny 仍然会拒绝。见 [Chat 和 bot](chats-and-bots.md#access-level)。
 
 ## 附件 {#attachments}
 

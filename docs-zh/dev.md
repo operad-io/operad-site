@@ -11,28 +11,34 @@ description: dev.json 和 dev 插件：它的命令、reviewer、worker 与 pool
 一个需求变成一个计划，计划里有若干任务，每个任务都走同一条路径。你在两处参与：确认计划时，以及合并时。
 
 ```text
-plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merge -> main
+plan -> tasks (draft) -> confirm -> ready -> code -> test -> review -> you merge -> main
                                                ^       |        |
                                                +-------+--------+  rework
 ```
 
-1. **计划和任务。** 计划是一个需求（`operad dev plan add`）。其中每个任务有一份 brief，也就是给 worker 的说明（`operad dev task add`）。任务可以用 `--after` 等另一个任务。`operad dev:confirm <plan>` 把计划里处于草稿的任务变成 ready；`operad serve` 调度的就是已确认的计划。
+1. **计划和任务。** 计划是一个需求（`operad dev plan add`）。其中每个任务有一份 brief，也就是给 worker 的说明（`operad dev task add`）。任务可以用 `--after` 等另一个任务。`operad dev:confirm <plan>` 把计划里处于草稿的任务变成 ready；`operad serve` 调度的就是已确认的计划。新计划的 auto 级别是 `off`（`autoDefault`），它等你来启动其中的任务：确认之后运行 `operad dev:auto <plan> --level run`，`serve` 就会启动它们。
 2. **启动。** `serve` 启动 ready 的任务，数量受仓库的 `concurrency` 和各个 pool 的上限限制。每个任务有自己的 git worktree 和分支，所以任务之间、任务与你自己的检出之间互不影响。
-3. **开发。** 一个 worker 通过 pool 从 `workers` 中选出，带着 brief 在任务的 worktree 里运行并提交。worker 的模型不可用时，可以把工作交给它的 `fallback`。
-4. **检查。** `gate.commands` 里的命令在这次提交上运行。失败的测试会先单独再跑一次，用来区分不稳定的测试和真正的失败。
-5. **评审。** reviewer 读改动并写一份报告。达到 `reviewer.fixLevel`（默认 `major`）的意见会让评审不通过。
-6. **返工。** 检查失败或评审不通过，任务会被退回给 worker，最多 `maxAutoRework` 次（默认 `2`）。超过之后任务就等你处理。
-7. **等你处理。** 通过检查和评审的任务会在 `operad pending` 里以 `ready to merge` 等待，可用的操作有 `dev:merge`、`dev:reject`、`dev:rework`、`dev:reverify` 和 `dev:cancel`。需要人介入的情况下任务也会等待：评审有意见、gate 失败、达到返工上限、worker 没有新增提交。
+3. **编码。** 一个 worker 通过 pool 从 `workers` 中选出，带着 brief 在任务的 worktree 里运行并提交。worker 的模型不可用时，可以把工作交给它的 `fallback`。
+4. **测试。** `gate.commands` 里的命令在这次提交上运行。失败的测试会先单独再跑一次，用来区分不稳定的测试和真正的失败。
+5. **评审。** reviewer 读改动并写一份报告。达到 `reviewer.fixLevel`（默认 `major`）的意见会让评审不通过。如果某次 attempt 的 work 留下了 `changed the main checkout: <files>` 这一行，dev 自己会对其中指名的每个文件给出一条 major 发现，不论 reviewer 是否报告了它。
+6. **返工。** 测试失败或评审不通过，任务会被退回给 worker，最多 `maxAutoRework` 次（默认 `2`）。超过之后任务就等你处理。
+7. **等你处理。** 通过测试和评审的任务会在 `operad pending` 里以 `ready to merge` 等待，可用的操作有 `dev:merge`、`dev:reject`、`dev:rework`、`dev:reverify` 和 `dev:cancel`。需要人介入的情况下任务也会等待：评审有意见、gate 失败、达到返工上限、worker 没有新增提交。worker 自己的提问，例如它的 harness 发出的权限请求，也是一个 pending 项；`allow_once` 或 `reject_once` 回答它，同一个 worker 继续。
 8. **合并和清理。** `dev:merge` 把验证过的提交放到 main 上（按 `integration.style`），运行 `integration.keyCommands`，然后推送到 remote。接着清理会删除任务的 worktree 和分支。同一个仓库的任务一次只集成一个。如果 remote 拒绝推送，什么都不会写入，任务带着一条说明继续等待。
 
-每一步都有记录：`operad history <task>` 显示运行了什么、检查或评审发现了什么、你选了什么。进程已死的运行会从它最后记录的步骤重新开始。计划可以在没有你的情况下走得更远：`operad dev:auto <plan> --level merge` 会在检查通过后合并已评审的工作，`--level run` 不需要你就会启动计划里的任务，但每个任务在合并时仍然会停下来等你，`--level off` 则在每次启动和合并时都等你。`autoDefault` 为新计划设置这个级别。
+每一步都有记录：`operad history <task>` 显示运行了什么、测试或评审发现了什么、你选了什么。进程已死的运行会从它最后记录的步骤重新开始。计划可以在没有你的情况下走得更远：`operad dev:auto <plan> --level merge` 会在测试通过后合并已评审的工作，`--level run` 不需要你就会启动计划里的任务，但每个任务在合并时仍然会停下来等你，`--level off` 则在每次启动和合并时都等你。`autoDefault` 为新计划设置这个级别。
 
 各部分的键见下面几节：[仓库和它的 worker](#the-repository-and-its-workers)、[gate 和它的检查](#the-gate-and-its-checks)、[开发、评审、集成和清理](#work-review-integration-and-cleanup)，以及 [flow 和它们的 stage](#flows-and-their-stages)。
+
+## 创建计划或任务 {#creating-a-plan-or-a-task}
+
+客户端在仓库上用 `dev:plan` 操作创建计划，在计划上用 `dev:task` 操作创建任务，方式与 `dev:chat` 创建 chat 相同。`dev:plan` 接受一个 `title`、一个可选的 `slug`、作为其备注的需求，以及从仓库的 flow 中选出的 `flow`，`default` 排在最前；它在创建计划之前要求确认。`dev:task` 接受一个 `title`、一个可选的 `slug`、作为其备注的 brief、同样的 `flow`，以及 `after`，即该计划中任意数量的任务。省略的 slug 取自标题。两者运行的代码与 `operad dev plan add` 和 `operad dev task add` 相同，所以它们用命令自己的话进行校验和拒绝；命令行仍然用这些命令创建它们。
 
 ## `.operad/dev.json` 的所有键 {#every-operaddevjson-key}
 
 仓库的 `dev.json` 是 JSON；schema 是 `packages/dev/dev.schema.json`。
 文件缺失时使用下面的默认值。每个 step 和每次 scheduler 轮询都会重新读取该文件；当文件变得无效时，最后一份有效的设置继续生效，`operad pending` 会为该仓库显示一项（见 [当 `dev.json` 无效时](#when-devjson-is-not-valid)）。错误的值会被拒绝，并在前面带上字段路径，例如 `workers.claude.fallback: ...`。
+
+既没有写 `worker` 也没有写 `workers` 的文件使用一个 worker，它的 `use` 是 home 的 `config.json` 中启用的第一个 harness，顺序为 `radian`、`claude`、`pi`、`codex`；省略 `reviewer.use` 的文件使用同一个 harness。没有启用任何 harness 时，两者都是 `radian/agent`。
 
 ### 仓库和它的 worker {#the-repository-and-its-workers}
 
@@ -46,8 +52,8 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.worktrees` | string | 未设置 | `worktreeRoot` 的旧名称；`worktreeRoot` 不存在时读取 | 读取文件时 | 拒绝，使用相同的两条消息，其中指明 `worktrees` |
 | `dev.concurrency` | integer | 未设置：只由各 pool 的数量决定其上限 | `1` 或更大 | 下一次 scheduler 轮询；正在运行的任务不会被停止 | 拒绝：`concurrency: must be a positive integer` |
 | `dev.sandbox` | string | 未设置 | 任意字符串；保留它是为了让旧文件仍然有效 | 从不；该值被忽略 | 忽略 |
-| `dev.worker` | object | 既没有写 `worker` 也没有写 `workers` 时为 `{ "use": "radian/agent", "args": [] }` | 下面的键；不允许与 `workers` 同时出现 | 读取文件时 | 拒绝：`worker: cannot be set together with workers; use one or the other` |
-| `dev.worker.use` | string | `"radian/agent"` | step 名称 `<plugin>/<step>` | worker step 开始时 | 拒绝：`worker.use: must be a non-empty string` |
+| `dev.worker` | object | 既没有写 `worker` 也没有写 `workers` 时为 `{ "use": <first enabled harness>, "args": [] }` | 下面的键；不允许与 `workers` 同时出现 | 读取文件时 | 拒绝：`worker: cannot be set together with workers; use one or the other` |
+| `dev.worker.use` | string | home 中启用的第一个 harness（没有启用时为 `radian/agent`） | step 名称 `<plugin>/<step>` | worker step 开始时 | 拒绝：`worker.use: must be a non-empty string` |
 | `dev.worker.args` | array of strings | `[]` | 传给该 step 的参数 | worker step 开始时 | 拒绝：`worker.args: must be an array of strings` |
 | `dev.worker.wallTimeSecs` | number | 未设置 | 大于 `0` | worker step 开始时 | 拒绝：`worker.wallTimeSecs: must be a positive number of seconds` |
 | `dev.worker.stallSecs` | number | 未设置 | 大于 `0` | worker step 开始时 | 拒绝：`worker.stallSecs: must be a positive number of seconds` |
@@ -64,6 +70,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.pools.<name>.workers` | array of strings | 对象形式下必填 | worker 名称，按选取空闲 worker 的顺序排列 | 下一次 scheduler 轮询 | 拒绝：`pools.<name>.workers: must be a non-empty list of worker names` |
 | `dev.pools.<name>.concurrency` | integer | 未设置：各 worker 的 `count` 之和 | `1` 或更大；把该 pool 正在运行的任务数限制在该总和以下 | 下一次 scheduler 轮询 | 拒绝：`pools.<name>.concurrency: must be an integer of at least 1` |
 | `dev.workerBrief` | string | `".operad/worker-brief.md"` | 一个 Markdown 文件的路径；文件缺失时使用内置的四行 brief | work step 构建 worker 提示时 | 拒绝：`workerBrief: must be a non-empty string` |
+| `dev.skills` | array of strings | `[".agents/skills"]` | 该仓库的 chat 使用的 skill 目录：每个路径相对于仓库且在仓库之内，可以是带有 `SKILL.md` 的目录、其直接子目录各带有一个这种文件的目录，或一个 `.agents` 目录，它的 `skills` 目录按后一种方式读取；直接位于其中的每个 skill 都会被读取，包括之后添加的；`[]` 关闭它们 | 仓库 chat 的每次回复时；chat 只读时从主克隆读取，有了 worktree 之后从它的 worktree 读取；任务的 worker 得不到它们 | 拒绝：`skills[<i>]: must be relative to the repository` 或 `skills[<i>]: must stay inside the repository` |
 | `dev.prepare` | array of strings | `[]` | shell 行，在每个 checkout 创建或移到新提交之后、step 使用它之前运行，并在合并移动了主克隆之后于主克隆中运行 | 创建或移动 checkout 时 | 拒绝：`prepare: must be an array of command lines` 或 `prepare[<i>]: must be a non-empty string`；失败的行会让该 step 以 `prepare failed` 失败（在主克隆中则记录在任务的 Changes 里，合并保持有效） |
 
 ### gate 和它的检查 {#the-gate-and-its-checks}
@@ -82,9 +89,11 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.check.loadLimit` | number | 未设置：核心数 | 大于 `0`，一个 1 分钟平均负载 | 检查超时或被外部杀掉时 | 拒绝：`check.loadLimit: must be a positive number` |
 | `dev.check.flakyLoadLimit` | number | 未设置：核心数的两倍 | 大于 `0`，一个 1 分钟平均负载 | 某个测试失败后在 rerun 时通过时 | 拒绝：`check.flakyLoadLimit: must be a positive number` |
 
+测试主机是 home 的设置，不是 `dev.json` 的：`dev.testHost`（一个 ssh 目标）和 `dev.testSlots`（在它上面同时运行多少个检查），在 [config.json](config.md#dev) 中。gate、integration 或 rerun 命令以 `OPERAD_CHECK_HOST` 和 `OPERAD_CHECK_SLOTS` 的形式得到它们；`serve` 自己的环境中显式设置的变量优先。当某个仓库的检查命令使用 `scripts/remote-check.sh`，而两者都没有指明主机时，`serve` 在启动时向日志写入一行，该仓库得到一个 pending 项，它的 Overview 会说明这些命令在本机运行。见 [Checks](checks.md)。
+
 ### 检查命令 {#a-check-command}
 
-同样的对象可以出现在 `gate.commands`、`integration.keyCommands` 和 flow 的 `check` stage 中。
+同样的对象可以出现在 `gate.commands`、`integration.keyCommands` 和 flow 的 `test` stage 中。
 
 | 键 | 类型 | 默认值 | 允许的值 | 何时生效 | 错误的值 |
 |---|---|---|---|---|---|
@@ -101,7 +110,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 
 当某个测试仅在 rerun 时通过的次数足够多（`check.flakyTask`）时，dev 提议的任务的 brief 使用其 `match` 找到该失败的那一行的 `failed` 设置：摘录是 `match` 找到的那一行以及它之前的行（日志中的第一处匹配）；`stress` 给出“Reproduce it”命令，brief 还会要求给出运行次数来代替 `<N>`；`rule` 指向一个文件，其文本就是仓库对 flaky 测试的规则。没有 `stress` 时，brief 中没有命令。没有 `rule`，或文件缺失或为空时，brief 写的是："A test that failed and then passed on rerun is a bug until shown otherwise. Do not raise a timeout or add a retry inside a test to make it pass."。该任务没有 area。见 [Checking a change](checks.md)。
 
-仅因测试运行到超时而失败的检查，通常会等待机器空闲，再次运行，如果发生两次就等待人处理。有一个例外：当失败的测试单独运行（它的 `failed.rerun` 命令）时再次超时，并且该次运行期间的负载低于 `check.flakyLoadLimit`（默认是核心数的两倍），责任就不在机器。改动会作为失败退回给 worker，其说明中写明该测试，说它 "timed out at 30 s when run alone under load 3 on 10 cores"，并给出日志路径。只在高于该限制的负载下出现的超时，或单独运行时能通过的测试，仍按原来的方式处理。
+仅因测试运行到超时而失败的检查，通常会等待机器空闲，再次运行，如果发生两次就等待人处理。有一个例外：当失败的测试单独运行（它的 `failed.rerun` 命令）时再次超时，并且该次运行期间的负载低于 `check.flakyLoadLimit`（默认是核心数的两倍），责任就不在机器。改动会作为失败退回给 worker，其说明中写明该测试，说它 "timed out at 30 s when run alone under load 3 on 10 cores"，并给出日志路径。在测试主机上运行的检查使用该主机的负载并写出主机，例如 "under load 3 on 16 cores on hai@host"；读不到主机的负载时，按机器空闲来判定。只在高于该限制的负载下出现的超时，或单独运行时能通过的测试，仍按原来的方式处理。
 
 ### work、review、integration 和清理 {#work-review-integration-and-cleanup}
 
@@ -110,7 +119,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.work` | object | `{ "wrapUpAt": 0.85 }` | 下面的键 | work step 开始时 | 拒绝：`work: must be an object` 或 `work.<key>: is not a work setting` |
 | `dev.work.wrapUpAt` | number | `0.85` | 大于 `0` 且小于 `1` | work step 用掉其时间限制的这一比例时 | 拒绝：`work.wrapUpAt: must be a number above 0 and below 1` |
 | `dev.reviewer` | object | 下面的 reviewer 默认值 | 下面的键 | review step 开始时 | 拒绝：`reviewer: must be an object` 或 `reviewer.<key>: is not a reviewer setting` |
-| `dev.reviewer.use` | string | `"radian/agent"` | step 名称 `<plugin>/<step>` | 评审开始时 | 拒绝：`reviewer.use: must be a non-empty string` |
+| `dev.reviewer.use` | string | home 中启用的第一个 harness（没有启用时为 `radian/agent`） | step 名称 `<plugin>/<step>` | 评审开始时 | 拒绝：`reviewer.use: must be a non-empty string` |
 | `dev.reviewer.args` | array of strings | `[]` | 传给该 step 的参数 | 评审开始时 | 拒绝：`reviewer.args: must be an array of strings` |
 | `dev.reviewer.firstArgs` | array of strings | 未设置 | 一次 attempt 的首次评审的参数 | 一次 attempt 的首次评审开始时 | 拒绝：`reviewer.firstArgs: must be an array of strings` |
 | `dev.reviewer.first` | object | 未设置 | 下面的键；设置的值在首次评审中取代 reviewer 自己的值 | 一次 attempt 的首次评审开始时 | 拒绝：`reviewer.first: must be an object` 或 `reviewer.first.<key>: is not a first review setting` |
@@ -127,7 +136,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.reviewer.followups` | boolean | `true` | `true` 或 `false` | 评审通过但带有未使其失败的发现时 | 拒绝：`reviewer.followups: must be true or false` |
 | `dev.reviewer.retrySecs` | number | `120` | 大于 `0` 秒 | 模型不可用后，评审等待再次运行时 | 拒绝：`reviewer.retrySecs: must be a positive number of seconds` |
 | `dev.reviewer.maxFileDiffBytes` | integer | `200000` | `1` 或更大 | 构建评审提示时 | 拒绝：`reviewer.maxFileDiffBytes: must be a positive integer`；更大的文件会被省略并列出 |
-| `dev.reviewer.maxDiffBytes` | integer | `1000000` | `1` 或更大 | 构建评审提示时 | 拒绝：`reviewer.maxDiffBytes: must be a positive integer`；更大的改动会在 reviewer 启动之前使评审失败 |
+| `dev.reviewer.maxDiffBytes` | integer | `1000000` | `1` 或更大 | 构建评审提示时 | 拒绝：`reviewer.maxDiffBytes: must be a positive integer`；整个被删除的文件按名称和行数列出，更大的改动会在 reviewer 启动之前使评审失败 |
 | `dev.integration` | object | `{ "style": "merge", "keyCommands": [], "batch": 1 }` | 下面的键 | integrate step 开始时 | 拒绝：`integration: must be an object` 或 `integration.<key>: is not an integration setting` |
 | `dev.integration.style` | string | `"merge"` | `merge`, `squash` | 已验证的提交被放到 main 上时 | 拒绝：`integration.style: must be "merge" or "squash"` |
 | `dev.integration.keyCommands` | array | `[]` | 检查命令 | 构建 integration 候选时 | 拒绝：`integration.keyCommands: must be an array of commands` 或该命令自己的错误；失败会把任务退回给 worker |
@@ -135,6 +144,7 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 | `dev.hooks` | object | 下面的清理命令 | 下面的键 | 清理运行时 | 拒绝：`hooks: must be an object` 或 `hooks.<key>: is not a hook setting` |
 | `dev.hooks.afterMerge` | array of strings | 五条命令：移除 worktree、prune、删除本地分支、删除远程分支 | 在仓库根目录运行的 shell 行，已设置 `OPERAD_TASK` 和 `OPERAD_WORKTREE` | 合并之后运行清理时 | 拒绝：`hooks.afterMerge: must be an array of strings` 或 `hooks.afterMerge[<i>]: must be a non-empty string`；失败会被记录，但不会让任务失败 |
 | `dev.maxAutoRework` | integer | `2` | `0` 或更大 | 自动 rework 即将开始时 | 拒绝：`maxAutoRework: must be zero or a positive integer`；超过则等待人处理 |
+| `dev.workIn` | string | `"worktree"` | `branch`（A branch in this folder）、`worktree`（A separate worktree） | 任务开始时 | 拒绝：`workIn: must be "branch" or "worktree"`；`"branch"` 与大于 1 的 `concurrency` 或合计超过 1 的 worker 一起出现时会被拒绝，消息会说明该改哪一个。`branch` 仓库一次只运行一个任务 |
 | `dev.autoDefault` | string | `"off"` | `off`, `run`, `merge` | 新建计划时 | 拒绝：`autoDefault: must be "off", "run" or "merge"` |
 | `dev.retry` | object | `{ "environmentWaitMinutes": 60 }` | 下面的键 | 某个 step 因任务自身工作之外的原因失败时 | 拒绝：`retry: must be an object` 或 `retry.<key>: is not a retry setting` |
 | `dev.retry.environmentWaitMinutes` | integer | `60` | `1` 或更大的分钟数 | step 等待缺少的东西时 | 拒绝：`retry.environmentWaitMinutes: must be a positive integer` |
@@ -143,33 +153,35 @@ plan -> tasks (draft) -> confirm -> ready -> work -> check -> review -> you merg
 
 仓库自己的 flow 在 [flow 和它们的 stage](#flows-and-their-stages) 中说明。`flows` 不存在时使用内置的 `default` flow。
 
+客户端不用碰这个文件就能读取和修改这些 flow：`operad settings --repo <name>` 列出 `dev.flowList`，即仓库的每个 flow，带有它的来源（`dev.json`、`typescript` 或 `built-in`）、它的 stage（`dev.json` flow 或内置的 `default`，后者的 stage 带着仓库的 `worker`、`reviewer` 和 `gate` 设置）或它的 step（TypeScript flow），或者 dev 拒绝某个 TypeScript 文件时给出的原因。当 `dev.json` 完全无法读取时，列表保留一个 `dev.json` 条目，它的 `refused` 就是原因，与 TypeScript flow 和内置 flow 并列。`operad settings set dev.flows.<name> '<flow JSON>' --repo <name>` 保存一个 `dev.json` flow（`null` 移除它；`dev.flows` 一次设置全部）。dev 会先检查整个文件：它的 schema、下面的规则，以及是否与 `.operad/flows` 中某个 TypeScript flow 重名。拒绝时会打印 dev 的原因，文件保持不变。同样的名称也可以通过 HTTP 使用（[Settings](http.md#settings)）。
+
 | 键 | 类型 | 默认值 | 允许的值 | 何时生效 | 错误的值 |
 |---|---|---|---|---|---|
 | `dev.flows` | object | 不存在：内置的 `default` flow | flow 名称到 flow 对象 | 计划或任务开始该 flow 的一次 run 时 | 拒绝：`flows: must be a JSON object`、`flows: a flow needs a non-empty name` 或该 flow 自己的错误 |
 | `dev.flows.<name>` | object | 无 | 只有 `stages` | 该 flow 的任务开始时 | 拒绝：`flows.<name>: must be a JSON object` 或 `flows.<name>.<key>: is not a flow setting` |
-| `dev.flows.<name>.stages` | array | 必填 | 至少一个 stage；其中至少一个必须是 `check`、`review` 或 `human` | 该 flow 的任务开始时 | 拒绝：`flows.<name>.stages: must be an array of stages` 或 `flows.<name>.stages: needs at least one check, review or human stage` |
-| `dev.flows.<name>.stages.stage` | string | 必填 | `work`, `check`, `review`, `human` | 到达该 stage 时 | 拒绝：`flows.<name>.stages[<i>].stage: must be "work", "check", "review" or "human"` |
-| `dev.flows.<name>.stages.use` | string | `work` 用仓库的 worker，`review` 用 `reviewer.use` | 一个 step 名称 | 该 stage 开始时 | 拒绝：`flows.<name>.stages[<i>].use: must be a non-empty string` |
+| `dev.flows.<name>.stages` | array | 必填 | 至少一个 stage；其中至少一个必须是 `test`、`review` 或 `human` | 该 flow 的任务开始时 | 拒绝：`flows.<name>.stages: must be an array of stages` 或 `flows.<name>.stages: needs at least one test, review or human stage` |
+| `dev.flows.<name>.stages.stage` | string | 必填 | `code`, `test`, `review`, `human`（旧的 `work` 和 `check` 仍可加载） | 到达该 stage 时 | 拒绝：`flows.<name>.stages[<i>].stage: must be "code", "test", "review" or "human"` |
+| `dev.flows.<name>.stages.use` | string | `code` 用仓库的 worker，`review` 用 `reviewer.use` | 一个 step 名称 | 该 stage 开始时 | 拒绝：`flows.<name>.stages[<i>].use: must be a non-empty string` |
 | `dev.flows.<name>.stages.args` | array of strings | worker 或 reviewer 自己的参数 | 传给该 step 的参数 | 该 stage 开始时 | 拒绝：`flows.<name>.stages[<i>].args: must be an array of strings` |
-| `dev.flows.<name>.stages.pool` | string | `default` | `pools` 中的一个 pool 名称（仅限 `work` stage） | work stage 开始时，以及用于运行中任务的上限 | 拒绝：`flows.<name>.stages[<i>].pool: no pool named "<pool>" in pools` |
-| `dev.flows.<name>.stages.workerBrief` | string | 未设置：仓库的 `workerBrief` | 相对于仓库的文件路径（绝对路径或仓库之外的路径会被拒绝），从主克隆读取；其文本为该 stage 取代仓库的 worker brief（`brief` 仍会追加） | work stage 开始时 | 文件缺失时拒绝：`flows.<name>.stages[<i>].workerBrief: <path> does not exist` |
-| `dev.flows.<name>.stages.commit` | boolean | `false`：worker 自己提交 | `true`：worker 以 done 结束后，dev 把 worktree 中留下的所有改动（已跟踪和未跟踪的，遵守 `.gitignore`）提交到任务分支，提交信息为 `<task id>: <task title>`；没有可提交的内容也没关系。它在检查之前运行。用于其 sandbox 不能写 `.git` 的 worker | work stage 结束时 | 拒绝：`flows.<name>.stages[<i>].commit: must be true or false` |
-| `dev.flows.<name>.stages.brief` | string | 未设置 | 追加到 worker 提示之后的额外指示 | work stage 开始时 | 拒绝：`flows.<name>.stages[<i>].brief: must be a non-empty string` |
-| `dev.flows.<name>.stages.beforeAttempt` | string | 未设置：worktree step 的 merge 继续有效 | `merge-main`, `none` | work stage 运行之前 | 拒绝：`flows.<name>.stages[<i>].beforeAttempt: must be "merge-main" or "none"` |
-| `dev.flows.<name>.stages.commands` | array | `gate.commands` | 检查命令 | check stage 开始时 | 拒绝：`flows.<name>.stages[<i>].commands: must be an array of commands` 或该命令自己的错误 |
+| `dev.flows.<name>.stages.pool` | string | `default` | `pools` 中的一个 pool 名称（仅限 `code` stage） | code stage 开始时，以及用于运行中任务的上限 | 拒绝：`flows.<name>.stages[<i>].pool: no pool named "<pool>" in pools` |
+| `dev.flows.<name>.stages.workerBrief` | string | 未设置：仓库的 `workerBrief` | 相对于仓库的文件路径（绝对路径或仓库之外的路径会被拒绝），从主克隆读取；其文本为该 stage 取代仓库的 worker brief（`brief` 仍会追加） | code stage 开始时 | 文件缺失时拒绝：`flows.<name>.stages[<i>].workerBrief: <path> does not exist` |
+| `dev.flows.<name>.stages.commit` | boolean | `false`：worker 自己提交 | `true`：worker 以 done 结束后，dev 把 worktree 中留下的所有改动（已跟踪和未跟踪的，遵守 `.gitignore`）提交到任务分支，提交信息为 `<task id>: <task title>`；没有可提交的内容也没关系。它在测试之前运行。用于其 sandbox 不能写 `.git` 的 worker | code stage 结束时 | 拒绝：`flows.<name>.stages[<i>].commit: must be true or false` |
+| `dev.flows.<name>.stages.brief` | string | 未设置 | 追加到 worker 提示之后的额外指示 | code stage 开始时 | 拒绝：`flows.<name>.stages[<i>].brief: must be a non-empty string` |
+| `dev.flows.<name>.stages.beforeAttempt` | string | 未设置：worktree step 的 merge 继续有效 | `merge-main`, `none` | code stage 运行之前 | 拒绝：`flows.<name>.stages[<i>].beforeAttempt: must be "merge-main" or "none"` |
+| `dev.flows.<name>.stages.commands` | array | `gate.commands` | 检查命令 | test stage 开始时 | 拒绝：`flows.<name>.stages[<i>].commands: must be an array of commands` 或该命令自己的错误 |
 | `dev.flows.<name>.stages.rerun` | integer | `check.rerun` | `0` 或更大 | 检查行列表失败时 | 拒绝：`flows.<name>.stages[<i>].rerun: must be zero or a positive integer` |
 | `dev.flows.<name>.stages.later` | array of strings | 未设置：`reviewer` 的参数 | 一次 attempt 中首次之后每次评审的参数 | 之后的评审开始时 | 拒绝：`flows.<name>.stages[<i>].later: must be an array of strings` |
 | `dev.flows.<name>.stages.grading` | string | 未设置：该 flow 自己的名称 | `.operad/review.json` 中的一项 | 评审被评级时 | 拒绝：`flows.<name>.stages[<i>].grading: must be a non-empty string`；缺失的项回退到 `default` |
 
-一个 image flow：使用另一个 worker pool，有自己的 brief，由 dev 替它们提交，有一次检查，没有 review stage。
+一个 image flow：使用另一个 worker pool，有自己的 brief，由 dev 替它们提交，有一次测试，没有 review stage。
 
 ```json
 {
   "flows": {
     "image": {
       "stages": [
-        { "stage": "work", "pool": "image", "workerBrief": ".operad/image-brief.md", "commit": true },
-        { "stage": "check" },
+        { "stage": "code", "pool": "image", "workerBrief": ".operad/image-brief.md", "commit": true },
+        { "stage": "test" },
         { "stage": "human" }
       ]
     }
@@ -244,13 +256,35 @@ field`。无效的文件会整个被拒绝，并指明该文件；review step �
 
 当 worker 没有新增提交时，如果分支上没有超出 main 的内容，或它的最新提交已经通过了 verify，任务就以 `work did nothing` 等待。如果分支上已有不在 main 上的提交，而它的最新提交没有通过 verify（较早的一次 run 在 verify 结束之前就停止了），任务不会等待：history 写 `the branch already has unchecked work; checking it`，任务继续进入 verify。
 
+worker 启动之前，work step 会记录主检出的 `git status`，以及其中已被标为改动的文件的内容。step 结束时，那里出现的、worktree 解释不了的改动，会在任务的 Changes、该 step 的 history 和 worker 的回答中写作 `changed the main checkout: <files>`：一个新的 status 条目，或对那里本已改动的文件的进一步编辑。`dev` 不会撤销它。比较的范围是该 step 自己的时间窗口，而 `dev` 无法分辨是哪个进程写了文件，所以 worker 运行期间另一个会话在主检出中做的改动也会被写出。该 attempt 的评审会得到一条来自 `dev` 自己的 major 发现，针对每个被指名的文件，出现在它的报告和评审 prompt 中；任务进入 rework，由 worker 改在自己的 worktree 中做这些改动。
+
+## 移动仓库的文件夹 {#moving-a-repositorys-folder}
+
+已注册的仓库在文件夹移动之后保留它的名称、计划和任务。先移除它，移动文件夹，再用同一个名称重新注册：
+
+```sh
+operad dev repo remove operad-ios
+mv ~/Code/radian-ios ~/Code/operad-ios
+operad dev repo add ~/Code/operad-ios --name operad-ios
+```
+
+添加一个其仓库已被移除的名称，会在新路径上重新注册它；该名称下的计划和任务保留，它们的 worktree、主克隆和 `.operad/dev.json` 使用的就是新路径。已注册且未被移除的名称仍然会被拒绝。`.operad/dev.json` 和 exclude 行缺失时会写到新路径，与新仓库一样。`dev:repo-add` 操作做的是同样的事。
+
+## 从客户端添加仓库 {#adding-a-repository-from-a-client}
+
+与远程 `operad serve` 通信的客户端无法在那台机器上运行 `operad dev repo add`，所以 `dev` 还声明了操作 `dev:repo-add`。它接受仓库在运行 `serve` 的那台机器上的 `path`，以及可选的 `name`，并要求确认。该操作和该命令调用同一份代码：操作添加的就是命令添加的，写入同样的 `.operad/dev.json`，并用命令的话拒绝（not a git work tree、no remote、already registered）。它的回答是命令的那一行 `added <name> (<path>)`，新仓库随后出现在 `GET /v1/objects?type=repo` 中。
+
+```json
+{ "action": "dev:repo-add", "args": { "path": "/srv/operad" }, "confirmed": true }
+```
+
 ## `dev` 命令在哪里运行 {#where-dev-commands-run}
 
 `dev` 命令从所在目录、从 `--repo <name>`，或从限定 id（例如 `operad/T-0045-shell-hang-guards`）确定它的仓库；在仓库之外，裸 id 只在只有一个仓库拥有它时有效。规则见 [packages/dev/REFERENCE.md](../../packages/dev/REFERENCE.md#where-a-command-runs-and-ids)。
 
 ## 当 reviewer 不可用时 {#when-the-reviewer-is-unavailable}
 
-harness 报告模型错误（`unavailable` 或 `usage_limit`），或其错误输出中有 `HTTP 429` 的评审，不会丢掉这次 attempt。`.operad/dev.json` 设置了 `reviewer.fallback` 时，同一轮评审会在它上面运行一次。没有 fallback，或 fallback 也不可用时，任务等待 `reviewer.retrySecs`（默认 120 秒；之后每次等待加倍，最多 30 分钟），然后再次运行评审。它不会启动 worker，也不计入 rework。一轮最多使用一次 fallback，所以重试时若发现主 reviewer 又不可用，就继续等待，而不是第二次调用 fallback。
+harness 报告模型错误（`unavailable` 或 `usage_limit`），或其错误输出中有 `HTTP 429` 的评审，不会丢掉这次 attempt。`.operad/dev.json` 设置了 `reviewer.fallback` 时，同一轮评审会在它上面运行一次。没有 fallback，或 fallback 也不可用时，如果模型给出了 `retry_after_secs`，任务从模型报告它的时刻起等待这么久，否则等待 `reviewer.retrySecs`（默认 120 秒；之后每次等待加倍，最多 30 分钟），然后再次运行评审。它不会启动 worker，也不计入 rework。一轮最多使用一次 fallback，所以重试时若发现主 reviewer 又不可用，就继续等待，而不是第二次调用 fallback。用量上限，或超过半小时的 retry-after，不会等它过去：任务立即等待人处理，那一行带有模型的消息和它重置的时间。
 
 一轮最多等待 6 次（按默认值约 90 分钟）。之后任务带着说明 `review did not finish (model unavailable)` 等待人处理。如果评审在三小时的 step 时间内放不下再一次运行，也会这样处理，说明为 `review did not finish (out of time)`。等待期间不提供 merge、reject、rework 和 reverify。超时的评审会用相同的参数重试一次；第二次超时则带着说明 `review timed out twice` 等待人处理。评审期间发生崩溃时，会恢复同一轮，并复用 reviewer 已经给出的答案，所以 fallback 不会被调用两次。`operad history <task>` 会写出每一轮由哪个模型评审，以及为什么发生了 fallback 或重试。
 
@@ -295,9 +329,9 @@ operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`
 这四个的不同之处：
 
 - `claude`：通过 Claude Agent SDK 运行你自己的 `claude`，使用 `claude` 已有的登录。一个 step 是一个前台回合。
-- `pi`：从 `PATH` 上的 `pi` 找到你安装的 pi 库，并在子进程中加载它。它需要 1.5.0 或更新版本的 pi。
-- `radian`：在该目录中运行 `radian exec`。radian 不能放行一次性权限，所以带有一次性权限的 profile 对它会被拒绝。它是 `dev.reviewer.use` 的默认值。
-- `codex`：启动你的 `codex-acp`，并通过 ACP 与它对话，使用你的 Codex 登录。在执行 `operad plugin enable codex` 之前它是关闭的。Codex 自己的 sandbox 保持开启，只允许写入 worktree，access profile 只会被问到离开 sandbox 的操作。订阅登录给不出费用，所以 `costMicros` 是 `null`。
+- `pi`：使用你安装的 pi 库（从 `PATH` 上的 `pi` 找到），没有时使用 operad 安装在 home 中的固定版本，并在子进程中加载它。它需要 1.5.0 或更新版本的 pi。
+- `radian`：在该目录中运行 `radian exec`。radian 不能放行一次性权限，所以带有一次性权限的 profile 对它会被拒绝。当 home 没有启用任何 harness 时，它是兜底的默认值。
+- `codex`：启动你的 `codex app-server`，并使用 Codex 自己的 JSON-RPC，用的是你的 Codex 登录。在执行 `operad plugin enable codex` 之前它是关闭的。Codex 自己的 sandbox 保持开启，只允许写入 worktree，并且 Codex 被设置为就离开 sandbox 的操作询问 operad；access profile 回答这些命令和文件改动请求。订阅登录给不出费用，所以 `costMicros` 是 `null`。
 
 时间上限和按模型的上限见后面的几节。
 
@@ -337,25 +371,27 @@ operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`
 
 ### `codex` 的设置 {#the-codex-settings}
 
-`codex` 通过 `codex-acp` 运行用户自己的 Codex。它不在默认 config 里：用 `operad plugin enable codex` 启用它。operad 自己不带 `codex-acp`：把 `codex-acp`（`bun add -g @agentclientprotocol/codex-acp`）和 `bun` 放进 `PATH`，再运行一次 `codex login`；operad 使用你自己的 Codex 登录。`operad plugin check codex` 会报告版本和登录方式，并在 `codex-acp` 无法启动或 Codex 没有登录时说明该怎么做。它的设置在 `config.json` 的 `codex` 一节中：
+`codex` 通过 `codex app-server`（Codex 自己的 JSON-RPC 接口）运行用户自己的 Codex。它不在默认 config 里：用 `operad plugin enable codex` 启用它。operad 自己不带 Codex：把 `codex` 放进 `PATH`（客户端是针对 codex-cli `0.166.0` 构建的；更旧的会被拒绝），再运行一次 `codex login`；operad 使用你自己的 Codex 登录。`operad plugin check codex` 会报告 Codex 版本、app-server 命令和登录方式，并在已安装的 Codex 没有 app-server、太旧或没有登录时说明该怎么做。它的设置在 `config.json` 的 `codex` 一节中：
 
 | 设置 | 类型 | 默认值 | 作用 |
 |---|---|---|---|
-| `codex.model` | string | Codex 自己的 | 模型；step 的 `--model` 优先。 |
+| `codex.model` | string | Codex 自己的 | 模型；step 的 `--model` 优先。chat 可以从 app-server 自己的模型列表中选取。 |
 | `codex.effort` | `minimal`, `low`, `medium`, `high`, `xhigh` | Codex 自己的 | 推理强度；step 的 `--effort` 优先。 |
-| `codex.command` | array of strings | `PATH` 中的 `bun` 和 `codex-acp` | 启动 codex-acp 的程序和参数。 |
+| `codex.command` | array of strings | `PATH` 中的 `bun` 和 `codex`，然后是 `app-server` | 启动 app-server 的程序和参数。 |
 | `codex.wallTimeSecs` | number，1 到 28500 | `3600` | 一次 run 最长可以用多久。 |
 | `codex.stallSecs` | number，1 或更大 | `600` | 没有打开的 tool call 时，一次 run 可以沉默多久。图像生成算作打开的 tool call。 |
 | `codex.concurrency` | object，模型名到 integer | `{}` | 上面描述的限制。 |
 | `codex.concurrency.<name>` | integer，1 或更大 | 无 | 模型 `<name>` 的 run 可以同时进行多少个。 |
 
+Codex 自己的 sandbox 保持开启（`workspace-write`），它的 approval policy 是询问而不是自行决定（`on-request`，reviewer `user`）。离开 sandbox 的命令或文件改动会交到 operad，operad 用与其他 harness 相同的 access profile 和提问来回答。在 sandbox 内运行的命令不会被询问，所以 deny 规则看不到它；在那里，边界就是 sandbox。
+
 ### `pi` 的设置 {#the-pi-settings}
 
-`pi` 运行 pi coding agent，而不是 radian。它不在默认 config 里：用 `operad plugin enable pi` 启用它。
+`pi` 运行 pi coding agent，而不是 radian。`pi` 在 `PATH` 上时，新的 home 会启用它；`PATH` 上没有任何 agent 命令时，新的 home 会启用它并安装 operad 自己的 pi。之后可以用 `operad plugin enable pi` 启用它。
 
-**安装 pi。** operad 自己不带 pi：它使用你安装的那一个，用 bun（`bun add -g @earendil-works/pi-coding-agent`）或 npm（`npm i -g @earendil-works/pi-coding-agent`）安装，使 `pi` 在 `PATH` 上。它接受的最旧的 pi 是 `1.5.0`；你的版本更旧时，`operad plugin check` 会同时指出两个版本，没有 `pi` 时则失败。要使用另一个 pi，把 `config.json` 的 `pi` 一节中的 `command` 设为它的路径。是 shell 包装脚本的 `pi` 会被拒绝，并指出它的路径；请把 `command` 指向该包的 bin（`.../@earendil-works/pi-coding-agent/dist/bundle/cli.js`）。
+**安装 pi。** `pi` 在 `PATH` 上时，operad 使用你安装的 pi，用 bun（`bun add -g @earendil-works/pi-coding-agent`）或 npm（`npm i -g @earendil-works/pi-coding-agent`）安装。没有时，operad 在首次使用时把 `@earendil-works/pi-coding-agent` `1.6.0` 安装到 home 的插件项目中；这需要联网一次，下载失败时会说明，再运行一次 enable 或 `operad init` 就会重试。它接受的最旧的 pi 是 `1.5.0`；你的版本更旧时，`operad plugin check` 会同时指出两个版本，没有 `pi` 时则失败。要使用另一个 pi，把 `config.json` 的 `pi` 一节中的 `command` 设为它的路径。是 shell 包装脚本的 `pi` 会被拒绝，并指出它的路径；请把 `command` 指向该包的 bin（`.../@earendil-works/pi-coding-agent/dist/bundle/cli.js`）。
 
-**登录 pi。** 运行 `pi`，输入 `/login`，然后选择 provider。operad 使用你自己的 pi 登录，即凭据文件 `~/.pi/agent/auth.json`（`authPath` 可指定另一个文件）。operad 从不读取该文件，只把路径交给 pi。pi 和 operad 可能同时刷新同一个登录；pi 会为此给文件加锁。
+**登录 pi。** 要用你的 ChatGPT 套餐，运行 pi 自己的登录 `pi auth login openai-codex`；operad 不运行这个登录。`pi` 不在你的 `PATH` 上时，用 operad 安装的那个 pi 的完整路径运行同一条命令（登录提问会打印它）。登录完成后 operad 就会用上它，不需要重启 `serve`。要用 API key，回答 operad 的登录提问，或者运行 `pi` 并输入 `/login`。operad 使用你自己的 pi 登录，即凭据文件 `~/.pi/agent/auth.json`（`authPath` 可指定另一个文件）。operad 从不读取该文件，只把路径交给 pi。pi 和 operad 可能同时刷新同一个登录；pi 会为此给文件加锁。
 
 **用哪个模型。** 模型是 pi 自己的默认值，即 `pi` 为你启动时用的那个，除非 `model` 设置（`provider/id`）指名了一个。`thinkingLevel` 的作用方式相同。pi 的自定义模型在 `~/.pi/agent/models.json`（`modelsPath`）中。
 
@@ -366,7 +402,7 @@ operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`
 | `pi.model` | string `provider/id` | pi 自己的默认值 | 模型；step 的 `--model` 优先。 |
 | `pi.models` | `provider/id` 的列表 | `pi --list-models` 打印的每个模型 | chat 可以选用的模型。 |
 | `pi.thinkingLevel` | `off`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max` | pi 自己的默认值 | 推理级别；step 的 `--thinking` 优先。 |
-| `pi.command` | string | `pi` | `PATH` 上的命令名或一个路径；它必须通向已安装的 `1.5.0` 或更新版本的 `@earendil-works/pi-coding-agent`。 |
+| `pi.command` | string | `pi` | `PATH` 上的命令名或一个路径；它必须通向已安装的 `1.5.0` 或更新版本的 `@earendil-works/pi-coding-agent`。默认的 `pi` 使用 `PATH` 上的那一份，否则使用 operad 安装在 home 中的那一份。 |
 | `pi.authPath` | string | `~/.pi/agent/auth.json` | pi 的凭据文件。 |
 | `pi.modelsPath` | string | `~/.pi/agent/models.json` | pi 的自定义模型文件。 |
 | `pi.wallTimeSecs` | number，1 到 28500 | `3600` | 一次 run 最长可以用多久。 |
@@ -391,9 +427,9 @@ operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`
 
 ### `claude` 的设置 {#the-claude-settings}
 
-`claude` 运行 `claude`，即 Anthropic 的 coding agent，而不是 radian。它不在默认 config 里：用 `operad plugin enable claude` 启用它。
+`claude` 运行 `claude`，即 Anthropic 的 coding agent，而不是 radian。`claude` 在 `PATH` 上时，新的 home 会启用它；之后可以用 `operad plugin enable claude` 启用它。
 
-在 workspace checkout 之外，启用时会把 `@operad-io/harness-claude` 和它需要的 Agent SDK 客户端安装到 `~/.operad/plugins` 下的一个 Bun 项目中，跳过 SDK 的可选平台包。它不会安装 `claude` 本身。第一次启用需要能访问 npm registry 的网络。当该包没有安装时，`operad plugin check claude` 会指出安装它的命令。
+在 workspace checkout 之外，启用时会把 `@operad-io/harness-claude` 和它需要的 Agent SDK 客户端安装到 `~/.operad/plugins` 下的一个 Bun 项目中，跳过 SDK 的可选平台包；`operad init` 在创建启用了 `claude` 的 home 时会做这件事。它不会安装 `claude` 本身。第一次启用需要能访问 npm registry 的网络。当该包没有安装时，`operad plugin check claude` 会指出安装它的命令。
 
 **安装 claude 并登录。** operad 自己不带 claude：它使用你安装的那一个（见 https://code.claude.com），所以 `PATH` 上必须有 `claude` 命令。运行一次 `claude` 并登录。operad 使用你自己的登录，不传入任何自己的凭据。`operad plugin check` 会运行 `claude --version` 和 `claude auth status`，并报告 claude 版本、Agent SDK 版本和登录方式（例如 `claude.ai (max)`）。没有 `claude`、claude 比 `2.1.319` 更旧或没有登录时，它会失败并说明该怎么做。SDK 版本只做报告。要使用另一个 claude，把 `config.json` 的 `claude` 一节中的 `command` 设为它的路径。
 
@@ -425,7 +461,7 @@ operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`
 
 **session 在哪里。** claude 把它的 session 文件保存在 `~/.claude/projects/` 下，放在以工作目录命名的文件夹中，所以它们与你自己的 `claude` 使用的是同一批文件。step 记录的 `sessionId` 就是 session 的 id；在同一个工作目录中运行 `claude --resume <id>`，可以手动继续该 session。
 
-**claude 被告知什么。** claude 在没有你的设置、hooks、插件、skills 或 `CLAUDE.md` 文件，也没有它的自动记忆的情况下运行。access profile（`denyPaths`、`denyCommands` 和一次性权限）会应用到它的 tool call 上，`askCommands` 匹配的调用会先询问人。
+**claude 被告知什么。** 在仓库 chat、任务或评审中，claude 在没有你的设置、hooks、插件、skills 或 `CLAUDE.md` 文件，也没有它的自动记忆的情况下运行。access profile（`denyPaths`、`denyCommands` 和一次性权限）会应用到它的 tool call 上，`askCommands` 匹配的调用会先询问人。bot 可以打开 `useOwnSettings`（见 [Chats and bots](chats-and-bots.md#using-your-own-agent-settings)）；它的 claude 随后会读取你自己的设置、`CLAUDE.md` 文件、记忆、skills、命令、subagent、插件和 MCP server，但仍然先按 bot 的 access profile 判断，telemetry、错误报告和后台任务保持关闭。
 
 **切换 worker 和 reviewer。** 在 `.operad/dev.json` 中把某个 worker（或 `reviewer`）的 `use` 设为 `claude/agent`。claude 只从 `args` 中读取 `--model <name>` 和 `--effort <level>`；任何其他条目都会使该 step 以 `invalid_args` 失败。例如：
 
@@ -462,7 +498,7 @@ operad 不自带 agent。它驱动你已经安装的那些：你的 `claude`、`
 
 ### 为什么需要 pool 插件 {#why-the-pool-plugin-exists}
 
-agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex 登录服务于机器上的每个仓库。两个仓库各自允许同时三个 Claude run，就没有任何东西限制总数；而 harness 按模型的 `concurrency`（见[限制同一模型的 run](#limiting-runs-of-one-model)）限制的是一个模型，不是机器上同一个 harness 的 run 数。`pool` 插件给每个仓库和 flow 一组命名的 worker，并给 home 为每个 harness 定一个总上限。它不统计直接调用 harness step 的 run，也不由 `operad init` 安装。
+agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex 登录服务于机器上的每个仓库。两个仓库各自允许同时三个 Claude run，就没有任何东西限制总数；而 harness 按模型的 `concurrency`（见[限制同一模型的 run](#limiting-runs-of-one-model)）限制的是一个模型，不是机器上同一个 harness 的 run 数。`pool` 插件给每个仓库和 flow 一组命名的 worker，并给 home 为每个 harness 定一个总上限。它不统计直接调用 harness step 的 run，在新的 home 中是关闭的；用 `operad plugin enable pool` 打开它。
 
 ### pool 插件如何工作 {#how-the-pool-plugin-works}
 
@@ -480,8 +516,7 @@ agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex �
 
 agent run 花的是账号的钱，而不是仓库的：一个 Claude 或 Codex 登录服务于机器上的每个仓库。`pool` 插件有一个 step，`pool/agent`，它选取一个有空位的 worker，运行该 worker 的 harness step，并把结果交回。使用它的 flow（`dev` flow 就是）描述自己的 worker；home 规定一个 harness 总共可以有多少个 run。
 
-该插件随产品提供，但 `operad init` 不安装它；`operad plugin enable
-pool` 会添加它。
+`operad init` 不启用它；用 `operad plugin enable pool` 打开它。
 
 ### home：`settings.harnesses` {#home-settingsharnesses}
 
@@ -537,19 +572,19 @@ worker 有这些字段；任何其他字段都会被拒绝。
 
 1. 它按顺序选取第一个这样的 worker：它在 `prefix` 下自己的计数还有空位，并且它的 harness 在 `settings.harnesses` 下还有空位。设置了 `worker` 时，只有该 worker 可以运行；不在 `workers` 中的名称会让该 step 以 `failed` 结束，`data.reason` 为 `unknown_worker`。
 2. 没有任何一个有空位时，它等待，不报错，直到某个 run 结束。每种原因它发送一次事件 `pool.waiting`：flow 的计数满时 `data.full` 是 `flow`，某个 harness 的 home 上限满时是 `home`。被停止的 step 离开队列并以 `interrupted` 结束。
-3. 它用这些参数、该 worker 的 `args`、`wallTimeSecs` 和 `stallSecs` 运行该 worker 的 `use`，原样返回结果，并向 `data` 添加：`worker`、`harness`，以及在 fallback 之后的 `fallbackFrom`（失败的那个 worker）。
-4. 当结果的 `data.modelError.kind` 是 `unavailable` 或 `usage_limit`，或者 harness step 无法启动（抛出了异常，或以 `failed` 结束且 `data.reason` 为 `missing` 或 `spawn`），并且该 worker 有 `fallback` 时，它在交还第一个 worker 的位置并等待 fallback 自己的空位之后，把那个 worker 运行一次。超时（wall time 或 stall）从不 fallback，fallback 自己的失败原样返回。
+3. 它用这些参数、该 worker 的 `args`、`wallTimeSecs` 和 `stallSecs` 运行该 worker 的 `use`，原样返回结果，并向 `data` 添加：`worker`、`harness`，以及在 fallback 之后的 `fallbackFrom`（失败的那个 worker）。`waiting` 结果保留它的提问；之后的回答用 `resumeSession` 和 `askAnswer` 让同一个 worker 继续。
+4. 当结果的 `data.modelError.kind` 是 `unavailable` 或 `usage_limit`，或者 harness 进程无法启动（该 step 以 `failed` 结束且 `data.reason` 为 `missing` 或 `spawn`），并且该 worker 有 `fallback` 时，它在交还第一个 worker 的位置并等待 fallback 自己的空位之后，把那个 worker 运行一次。超时（wall time 或 stall）从不 fallback，抛出异常的 step 也不会：它让这次 work 失败，与没有 fallback 时一样。fallback 自己的失败原样返回。
 
 计数存放在哪里：每个 step 都在自己的 worker 线程中运行，所以位置保存在 home 下的一个文件 `pool/places.json` 中，通过锁文件来修改。home 中任何线程或进程里的 step 看到的是同样的计数。一个位置记录持有它的进程；当该进程不在了（崩溃的 serve），该位置会在下一次 `pool/agent` step 查看时被丢弃。
 
 ## `dev.json`：workers 和 pools {#devjson-workers-and-pools}
 
-`dev` 插件的 work step 通过 `pool/agent` 运行每个任务，所以 `dev` 需要启用 `pool` 插件（`operad plugin enable pool`）。仓库在 `<repository>/.operad/dev.json` 中选择它的 worker；`dev` 读取已注册仓库的主克隆中的该文件，从不读取任务 worktree 中的副本，后者带的是任务分支开始时的内容。
+`dev` 插件的 work step 通过 `pool/agent` 运行每个任务，所以 `dev` 需要启用 `pool` 插件。新的 home 两者都不启用，`operad plugin enable dev` 会连同 `dev` 一起打开 `pool` 和 `shell`，并说明它打开了哪些。仓库在 `<repository>/.operad/dev.json` 中选择它的 worker；`dev` 读取已注册仓库的主克隆中的该文件，从不读取任务 worktree 中的副本，后者带的是任务分支开始时的内容。
 
 | 字段 | 类型 | 作用 |
 |---|---|---|
 | `workers` | object | 仓库的 worker。字段与 [flow：`workers` 和 `pools`](#a-flow-workers-and-pools) 中相同；那张表是列出 worker 字段、默认值和拒绝情形的唯一位置。 |
-| `pools` | object | pool 分组。pool 是 worker 名称的列表，或对象 `{ "workers": [...], "concurrency": n }`。work stage 从它的 `pool` 字段所指名的 pool 中取 worker；没有指名时使用 `default`，所以 `pools` 设置必须定义 `default`。没有 `pools` 时，`default` 按书写顺序包含所有 worker。 |
+| `pools` | object | pool 分组。pool 是 worker 名称的列表，或对象 `{ "workers": [...], "concurrency": n }`。code stage 从它的 `pool` 字段所指名的 pool 中取 worker；没有指名时使用 `default`，所以 `pools` 设置必须定义 `default`。没有 `pools` 时，`default` 按书写顺序包含所有 worker。 |
 | `concurrency` | integer，1 或更大 | 对运行中任务的额外上限；见下文。 |
 
 <!-- schema: dev.schema.json -->
@@ -577,11 +612,11 @@ worker 有这些字段；任何其他字段都会被拒绝。
 
 **旧的 `worker` 形式。** `worker`（`use`、`args`、`wallTimeSecs`、`stallSecs`）仍然有效，表示一个以其 harness 插件命名的 worker（`radian/agent` 对应 `radian`），其 `count` 等于 `concurrency`，单独在 pool `default` 中。它的 run 像任何 worker 的一样计入其 harness 的 home 上限。同时有 `worker` 和 `workers` 的文件，或有 `pools` 而没有 `workers` 的文件，在读取时会被拒绝。
 
-**同时运行多少个任务。** 每个 pool 有自己的上限：其 worker 的 `count` 之和，或在更小时取它的 `concurrency`。任务计入它所运行的 flow 的 pool：它的第一个 `work` stage 的 `pool`，或 `default`。已满的代码 pool 不会阻止使用另一个 pool 的 flow 的任务启动，反之亦然。文件设置了 `concurrency` 时，它为所有 pool 合计设上限，并且从不提高某个 pool 的上限。计划自己的 `concurrency` 仍然在此之上适用。超过上限的任务等待空位，当仓库有多个 pool 时，它的行会说明哪个 pool 满了（`waiting for the image pool's slot (T-0007)`）；超过某个 worker 自己的 `count` 或 home 上限的任务在 `pool/agent` 中等待。
+**同时运行多少个任务。** 每个 pool 有自己的上限：其 worker 的 `count` 之和，或在更小时取它的 `concurrency`。任务计入它所运行的 flow 的 pool：它的第一个 `code` stage 的 `pool`，或 `default`。已满的代码 pool 不会阻止使用另一个 pool 的 flow 的任务启动，反之亦然。文件设置了 `concurrency` 时，它为所有 pool 合计设上限，并且从不提高某个 pool 的上限。计划自己的 `concurrency` 仍然在此之上适用。超过上限的任务等待空位，当仓库有多个 pool 时，它的行会说明哪个 pool 满了（`waiting for the image pool's slot (T-0007)`）；超过某个 worker 自己的 `count` 或 home 上限的任务在 `pool/agent` 中等待。
 
 出现在两个 pool 中的 worker 只有一个 `count`：它的位置由两个 pool 共享。任务始终计入它开始时所在 flow 的 pool，即使 `dev.json` 在它运行期间发生了变化。
 
-worker 没有 `fallback` 的 pool 从不把它的工作交给另一个 pool 的 worker：当模型不可用或达到其使用上限时，工作会等待并重试，在用完允许的等待次数之后交给人处理。用 `task add --flow <name>`（MCP 的 `command` 工具像 CLI 一样传递它）或 `task update <id> --flow <name>` 选择任务的 flow；任务一旦开始了它的第一次 attempt，该更新就会被拒绝。
+worker 没有 `fallback` 的 pool 从不把它的工作交给另一个 pool 的 worker：当模型不可用时，如果模型给出了 `retry_after_secs`，工作从模型报告它的时刻起等待这么久，否则等待 `reviewer.retrySecs`，用完允许的等待次数之后交给人处理。用量上限，或超过半小时的 retry-after，会立即交给人处理，并带上模型的消息和它重置的时间。用 `task add --flow <name>`（MCP 的 `command` 工具像 CLI 一样传递它）或 `task update <id> --flow <name>` 选择任务的 flow；任务一旦开始了它的第一次 attempt，该更新就会被拒绝。
 
 **用哪个 worker。** work step 把该 stage 的 pool（`default`，除非该 stage 指名了另一个）和键 `<repository>/<pool>` 传给 `pool/agent`。attempt 记录运行的 `worker`（fallback 之后，是 fallback 的 worker，`fallbackFrom` 指名失败的那个），work 结果写 `work: claude` 或 `work: pi (fallback from claude)`。在 rework 或 reject 之后，下一次 work attempt 请求上一次 attempt 的 worker，所以在 harness 支持时它会恢复该 worker 的 session。如果那个 worker 忙，work 会等它；不会由另一个 worker 接手。如果该 worker 已不在该 stage 的 pool 中，pool 会选任何有空位的 worker，结果写 `work: pi; claude is no longer in the pool`。
 
@@ -618,7 +653,7 @@ then no new work starts`，就绪的任务保持就绪，而不是失败。`pool
 ```
 $ operad list task
 T-0044-views   Worker views   running   $0.35  pi
-$ operad section T-0044-views metrics
+$ operad show T-0044-views --section metrics
 | worker | attempts | cost | time | first pass |
 | --- | --- | --- | --- | --- |
 | claude | 2 | $0.30 | 4m10s | 1/2 |
@@ -660,4 +695,4 @@ step 以下列结果之一结束：
 | `waiting` | 该 step 停下来等待，之后会继续。 |
 | `interrupted` | 该 step 在完成之前被停止。 |
 
-结束结果适用于 `harness` 类型的插件：它们运行 agent，flow 以同样的方式读取任何 agent。`operad plugin check` 会拒绝声明了其他名称的 harness step，并指明该名称。`radian`、`pi`、`claude` 和 `codex` 的 agent step 声明 `done`、`failed` 和 `interrupted`。其他类型的插件自己命名其结果。`shell` 是 `stage`，不是 harness：它的 step 运行一个命令或一次检查并给出结论，所以它们以 `pass` 和 `fail`（检查还有 `ready` 或 `waiting`）结束，结束结果不适用于它们。
+结束结果适用于 `harness` 类型的插件：它们运行 agent，flow 以同样的方式读取任何 agent。`operad plugin check` 会拒绝声明了其他名称的 harness step，并指明该名称。`radian`、`pi`、`claude` 和 `codex` 的 agent step 声明 `done`、`failed`、`interrupted`，并在 harness 能恢复提问时声明 `waiting`。其他类型的插件自己命名其结果。`shell` 是 `stage`，不是 harness：它的 step 运行一个命令或一次检查并给出结论，所以它们以 `pass` 和 `fail`（检查还有 `ready` 或 `waiting`）结束，结束结果不适用于它们。

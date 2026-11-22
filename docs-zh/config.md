@@ -23,7 +23,7 @@ operad 需要一个地方保存一个人的配置：安装了哪些插件、stor
 
 ## home {#the-home}
 
-`operad` 把它的状态保存在一个目录中：设置了 `$OPERAD_HOME` 时用它，否则用 `~/.operad`。home 中有 `config.json`、store、secrets 目录、`access-user.json`、`keys.json`、`triggers.json`、`tui.json` 和 themes 目录。secret 文件的权限是 `0600`，位于权限为 `0700` 的目录内；本手册中没有任何地方会打印 secret。
+`operad` 把它的状态保存在一个目录中：设置了 `$OPERAD_HOME` 时用它，否则用 `~/.operad`。home 中有 `config.json`、store、secrets 目录、`access-user.json`、`access-grants.json`、`keys.json`、`triggers.json`、`tui.json` 和 themes 目录。secret 文件的权限是 `0600`，位于权限为 `0700` 的目录内；本手册中没有任何地方会打印 secret。
 
 ## 示例 {#an-example}
 
@@ -93,18 +93,18 @@ operad 需要一个地方保存一个人的配置：安装了哪些插件、stor
     }
   },
   "store": { "backend": "sqlite", "path": "store/log.sqlite" },
-  "http": { "enabled": true, "port": 7480, "listen": ["127.0.0.1"] },
+  "http": { "enabled": true, "port": 8765, "listen": ["127.0.0.1"] },
   "notify": { "command": "sh ~/.operad/notify.sh", "on": ["waiting"] },
   "mcp": {
     "channel": { "notify": ["waiting", "ended", "loop"], "loopAfter": 3 },
-    "actions": ["dev:rework", "dev:reverify", "dev:reject", "dev:priority", "dev:concurrency", "chat:close"],
+    "actions": ["chat:close"],
     "confirmActions": ["chat:close"]
   },
   "ask": { "graceSecs": 600 }
 }
 ```
 
-当 home 中没有 `config.json` 时，`operad init` 会写入一个：安装了 `shell`、`radian`、`chat` 和 `dev`，store 位于 `store/log.sqlite`，`http` 在 `127.0.0.1:7480` 上开启，通知关闭，写入上面的 `mcp.actions` 和 `mcp.confirmActions` 列表，以及 600 秒的 ask grace。这些全部写入文件；其中没有任何隐藏的默认值。完全没有 `config.json` 的 home 没有插件，也不允许任何 lead action。
+当 home 中没有 `config.json` 时，`operad init` 会写入一个：`chat`、`bot` 和 `memory`，再加上 `radian`、`claude` 和 `pi` 中命令在 `PATH` 上的每一个所对应的 harness 插件，按这个顺序。一个 agent 都找不到时它写入 `radian`，并且 `operad init` 失败，消息中列出这三个 agent 以及如何安装其中一个。`shell`、`dev` 和 `pool` 在新 home 中是关闭的；要在仓库上工作的 home 会把它们打开。它写入位于 `store/log.sqlite` 的 store，在 `127.0.0.1:8765` 上开启的 `http`，关闭的通知，上面带有 `chat:close` 的 `mcp.actions` 列表，内容为 `["chat:close"]` 的 `mcp.confirmActions` 列表，以及 600 秒的 ask grace。这些全部写入文件；其中没有任何隐藏的默认值。完全没有 `config.json` 的 home 没有插件，也不允许任何 lead action。
 
 已有的 home 不会被重写。在已有 `config.json` 的 home 上运行 `operad init` 会保持该文件不变；唯一的例外是没有 `plugins` 键的文件，它会被加上默认插件，其他什么都不改。没有 `mcp.actions` 的 `config.json` 不允许任何 lead action。在这次变更之前创建的 home 已经列出了它的插件，但可能没有 `mcp.actions`；要保留 lead 的 action，请把下面几行加入它的 `mcp` 部分，然后重启 `operad mcp`：
 
@@ -123,14 +123,16 @@ operad 需要一个地方保存一个人的配置：安装了哪些插件、stor
 
 | Key | Type | Default | Allowed values | When it takes effect | Wrong value |
 |---|---|---|---|---|---|
-| `plugins` | object，或模块名数组 | `operad init` 安装的四个插件 | 插件名对应模块名、路径或选项对象 | 每次命令启动时，以及运行中的 `serve` 在变更后重新加载时 | 被拒绝：`plugins: must be an object of plugin options or an array of module names` |
+| `plugins` | object，或模块名数组 | `chat`、`bot` 和 `memory`，再加上 `radian`、`claude` 和 `pi` 中在 `PATH` 上找到的每一个的 harness（一个都找不到时为 `radian`）；`shell`、`dev` 和 `pool` 关闭 | 插件名对应模块名、路径或选项对象 | 每次命令启动时，以及运行中的 `serve` 在变更后重新加载时 | 被拒绝：`plugins: must be an object of plugin options or an array of module names` |
 | `store` | object | 位于 `<home>/store/log.sqlite` 的 sqlite | 下面的键 | 每次命令启动时 | 被拒绝：`store: must be an object` |
-| `http` | object | 开启，端口 `7480`，`127.0.0.1` | [HTTP 页](http.md#the-http-section)中的键 | `operad serve` 启动时；新配置加载时重新加载 | 被拒绝：`http: must be an object`，或该字段自己的信息 |
+| `http` | object | 开启，端口 `8765`，`127.0.0.1` | [HTTP 页](http.md#the-http-section)中的键 | `operad serve` 启动时；新配置加载时重新加载 | 被拒绝：`http: must be an object`，或该字段自己的信息 |
 | `notify` | object | command 为 `null`，`on` 为 `["waiting"]` | [notifications](notifications.md) 中的键 | `operad serve` 启动时；新配置加载时重新加载 | 被拒绝：`notify: must be an object`，或该字段自己的信息 |
 | `mcp` | object | 下面的列表 | 下面的键 | `operad mcp` 启动时 | 被拒绝：`mcp: must be an object`，或该字段自己的信息 |
 | `ask` | object | `{ "graceSecs": 600 }` | 下面的键 | 当某个 step 向人提问时 | 被拒绝：`ask: must be an object`，或 `ask.graceSecs: ...` |
 
 内核在命令启动时读取 `config.json`。运行中的 `serve` 会监视该文件，并在新文件加载成功时重新加载；加载失败时，旧配置继续运行，并把问题记入日志。一次性命令在下次运行时重新读取该文件。
+
+默认的 HTTP 端口已改为 `8765`；在旧端口上配对的客户端必须重新配对（iOS app、桌面端的远程连接）。
 
 ### `plugins` {#plugins}
 
@@ -144,7 +146,7 @@ operad 需要一个地方保存一个人的配置：安装了哪些插件、stor
 
 如果某个插件条目的模块导入失败、设置无效，或它声明的名称与它的键不匹配，它就不会加载。文件的其余部分仍会加载，`serve` 和 `operad plugin check` 会打印说明原因的那一行。`operad plugin list`、`operad plugin enable`、`operad plugin disable` 和 `operad plugin check` 见 [CLI 页](cli.md)。
 
-`operad init` 安装 `shell`、`radian`、`chat` 和 `dev`。`pi`、`claude`、`codex`、`pool`、`bot` 和 `telegram` 随附但未安装；用 `operad plugin enable <name>` 启用。
+`operad init` 启用 `chat`、`bot` 和 `memory`，并在创建 home 时，对 `radian`、`claude` 和 `pi` 中命令在 `PATH` 上的那些予以启用。启用了 `claude` 的新 home 还会在 `~/.operad/plugins` 中得到 `@operad-io/harness-claude` 及其 Agent SDK。`shell`、`dev` 和 `pool` 随附，但在新 home 中是关闭的；仓库的工作需要这三个，`operad plugin enable dev` 会连同 `pool` 和 `shell` 一起打开。`codex` 和 `telegram` 随附但未启用；用 `operad plugin enable <name>` 启用。
 
 ### `store` {#store}
 
@@ -162,7 +164,7 @@ store 是 history 和 pending 视图读取的内容。更改路径会让新进�
 | `mcp.channel` | object | `{ "notify": ["waiting", "ended", "loop"], "loopAfter": 3 }` | 下面的键 | `operad mcp` 启动时 | 被拒绝：`mcp.channel: must be an object` |
 | `mcp.channel.notify` | 字符串数组 | `["waiting", "ended", "loop"]` | `waiting`、`ended`、`loop`、`changes` | `operad mcp` 启动时 | 被拒绝：`mcp.channel.notify: unknown entry <value>; use "waiting", "ended", "loop", "changes"` |
 | `mcp.channel.loopAfter` | integer | `3` | `2` 或更大 | `operad mcp` 启动时 | 被拒绝：`mcp.channel.loopAfter: must be an integer of 2 or more` |
-| `mcp.actions` | 字符串数组 | `[]`（`operad init` 会在新文件中写入五个 `dev` lead action 和 `chat:close`） | `<plugin>:<action>` 名称 | `operad mcp` 启动时 | 被拒绝：`mcp.actions: must be an array of "<plugin>:<action>" names` |
+| `mcp.actions` | 字符串数组 | `[]`（`operad init` 会在新文件中写入 `["chat:close"]`） | `<plugin>:<action>` 名称 | `operad mcp` 启动时 | 被拒绝：`mcp.actions: must be an array of "<plugin>:<action>" names` |
 | `mcp.confirmActions` | 字符串数组 | `[]`（`operad init` 会在新文件中写入 `["chat:close"]`） | 同时在 `mcp.actions` 中、且需要确认的 `<plugin>:<action>` 名称 | `operad mcp` 启动时 | 被拒绝：`mcp.confirmActions: must be an array of "<plugin>:<action>" names` |
 
 `mcp.actions` 是 MCP server 可以替 lead 运行的列表。其他所有 action 都会被拒绝，留给 owner 运行。`mcp.confirmActions` 是允许的 action 中更小的一个列表，这些 action 还需要 `confirm: true`；在 `actions` 中但不在这里的 action，即使 MCP 调用已确认也会被拒绝。channel 的键在 [MCP 页](mcp.md#claude-code-channel)中说明。
@@ -189,12 +191,18 @@ step 自己的 `askGraceSecs` 参数，或该调用自己的 grace，可以更�
 |---|---|---|---|---|---|
 | `bot.bots` | object | `{ "default": {} }` | bot 名称对应 bot 对象 | 下一次回复 | 被 schema 拒绝；错误的名称会使该 bot 被拒绝 |
 | `bot.bots.<name>` | object | `{}` | 下面的键 | 下一次回复 | 被拒绝：`bot "<name>": ...` 或 schema 的字段信息 |
-| `bot.bots.<name>.cwd` | string | `default` 为 `~/.operad/bot`，其他 bot 为 `~/.operad/bot/<name>` | `~/.operad/bot` 内的目录，或完全在 operad home 之外的目录 | 下一次回复和下一次 chat 启动 | 被拒绝：`bot "<name>": the working directory <path> is inside the operad home but outside <bot dir>` 或 `... is the operad home or holds it` |
+| `bot.bots.<name>.cwd` | string | `~/.operad/bot/<name>`，所以 `default` 为 `~/.operad/bot/default` | `~/.operad/bot` 内的目录，或完全在 operad home 之外的目录 | 下一次回复和下一次 chat 启动 | 被拒绝：`bot "<name>": the working directory <path> is inside the operad home but outside <bot dir>` 或 `... is the operad home or holds it` |
 | `bot.bots.<name>.harness` | string | chat 提供的第一个已加载的 agent | 已加载的 agent 插件名，例如 `claude` 或 `pi` | 新 chat 启动时 | chat 启动时，不是 agent 的名称会被拒绝 |
-| `bot.bots.<name>.skills` | 字符串数组 | `[]` | 包含 `SKILL.md` 的目录；相对路径位于工作目录之下 | 下一次回复 | 被拒绝：`skill "<path>": there is no SKILL.md in <path>` |
+| `bot.bots.<name>.useOwnSettings` | boolean | `false` | `true` 让 bot 的 `claude` 或 `pi` 读取你自己对该 agent 的配置；`codex` 和 `radian` 无论它开还是关都读取它们自己的配置。bot 的 access profile 该拒绝的仍然拒绝；见 [Chats and bots](chats-and-bots.md#using-your-own-agent-settings) | 下一次回复 | 被 schema 拒绝 |
+| `bot.bots.<name>.skills` | 字符串数组 | `[]` | 包含 `SKILL.md` 的目录，直接子目录各自包含一个这种文件的目录，或 `.agents` 目录（它的 `skills` 目录按前一种方式读取）；相对路径位于工作目录之下 | 下一次回复 | 被拒绝：`skill "<path>": there is no SKILL.md in <path>` |
 | `bot.bots.<name>.model` | string | agent 的默认值 | chat 的 agent 所列出的 model | 新 chat 启动时 | agent 没有列出它时，在 chat 启动时被拒绝 |
 | `bot.bots.<name>.effort` | string | agent 的默认值 | chat 的 agent 所列出的 effort | 新 chat 启动时 | agent 没有列出它时，在 chat 启动时被拒绝 |
 | `bot.bots.<name>.speaker` | string | `chat.speaker` 的值 | 非空文本 | 下一次回复 | 被 schema 拒绝 |
+| `bot.bots.<name>.accessLevel` | string | `ask` | `plan`、`ask`、`edits` 或 `full`：该 bot 上的新 chat 开始时的级别，无论来自桌面端、CLI、MCP server 还是 Telegram。`access` 只能收紧 profile，而它可以放宽：`full` 除 deny 规则外什么都不问（[Access](access.md)）。定时 prompt 打开的 chat 仍然从 `full` 开始；用 `/access` 选过级别的 chat 保留所选的级别 | 没有选过级别的 chat 的下一次回复；新 chat | 被 schema 拒绝 |
+| `bot.bots.<name>.writeWiki` | boolean | `default` 为 `true`，其他每个 bot 为 `false` | `true` 或 `false`；读取权限始终都有 | 下一次回复 | 被 schema 拒绝 |
+| `bot.bots.<name>.tidyTime` | string | `03:30` | `HH:MM`，从 `00:00` 到 `23:59`，使用本机的本地时区 | 下一次夜间 memory 检查 | 被 schema 拒绝 |
+| `bot.bots.<name>.runWithoutAsking` | boolean | `false` | `true` 时夜间的 memory 整理直接运行，不产生 pending 卡片；`false` 时等待 Run 或 Skip | 下一次夜间检查 | 被 schema 拒绝 |
+| `bot.bots.<name>.backgroundModel` | string | agent 声明的后台 model，否则为 bot 的 `model` | bot 的 agent 所列出的 model | 下一次 memory 整理运行 | agent 没有列出它时，在该次运行时被拒绝 |
 | `bot.bots.<name>.mcpServers` | object | `{}` | server 名称对应 server 对象；用 `operad bot mcp` 添加，需由人批准 | 下一次回复 | 被 schema 拒绝；工具发生变化的 server 不会被挂载 |
 | `bot.bots.<name>.mcpServers.<name>` | object | 无 | 下面的键 | 下一次回复 | 被 schema 拒绝 |
 | `bot.bots.<name>.mcpServers.<name>.command` | string | 无 | 启动该 server 的程序 | 下一次回复 | 被 schema 拒绝；缺少 command 表示该 server 无法启动 |
@@ -224,6 +232,10 @@ step 自己的 `askGraceSecs` 参数，或该调用自己的 grace，可以更�
 
 bot chat 使用它的 bot 的 `speaker`。见 [Chats and bots](chats-and-bots.md)。
 
+### `memory` {#memory}
+
+`memory` 插件是可选的；它的 `wikiDir` 设置见 [memory 页](memory.md)。
+
 ### `telegram` {#telegram}
 
 Telegram 插件是可选的；它的 `users`、`bot` 和 `pending` 设置以及密钥 `token` 见 [Telegram 页](telegram.md)。
@@ -233,8 +245,12 @@ Telegram 插件是可选的；它的 `users`、`bot` 和 `pending` 设置以及�
 | Key | Type | Default | Allowed values | When it takes effect | Wrong value |
 |---|---|---|---|---|---|
 | `dev.checks` | integer | `2` | `1` 或更大 | 下一次检查占用名额时；已经在等待或运行的检查保留它们的名额 | 被 schema 拒绝；该插件被拒绝，日志指明 `settings.checks` |
+| `dev.testHost` | string | 未设置：检查在本机运行 | 一个 ssh 目标，例如 `hai@192.168.6.177` | gate、integration 或 rerun 命令启动时；下一条命令使用它 | 被 schema 拒绝；该插件被拒绝，日志指明 `settings.testHost` |
+| `dev.testSlots` | integer | 未设置：`scripts/remote-check.sh` 使用 `1` | `1` 或更大 | gate、integration 或 rerun 命令启动时 | 被 schema 拒绝；该插件被拒绝，日志指明 `settings.testSlots` |
 
 `dev.checks` 是这个 home 中同时运行的检查（任务的 verify，以及 merge 之前的检查）的最大数量，跨所有仓库计算。仓库可以用[它的 dev.json](dev.md#the-gate-and-its-checks) 中的 `gate.places` 降低自己的份额。
+
+`dev.testHost` 和 `dev.testSlots` 是 [`scripts/remote-check.sh`](checks.md) 的测试主机：任务运行的 gate、integration 或 rerun 命令会以 `OPERAD_CHECK_HOST` 和 `OPERAD_CHECK_SLOTS` 的形式得到它们。`serve` 自己的环境中显式设置的 `OPERAD_CHECK_HOST` 或 `OPERAD_CHECK_SLOTS` 优先于这项设置，包括空的主机，它让检查在本机运行。两者默认都未设置，所以没有测试主机的 home 行为与以前一样。当某个仓库的检查命令使用 `scripts/remote-check.sh`，而设置和变量都没有指明主机时，`serve` 在启动时向日志写入一行，该仓库的 pending 列表会多出一项，它的 Overview 会说明这些命令在本机运行。
 
 ### `pool` {#pool}
 
@@ -266,13 +282,13 @@ Telegram 插件是可选的；它的 `users`、`bot` 和 `pending` 设置以及�
 
 ### `codex` {#codex}
 
-`codex` 插件通过 `codex-acp` 运行用户自己的 Codex。它的 step 是 `codex/agent`；设置方法和这些设置见 [dev 页](dev.md#the-codex-settings)。
+`codex` 插件通过 `codex app-server` 运行用户自己的 Codex。它的 step 是 `codex/agent`；设置方法和这些设置见 [dev 页](dev.md#the-codex-settings)。
 
 | Key | Type | Default | Allowed values | When it takes effect | Wrong value |
 |---|---|---|---|---|---|
-| `codex.model` | string | Codex 的默认值 | codex-acp 提供的 model 名 | agent step 启动时 | 被 schema 拒绝；codex-acp 不提供的 model 会使该 step 失败 |
+| `codex.model` | string | Codex 的默认值 | app-server 提供的 model 名 | agent step 启动时 | 被 schema 拒绝；app-server 不提供的 model 会使该 step 失败 |
 | `codex.effort` | string | Codex 的默认值 | `minimal`、`low`、`medium`、`high`、`xhigh` | agent step 启动时 | 被 schema 拒绝 |
-| `codex.command` | 字符串数组 | `PATH` 中的 `bun` 和 `codex-acp` | 程序及其参数 | agent step 启动时 | 被 schema 拒绝；无法启动的命令会使插件检查失败 |
+| `codex.command` | 字符串数组 | `PATH` 中的 `bun` 和 `codex`，然后是 `app-server` | 程序及其参数 | agent step 启动时 | 被 schema 拒绝；无法启动的命令会使插件检查失败 |
 | `codex.wallTimeSecs` | number | `3600` | `1` 到 `28500` 秒 | agent step 启动时 | 被 schema 拒绝 |
 | `codex.stallSecs` | number | `600` | `1` 或更多秒 | agent step 启动时 | 被 schema 拒绝 |
 | `codex.concurrency` | object | `{}` | model 名对应 `1` 或更大的数量 | 随下一个启动的 agent step | 被 schema 拒绝；会指明该数量的键 |
@@ -287,7 +303,7 @@ Telegram 插件是可选的；它的 `users`、`bot` 和 `pending` 设置以及�
 | `pi.model` | string | pi 的默认 model | `provider/id` | agent step 或新 chat 启动时 | 被 schema 拒绝 |
 | `pi.models` | 字符串数组 | `pi --list-models` 打印的每个 model | `provider/id` 值 | 新 chat 列出它的 model 时 | 被 schema 拒绝 |
 | `pi.thinkingLevel` | string | pi 的默认值 | `off`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max` | agent step 或新 chat 启动时 | 被 schema 拒绝 |
-| `pi.command` | string | `"pi"` | 指向已安装的 `@earendil-works/pi-coding-agent` 的命令名或路径 | 插件加载时和 agent step 启动时 | 被 schema 拒绝；缺失或过旧的安装会使插件检查失败 |
+| `pi.command` | string | `"pi"` | 指向已安装的 `@earendil-works/pi-coding-agent` 的命令名或路径；默认值使用 `PATH` 上的那一份，否则使用 operad 安装在 home 中的那一份 | 插件加载时和 agent step 启动时 | 被 schema 拒绝；缺失或过旧的安装会使插件检查失败 |
 | `pi.authPath` | string | `"~/.pi/agent/auth.json"` | pi 的凭据文件 | agent step 启动时 | 被 schema 拒绝 |
 | `pi.modelsPath` | string | `"~/.pi/agent/models.json"` | pi 的自定义 model 文件 | agent step 启动时 | 被 schema 拒绝 |
 | `pi.wallTimeSecs` | number | `3600` | `1` 到 `28500` 秒 | agent step 启动时 | 被 schema 拒绝；更大的值还会使该 step 失败，信息为 `must be at most 28500` |
@@ -347,12 +363,15 @@ home 中的 `triggers.json` 保存规则，规定哪个事件启动哪个 flow�
 | `object` | string | 必填 | 固定的对象 id，或 `$event.object` | 规则启动 run 时 | 被拒绝：`rule <n>: object: must be a non-empty string` |
 | `mode` | string | 必填 | `observe`、`candidate`、`auto` | 规则启动 run 时 | 被拒绝：`rule <n>: mode: must be "observe", "candidate", "auto"` |
 | `schedule` | string | 缺省 | 使用本地时区的五字段 cron 表达式 | 加载 cron 规则时；只有 source 为 `cron` 的规则使用它 | 被拒绝：`rule <n>: schedule: <why the cron expression is not valid>` |
+| `paused` | boolean | 缺省 | `true` 停止该规则的 tick；被暂停的规则不保留错过的时间 | 读取规则时；下一次加载会启动或恢复它 | 被拒绝：`rule <n>: paused: must be true or false` |
 
-cron 来源是来自 `@operad-io/source-cron`、名为 `cron` 的插件。对每条 `source` 为 `cron` 且带有 `schedule` 的规则，它在每个到期的分钟发出一个 `tick`；其他规则忽略 `schedule`。通过命令添加规则时，规则不能使用保留的来源 `operad`。
+cron 来源是来自 `@operad-io/source-cron`、名为 `cron` 的插件。对每条 `source` 为 `cron` 且带有 `schedule` 的规则，它在每个到期的分钟发出一个 `tick`；其他规则忽略 `schedule`。它把每条规则上一次触发的分钟记在 `<home>/cron/state.json` 中，按规则自己的字段而不是它在文件中的位置来识别。新规则，或 schedule 改过的规则，会把它最近一个计划的分钟记为基线，然后等待下一个；它不会补跑规则被知晓之前的时间。一旦规则有了记录的上次时间，`serve` 启动或机器唤醒时会向前回看最多七天，只把最近一次错过的 tick 发出一次，tick 的摘要会写明它跳过的更早的时间以及原因。这个 tick 的数据中还带有 `scheduledAt` 和 `lateSecs`，所以 step 或 prompt 可以告诉 agent 计划的时间以及这次运行晚了多久；准时的 tick 不带迟到信息。schedule 改过的规则重新开始，不为旧的 schedule 补跑。`paused` 为 true 的规则不发出 tick；它记录的时间跟随时钟，所以恢复后是等待下一个计划的分钟，而不是补跑暂停期间的时间。通过命令添加规则时，规则不能使用保留的来源 `operad`。
+
+cron 来源还拥有 `scheduled` 命令，它可以列出、添加、编辑、暂停、恢复和删除这些规则，而不必手工编辑文件。它写入的是同一个 `triggers.json`；没有第二个存储。客户端可以通过 `operad scheduled ...`、通过 HTTP 的 `POST /v1/commands`，或通过 MCP 的 `command` 工具使用它。列表会显示每个定时 flow 的 flow、schedule、参数、下一次运行，以及上一次运行的结果和 run id。未知的 flow 或错误的 cron 表达式会被拒绝并说明原因。
 
 如果 `triggers.json` 无效，整个文件会被拒绝，信息中包含规则和字段。`operad serve` 会记录日志，并在文件修复之前不带来源运行；需要规则的命令会报告这一点。运行中的 `serve` 会监视该文件，并在新文件加载成功时重新加载。
 
 ## 从客户端修改设置 {#settings-from-a-client}
 
 `operad settings` 列出人可以调整的设置，`operad settings set
-<name> <value>` 修改其中一项；`--repo <name>` 指定一个已注册的仓库。全局设置是 `<plugin>.<path>`。文件名与其插件名相同的项目文件只使用插件名，所以 `.operad/dev.json` 对应 `dev.concurrency`、`dev.autoDefault`、`dev.gate.commands`、`dev.gate.commandTimeoutSecs`、`dev.reviewer.use`、`dev.reviewer.args`、`dev.reviewer.timeoutSecs` 和 `dev.reviewer.fixLevel`。其他文件会加上它的名称：`.operad/review.json` 对应 `dev.review.default.levels`、`dev.review.default.rules` 和 `dev.review.default.fixLevel`。更改会影响 merge 的内容（`autoDefault`、`fixLevel`、levels 和 rules）时需要 `--yes`。
+<name> <value>` 修改其中一项；`--repo <name>` 指定一个已注册的仓库。全局设置是 `<plugin>.<path>`。文件名与其插件名相同的项目文件只使用插件名，所以 `.operad/dev.json` 对应 `dev.concurrency`、`dev.autoDefault`、`dev.flows`（可编辑；dev 在保存时检查它）和 `dev.flowList`（只读）、`dev.gate.commands`、`dev.gate.commandTimeoutSecs`、`dev.reviewer.use`、`dev.reviewer.args`、`dev.reviewer.timeoutSecs` 和 `dev.reviewer.fixLevel`。其他文件会加上它的名称：`.operad/review.json` 对应 `dev.review.default.levels`、`dev.review.default.rules` 和 `dev.review.default.fixLevel`。更改会影响 merge 的内容（`autoDefault`、`fixLevel`、levels 和 rules）时需要 `--yes`。

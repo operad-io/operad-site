@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>memory 和 wiki · operad 文档</title>
+<meta name="description" content="memory 插件：共享的 wiki、bot 的 memory，以及 bot 所写内容的 git 历史。">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://operad.io/zh/docs/memory/">
+<link rel="alternate" hreflang="en" href="https://operad.io/docs/memory/">
+<link rel="alternate" hreflang="zh-CN" href="https://operad.io/zh/docs/memory/">
+<link rel="alternate" hreflang="x-default" href="https://operad.io/docs/memory/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d11" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="operad">
+<meta property="og:title" content="memory 和 wiki · operad 文档">
+<meta property="og:description" content="memory 插件：共享的 wiki、bot 的 memory，以及 bot 所写内容的 git 历史。">
+<meta property="og:url" content="https://operad.io/zh/docs/memory/">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://operad.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="memory 和 wiki · operad 文档">
+<meta name="twitter:description" content="memory 插件：共享的 wiki、bot 的 memory，以及 bot 所写内容的 git 历史。">
+<meta name="twitter:image" content="https://operad.io/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "memory 和 wiki",
+ "description": "memory 插件：共享的 wiki、bot 的 memory，以及 bot 所写内容的 git 历史。",
+ "inLanguage": "zh-CN",
+ "url": "https://operad.io/zh/docs/memory/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "operad",
+  "url": "https://operad.io/"
+ }
+}
+</script>
+<link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../docs.css">
+</head>
+<body>
+
+<header class="top board">
+  <a class="tile logo" href="../../../zh/" aria-label="operad，回到首页"><svg viewBox="5 2 38 42" width="30" height="33" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.15"><path d="M23.06 32.49L16.75 22.44M26.40 31.52L26.40 22.98M29.74 32.49L36.05 22.44M13.59 16.28L11.13 10.23M16.23 16.29L18.75 10.23"/><circle cx="26.4" cy="37.8" r="5.7"/><circle cx="14.9" cy="19.5" r="2.9"/><circle cx="26.4" cy="19.5" r="2.9"/><circle cx="37.9" cy="19.5" r="2.9"/><circle cx="9.9" cy="7.2" r="2.7"/><circle cx="20.0" cy="7.2" r="2.7"/></g></svg></a>
+  <nav class="tile links" aria-label="章节">
+    <a href="../../../zh/">首页</a>
+    <a href="../" aria-current="true">文档</a>
+    <a class="gh end" href="https://github.com/operad-io/operad" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
+    <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a class="gh lang" href="../../../docs/memory/" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
+  </nav>
+  <a class="tile go" href="../../../zh/#install">开始用</a>
+</header>
+
+<div class="docs">
+  <aside class="tile side" aria-label="文档">
+    <details class="side-nav" open>
+      <summary class="s3">文档</summary>
+      <ul>
+        <li><a href="../">概览</a></li>
+        <li><a href="../quickstart/">快速上手</a></li>
+        <li><a href="../setup-prompt/">Setup Dev</a></li>
+        <li><a href="../config/">config.json</a></li>
+        <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../access/">访问</a></li>
+        <li><a href="../cli/">命令行</a></li>
+        <li><a href="../tui/">终端客户端</a></li>
+        <li><a href="../app/">手机 app</a></li>
+        <li><a href="../http/">HTTP 接口</a></li>
+        <li><a href="../tailscale/">Tailscale</a></li>
+        <li><a href="../mcp/">MCP server</a></li>
+        <li><a href="../chats-and-bots/">chat 和 bot</a></li>
+        <li><a href="../memory/" aria-current="page">memory 和 wiki</a></li>
+        <li><a href="../telegram/">Telegram</a></li>
+        <li><a href="../notifications/">通知</a></li>
+        <li><a href="../checks/">检查</a></li>
+        <li><a href="../environment/">环境变量</a></li>
+        <li><a href="../troubleshooting/">故障排查</a></li>
+      </ul>
+    </details>
+  </aside>
+  <script>if (matchMedia("(max-width: 900px)").matches) document.querySelector(".side-nav").removeAttribute("open")</script>
+
+  <main class="tile paper doc" id="top">
+<h1 id="memory-and-the-wiki">memory 和 wiki</h1>
+<p><code>memory</code> 插件给 bot 两个地方保存它知道的东西：</p>
+<ul><li><strong>wiki</strong>，一个共享的知识库，每个 bot 都能读，部分 bot 能写；</li><li>bot 的 <strong>memory</strong>，它工作目录里属于它自己的一个目录。</li></ul>
+<p>新建的 home 会启用它；之前建的 home 需要运行 <code>operad plugin enable memory</code>：</p>
+<pre data-ui><code class="lang-sh">operad plugin enable memory</code></pre>
+<p>这个插件拥有一项设置、一个 skill 和一个索引。wiki 是一个带 git 历史的 Markdown 目录；bot 的 memory 有同样的历史，每个 bot 一个仓库。</p>
+<h2 id="the-wiki">wiki<a class="anchor" href="#the-wiki" aria-label="链接到本节">#</a></h2>
+<p>wiki 是每个 bot 共享的一个保留目录。它用来放那些关于外部世界、比一次 chat 活得更久的笔记：人可以把它指向自己的笔记库，例如一个 Obsidian vault，并在那里编辑它。</p>
+<div class="table-wrap"><table><thead><tr><th>设置</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>memory.wikiDir</code></td><td>字符串</td><td>operad home 中的 <code>wiki</code>，所以通常的 home 下是 <code>~/.operad/wiki</code></td><td>一个目录；<code>~</code> 是你的 home 目录，相对路径位于 operad home 之下</td><td>下一次 bot 回复时，以及下一次 <code>serve</code> 启动时</td><td>被设置调用拒绝，并给出 schema 的原因</td></tr></tbody></table></div>
+<p>目录缺失时会被创建，不是 git 仓库时会被做成 git 仓库。已经是 git 仓库的目录按原样使用：它不会被再次初始化，它的文件也不会被重新组织。所以把这项设置指向一个已有的 vault，会保留该 vault 的历史、分支和布局。</p>
+<p>谁可以写 wiki，由每个 bot 的访问 profile 决定，而不是一个全局开关（见<a href="../../../zh/docs/access/">访问</a>）。默认情况下 <code>default</code> bot 可以写它，其他每个 bot 只能读它。bot 自己的一项设置可以改变这一点：</p>
+<div class="table-wrap"><table><thead><tr><th>设置</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>bot.bots.&lt;name&gt;.writeWiki</code></td><td>布尔值</td><td><code>default</code> 为 <code>true</code>，其他每个 bot 为 <code>false</code></td><td><code>true</code> 或 <code>false</code></td><td>下一次 bot 回复时</td><td>被 schema 拒绝</td></tr></tbody></table></div>
+<p>读取权限始终存在。不能写 wiki 的 bot，对这个目录的写入是被拒绝，而不只是被询问，所以一次误读不会意外改动人的笔记。</p>
+<h2 id="a-bots-memory">bot 的 memory<a class="anchor" href="#a-bots-memory" aria-label="链接到本节">#</a></h2>
+<p>bot 的 memory 位于它工作目录里的 <code>memory/</code>，所以 <code>default</code> 的是 <code>~/.operad/bot/default/memory/</code>。它不共享：其他 bot 读不到它。这个目录是一个独立的 git 仓库，缺失时会被创建，所以一个 bot 的历史与其他每个 bot 的历史分开。工作目录本来就在某个仓库里时，保留那个仓库：插件只提交 <code>memory/</code> 这一部分。</p>
+<p>布局有三层和一个文件：</p>
+<div class="table-wrap"><table><thead><tr><th>路径</th><th>里面有什么</th></tr></thead><tbody><tr><td><code>memory/index.md</code></td><td>索引：每个条目一行，一个链接加几个词。它保持很小；细节属于主题笔记</td></tr><tr><td><code>memory/log/YYYY-MM-DD.md</code></td><td>只追加的每日日志，记录发生了什么</td></tr><tr><td><code>memory/topics/&lt;name&gt;.md</code></td><td>主题笔记，从索引链接过去</td></tr><tr><td><code>memory/instructions.md</code></td><td>人给这个 bot 的长期指示</td></tr></tbody></table></div>
+<p><code>index.md</code>、<code>instructions.md</code> 和 <code>log/</code> 缺失时由插件创建，插件从不覆盖它们。</p>
+<h2 id="what-a-reply-carries">一次回复带着什么<a class="anchor" href="#what-a-reply-carries" aria-label="链接到本节">#</a></h2>
+<p>bot chat 把 memory 索引和人的指示放在它的消息上，而不是放在 agent 的系统提示里。新会话的第一条消息，以及 agent 压缩上下文之后的第一条消息，会完整带上这两个文件。此后，每次回复把每个文件与会话上次看到的内容比较：在别处被改动的文件（同一个 bot 的另一个 chat、一次定时运行、一次整理）会再完整发一次，而 chat 自己的运行写下的改动不会重复。索引在大约 8,000 个字符处截断，并有一行说明它被截断了；把细节移到主题笔记里，让这个文件保持在这个长度以内。这些附注不是 transcript 的一部分，也不会改变你发出的消息。</p>
+<h2 id="the-nightly-tidy">夜间整理<a class="anchor" href="#the-nightly-tidy" aria-label="链接到本节">#</a></h2>
+<p>每晚一次，在 bot 的 <code>tidyTime</code>（默认 <code>03:30</code>），bot 检查自上次整理以来它的 memory 有没有变化，以及 <code>index.md</code> 是否超过了上限。这次检查不花费任何模型调用。没有事可做的夜晚到此为止。</p>
+<p>有工作要做时，bot 有一个 pending 项，写明有多少笔记和 chat 需要检查，以及索引是否超过上限。Run（运行）开始整理；Skip（跳过）关闭它，直到下一次检查发现有工作为止。打开 <code>runWithoutAsking</code> 时，整理不经过这个 pending 项直接运行。bot 的任何 chat 正在写回复时，整理会等待。</p>
+<p>从 Run 开始的整理完成后不留下 pending 项。和自动运行一样，它通过配置的 <a href="../../../zh/docs/notifications/"><code>notify</code> 命令</a>发送一行。这一行写明是哪个 bot、它改动的文件和行数（或者 memory 没有变化）、费用，以及当一次重写丢掉了索引中太多内容时只保留了新增部分。bot 的回复不在这一行里；完整结果留在这次 memory 整理的页面上。失败的整理保留一个 pending 项，带有 Run 和 Skip，以及简短的一行说明失败原因。</p>
+<h2 id="the-memory-skill">memory skill<a class="anchor" href="#the-memory-skill" aria-label="链接到本节">#</a></h2>
+<p>插件启用期间，每个 bot 都会在它列出的 skill 旁边挂载 <code>memory</code> skill（<code>SKILL.md</code>）。这个 skill 告诉 bot memory 是用来做什么的：记它查不到的东西，例如某个人的偏好、他们做过的一次纠正，以及他们核实过的一条规则。它指向 operad 自己的 history 和 wiki，而不是复制它们。它还说明，bot 必须遵守的规则不属于 memory：它们在 bot 的指示和它的访问 profile 里，修改其中一条是交给人的 proposal。</p>
+<p>这个 skill 要求 bot 在回答之前读它的 memory，写入时不必询问，并保持索引简短。人事后在 git 历史里查看改了什么，而不是逐次批准每次写入。</p>
+<h2 id="search">搜索<a class="anchor" href="#search" aria-label="链接到本节">#</a></h2>
+<p>插件为 wiki、每个 bot 的 memory 和 chat 记录维护一个全文索引。它位于 <code>~/.operad/store/search.sqlite</code>。这个索引是缓存：它保存的任何内容都能从 Markdown 文件和 chat 重建，所以删除这个文件的代价是一次重建，不会丢任何笔记。</p>
+<p>bot 用 <code>search</code> 工具搜索它，这个工具和其他 operad 工具一起提供。一次搜索可以覆盖 wiki、bot 自己的 memory 或 bot 自己的 chat；wiki 是共享的，memory 和 chat 不是。一条结果写明文档、它的行范围和一段摘录。<code>read</code> 工具返回文档，或结果所指的行范围。frontmatter 字段可以缩小搜索范围，目录的 <code>_about.md</code> 会随该目录内找到的命中一起返回。</p>
+<p>读取还会显示链接到你所读笔记的那些笔记。有这样的笔记时，结果以 <code>Backlinks</code> 部分结尾：每条写明链接过来的笔记的路径、链接所在的行，以及它周围的一小段摘录。frontmatter 写着 <code>untrusted: true</code> 的链接笔记会被标记，和搜索结果一样。笔记自己向外的链接已经在它的正文里，所以不再列一次。没有反向链接时，这个部分被省略。<code>read</code> 命令打印这段文本；<code>--json</code> 则把同一个列表作为 <code>backlinks</code> 数组给出。</p>
+<p>索引使用 SQLite FTS5 的 <code>trigram</code> 分词器，它对中文和英文都有效：句子中两个字的中文词由子串回退找到，因为 trigram 需要三个字符。FTS5 的默认分词器 <code>unicode61</code> 把一整串连续的汉字当作一个词。在仓库的 fixture 上，<code>unicode61</code> 找到了 9 篇相关文档中的 3 篇，<code>trigram</code> 找到了 9 篇中的 9 篇。</p>
+<p>人在自己的编辑器里改过的笔记，在下一次搜索时就能找到。长时间运行的 <code>serve</code> 还会监视 wiki 和 memory 目录以及 store，所以它的索引在两次搜索之间也会跟上。</p>
+<h2 id="the-wiki-in-the-app">app 中的 wiki<a class="anchor" href="#the-wiki-in-the-app" aria-label="链接到本节">#</a></h2>
+<p>app 通过与其他每个插件相同的对象接口读取 wiki，所以 wiki 有列表页和对象页，不需要单独的文件 API。有两种只读的对象类型：wiki <strong>folder</strong> 和 wiki <strong>note</strong>。它们没有 action。只显示 <code>memory.wikiDir</code> 中的目录；bot 自己的 memory 目录不显示。</p>
+<p>顶层是 wiki 的根：没有父级的列表显示直接位于根下的 folder 和 note。打开一个 folder 会列出它的子 folder 和 note，note 打开后显示它的内容。</p>
+<div class="table-wrap"><table><thead><tr><th>对象</th><th>行</th></tr></thead><tbody><tr><td>folder</td><td>以它的名称为标题，以及它之下有多少 note，包括它的子 folder 中的</td></tr><tr><td>note</td><td>以第一个标题为标题，否则用去掉 <code>.md</code> 的文件名，以及修改时间</td></tr></tbody></table></div>
+<p>folder 的标题是它的目录名。frontmatter 写着 <code>untrusted: true</code> 的 note 和其他 note 一样列出，带有搜索结果所带的同一个 <code>(untrusted)</code> 标记。行没有状态标记。</p>
+<p>note 的页面有一个 <strong>Note</strong> 部分，里面是它的 Markdown 内容；有其他 note 链接到它时，还有一个 <strong>Backlinks</strong> 部分。反向链接遵循与 <code>memory read</code> 相同的链接规则：每一条都打开链接过来的 note 的对象。没有反向链接时，Backlinks 部分被省略。超过一页的内容用部分的游标分页，和其他任何长的部分一样。</p>
+<p>内容部分还会写明其中的链接指向哪些 note，所以客户端可以跟随 <code>[[links]]</code> 和相对的 Markdown 链接。指向还没有人写的页面的链接保持未解析；Markdown 本身不会被改写。</p>
+<h2 id="what-a-bot-wrote-is-recorded-in-git">bot 写了什么都记录在 git 中<a class="anchor" href="#what-a-bot-wrote-is-recorded-in-git" aria-label="链接到本节">#</a></h2>
+<p>bot 的一次回复改动了它的 memory 目录或 wiki 之后，插件在这次回复改动过的每个仓库中各做一次提交。提交信息写明 bot 和它当时对话所在的 chat，例如：</p>
+<pre data-ui><code>memory: bot default, chat C-12
+wiki: bot default, chat C-12</code></pre>
+<p>什么都没写的回复不做提交。这些提交是普通仓库中的普通提交：用 <code>git log</code> 查看，或在能显示它们的编辑器里查看，并像其他任何提交一样 revert 其中一个。不会有任何东西被 push 到任何地方。</p>
+<p>插件分不清你自己未提交的修改和 bot 的修改：一次回复结束时，那一刻 wiki 之下的每一处改动都会被提交，提交信息里写着该 bot 和该 chat。请在 bot 写入之前提交你自己的修改，或者事后单独提交它们。</p>
+<h2 id="notes-a-bot-found-outside">bot 在外部找到的笔记<a class="anchor" href="#notes-a-bot-found-outside" aria-label="链接到本节">#</a></h2>
+<p>bot 读过网页、邮件或某个来源插件取回的条目之后写下的笔记，可能来自别人控制的内容。skill 要求 bot 在这种笔记的 frontmatter 里做标记：</p>
+<pre data-ui><code class="lang-md">---
+untrusted: true
+---</code></pre>
+<p>这样标记的笔记永远不会从 <code>memory/index.md</code> 链接过去：插件在提交之前会移除指向它的索引行，笔记本身留在写下它的地方。夜间整理也会把这样的笔记排除在它的链接列表之外，所以它永远不会被建议用来链接。bot 被要求从一开始就不把它放进索引。</p>
+<p>operad 目前还不能自己判断一次 bot 运行读过这样的内容：agent 的读取和本地 MCP server 返回的文本没有按运行记录下来。在做到这一点之前，这个标记取决于 bot 写不写它，bot 没有标记的笔记保持原样。</p>
+<h2 id="not-here-yet">还没有的东西<a class="anchor" href="#not-here-yet" aria-label="链接到本节">#</a></h2>
+<p>目前还没有捕获或审阅流程。向量搜索尚未构建；索引的构建方式让另一个搜索引擎可以替换它，而不必改动工具。wiki、memory 布局和夜间整理现在已经可用。</p>
+    <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/memory.md">查看英文原文</a></p>
+    <nav class="pn" aria-label="上一页和下一页">
+      <a class="prev" href="../chats-and-bots/"><small>上一页</small>chat 和 bot</a>
+      <a class="next" href="../telegram/"><small>下一页</small>Telegram</a>
+    </nav>
+  </main>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-wiki">wiki</a></li><li class="l2"><a href="#a-bots-memory">bot 的 memory</a></li><li class="l2"><a href="#what-a-reply-carries">一次回复带着什么</a></li><li class="l2"><a href="#the-nightly-tidy">夜间整理</a></li><li class="l2"><a href="#the-memory-skill">memory skill</a></li><li class="l2"><a href="#search">搜索</a></li><li class="l2"><a href="#the-wiki-in-the-app">app 中的 wiki</a></li><li class="l2"><a href="#what-a-bot-wrote-is-recorded-in-git">bot 写了什么都记录在 git 中</a></li><li class="l2"><a href="#notes-a-bot-found-outside">bot 在外部找到的笔记</a></li><li class="l2"><a href="#not-here-yet">还没有的东西</a></li></ul></nav></aside>
+</div>
+
+<footer class="foot docs-foot">
+  <p class="fnote">operad.io · <a href="../../../zh/">首页</a> · <a href="https://github.com/operad-io/operad">GitHub</a></p>
+</footer>
+
+</body>
+</html>
