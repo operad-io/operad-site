@@ -89,7 +89,7 @@ pre code { font-size: inherit; }
 .hero > * { grid-column: span 6; }
 .name { display: flex; flex-direction: column; justify-content: space-between; }
 .name .state { max-width: 18ch; }
-.name .lede { max-width: 34ch; color: var(--weak); margin-top: 16px; }
+.name .lede { max-width: 40ch; color: var(--weak); margin-top: 16px; }
 :lang(zh) .name .lede { max-width: 22em; }
 :lang(zh) .name .state { max-width: none; }
 .name h1 { font-size: var(--s1); letter-spacing: -0.05em; line-height: .9; margin-bottom: 0; }
