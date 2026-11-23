@@ -99,20 +99,33 @@
     <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
     <a class="gh lang" href="zh/" hreflang="zh" lang="zh" aria-label="中文" title="中文"><b>EN</b><i>/</i><span>中</span></a>
   </nav>
-  <a class="tile go" href="#install">Run it</a>
+  <a class="tile go" href="https://github.com/operad-io/operad/releases/latest">Download</a>
 </header>
 
 <main id="top">
 
-<section class="hero board" aria-label="operad">
+<section class="hero hero-app board" aria-label="operad">
   <div class="tile paper name">
     <p class="state s3">An open orchestration layer for coding agents.</p>
     <h1>operad</h1>
+    <p class="dl"><a class="btn-dl" href="https://github.com/operad-io/operad/releases/latest">Download for macOS</a><a class="alt" href="#developers">or install the CLI</a></p>
   </div>
 
-  <div class="tile term shutter" aria-label="Output of operad pending">
-    <div class="shutter-in">
-<pre data-ui><code>$ operad pending
+  <div class="tile soft shot shutter" aria-label="The operad desktop app: a plan with eight tasks, some merged, some waiting, some running">
+    <div class="shutter-in"><img src="media/desktop-plan.png" width="2000" height="1250" alt="The operad desktop app: a plan with eight tasks, some merged, some waiting, some running"></div>
+  </div>
+
+  <div class="pair">
+    <div class="tile dark"><p class="s3">Chat with claude, pi or radian, or hand them a plan.</p></div>
+    <div class="tile acc"><p class="s3">Nothing merges until you say so.</p></div>
+  </div>
+</section>
+
+<section id="developers" class="band" aria-labelledby="developers-h">
+  <h2 id="developers-h">The same work, from a terminal or a phone.</h2>
+  <div class="board dev-pair">
+  <div class="tile term" aria-label="Output of operad pending">
+    <pre data-ui><code>$ operad pending
 4c1e9a02  dev  confirm
   Rotate the http token
   waiting: ready to merge
@@ -124,7 +137,6 @@ $ operad dev:merge T-0022-token-rotate --yes
 $ operad history T-0022-token-rotate
 - 22:28:40  review  pass  58s
 - 22:30:02  you chose merge</code></pre>
-    </div>
   </div>
 
   <div class="tile soft phone-tile" aria-label="The pending list in the iPhone app">
@@ -138,10 +150,6 @@ $ operad history T-0022-token-rotate
       </ul>
     </div>
   </div>
-
-  <div class="pair">
-    <div class="tile dark"><p class="s3">A kernel with three words: flow, pending, history.</p></div>
-    <div class="tile acc"><p class="s3">Everything else is a plugin.</p></div>
   </div>
 </section>
 

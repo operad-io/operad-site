@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>operad：编码 agent 的开放编排层</title>
-<meta name="description" content="operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），其余都是插件。">
+<meta name="description" content="operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），你不点头，什么都不会合并。">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://operad.io/zh/">
 <link rel="alternate" hreflang="en" href="https://operad.io/">
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="operad">
 <meta property="og:title" content="operad：编码 agent 的开放编排层">
-<meta property="og:description" content="operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），其余都是插件。">
+<meta property="og:description" content="operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），你不点头，什么都不会合并。">
 <meta property="og:url" content="https://operad.io/zh/">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:locale:alternate" content="en_US">
@@ -26,7 +26,7 @@
 <meta property="og:image:alt" content="operad：编码 agent 的开放编排层">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="operad：编码 agent 的开放编排层">
-<meta name="twitter:description" content="operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），其余都是插件。">
+<meta name="twitter:description" content="operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），你不点头，什么都不会合并。">
 <meta name="twitter:image" content="https://operad.io/og.png">
 <script type="application/ld+json">
 {
@@ -56,7 +56,7 @@
    "@id": "https://operad.io/#app",
    "name": "operad",
    "applicationCategory": "DeveloperApplication",
-   "description": "operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），其余都是插件。",
+   "description": "operad 让编码 agent 走一条经过验证的流程：计划、开发、检查、评审、合并。内核只有三个词（flow、pending、history），你不点头，什么都不会合并。",
    "url": "https://operad.io/zh/",
    "inLanguage": "zh-CN",
    "publisher": {
@@ -99,20 +99,33 @@
     <a class="gh" href="https://x.com/zyinghai" aria-label="X" title="X"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
     <a class="gh lang" href="../" hreflang="en" lang="en" aria-label="English" title="English"><span>EN</span><i>/</i><b>中</b></a>
   </nav>
-  <a class="tile go" href="#install">开始用</a>
+  <a class="tile go" href="https://github.com/operad-io/operad/releases/latest">下载</a>
 </header>
 
 <main id="top">
 
-<section class="hero board" aria-label="operad">
+<section class="hero hero-app board" aria-label="operad">
   <div class="tile paper name">
     <p class="state s3">编码 agent 的开放编排层。</p>
     <h1>operad</h1>
+    <p class="dl"><a class="btn-dl" href="https://github.com/operad-io/operad/releases/latest">下载 macOS 版</a><a class="alt" href="#developers">或安装命令行</a></p>
   </div>
 
-  <div class="tile term shutter" aria-label="operad pending 的输出">
-    <div class="shutter-in">
-<pre data-ui><code>$ operad pending
+  <div class="tile soft shot shutter" aria-label="operad 桌面应用：一个计划里的八个任务，有的已合并，有的在等待，有的在运行">
+    <div class="shutter-in"><img src="../media/desktop-plan.png" width="2000" height="1250" alt="operad 桌面应用：一个计划里的八个任务，有的已合并，有的在等待，有的在运行"></div>
+  </div>
+
+  <div class="pair">
+    <div class="tile dark"><p class="s3">和 claude、pi、radian 聊天，或者交给它们一个计划。</p></div>
+    <div class="tile acc"><p class="s3">你不点头，什么都不会合并。</p></div>
+  </div>
+</section>
+
+<section id="developers" class="band" aria-labelledby="developers-h">
+  <h2 id="developers-h">同样的工作，也可以在终端和手机上做。</h2>
+  <div class="board dev-pair">
+  <div class="tile term" aria-label="operad pending 的输出">
+    <pre data-ui><code>$ operad pending
 4c1e9a02  dev  confirm
   Rotate the http token
   waiting: ready to merge
@@ -124,7 +137,6 @@ $ operad dev:merge T-0022-token-rotate --yes
 $ operad history T-0022-token-rotate
 - 22:28:40  review  pass  58s
 - 22:30:02  you chose merge</code></pre>
-    </div>
   </div>
 
   <div class="tile soft phone-tile" aria-label="iPhone app 里的待办列表">
@@ -138,10 +150,6 @@ $ operad history T-0022-token-rotate
       </ul>
     </div>
   </div>
-
-  <div class="pair">
-    <div class="tile dark"><p class="s3">内核只有三个词：flow、pending、history。</p></div>
-    <div class="tile acc"><p class="s3">其余都是插件。</p></div>
   </div>
 </section>
 
