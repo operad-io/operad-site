@@ -89,7 +89,9 @@ pre code { font-size: inherit; }
 .hero > * { grid-column: span 6; }
 .name { display: flex; flex-direction: column; justify-content: space-between; }
 .name .state { max-width: 18ch; }
-:lang(zh) .name .state { max-width: 14em; }
+.name .lede { max-width: 34ch; color: var(--weak); margin-top: 16px; }
+:lang(zh) .name .lede { max-width: 22em; }
+:lang(zh) .name .state { max-width: none; }
 .name h1 { font-size: var(--s1); letter-spacing: -0.05em; line-height: .9; margin-bottom: 0; }
 .term, .phone-tile { padding: 0; overflow: hidden; position: relative; }
 .term { background: var(--dark); color: var(--on-dark); }
@@ -121,6 +123,7 @@ pre code { font-size: inherit; }
 .btn-dl { background: var(--acc); color: var(--on); font-weight: 500; padding: 14px 22px; border-radius: var(--r); text-decoration: none; }
 .btn-dl:hover { background: var(--deep); }
 .dl .alt { color: var(--weak); font-size: var(--s4); }
+.band .sub + .dev-pair { margin-top: 28px; }
 .dev-pair > * { grid-column: span 6; min-height: 340px; }
 .pair { grid-column: span 6; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
 .pair .tile { margin: 0; }
