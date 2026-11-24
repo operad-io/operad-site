@@ -14,7 +14,7 @@ bot 用于与仓库无关的 chat。它把这类 chat 使用的工作目录、�
 
 bot 的目录是 `$OPERAD_HOME/bot/<name>`；默认 bot 是 `$OPERAD_HOME/bot/default`，与其他 bot 并列，而不是在它们的上一层。它的 `memory/` 目录缺失时会被创建；`memory` 插件给它一份 git 历史，并为每个 bot 挂载 `memory` skill，共享的 wiki 在 bot 的目录之外，所以所有 bot 用的是同一个。见 [memory 和 wiki](memory.md)。bot 可以读写自己的目录和自己的 memory，其他每个 bot 的目录则拒绝读取和写入。默认 bot 原来的 home `$OPERAD_HOME/bot` 不会被清空：只有 operad 在那里创建的 `skills/` 和 `memory/` 目录会移到 `$OPERAD_HOME/bot/default`。人或 bot 放在旧 home 里的其他每个文件和目录都留在原处，默认 bot 仍然可以在那里读、写和运行；只有其他 bot 的目录会被拒绝。`access-user.json` 中工作目录恰好是旧 home 的授权会被改写一次，改为 `$OPERAD_HOME/bot/default`；其他目录的授权不变。写明了 `cwd` 的 bot 保留它。
 
-这两个插件刻意保持谨慎。仓库上的 chat 在你同意打开 worktree 之前是只读的（除非仓库把 `workIn` 设为 `branch`：那样 chat 在 main clone 中按它的访问级别工作）。bot 不能自己修改自己的 skill、设置或 MCP server；它只能提出修改，在人批准之前磁盘上的内容不会改变。
+这两个插件刻意保持谨慎。仓库上的 chat 在你同意打开 worktree 之前是只读的（除非仓库把 `workIn` 设为 `branch`：那样 chat 在 main clone 中按它的访问级别工作；没有 git 的文件夹也是这样，那里没有 worktree 可以打开，chat 可以按它的访问级别修改该文件夹的文件）。bot 不能自己修改自己的 skill、设置或 MCP server；它只能提出修改，在人批准之前磁盘上的内容不会改变。
 
 ## 它如何工作 {#how-it-works}
 
@@ -37,7 +37,7 @@ operad chat:send C-0001 --note "why does the gate fail on main?"
 operad show C-0001 --section transcript
 ```
 
-`dev:chat` 提供 `claude` 和 `pi` 作为 agent（省略 `--agent` 时用第一个已加载的）：它们可以在工具调用开始前拦下它，只读 chat 需要这一点。`radian` 在这里不能作为 agent，只用于 bot chat。仓库 chat 从 `plan` 开始；bot chat 从 bot 的 `bot.bots.<name>.accessLevel` 开始（未设置时为 `ask`），定时任务打开的 chat 除外，它从 `full` 开始。访问级别在 chat 中用 `/access <level>` 更改（见[访问级别](#access-level)）。`bot:chat` 提供所有已加载的 agent；它的默认值是 bot 的 `harness`，否则是第一个已加载的。
+`dev:chat` 提供 `claude` 和 `pi` 作为 agent（省略 `--agent` 时用第一个已加载的）：它们可以在工具调用开始前拦下它，只读 chat 需要这一点。`radian` 在这里不能作为 agent，只用于 bot chat。仓库 chat 从 `plan` 开始；bot chat 从 bot 的 `bot.bots.<name>.accessLevel` 开始（未设置时为 `ask`），定时任务的运行除外，它从 `full` 开始。访问级别在 chat 中用 `/access <level>` 更改（见[访问级别](#access-level)）。`bot:chat` 提供所有已加载的 agent；它的默认值是 bot 的 `harness`，否则是第一个已加载的。
 
 chat 有这些 action：
 
@@ -50,13 +50,14 @@ chat 有这些 action：
 | `chat:effort` | `effort` | 从 agent 的列表中更改下一次回复使用的 effort；输出 `chat <id> now uses effort <effort>; the next reply uses it`。 |
 | `chat:access` | `level`（`plan`、`ask`、`edits` 或 `full`） | 更改 chat 的访问级别；此后每次工具调用都使用它，包括已经在写的回复。输出 `chat <id> now uses access level <level>; replies follow it`。见[访问级别](#access-level)。 |
 | `chat:stop` | 无 | 停止正在写的回复。已经写出的内容留在 transcript 中，标记为已停止。期间到达的消息保持未回答，也不会自动开始新的回复；输出会说明这一点并指向 `/retry`。没有回复在运行时，它会说明这一点，不做任何改动。客户端按钮上的词是 **Stop**。 |
+| `chat:new` | 无 | 在同一个 chat 中开始一个新的 agent 会话。transcript 保留；下一条消息交给一个不带任何先前上下文的 agent（bot 的 memory 笔记仍然随消息带上），在那次回复之前 `Context used` 的数字为空。回复正在写时会被拒绝。 |
 | `chat:retry` | 无 | 在回复失败、被停止或被中断之后，重新回答最后一条消息。它只在确实会回答时出现：chat 是打开的，有消息在等回复，并且没有回复正在写。失败或被停止的那次尝试留在记录中，agent 的会话继续。其他情况下输入它会说明原因，不启动任何东西。 |
 | `chat:status` | 无 | 显示 agent、当前生效的模型和 effort、是否有回复正在写以及从何时开始、有多少条消息在等、会话的费用和 token 用量，以及上一次回复的用量和到首次输出的时间。它只读取，不花费 token，回复正在写时也能用。不报告费用的 agent 会让费用显示为 `unknown`。 |
 | `chat:close` | 无；要求确认 | 记录 `chat.closed` 并结束 chat。输出 `closed <id>`。transcript 仍可读取；不再出现其他 action。 |
 
 一条消息从发出到被某次运行取走之前都在排队：一次运行第一个提示中的消息在它开始时被取走，运行中途交给 agent 的消息在交出时被取走。chat 的行和它的 `transcript` 部分在 `data.queued` 中按发送顺序带着排队的消息，并带有 `data.queuedCount`；没有排队消息时，行和部分都没有这两个字段。客户端在输入框上方显示“N queued”，并在每条排队消息上提供 `chat:withdraw` 和 `chat:edit`。已被运行取走的消息不再改变，这两个 action 都会拒绝它，并用一行指明是哪条消息。
 
-以 `/` 开头并写出 chat 某个 action 名称的一行，会运行该 action，而不是发给 agent：`/model sonnet`、`/effort high`、`/access edits`、`/stop`、`/retry`、`/status`、`/close`、`/help`。`chat:withdraw` 和 `chat:edit` 是排队消息的 action，不是 chat 命令。这一行余下的部分是 action 的参数，按它的字段声明的顺序排列；只有一个字段时它取余下的全部，多于一个时最后一个字段取剩下的部分。不对应任何 action 的 `/xxx`，或者出现在行中靠后位置的斜杠，都是普通消息。`/close` 要求 action 的确认：单独的 `/close` 什么也不做，并提示发送 `/close yes`。`/help` 列出这个 chat 接受的 action，每个带一行描述，然后列出可以按名称输入的 skill。每次尝试都在 transcript 中留下一条记录，写明是谁输入的、这一行的内容，以及发生了什么或为什么被拒绝；这条记录不是消息，所以 agent 永远看不到它。回复正在写的时候，命令也会立即运行，并且不会自己开始一次回复。命令在每个客户端上都可用，因为处理它的是 `chat:send`。
+以 `/` 开头并写出 chat 某个 action 名称的一行，会运行该 action，而不是发给 agent：`/model sonnet`、`/effort high`、`/access edits`、`/stop`、`/new`、`/new <what comes next>`（新会话以旧会话针对这个目标的一份简短 brief 开始）、`/private`（仅限 bot chat；见下文）、`/retry`、`/status`、`/close`、`/help`。`chat:withdraw` 和 `chat:edit` 是排队消息的 action，不是 chat 命令。这一行余下的部分是 action 的参数，按它的字段声明的顺序排列；只有一个字段时它取余下的全部，多于一个时最后一个字段取剩下的部分。不对应任何 action 的 `/xxx`，或者出现在行中靠后位置的斜杠，都是普通消息。`/close` 要求 action 的确认：单独的 `/close` 什么也不做，并提示发送 `/close yes`。`/help` 列出这个 chat 接受的 action，每个带一行描述，然后列出可以按名称输入的 skill。每次尝试都在 transcript 中留下一条记录，写明是谁输入的、这一行的内容，以及发生了什么或为什么被拒绝；这条记录不是消息，所以 agent 永远看不到它。回复正在写的时候，命令也会立即运行，并且不会自己开始一次回复。命令在每个客户端上都可用，因为处理它的是 `chat:send`。
 
 chat 的 skill 也以 `/name rest` 的形式输入。bot chat 可以输入它的 bot 的 skill；仓库 chat 可以输入它的 `dev.json` 给它的 skill。当这个名称不是 operad 的命令时，这一行是发给 agent 的普通消息：自己加载 skill 的 agent 会原样收到 `/name rest`，其他 agent 则在提示中收到该 skill 的 `SKILL.md` 正文，位于一行指明 skill 名称的文字之后、`rest` 之前。transcript 保留输入时的原样。名称与 operad 命令相同的 skill 让位于命令。chat 的视图在它的 action 旁边带有 `skills: [{ name, description? }]`，所以客户端通过一次 `GET /v1/objects/<id>`（或 MCP 的 `show`）就能显示 skill 和命令；每条描述来自 `SKILL.md`。
 
@@ -64,7 +65,20 @@ chat 的 skill 也以 `/name rest` 的形式输入。bot chat 可以输入它的
 
 `transcript` 部分是实时的：它显示用户消息、agent 的中间文本、`Thinking`、带结果的工具调用、耗时和简短输出，以及最终回复。它按发生的顺序显示一次回复的各行和回复期间取走的消息：agent 在这条消息之前做的事留在它上方，之后做的事留在它下方，而启动这次回复的消息留在所有这些的上方。回复没有取走的消息等下一轮，显示在已完成的回复下方。较早的 chat 如果各行记录时没有时间，就保持记录时的顺序。它还带有 agent 的上下文有多满（`used`、已知时模型的 `window`，以及 `model`），取自上一次完成的回复；chat 的对象视图带有同样的 `context`。新会话在下一次回复之前不带它。客户端用已批准的词 **Context used** 和 **上下文用量** 标注它。失败的回复会留下一行，说明它失败了以及原因，这样失败不会被误认为是回复慢。工具输出在 transcript 中会被截断；完整输出在 chat 目录下的一个文件中。仍在写的回复会把它尚未完成的文本和 thinking 显示为 `tail`；`mark` 和 `after` 让客户端只追加已完成的部分（见[读取一个部分](http.md#reading-a-section)）。`pi` chat 等待重试失败的模型请求时，实时部分还带有 `retry`：第几次尝试、一共几次、下一次何时开始以及提供方给出的原因，这样客户端可以倒计时。这些记录不依赖 agent 自己的会话文件，所以被清理或压缩的会话不会抹掉 chat 的 history；agent 的上下文仍然属于 agent，它继续自己的会话。
 
-chat 的过滤器是 `open`（默认）和 `closed`；内核再加上 `all`，所以 `operad list chat --filter all` 仍然显示已关闭的 chat。`workIn` 为 `worktree` 的仓库上的 chat 在主 clone 中只读地工作（`workIn` 为 `branch` 时它在那里按它的访问级别工作，见下文）：只有当 shell 命令在只读命令的短名单（`git status`、`ls`、`cat`、`grep`、`sed -n`、`bun test` 等）上时才会在那里运行；其他每条命令，以及每次写入或编辑，都会变成 worktree 问题，其中写明命令或路径。这个问题提供 Allow once（只限这一次调用）、Always allow（这次调用和工作目录原样写入 `access-user.json`，之后在任何 chat 中都不再询问）、Deny 和打开 worktree。选 Deny，agent 会被告知调用因 chat 只读而被拒绝，应当在 chat 中回答或使用只读命令。选择打开 worktree，`dev` 会打开 `work/chat-<id>`，此后 chat 一直在那里工作，只此一次；除此之外主 clone 保持只读。发问的那次回复结束，同一条消息在 worktree 中重新回答，于是 agent 带着写权限在那里继续。回复结束之后才给出的同意会打开 worktree，但不会开始第二次回复。transcript 会说一次 `This chat now works in a worktree.`。worktree 中的修改只能通过指向它的任务，经过正常的 gate 和 integrate 进入 main。
+`pi` chat 在一次回复之后，当上下文达到模型窗口的四分之三时会压缩它。如果压缩后的上下文仍然占满这么多，chat 不会一次又一次地压缩：你的下一条消息会失败，并用一行说明这个 chat 太满，无法继续。发送 `/new` 开始一个新的会话。
+
+## 不记入记忆的一段 {#a-stretch-that-is-not-remembered}
+
+在 bot 的 chat 中，`/private` 开始一段 bot 不记住的对话，再发一次 `/private` 结束它。开启期间 chat 显示“Not remembered / 不记入记忆”。消息留在 chat 中，你仍然能看到它们；这不是删除，也不是另一个 chat。它们不会进入 bot 的 memory：在这一段期间 bot 不能写笔记（仍然可以读它的笔记），压缩之前的 memory 写入会被跳过，梦境整理会略过这些消息，它们也不在搜索索引中，所以 bot 无法再找到它们。chat 用以下两行之一回答 `/private`，Telegram 在这一段开始和结束时显示同样的一行：
+
+- 开启：`Not remembered / 不记入记忆: on. Messages from here stay in this chat but are not saved to memory or search. Send /private again to end it.`
+- 关闭：`Not remembered / 不记入记忆: off. What you sent meanwhile was not saved, but this chat may still recall it. Send /new to start clean.`
+
+回复正在写时，这条命令会被拒绝。
+
+这一段仍然在 agent 自己的会话中。压缩可能把它带进之后的上下文，所以当你结束这一段时，chat 会建议 `/new`；在那之前，该会话的 memory 写入一直被跳过。
+
+chat 的过滤器是 `open`（默认）和 `closed`；内核再加上 `all`，所以 `operad list chat --filter all` 仍然显示已关闭的 chat。`workIn` 为 `worktree` 的仓库上的 chat 在主 clone 中只读地工作（`workIn` 为 `branch` 时它在那里按它的访问级别工作，见下文）：只有当 shell 命令在只读命令的短名单（`git status`、`ls`、`cat`、`grep`、`sed -n`、`bun test` 等）上时才会在那里运行；其他每条命令，以及每次写入或编辑，都会变成 worktree 问题，其中写明命令或路径。这个问题提供 Allow once（只限这一次调用）、Always allow（这次调用和工作目录原样写入 `access-user.json`，之后在任何 chat 中都不再询问）、Deny 和打开 worktree。选 Deny，agent 会被告知调用因 chat 只读而被拒绝，应当在 chat 中回答或使用只读命令。选择打开 worktree，`dev` 会打开 `work/chat-<id>`，此后 chat 一直在那里工作，只此一次；除此之外主 clone 保持只读。发问的那次回复结束，同一条消息在 worktree 中重新回答，于是 agent 带着写权限在那里继续：处于 `plan` 的 chat 会随之移到 `edits`。回复结束之后才给出的同意会打开 worktree，但不会开始第二次回复。transcript 会说一次 `This chat now works in a worktree.`。worktree 中的修改只能通过指向它的任务，经过正常的 gate 和 integrate 进入 main。
 
 附件是客户端上传的文件（`POST /v1/uploads`），存放在 operad home 中该 chat 的附件目录下。一条消息可以只有文件。transcript 把每个附件显示为一行，带有它的名称（图片显示为图片，其他文件显示为 `Attachment:` 链接）。回复会把图片作为图像输入交给 `claude` 和 `pi`（每张最大 5 MB），并把每个文件以路径的形式放进提示交给 agent；chat 的访问 profile 获得该 chat 附件目录的读取权限，除此之外没有别的。MCP 工具无法传递文件；文件由客户端上传。
 
@@ -72,7 +86,7 @@ agent 通过它的工具（`list`、`show`、`section`、`pending`、`answer`、
 
 ### 访问级别 {#access-level}
 
-每个 chat 都有一个访问级别：`plan`、`ask`、`edits` 或 `full`。`/access <level>` 更改它，也可以用 `operad chat:access <chat> --level <level>`；级别记录在 chat 上，此后每次工具调用都使用它，包括已经在写的回复，重启和换客户端之后也一样。级别变化时还开着的问题会按新级别重新检查。仓库 chat 从 `plan`（只读）开始，bot chat 从 bot 的 `accessLevel` 设置开始（未设置时为 `ask`；取值为 `plan`、`ask`、`edits`、`full` 之一），定时任务打开的 chat 除外，它从 `full` 开始。没有人运行过 `/access` 的 chat 在下一次回复时跟随该设置，所以改设置会改变它；人选定的级别保持不变。级别不是 chat 的起始级别时，行上会显示它。在 `workIn` 为 `branch`（“A branch in this folder”）的仓库中，仓库 chat 在 main clone 中、在当前检出的分支上按它的级别工作：`edits` 和 `full` 在那里写入，不提供 worktree，也不创建 `work/chat-<id>` 分支，`plan` 保持只读。设为 `worktree`（“A separate worktree”，默认值）时，本段余下的内容适用。仍在 main clone 中工作的仓库 chat 被提升到 `edits` 或 `full` 时，会先打开 `work/chat-<id>` 并移到那里；如果 worktree 无法打开，级别保持原样，命令会说明原因。已经在自己 worktree 中的 chat 就在那里应用该级别。`plan` 和 `ask` 从不打开 worktree，main clone 中的 `ask` 对写入仍然提出 worktree 问题。bot chat 在任何级别下都在 bot 自己的目录中工作，没有 worktree。
+每个 chat 都有一个访问级别：`plan`、`ask`、`edits` 或 `full`。`/access <level>` 更改它，也可以用 `operad chat:access <chat> --level <level>`；级别记录在 chat 上，此后每次工具调用都使用它，包括已经在写的回复，重启和换客户端之后也一样。级别变化时还开着的问题会按新级别重新检查。仓库 chat 从 `plan`（只读）开始，bot chat 从 bot 的 `accessLevel` 设置开始（未设置时为 `ask`；取值为 `plan`、`ask`、`edits`、`full` 之一），定时任务的运行除外，它从 `full` 开始。没有人运行过 `/access` 的 chat 在下一次回复时跟随该设置，所以改设置会改变它；人选定的级别保持不变。级别不是 chat 的起始级别时，行上会显示它。在 `workIn` 为 `branch`（“A branch in this folder”）的仓库中，仓库 chat 在 main clone 中、在当前检出的分支上按它的级别工作：`edits` 和 `full` 在那里写入，不提供 worktree，也不创建 `work/chat-<id>` 分支，`plan` 保持只读。当某个任务占用该文件夹时（正在运行、等你处理、可以 merge 或已暂停），回复是只读的，chat 会说明有任务占用该文件夹。设为 `worktree`（“A separate worktree”，默认值）时，本段余下的内容适用。仍在 main clone 中工作的仓库 chat 被提升到 `edits` 或 `full` 时，会先打开 `work/chat-<id>` 并移到那里；如果 worktree 无法打开，级别保持原样，命令会说明原因。已经在自己 worktree 中的 chat 就在那里应用该级别。`plan` 和 `ask` 从不打开 worktree，main clone 中的 `ask` 对写入仍然提出 worktree 问题。bot chat 在任何级别下都在 bot 自己的目录中工作，没有 worktree。
 
 | Level | What runs without asking |
 |---|---|
@@ -118,11 +132,12 @@ bot 由某个已有 bot 上的 `bot:create` action 创建。它接受新 bot 的
 | `bot.bots.<name>.access.askCommands` | 字符串数组 | `[]` | 命令模式 | 追加到默认 ask 列表之后；匹配时运行前会询问。 |
 | `bot.bots.<name>.access.askPaths` | 字符串数组 | `[]` | 路径 | 追加到默认 ask 列表之后。 |
 | `bot.bots.<name>.access.readOnly` | 布尔值 | `false` | `true`、`false` | 每次回复：`true` 会拒绝每次写入，以及每条不确定只读的命令。 |
-| `bot.bots.<name>.accessLevel` | 字符串 | `ask` | `plan`、`ask`、`edits`、`full` | 该 bot 上新 chat 开始时所用的级别。对没有选定级别的 chat 在下一次回复生效，对每个新 chat 也一样。与 `access` 不同，它可以放宽 profile：`full` 除 deny 规则外什么都不问。定时任务打开的 chat 从 `full` 开始；用 `/access` 选定了级别的 chat 保持该级别。见[访问级别](#access-level)。 |
+| `bot.bots.<name>.accessLevel` | 字符串 | `ask` | `plan`、`ask`、`edits`、`full` | 该 bot 上新 chat 开始时所用的级别。对没有选定级别的 chat 在下一次回复生效，对每个新 chat 也一样。与 `access` 不同，它可以放宽 profile：`full` 除 deny 规则外什么都不问。定时任务的运行打开的 chat 从 `full` 开始；用 `/access` 选定了级别的 chat 保持该级别。见[访问级别](#access-level)。 |
 | `bot.bots.<name>.writeWiki` | 布尔值 | `default` 为 `true`，其他每个 bot 为 `false` | `true`、`false` | 下一次回复：`true` 让 bot 写共享的 wiki；读取权限始终都有。见[记忆和 wiki](memory.md)。 |
 | `bot.bots.<name>.tidyTime` | 字符串 | `03:30` | `HH:MM`，从 `00:00` 到 `23:59`，按本机本地时区 | bot 的下一次夜间记忆检查。 |
-| `bot.bots.<name>.runWithoutAsking` | 布尔值 | `false` | `true`、`false` | 下一次夜间检查：`true` 会运行 bot 的记忆整理，不产生 pending 条目；`false` 等待 Run 或 Skip。 |
+| `bot.bots.<name>.runWithoutAsking` | 布尔值 | `false` | `true`、`false` | 下一次夜间检查：`true` 会运行 bot 的梦境整理（记忆整理），不产生 pending 条目；`false` 等待 Run 或 Skip。 |
 | `chat.speaker` | 字符串 | `"Operad Bot"` | 任何非空字符串 | 每次不使用 bot 的 `speaker` 的 chat 的回复；可用 `operad settings set chat.speaker <value>` 编辑。 |
+| `chat.awayMinutes` | 整数 | `240` | 0 或更大；0 关闭它 | 在你这么多分钟没有发消息或命令之后写下的一条消息：chat 会加上一份回顾，汇总这段时间里到来的定时任务结果和回复；可用 `operad settings set chat.awayMinutes <value>` 编辑。 |
 
 默认访问 profile 拒绝凭据和秘密（`~/.ssh`、`~/.gnupg`、`~/.aws`、`~/.config/gh`、钥匙串和浏览器 profile）、operad home（bot 自己的目录除外）、`.git/config`、`.git/hooks`，以及 `sudo`、`operad`、`mkfs`、`dd`、`shutdown`、`pkill` 和 `killall` 之类的命令；在 `git push`、`brew install`、`npm install -g`、`pip install`、`osascript` 和 `open` 之前会询问。`access-user.json` 和 always allow 见[访问](access.md)。
 
@@ -147,7 +162,16 @@ bot 向自己提出的变更是一个 `bot-proposal` 对象。在人批准或拒
 - skill（`bot skill`）：修改前后的文件，应用到 skill 目录，并加入 bot 的 `skills`；
 - 设置变更（`bot setting`）：bot 修改前后的设置；
 - MCP server（`bot mcp`）：新的 server、升级，或工具发生变化的 server；
-- 定时任务（`bot schedule`）：添加、修改或移除一个条目，显示它的名称、用文字和 cron 写出的时间安排、提示、模型和 effort。
+- 定时任务（`bot schedule`）：添加、修改或移除一个定时任务，显示它的名称、用文字和 cron 写出的时间安排、提示、模型和 effort。
+- 在这里设置 git（`bot setup-git`，供 bot 的 agent 使用）：见[在这里设置 git](#set-up-git-here)。
+
+### 在这里设置 git {#set-up-git-here}
+
+没有 git 的文件夹，或没有安装 git 程序的电脑，都可以添加并在其中 chat，chat 也可以修改它的文件。只有创建任务才需要 git，在那之前 bot 不会问任何关于 git 的事。当你要求在这样的文件夹中创建任务时，operad 会说明缺了什么，bot 会提出 **Set up git here**（在这里设置 git）：
+
+- 如果没有安装 git，bot 会给出适用于你的系统的命令（Mac 上是 `xcode-select --install`，Windows 上是 `winget install Git.Git`，Linux 上是包管理器）。每条命令都是一个由你批准的 pending 项；operad 不捆绑 git。
+- 然后它把第一个 commit 作为一个 pending 项提出。它的审阅显示 `.gitignore`（你自己的会保留，只添加几行）、这个 commit 将包含的文件列表、本身就是独立仓库的文件夹（不会被提交），以及提交所用的名字和邮箱，预先从电脑账户填好；bot 会请你在 chat 中确认它们。电脑上的 git 已经有名字和邮箱时，就使用它们，不再询问。超过 5000 个文件的文件夹会带一条提示，请你先检查 `.gitignore`。你的 home 文件夹和磁盘根目录会被拒绝，位于另一个 git 仓库内的文件夹也会被拒绝（回答中会指出那个仓库的文件夹）。
+- 批准会在需要时在文件夹中启动 git，用恰好列出的那些文件做第一个 commit（审阅之后 chat 写的文件不在其中），并把名字和邮箱存进该文件夹自己的 git 设置。之后该文件夹在一个没有 remote 的分支中工作；不会推送任何东西。拒绝不改变任何东西。
 
 `bot:approve` 应用一个 pending 的 proposal，`bot:reject` 拒绝它。不是 pending 的 proposal 仍然显示它的状态。`bot-proposal` 的过滤器是 `pending`（默认）、`applied` 和 `rejected`；每个 pending 的 proposal 同时也是其 bot 的一个 pending 项，所以它出现在 Pending 和 app 中。
 
@@ -159,39 +183,47 @@ bot 向自己提出的变更是一个 `bot-proposal` 对象。在人批准或拒
 
 `operad bot setting <bot>` 从 stdin 读取一个 JSON 对象并提议该变更。它不能添加或修改 `mcpServers`；那是 `bot mcp` 的用途。它输出 `proposed settings for bot <bot>; review it in pending`。
 
-`operad bot schedule <bot> add|edit|remove <name>` 提议对 bot 的定时任务的一项变更。`add` 需要 `--schedule <cron>`、`--words <schedule in words>` 和 `--prompt <text>`；`edit` 需要 `--schedule`、`--prompt`、`--model` 和 `--effort` 中的至少一个，并带上 `--words`；`remove` 接受名称和 `--words`。可选的 `--model` 和 `--effort` 设置或清除这两个字段。它输出 `proposed scheduled prompt "<name>" for bot <bot>; review it in pending`。chat 的 agent 通过 operad 的 `command` 工具调用这条命令；它写的时间安排是一个 proposal，从不直接成为条目。
+`operad bot schedule <bot> add|edit|remove <name>` 提议对 bot 的定时任务的一项变更。`add` 需要 `--schedule <cron>`、`--words <schedule in words>` 和 `--prompt <text>`；`edit` 需要 `--schedule`、`--prompt`、`--model` 和 `--effort` 中的至少一个，并带上 `--words`；`remove` 接受名称和 `--words`。可选的 `--model` 和 `--effort` 设置或清除这两个字段。它输出 `proposed routine "<name>" for bot <bot>; review it in pending`。chat 的 agent 通过 operad 的 `command` 工具调用这条命令；它写的时间安排是一个 proposal，从不直接成为定时任务。
 
-### 定时任务 {#scheduled-prompts}
+### 定时任务 {#routines}
 
-bot 可以持有定时任务。面向用户的词是 **Scheduled**（中文为定时任务）。一个条目有名称、按本机本地时区的五字段 cron 时间安排、提示、可选的模型和 effort，以及是否暂停。bot 页面列出这些条目，带有它们的下一次运行，以及上一次运行的结果和 chat id。
+bot 可以持有定时任务。面向用户的词是 **Routine**（中文为定时任务）。一个定时任务有名称、按本机本地时区的五字段 cron 时间安排、提示、可选的模型和 effort，以及是否暂停。定时任务有自己的列表 **Routines**：每一行显示定时任务的名称、它的 bot 的名称、下一次运行和上一次结果（完成、没有可报告的内容或失败）。定时任务的页面显示提示、时间安排，并把它的各次运行显示为 history；每次运行是一个 section，带有它的过程和结果。bot 页面也列出它的定时任务。
 
-要在 chat 中安排一件事，用话说出来（“每天早上 8 点，收集当天的新闻”）。bot 会写一个 proposal，其中有名称、用文字和五字段 cron 表达式写出的时间安排、提示，以及模型和 effort。它在 Pending 中等待：`bot:approve` 添加它，`bot:reject` 放弃它，在此之前不存在任何条目。从 chat 中修改或移除已有条目也是 proposal；通过下面的 action 做的变更是你自己的修改，立即生效。
+每个 bot 还有 **Dreaming**（中文为梦境整理），这是一个内置的定时任务，负责它夜间的 memory 整理（见 [memory](memory.md)）。它在列表中，带有它的下一个夜晚、上一次结果和各次运行，但不在那里编辑、暂停或移除：它的时间是 bot 的 `tidyTime`，设置 `runWithoutAsking` 决定它是否先显示一张 pending 卡片并等待 Run 或 Skip。
+
+要在 chat 中安排一件事，用话说出来（“每天早上 8 点，收集当天的新闻”）。bot 会写一个 proposal，其中有名称、用文字和五字段 cron 表达式写出的时间安排、提示，以及模型和 effort。它在 Pending 中等待：`bot:approve` 添加它，`bot:reject` 放弃它，在此之前不存在任何定时任务。从 chat 中修改或移除已有的定时任务也是 proposal；通过下面的 action 做的变更是你自己的修改，立即生效。
+
+在定时任务自己的页面上，action 是 `bot:edit`（可选的 `schedule`、`prompt`、`model`、`effort`）、`bot:pause`、`bot:resume`、`bot:run-now` 和 `bot:remove`；它们不接受名称。添加在 bot 上。命令行、HTTP 和 MCP 也保留了较早的 bot action，它们接受定时任务的 `name`，含义相同：
 
 ```sh
 operad bot:schedule-add default --name Morning --schedule "0 8 * * *" --prompt "Collect the day's news."
 operad bot:schedule-edit default --name Morning --schedule "0 9 * * *"
 operad bot:schedule-pause default --name Morning
 operad bot:schedule-resume default --name Morning
+operad bot:schedule-run-now default --name Morning
 operad bot:schedule-remove default --name Morning
 ```
 
-| Action | Arguments | What it does |
+| Action on the bot | Arguments | What it does |
 |---|---|---|
-| `bot:schedule-add` | `name`、`schedule`、`prompt`，可选的 `model`、`effort`、`paused` | 添加一个条目。名称在该 bot 上唯一；时间安排是按本地时间的五字段 cron 表达式。 |
-| `bot:schedule-edit` | `name`，可选的 `schedule`、`prompt`、`model`、`effort` | 修改一个条目。修改后的时间安排重新开始，所以旧安排下错过的时间不会补跑。 |
-| `bot:schedule-pause` | `name` | 让它停止触发；暂停的条目不累积错过的时间。 |
-| `bot:schedule-resume` | `name` | 让它在下一个计划时间再次触发。 |
-| `bot:schedule-remove` | `name` | 删除它。 |
+| `bot:schedule-add` | `name`、`schedule`、`prompt`，可选的 `model`、`effort`、`paused` | 添加一个定时任务。名称在该 bot 上唯一；时间安排是按本地时间的五字段 cron 表达式。 |
+| `bot:schedule-edit` | `name`，可选的 `schedule`、`prompt`、`model`、`effort` | 修改一个定时任务。修改后的时间安排重新开始，所以旧安排下错过的时间不会补跑。 |
+| `bot:schedule-pause` | `name` | 让它停止运行；暂停的定时任务不累积错过的时间。 |
+| `bot:schedule-resume` | `name` | 让它在下一个计划时间再次运行。 |
+| `bot:schedule-run-now` | `name` | 现在运行它一次，与按时运行的方式相同（客户端把它标为“Run now”，立即运行）：提示带上最近的结果和安静结束的那一行，除非安静结束，否则发出通知。下一次按时运行不变。未知的名称会被拒绝，上一次运行仍在回复的定时任务也会被拒绝。 |
+| `bot:schedule-remove` | `name` | 移除它。 |
 
-条目触发时，bot 在自己之下打开一个新 chat，标题是条目的名称加日期，并把提示作为第一条消息发出。这个 chat 以该 bot 的身份运行，带着它的 skill、MCP server 和访问 profile，并从 `full` 开始：只有 profile 的 deny 规则、`readOnly` 和 `readPaths` 之下的写入能拦下一次调用；ask 规则和对外写入都不询问。之后人可以用 `/access` 更改级别。它的第一条消息没有人的来源，所以那次回复是后台运行：在低于 `full` 的级别（可用 `/access` 设置）下，其中的对外写入会询问。你可以在这个新 chat 里继续对话。
+定时任务运行时，bot 在自己之下开始一次运行，并把提示作为它的第一条消息发出。一次运行不是 chat：它没有 chat id，不在 chat 列表中，也不能继续对话；它是定时任务 history 中的一个 section，带有它的过程和结果。它以该 bot 的身份运行，带着它的 skill、MCP server 和访问 profile，并从 `full` 开始：只有 profile 的 deny 规则、`readOnly` 和 `readPaths` 之下的写入能拦下一次调用；ask 规则和对外写入都不询问。它的第一条消息没有人的来源，所以那次回复是后台运行：在低于 `full` 的级别下，其中的对外写入会询问。定时任务把它的各次运行保留 30 天。
 
-`serve` 停过或机器休眠过之后，最近七天内最新的一次错过的运行会触发一次；更早的被跳过。补跑的运行会在提示中加一行，说明它原定的时间和晚了多久。
+`serve` 停过或机器休眠过之后，最近七天内最新的一次错过的运行会运行一次；更早的被跳过。补跑的运行会在提示中加一行，说明它原定的时间和晚了多久。
 
-回复结束时，条目的上一次结果是这次回复的简短摘要，`notify` 命令会以该摘要作为 `OPERAD_REASON` 运行（见[通知](notifications.md)）。失败的回复则记录并通知它的失败行。
+回复结束时，定时任务的上一次结果是这次回复的简短摘要，`notify` 命令会以该摘要作为 `OPERAD_REASON` 运行（见[通知](notifications.md)）。失败的回复则记录并通知它的失败行。
 
-每个定时任务的提示都以一行结尾，告诉 agent 如何安静地结束：回复恰好是 `NOTHING_TO_REPORT`（忽略前后的空白）表示没有新内容。这次触发不运行 `notify` 命令；条目的上一次结果显示为“Nothing to report.”，chat 保持打开。其他任何回复，以及每次失败，都按上面的方式通知。
+每个定时任务都在提示末尾加一行，告诉 agent 如何安静地结束：回复恰好是 `NOTHING_TO_REPORT`（忽略前后的空白）表示没有新内容。这次运行不运行 `notify` 命令；定时任务的上一次结果显示为“Nothing to report.”。其他任何回复，以及每次失败，都按上面的方式通知。
 
-每次触发的提示还带有同一条目最近三次的结果（每条截到 120 个字符，安静的那些也算在内），并要求 agent 不要重复人已经看过的内容。
+每次运行的提示还带有同一个定时任务最近三次的结果（每条截到 120 个字符，安静的那些也算在内），并要求 agent 不要重复人已经看过的内容。
+
+这次变更之前的定时任务会在服务器第一次启动时移到定时任务对象中，那些定时 prompt 和 memory 整理曾经打开的 chat 会被关闭一次。
 
 ### 跟进 {#follow-ups}
 

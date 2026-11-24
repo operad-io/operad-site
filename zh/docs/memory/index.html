@@ -69,6 +69,7 @@
         <li><a href="../setup-prompt/">Setup Dev</a></li>
         <li><a href="../config/">config.json</a></li>
         <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../home-flows/">home 中的 flow</a></li>
         <li><a href="../access/">访问</a></li>
         <li><a href="../cli/">命令行</a></li>
         <li><a href="../tui/">终端客户端</a></li>
@@ -98,12 +99,12 @@
 <h2 id="the-wiki">wiki<a class="anchor" href="#the-wiki" aria-label="链接到本节">#</a></h2>
 <p>wiki 是每个 bot 共享的一个保留目录。它用来放那些关于外部世界、比一次 chat 活得更久的笔记：人可以把它指向自己的笔记库，例如一个 Obsidian vault，并在那里编辑它。</p>
 <div class="table-wrap"><table><thead><tr><th>设置</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>memory.wikiDir</code></td><td>字符串</td><td>operad home 中的 <code>wiki</code>，所以通常的 home 下是 <code>~/.operad/wiki</code></td><td>一个目录；<code>~</code> 是你的 home 目录，相对路径位于 operad home 之下</td><td>下一次 bot 回复时，以及下一次 <code>serve</code> 启动时</td><td>被设置调用拒绝，并给出 schema 的原因</td></tr></tbody></table></div>
-<p>目录缺失时会被创建，不是 git 仓库时会被做成 git 仓库。已经是 git 仓库的目录按原样使用：它不会被再次初始化，它的文件也不会被重新组织。所以把这项设置指向一个已有的 vault，会保留该 vault 的历史、分支和布局。</p>
+<p>目录缺失时会被创建。电脑上有 git 时，它不是 git 仓库就会被做成 git 仓库，不会询问；没有 git 时它保持为普通文件夹，wiki 照样工作，只是不保留历史，并在装上 git 之后某个 bot 下一次使用它时成为仓库。已经是 git 仓库的目录按原样使用：它不会被再次初始化，它的文件也不会被重新组织。所以把这项设置指向一个已有的 vault，会保留该 vault 的历史、分支和布局。</p>
 <p>谁可以写 wiki，由每个 bot 的访问 profile 决定，而不是一个全局开关（见<a href="../../../zh/docs/access/">访问</a>）。默认情况下 <code>default</code> bot 可以写它，其他每个 bot 只能读它。bot 自己的一项设置可以改变这一点：</p>
 <div class="table-wrap"><table><thead><tr><th>设置</th><th>类型</th><th>默认值</th><th>允许的值</th><th>何时生效</th><th>错误的值</th></tr></thead><tbody><tr><td><code>bot.bots.&lt;name&gt;.writeWiki</code></td><td>布尔值</td><td><code>default</code> 为 <code>true</code>，其他每个 bot 为 <code>false</code></td><td><code>true</code> 或 <code>false</code></td><td>下一次 bot 回复时</td><td>被 schema 拒绝</td></tr></tbody></table></div>
 <p>读取权限始终存在。不能写 wiki 的 bot，对这个目录的写入是被拒绝，而不只是被询问，所以一次误读不会意外改动人的笔记。</p>
 <h2 id="a-bots-memory">bot 的 memory<a class="anchor" href="#a-bots-memory" aria-label="链接到本节">#</a></h2>
-<p>bot 的 memory 位于它工作目录里的 <code>memory/</code>，所以 <code>default</code> 的是 <code>~/.operad/bot/default/memory/</code>。它不共享：其他 bot 读不到它。这个目录是一个独立的 git 仓库，缺失时会被创建，所以一个 bot 的历史与其他每个 bot 的历史分开。工作目录本来就在某个仓库里时，保留那个仓库：插件只提交 <code>memory/</code> 这一部分。</p>
+<p>bot 的 memory 位于它工作目录里的 <code>memory/</code>，所以 <code>default</code> 的是 <code>~/.operad/bot/default/memory/</code>。它不共享：其他 bot 读不到它。这个目录缺失时会被创建，电脑上有 git 时它是一个独立的 git 仓库，所以一个 bot 的历史与其他每个 bot 的历史分开。没有 git 时，它是一个没有历史的普通文件夹，直到 git 出现，然后它不经询问就成为仓库。工作目录本来就在某个仓库里时，保留那个仓库：插件只提交 <code>memory/</code> 这一部分。</p>
 <p>布局有三层和一个文件：</p>
 <div class="table-wrap"><table><thead><tr><th>路径</th><th>里面有什么</th></tr></thead><tbody><tr><td><code>memory/index.md</code></td><td>索引：每个条目一行，一个链接加几个词。它保持很小；细节属于主题笔记</td></tr><tr><td><code>memory/log/YYYY-MM-DD.md</code></td><td>只追加的每日日志，记录发生了什么</td></tr><tr><td><code>memory/topics/&lt;name&gt;.md</code></td><td>主题笔记，从索引链接过去</td></tr><tr><td><code>memory/instructions.md</code></td><td>人给这个 bot 的长期指示</td></tr></tbody></table></div>
 <p><code>index.md</code>、<code>instructions.md</code> 和 <code>log/</code> 缺失时由插件创建，插件从不覆盖它们。</p>
@@ -112,7 +113,7 @@
 <h2 id="the-nightly-tidy">夜间整理<a class="anchor" href="#the-nightly-tidy" aria-label="链接到本节">#</a></h2>
 <p>每晚一次，在 bot 的 <code>bot.bots.&lt;name&gt;.tidyTime</code>（默认 <code>03:30</code>），bot 检查自上次整理以来它的 memory 有没有变化，以及 <code>index.md</code> 是否超过了上限。这次检查不花费任何模型调用。没有事可做的夜晚到此为止。</p>
 <p>有工作要做时，bot 有一个 pending 项，写明有多少笔记和 chat 需要检查，以及索引是否超过上限。Run（运行）开始整理；Skip（跳过）关闭它，直到下一次检查发现有工作为止。打开 <code>bot.bots.&lt;name&gt;.runWithoutAsking</code> 时，整理不经过这个 pending 项直接运行。bot 的任何 chat 正在写回复时，整理会等待。</p>
-<p>从 Run 开始的整理完成后不留下 pending 项。和自动运行一样，它通过配置的 <a href="../../../zh/docs/notifications/"><code>notify</code> 命令</a>发送一行。这一行写明是哪个 bot、它改动的文件和行数（或者 memory 没有变化）、费用，以及当一次重写丢掉了索引中太多内容时只保留了新增部分。bot 的回复不在这一行里；完整结果留在这次 memory 整理的页面上。失败的整理保留一个 pending 项，带有 Run 和 Skip，以及简短的一行说明失败原因。</p>
+<p>从 Run 开始的整理完成后不留下 pending 项。和自动运行一样，它通过配置的 <a href="../../../zh/docs/notifications/"><code>notify</code> 命令</a>发送一行。这一行写明是哪个 bot、它改动的文件和行数（或者 memory 没有变化）、费用，以及当一次重写丢掉了索引中太多内容时只保留了新增部分。bot 的回复不在这一行里；完整结果留在梦境整理的页面上。失败的整理保留一个 pending 项，带有 Run 和 Skip，以及简短的一行说明失败原因。</p>
 <h2 id="the-memory-skill">memory skill<a class="anchor" href="#the-memory-skill" aria-label="链接到本节">#</a></h2>
 <p>插件启用期间，每个 bot 都会在它列出的 skill 旁边挂载 <code>memory</code> skill（<code>SKILL.md</code>）。这个 skill 告诉 bot memory 是用来做什么的：记它查不到的东西，例如某个人的偏好、他们做过的一次纠正，以及他们核实过的一条规则。它指向 operad 自己的 history 和 wiki，而不是复制它们。它还说明，bot 必须遵守的规则不属于 memory：它们在 bot 的指示和它的访问 profile 里，修改其中一条是交给人的 proposal。</p>
 <p>这个 skill 要求 bot 在回答之前读它的 memory，写入时不必询问，并保持索引简短。人事后在 git 历史里查看改了什么，而不是逐次批准每次写入。</p>
@@ -133,7 +134,7 @@
 <p>bot 的一次回复改动了它的 memory 目录或 wiki 之后，插件在这次回复改动过的每个仓库中各做一次提交。提交信息写明 bot 和它当时对话所在的 chat，例如：</p>
 <pre data-ui><code>memory: bot default, chat C-12
 wiki: bot default, chat C-12</code></pre>
-<p>什么都没写的回复不做提交。这些提交是普通仓库中的普通提交：用 <code>git log</code> 查看，或在能显示它们的编辑器里查看，并像其他任何提交一样 revert 其中一个。不会有任何东西被 push 到任何地方。</p>
+<p>什么都没写的回复不做提交，在没有 git 的电脑上的回复也不做。这些提交是普通仓库中的普通提交：用 <code>git log</code> 查看，或在能显示它们的编辑器里查看，并像其他任何提交一样 revert 其中一个。不会有任何东西被 push 到任何地方。</p>
 <p>插件分不清你自己未提交的修改和 bot 的修改：一次回复结束时，那一刻 wiki 之下的每一处改动都会被提交，提交信息里写着该 bot 和该 chat。请在 bot 写入之前提交你自己的修改，或者事后单独提交它们。</p>
 <h2 id="notes-a-bot-found-outside">bot 在外部找到的笔记<a class="anchor" href="#notes-a-bot-found-outside" aria-label="链接到本节">#</a></h2>
 <p>bot 读过网页、邮件或某个来源插件取回的条目之后写下的笔记，可能来自别人控制的内容。skill 要求 bot 在这种笔记的 frontmatter 里做标记：</p>
@@ -144,13 +145,16 @@ untrusted: true
 <p>operad 目前还不能自己判断一次 bot 运行读过这样的内容：agent 的读取和本地 MCP server 返回的文本没有按运行记录下来。在做到这一点之前，这个标记取决于 bot 写不写它，bot 没有标记的笔记保持原样。</p>
 <h2 id="not-here-yet">还没有的东西<a class="anchor" href="#not-here-yet" aria-label="链接到本节">#</a></h2>
 <p>目前还没有捕获或审阅流程。向量搜索尚未构建；索引的构建方式让另一个搜索引擎可以替换它，而不必改动工具。wiki、memory 布局和夜间整理现在已经可用。</p>
+<h2 id="the-regression-set">回归集<a class="anchor" href="#the-regression-set" aria-label="链接到本节">#</a></h2>
+<p>一个用例是一次 bot 答错了、或被你更正的交流（更正算作一次 miss）。每个用例是一个文件 <code>~/.operad/memory-cases/&lt;id&gt;.json</code>；用例中有你的 chat 文本，所以它们留在你的 home 里。<code>memory propose</code> 把它在你的 chat 中找到的更正变成 pending 项；带着正确答案应当说出的短语批准其中一项，就会添加这个用例。<code>memory score</code> 对 bot 当前的 memory 运行这个集合，并把分数追加到 home 中的 <code>memory-scores.jsonl</code>。当每个短语都被说出（忽略大小写、空格和标点），且没有说出任何 <code>avoid</code> 短语时，用例通过。</p>
+<div class="table-wrap"><table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Allowed values</th><th>When it takes effect</th><th>Wrong value</th></tr></thead><tbody><tr><td><code>id</code></td><td>string</td><td>无，必填</td><td>小写字母、数字、<code>-</code> 和 <code>_</code>，最多 64 个；文件名为 <code>&lt;id&gt;.json</code></td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>kind</code></td><td>string</td><td>无，必填</td><td><code>miss</code> 或 <code>correction</code></td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>context</code></td><td>list</td><td>无</td><td>更早的消息，最旧的在前</td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>context.role</code></td><td>string</td><td>无，消息中必填</td><td><code>user</code> 或 <code>assistant</code></td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>context.text</code></td><td>string</td><td>无，消息中必填</td><td>任何文本</td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>question</code></td><td>string</td><td>无，必填</td><td>非空文本</td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>answer</code></td><td>object</td><td>无，必填</td><td><code>include</code>，以及可选的 <code>avoid</code></td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>answer.include</code></td><td>list</td><td>无，必填</td><td>正确答案应当说出的一个或多个短语</td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr><tr><td><code>answer.avoid</code></td><td>list</td><td>无</td><td>错误答案中的短语；说出其中任何一个的答案不通过</td><td>下一次 <code>memory score</code> 时</td><td>拒绝，并指出文件名</td></tr></tbody></table></div>
     <p class="src"><a href="https://github.com/operad-io/operad/blob/main/docs/user/memory.md">查看英文原文</a></p>
     <nav class="pn" aria-label="上一页和下一页">
       <a class="prev" href="../chats-and-bots/"><small>上一页</small>chat 和 bot</a>
       <a class="next" href="../telegram/"><small>下一页</small>Telegram</a>
     </nav>
   </main>
-  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-wiki">wiki</a></li><li class="l2"><a href="#a-bots-memory">bot 的 memory</a></li><li class="l2"><a href="#what-a-reply-carries">一次回复带着什么</a></li><li class="l2"><a href="#the-nightly-tidy">夜间整理</a></li><li class="l2"><a href="#the-memory-skill">memory skill</a></li><li class="l2"><a href="#search">搜索</a></li><li class="l2"><a href="#the-wiki-in-the-app">app 中的 wiki</a></li><li class="l2"><a href="#what-a-bot-wrote-is-recorded-in-git">bot 写了什么都记录在 git 中</a></li><li class="l2"><a href="#notes-a-bot-found-outside">bot 在外部找到的笔记</a></li><li class="l2"><a href="#not-here-yet">还没有的东西</a></li></ul></nav></aside>
+  <aside class="tile toc-wrap"><nav class="toc" aria-label="本页目录"><p class="s3">本页目录</p><ul><li class="l2"><a href="#the-wiki">wiki</a></li><li class="l2"><a href="#a-bots-memory">bot 的 memory</a></li><li class="l2"><a href="#what-a-reply-carries">一次回复带着什么</a></li><li class="l2"><a href="#the-nightly-tidy">夜间整理</a></li><li class="l2"><a href="#the-memory-skill">memory skill</a></li><li class="l2"><a href="#search">搜索</a></li><li class="l2"><a href="#the-wiki-in-the-app">app 中的 wiki</a></li><li class="l2"><a href="#what-a-bot-wrote-is-recorded-in-git">bot 写了什么都记录在 git 中</a></li><li class="l2"><a href="#notes-a-bot-found-outside">bot 在外部找到的笔记</a></li><li class="l2"><a href="#not-here-yet">还没有的东西</a></li><li class="l2"><a href="#the-regression-set">回归集</a></li></ul></nav></aside>
 </div>
 
 <footer class="foot docs-foot">

@@ -20,4 +20,4 @@ missing heading id, a link that no longer matches. It cannot judge the wording.
 Then run `node scripts/build-docs.mjs ../operad/docs/user` and commit `docs-zh/`
 and the generated `zh/docs/` together.
 
-Last translated from operad at `a5ce9df4` (after T-0740 and T-0742, the manual fixes).
+Last translated from operad at `29f3d543` (Routines, where a task works, set up git here, flows in the home, the memory regression set).

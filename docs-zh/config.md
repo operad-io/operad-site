@@ -198,11 +198,11 @@ step 自己的 `askGraceSecs` 参数，或该调用自己的 grace，可以更�
 | `bot.bots.<name>.model` | string | agent 的默认值 | chat 的 agent 所列出的 model | 新 chat 启动时 | agent 没有列出它时，在 chat 启动时被拒绝 |
 | `bot.bots.<name>.effort` | string | agent 的默认值 | chat 的 agent 所列出的 effort | 新 chat 启动时 | agent 没有列出它时，在 chat 启动时被拒绝 |
 | `bot.bots.<name>.speaker` | string | `chat.speaker` 的值 | 非空文本 | 下一次回复 | 被 schema 拒绝 |
-| `bot.bots.<name>.accessLevel` | string | `ask` | `plan`、`ask`、`edits` 或 `full`：该 bot 上的新 chat 开始时的级别，无论来自桌面端、CLI、MCP server 还是 Telegram。`access` 只能收紧 profile，而它可以放宽：`full` 除 deny 规则外什么都不问（[Access](access.md)）。定时 prompt 打开的 chat 仍然从 `full` 开始；用 `/access` 选过级别的 chat 保留所选的级别 | 没有选过级别的 chat 的下一次回复；新 chat | 被 schema 拒绝 |
+| `bot.bots.<name>.accessLevel` | string | `ask` | `plan`、`ask`、`edits` 或 `full`：该 bot 上的新 chat 开始时的级别，无论来自桌面端、CLI、MCP server 还是 Telegram。`access` 只能收紧 profile，而它可以放宽：`full` 除 deny 规则外什么都不问（[Access](access.md)）。定时任务的运行仍然让它的 chat 从 `full` 开始；用 `/access` 选过级别的 chat 保留所选的级别 | 没有选过级别的 chat 的下一次回复；新 chat | 被 schema 拒绝 |
 | `bot.bots.<name>.writeWiki` | boolean | `default` 为 `true`，其他每个 bot 为 `false` | `true` 或 `false`；读取权限始终都有 | 下一次回复 | 被 schema 拒绝 |
 | `bot.bots.<name>.tidyTime` | string | `03:30` | `HH:MM`，从 `00:00` 到 `23:59`，使用本机的本地时区 | 下一次夜间 memory 检查 | 被 schema 拒绝 |
-| `bot.bots.<name>.runWithoutAsking` | boolean | `false` | `true` 时夜间的 memory 整理直接运行，不产生 pending 卡片；`false` 时等待 Run 或 Skip | 下一次夜间检查 | 被 schema 拒绝 |
-| `bot.bots.<name>.backgroundModel` | string | agent 声明的后台 model，否则为 bot 的 `model` | bot 的 agent 所列出的 model | 下一次 memory 整理运行 | agent 没有列出它时，在该次运行时被拒绝 |
+| `bot.bots.<name>.runWithoutAsking` | boolean | `false` | `true` 时梦境整理（夜间的 memory 整理）直接运行，不产生 pending 卡片；`false` 时等待 Run 或 Skip | 下一次夜间检查 | 被 schema 拒绝 |
+| `bot.bots.<name>.backgroundModel` | string | agent 声明的后台 model，否则为 bot 的 `model` | bot 的 agent 所列出的 model | 下一次梦境整理运行 | agent 没有列出它时，在该次运行时被拒绝 |
 | `bot.bots.<name>.mcpServers` | object | `{}` | server 名称对应 server 对象；用 `operad bot mcp` 添加，需由人批准 | 下一次回复 | 被 schema 拒绝；工具发生变化的 server 不会被挂载 |
 | `bot.bots.<name>.mcpServers.<name>` | object | 无 | 下面的键 | 下一次回复 | 被 schema 拒绝 |
 | `bot.bots.<name>.mcpServers.<name>.command` | string | 无 | 启动该 server 的程序 | 下一次回复 | 被 schema 拒绝；缺少 command 表示该 server 无法启动 |
@@ -229,6 +229,7 @@ step 自己的 `askGraceSecs` 参数，或该调用自己的 grace，可以更�
 | Key | Type | Default | Allowed values | When it takes effect | Wrong value |
 |---|---|---|---|---|---|
 | `chat.speaker` | string | `"Operad Bot"` | 非空文本 | 渲染 chat 记录时 | 被 schema 拒绝 |
+| `chat.awayMinutes` | integer | `240` | 0 或更大 | 下一条消息 | 被 schema 拒绝 |
 
 bot chat 使用它的 bot 的 `speaker`。见 [Chats and bots](chats-and-bots.md)。
 
@@ -367,7 +368,7 @@ home 中的 `triggers.json` 保存规则，规定哪个事件启动哪个 flow�
 
 cron 来源是来自 `@operad-io/source-cron`、名为 `cron` 的插件。对每条 `source` 为 `cron` 且带有 `schedule` 的规则，它在每个到期的分钟发出一个 `tick`；其他规则忽略 `schedule`。它把每条规则上一次触发的分钟记在 `<home>/cron/state.json` 中，按规则自己的字段而不是它在文件中的位置来识别。新规则，或 schedule 改过的规则，会把它最近一个计划的分钟记为基线，然后等待下一个；它不会补跑规则被知晓之前的时间。一旦规则有了记录的上次时间，`serve` 启动或机器唤醒时会向前回看最多七天，只把最近一次错过的 tick 发出一次，tick 的摘要会写明它跳过的更早的时间以及原因。这个 tick 的数据中还带有 `scheduledAt` 和 `lateSecs`，所以 step 或 prompt 可以告诉 agent 计划的时间以及这次运行晚了多久；准时的 tick 不带迟到信息。schedule 改过的规则重新开始，不为旧的 schedule 补跑。`paused` 为 true 的规则不发出 tick；它记录的时间跟随时钟，所以恢复后是等待下一个计划的分钟，而不是补跑暂停期间的时间。通过命令添加规则时，规则不能使用保留的来源 `operad`。
 
-cron 来源还拥有 `scheduled` 命令，它可以列出、添加、编辑、暂停、恢复和删除这些规则，而不必手工编辑文件。它写入的是同一个 `triggers.json`；没有第二个存储。客户端可以通过 `operad scheduled ...`、通过 HTTP 的 `POST /v1/commands`，或通过 MCP 的 `command` 工具使用它。列表会显示每个定时 flow 的 flow、schedule、参数、下一次运行，以及上一次运行的结果和 run id。未知的 flow 或错误的 cron 表达式会被拒绝并说明原因。
+cron 来源还拥有 `routines` 命令，它可以列出、添加、编辑、暂停、恢复和删除这些规则，而不必手工编辑文件。它写入的是同一个 `triggers.json`；没有第二个存储。客户端可以通过 `operad routines ...`、通过 HTTP 的 `POST /v1/commands`，或通过 MCP 的 `command` 工具使用它。列表会显示每个定时任务的 flow、schedule、参数、下一次运行，以及上一次运行的结果和 run id。未知的 flow 或错误的 cron 表达式会被拒绝并说明原因。
 
 如果 `triggers.json` 无效，整个文件会被拒绝，信息中包含规则和字段。`operad serve` 会记录日志，并在文件修复之前不带来源运行；需要规则的命令会报告这一点。运行中的 `serve` 会监视该文件，并在新文件加载成功时重新加载。
 

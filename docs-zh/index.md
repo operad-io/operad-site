@@ -14,6 +14,7 @@ operad 是面向编码 agent 的开放编排层。它让 agent（radian、Claude
 - [setup-prompt](setup-prompt.md)：Setup Dev，它让你的 bot 提议 `.operad/dev.json` 并打开 `dev`。
 - [config](config.md)：home 以及 `config.json` 的每个部分。
 - [dev](dev.md)：`dev.json` 和 `dev` 插件的命令、reviewer、worker 与 pool。
+- [home-flows](home-flows.md)：以文件形式放在 home 中的你自己的 flow。
 - [access](access.md)：访问 profile、`access-user.json` 和 always allow。
 - [cli](cli.md)：每个命令和选项。
 - [tui](tui.md)：终端客户端、它的主题和按键。

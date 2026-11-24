@@ -45,7 +45,7 @@ app 只能连到 `serve` 可以监听的地址：loopback、私有地址（`10.0
 
 - **Pending**：所有在等待用户的内容。
 - **Running**：每一个进行中的 run。
-- 每个插件的顶层对象类型各有一个 tab：`dev` 是 **Projects**（项目），`chat` 是 **Chat**。
+- 每个插件的顶层对象类型各有一个 tab，标题取自 `GET /v1/types` 发送的 `pluginTitle`（`dev` 是 **Projects**）；不读取它的客户端显示插件名。`chat` 是 **Chat**。
 - **Settings**：服务器设置，以及插件放在 settings 之下的对象。
 
 顶层以下的类型（计划、任务）没有 tab；它从父对象的页面、Pending 或 Running 中打开。`bot` 插件没有 tab：bot 页就是该 bot 的设置页，bot 出现在 **Settings** 下名为 **Bots** 的 section 中。
@@ -93,7 +93,7 @@ bot 上的 chat 使用该 bot 的工作目录、skill 和访问 profile；bot �
 
 ### 访问级别 {#access-level}
 
-每个 chat 都有一个访问级别，显示在 **Access** 菜单中：**Plan only**、**Ask each time**、**Accept edits** 或 **Full access**。仓库 chat 从 Plan only 开始，bot chat 从 Ask each time 开始，但定时 prompt 打开的 chat 除外，它从 Full access 开始；选择一个级别会为该 chat 及之后的每次回复更改它。把仍在主 clone 中工作的仓库 chat 提升到 Accept edits 或 Full access 时，会先打开它的 worktree，失败时级别保持原样并说明原因；bot chat 在任何级别下都在自己的目录中工作。profile 的 deny 列表仍然有效，只读的工作目录仍然会询问；Full access 会用一行说明它跳过该级别的问题，而 deny 仍然会拒绝。见 [Chat 和 bot](chats-and-bots.md#access-level)。
+每个 chat 都有一个访问级别，显示在 **Access** 菜单中：**Plan only**、**Ask each time**、**Accept edits** 或 **Full access**。仓库 chat 从 Plan only 开始，bot chat 从 Ask each time 开始，但定时任务的运行除外，它从 Full access 开始；选择一个级别会为该 chat 及之后的每次回复更改它。把仍在主 clone 中工作的仓库 chat 提升到 Accept edits 或 Full access 时，会先打开它的 worktree，失败时级别保持原样并说明原因；bot chat 在任何级别下都在自己的目录中工作。profile 的 deny 列表仍然有效，只读的工作目录仍然会询问；Full access 会用一行说明它跳过该级别的问题，而 deny 仍然会拒绝。见 [Chat 和 bot](chats-and-bots.md#access-level)。
 
 ## 附件 {#attachments}
 

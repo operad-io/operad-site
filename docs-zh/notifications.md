@@ -25,14 +25,14 @@ operad 不提供投递服务。它运行你的命令，并通过环境变量传�
 5. 命令结束后，`serve` 记录该通知。失败或超时会连同退出码和输出的最后几行一起写入日志，同样会被记录，并且不会重试。该等待不会再次通知，`serve` 重启之后也一样。
 6. 如果 `serve` 在命令仍在运行时被停止，命令会被取消且不记录任何内容，所以下一次 `serve` 会再次运行它。如果 `serve` 在命令结束之后、记录写入之前被杀掉，该等待会多通知一次。
 7. 当你回答之后同一个 run 再次等待，那是一个新的等待，会产生新的通知。
-8. bot 的定时 prompt 在它的回复结束时也会运行一次该命令。`OPERAD_ID`、`OPERAD_TITLE` 和 `OPERAD_LINK` 指向新建的 chat，`OPERAD_REASON` 是回复的简短摘要（或它的失败行）。这里 `notify.on` 不起作用，只看 `notify.command`：该命令是告诉你一次定时运行已结束的途径。安静结束的回复（`NOTHING_TO_REPORT`）不会运行它；见[定时任务](chats-and-bots.md#scheduled-prompts)。
+8. bot 的定时任务在它某次运行的回复结束时也会运行一次该命令。`OPERAD_ID` 和 `OPERAD_LINK` 指向该定时任务（`bot-routine:<id>`），`OPERAD_TITLE` 是它的名称，`OPERAD_REASON` 是回复的简短摘要（或它的失败行）。这里 `notify.on` 不起作用，只看 `notify.command`：该命令是告诉你一个定时任务已运行的途径。安静结束的回复（`NOTHING_TO_REPORT`）不会运行它；见[定时任务](chats-and-bots.md#routines)。梦境整理，即 bot 夜间的 memory 整理，也是一个定时任务，以同样的方式通知。
 
 ## 设置和变量 {#settings-and-variables}
 
 | Key | Type | Default | Allowed values | When it takes effect | Wrong value |
 |---|---|---|---|---|---|
 | `notify` | object | `{ "command": null, "on": ["waiting"] }` | 一个带有下列键的对象；缺少该部分表示通知关闭 | `operad serve` 启动时；新配置加载时重新加载 | 被拒绝：`notify: must be an object` |
-| `notify.command` | string or `null` | `null` | 一个非空的 shell 命令行，在 operad home 中用 `sh -c` 运行；`null` 关闭通知 | `serve` 启动或重新加载时；该命令对每次新的等待以及每个结束的定时 prompt 运行 | 被拒绝：`notify.command: must be a non-empty string or null` |
+| `notify.command` | string or `null` | `null` | 一个非空的 shell 命令行，在 operad home 中用 `sh -c` 运行；`null` 关闭通知 | `serve` 启动或重新加载时；该命令对每次新的等待以及每次结束的定时任务运行 | 被拒绝：`notify.command: must be a non-empty string or null` |
 | `notify.on` | array of strings | `["waiting"]` | 只有 `waiting`：一个对象现在在等待人处理 | `serve` 启动或重新加载时；它决定哪些新的等待会通知 | 被拒绝：`notify.on: must be an array of "waiting"`；重复的 `waiting` 只保留一个 |
 
 `notify` 内的未知键会被忽略；只读取上面的键。该命令对每个事项和每次等待运行一次，环境中有以下变量：

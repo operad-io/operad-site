@@ -36,8 +36,8 @@ CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 
 
 | 命令 | 参数 | 作用与输出 |
 |---|---|---|
-| `operad` | 无 | home 不存在时创建它，没有 `serve` 响应时启动它，并在默认 bot 的新 chat 上打开[终端客户端](tui.md)，光标位于输入框中。第一条消息会创建该 chat。 |
-| `operad doctor` | `[--json]` | 检查 home，不改动其中任何内容。每项检查打印一行，`ok` 或 `problem`：home 和 `config.json`、每个已启用的插件、每个 agent 及其版本和是否已登录、`serve` 是否有响应、设置了 `dev.testHost` 时的测试主机，以及 `operad pending` 报告为设置问题的内容。`problem` 行以接下来要输入的命令结尾；对未登录的 agent，当 operad 能登录该 agent 时是 `operad bot:login <bot>`，否则是该 agent 自己的命令。只要有一行是问题，就以 `1` 退出。`--json` 打印 `{ "ok", "checks": [{ "id", "ok", "message", "next" }] }`。 |
+| `operad` | 无 | home 不存在时创建它，没有 `serve` 响应时启动它，并在默认 bot 的主 chat 上打开[终端客户端](tui.md)：有绑定 Telegram 的 chat 时是它，否则是它最近一个打开的 chat（定时 prompt 打开的 chat 不算）。没有打开的 chat 时，它打开一个新 chat，光标位于输入框中，第一条消息会创建它。新 chat 是 bot 上的 `bot:chat`。 |
+| `operad doctor` | `[--json]` | 检查 home，不改动其中任何内容。每项检查打印一行，`ok` 或 `problem`：home 和 `config.json`、每个已启用的插件、每个 agent 及其版本和是否已登录、`serve` 是否有响应、没有安装 git 时说明这一点的一行 `ok`（chat 不需要 git；任务需要），设置了 `dev.testHost` 时的测试主机，以及 `operad pending` 报告为设置问题的内容。`problem` 行以接下来要输入的命令结尾；对未登录的 agent，当 operad 能登录该 agent 时是 `operad bot:login <bot>`，否则是该 agent 自己的命令。只要有一行是问题，就以 `1` 退出。`--json` 打印 `{ "ok", "checks": [{ "id", "ok", "message", "next" }] }`。 |
 | `operad init` | 无 | 在 `config.json` 缺失时创建它，并检查每个已加载的插件。打印 `created <file>` 或 `using <file>`，然后每项检查打印一行 `<plugin>: <result>`。新 home 启用 `chat`、`bot` 和 `memory`，并为在 `PATH` 上找到的命令启用 `radian`、`claude` 和 `pi`；`shell`、`dev` 和 `pool` 在被启用之前保持关闭。找到 `claude` 时，它还会在 home 中安装 `@operad-io/harness-claude` 及其 SDK。一个 agent 都找不到时，它启用 `pi`，并在 home 中安装 operad 自己固定版本的 pi；这次下载需要联网一次，再次运行 `operad init` 会重试。`codex` 在 `operad plugin enable codex` 之前保持关闭。已启用插件的检查是：`shell` 开启时即就绪，每个已启用的 harness 在 `PATH` 上找到它的 agent，对 `pi` 来说也可以是 operad 安装的那一份，`dev` 开启时连通每个已注册仓库的 remote（见 [dev 命令](#dev-commands)）。检查失败时退出码为 `1`。 |
 | `operad serve` | 无 | 运行此 home 的循环：启动等待、运行 step、提供 HTTP 服务并运行 notify。为每个监听地址打印 `http <url>`，最后打印 `serving <home>`。另一个 `serve` 持有该 home 时退出码为 `4`。 |
 | `operad serve stop` | `--timeout <secs>` | 用 SIGTERM 停止此 home 的 `serve`；见[停止 serve](#stopping-serve)。 |
@@ -46,7 +46,7 @@ CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 
 | `operad show [<id>]` | `--section <id>`、`--page <label or number>`、`--cursor <c>`、`--full`、`--raw`、`--json`、`--repo <name>` | 给出 id 时：打印该行、它的父对象、它的子对象、各 section 的名称和可用的 action，然后打印第一个 section（或 `--section` 指定的）。不给 id 时：打印最近变化的十个对象和 `operad show <id>`。 |
 | `operad history <id>` | `--json` | 以 [History](#the-history-section) 的形式打印一个 run 的 step，或某个对象的所有 run。若一个裸 id 属于多个对象类型，会因有歧义而被拒绝。 |
 | `operad running` | `--json` | 列出进行中的 run：对象、step、step 耗时、标题、run 的存续时间和排队时间。为空时打印 `nothing is running`。 |
-| `operad flows` | `--json` | 列出已加载的 flow、各自所属的插件，以及某个 flow 无法启动的原因。为空时打印 `no flows loaded`。 |
+| `operad flows` | `--json` | 列出已加载的 flow（包括 [`<home>/flows`](home-flows.md) 中的文件，显示为 `home:<file>`）、各自所属的插件（这些文件为 `home`），以及某个 flow 无法启动的原因。为空时打印 `no flows loaded`。 |
 | `operad plugin list` | 无 | 列出已配置的插件及其版本，以及 `enabled` 或 `disabled`。 |
 | `operad plugin add <package>` | 无 | 把一个 npm 插件安装到 home 的插件目录中，并关闭它的安装脚本。`<package>` 是合法的 npm 名称，带确切的 `@version`，或不带版本表示最新版。运行与 `operad plugin check` 相同的检查，然后以关闭状态把它加入 `config.json`。打印包、它的版本、插件声明的名称和版本，以及 `operad plugin enable` 那一行。npm 不允许的名称、不确切的版本、不是 operad 插件的包，以及已被某个已配置插件使用的声明名称，都会被拒绝。 |
 | `operad plugin enable <name>` | 无 | 在下一条命令时启用一个插件；config 中没有的内置插件会被加入。它所需要的、处于关闭状态的内置插件也会一并启用（`dev` 需要 `pool` 和 `shell`）。先打印包安装在运行过程中打印的那些行，然后为它打开的每个插件打印一行 `<name>: enabled`，被需要的插件在前；已经开启的插件不打印。禁用是逐个插件的：`plugin disable pool` 不会关掉 `dev`。启用 `claude` 会安装它的包；`PATH` 上没有 `pi` 时，启用 `pi` 会安装 operad 自己固定版本的 pi。下载失败时会说明，再次运行该命令会重试。 |
@@ -63,12 +63,13 @@ CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 
 | `operad mcp` | `--claude-channel`、`--types <t,…>` | 在 stdio 上为 lead agent 运行 MCP 服务器；见 [MCP 页面](mcp.md)。 |
 | `operad trigger <source> <key>` | `--type <type>`、`--object <id>`、`--summary <text>`、`--data <file>` | 让一个事件经过各条规则。打印 `started <run>`、`waiting <pending id>`、`recorded in <run>`、`observed <flow> on <object>`、`not started: <reason>` 或 `recorded <id>`。 |
 | `operad trigger rules` | 无 | 打印当前生效的规则，以及每条规则来自哪个文件。打印 `no trigger rules`。 |
-| `operad scheduled list` | `--json` | 列出 `triggers.json` 中的定时 flow：每一个的 id、flow、cron schedule、对象、mode、下一次运行，以及上一次运行的结果和 run id。为空时打印 `no scheduled flows`。`--json` 把这些条目以 JSON 打印，供客户端使用。 |
-| `operad scheduled add` | `--flow <flow>`、`--schedule <expression>`、`--params <json>`、`--object <id>`、`--mode <mode>` | 添加一条启动某个已加载 flow 的 cron 规则；对象默认为 `flow:<flow>`，mode 默认为 `auto`。未知的 flow 或错误的 cron 表达式会被拒绝并说明原因。空白的 `--params ""` 不添加任何参数。打印新的 schedule 及其 id。 |
-| `operad scheduled edit <id>` | `--flow`、`--schedule`、`--params`、`--object`、`--mode` | 更改一个定时 flow，保留其他的。schedule 改动后重新开始。`--params ""` 清除该 flow 的参数。打印 `edited <flow> (<id>)`。 |
-| `operad scheduled pause <id>` | 无 | 停止该 schedule 的 tick；暂停状态写在 `triggers.json` 中，重启后仍然保留。打印 `paused <flow>`。 |
-| `operad scheduled resume <id>` | 无 | 在下一个计划的分钟恢复被暂停的 schedule。打印 `resumed <flow>`。 |
-| `operad scheduled remove <id>` | 无 | 删除该 schedule 的规则。打印 `removed <flow> (<id>)`。 |
+| `operad routines list` | `--json` | 列出 `triggers.json` 中的定时任务（按 schedule 启动的 flow）：每一个的 id、flow、cron schedule、对象、mode、下一次运行，以及上一次运行的结果和 run id。运行命令的定时任务在 flow 的位置显示 `command "<line>"`；失败的命令（非零退出码或超时）显示为 `last failed <run id>: the command exited 3`，它的输出末尾在 `operad history` 中。为空时打印 `no routines`。`--json` 把这些条目以 JSON 打印，供客户端使用。 |
+| `operad routines add` | `--flow <flow>`、`--command <line>`、`--cwd <dir>`、`--schedule <expression>`、`--params <json>`、`--object <id>`、`--mode <mode>` | 添加一条启动某个已加载 flow 的 cron 规则；对象默认为 `flow:<flow>`，mode 默认为 `auto`。未知的 flow 或错误的 cron 表达式会被拒绝并说明原因。空白的 `--params ""` 不添加任何参数。用 `--command "<line>"` 代替 `--flow` 时，按 schedule 运行一条命令行（`--cwd` 设置它的目录；默认是 operad home），使用 `shell` 插件的超时、输出和访问规则，并且不接受 `--flow` 或 `--params`；它与 `--flow shell:command --params '{"command":"<line>"}'` 是同一条规则。`shell` 关闭时会被拒绝，并指出 `operad plugin enable shell`。打印新的定时任务及其 id。 |
+| `operad routines to-flow <id>` | `--name <name>` | 把一个运行命令的定时任务变成一个你可以编辑的 flow 文件：写入 `<home>/flows/<name>.flow.ts`（默认名称为 `routine-<id>`），这个 flow 在同一个目录中运行同一条命令，并带有注释，说明如何添加 step、等待人处理，或按退出码分支。之后该定时任务改为启动 `home:<name>`。文件已存在、该定时任务不运行命令，或名称不是有效的文件名时会拒绝。见 [home 中的 flow](home-flows.md)。客户端通过 action `cron:to-flow` 做同样的事，它不指向任何对象，接受 `routine`（id）和可选的 `name`，发送到不带 `id` 的 `POST /v1/act`。 |
+| `operad routines edit <id>` | `--flow`、`--schedule`、`--params`、`--object`、`--mode` | 更改一个定时任务，保留其他的。schedule 改动后重新开始。`--params ""` 清除该 flow 的参数。打印 `edited <flow> (<id>)`。 |
+| `operad routines pause <id>` | 无 | 停止该定时任务的 tick；暂停状态写在 `triggers.json` 中，重启后仍然保留。打印 `paused <flow>`。 |
+| `operad routines resume <id>` | 无 | 在下一个计划的分钟恢复被暂停的定时任务。打印 `resumed <flow>`。 |
+| `operad routines remove <id>` | 无 | 删除该定时任务的规则。打印 `removed <flow> (<id>)`。 |
 | `operad:start <id>` | 无 | 启动由某个事件创建的 pending 项。打印 `started <run>`。 |
 | `operad:dismiss <id>` | 无 | 忽略由某个事件创建的 pending 项。打印 `dismissed <id>`。 |
 | `operad <plugin>:<action> <id>` | action 的参数、`--yes`、`--repo <name>` | 对一个对象运行一个 action；见 [Actions](#actions)。 |
@@ -87,13 +88,16 @@ CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 
 | `operad bot setting <bot>` | 无 | 根据 stdin 上的 JSON，为一个 bot 提议更改设置；由人批准。 |
 | `operad bot setup-dev <bot> <repository directory>` | `< dev.json` | Setup Dev：没有输入时，它打印给 agent 的步骤；stdin 上有该仓库的 `dev.json` 时，它提议为该仓库打开 `dev`，由人批准。 |
 | `operad bot setup <bot> <plugin> [target]` | | Setup <name>：打印该插件自己的检查发现缺少的内容，以及它的设置指南中的步骤，供 bot 的 agent 照着做。在 bot chat 中，`/setup <plugin> [target]` 会把同样的内容发到 chat 里。 |
-| `operad bot schedule <bot> add\|edit\|remove <name>` | `--words <text>`、`--schedule <cron>`、`--prompt <text>`、`--model <model>`、`--effort <effort>` | 提议添加、更改或删除一个定时 prompt；由人批准。 |
+| `operad bot setup-git <bot> <folder>` | `< {"gitignore", "identity"}` | 在这里设置 git，供 bot 的 agent 使用：没有输入时，它打印步骤（缺少 git 时安装它，每条命令都是一个经批准的 pending 项，然后是提议）；stdin 上有一个 JSON 对象时（`{}` 表示使用默认值），它为一个没有 git 或没有 commit 的文件夹提议第一个 commit：`.gitignore`、文件列表以及名字和邮箱（预先从电脑账户填好），由人在 Pending 中批准。位于另一个 git 仓库内的文件夹、home 文件夹和磁盘根目录会被拒绝。 |
+| `operad bot schedule <bot> add\|edit\|remove <name>` | `--words <text>`、`--schedule <cron>`、`--prompt <text>`、`--model <model>`、`--effort <effort>` | 提议添加、更改或删除一个定时任务；由人批准。 |
 | `operad bot follow-up <chat> --at <time> --do <sentence>` | `--at <time>`、`--do <sentence>` | 在 bot chat 中设置一个 Follow-up；立即生效。供该 chat 的 agent 使用；见 [Follow-ups](chats-and-bots.md#follow-ups)。 |
 | `operad bot follow-ups <chat>` | `--cancel <id>` | 列出该 chat 的 follow-up，或用 `--cancel` 取消其中一个。 |
 | `operad memory search <query>` | `--scope <scope>`、`--field <name>=<value>`、`--limit <n>` | 搜索共享的 wiki、bot 的 memory 和 bot 的 chat。打印每个结果的文档 id、标题、行范围和片段，然后是随结果一起返回的目录说明。`--scope` 接受 `wiki`、`memory` 或 `chats`；`--field` 按 frontmatter 缩小范围；`--limit` 限制结果数量。同样的参数也可以作为 JSON 从 stdin 给出。 |
 | `operad memory read <id>` | `from`、`to`、`--json` | 读取搜索返回的一个文档，或由 `from` 和 `to`（都从 1 开始）指定的行范围。读取一篇被其他笔记链接的笔记时，末尾会附上它的 `Backlinks`，每一条带有链接它的笔记的路径、行号和一段摘录。默认打印文本；`--json` 给出同样的结果，包括一个 `backlinks` 数组。id 和范围也可以作为 JSON 从 stdin 给出。 |
+| `operad memory score` | `--cases <dir>`、`--bot <name>`、`--memory <dir>`、`--window <n>`、`--no-record`、`--answer-with <program>` | 对 bot 当前的 memory 运行 memory 回归集，并把分数追加到 home 中的 `memory-scores.jsonl`。打印分数、与同一回归集上一次运行相比的变化，以及每个失败的用例。见[回归集](memory.md#the-regression-set)。 |
+| `operad memory propose` | `--chat <id>` | 在 chat 记录中找出更正，把每一条存为一个 pending 项；带着正确答案应当说出的短语批准其中一项，就会添加一个用例。打印提议了多少条。 |
 
-定时 flow 的 verb 也可以带上插件名，以 `operad cron scheduled ...` 的形式使用；简写的 `operad scheduled ...` 是同一个命令。
+定时任务的 verb 也可以带上插件名，以 `operad cron routines ...` 的形式使用；简写的 `operad routines ...` 是同一个命令。
 
 `serve` 的客户端可以通过 HTTP 的 `GET /v1/plugins` 和 `POST /v1/plugins` 做同样的事，包括用 `"install"` 形式安装；见 [Plugins](http.md#plugins)。
 
@@ -104,7 +108,7 @@ CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 
 | `--help` | CLI 自身拥有的命令 | 打印该命令的用法。插件的 verb 会原样收到它的参数，因此 `--help` 会被传给插件，并可能因未知选项而被拒绝；请用 `operad help` 查看命令表。`operad --help` 打印完整的命令表。 |
 | `--version`、`-V` | `operad` | 打印 `operad <version>`。 |
 | `--timeout <secs>` | `serve stop` | 等待被停止的 `serve` 多久：从 1 起的整数，默认 30。`0`、缺少值或不是数字都属于用法错误。 |
-| `--json` | `pending`、`history`、`running`、`flows`、`list`、`show`、`settings`、`scheduled list`、`memory read` | 打印 JSON 而不是文本行。`settings set` 不接受它。 |
+| `--json` | `pending`、`history`、`running`、`flows`、`list`、`show`、`settings`、`routines list`、`memory read` | 打印 JSON 而不是文本行。`settings set` 不接受它。 |
 | `--filter <name>` | `list` | 要使用的过滤器；`all` 显示每一行。没有过滤器的类型会拒绝它。 |
 | `--repo <name>` | `list`、`show`、`settings`、`settings set`、action、插件命令 | 把列表限制在一个仓库内，或指明一个裸 id 属于哪个仓库。 |
 | `--where <field=value>` | `list` | 对该类型的行所带的某个字段做一次精确匹配；可以重复。 |
@@ -148,6 +152,12 @@ CLI 自身拥有的命令，在下表注明处接受紧跟在命令名之后的 
 | `--cancel <id>` | `bot follow-ups` | 要取消的 follow-up。 |
 | `--scope <scope>` | `memory search` | 要搜索索引的哪一部分：`wiki`、`memory` 或 `chats`。默认是全部三个；接受以逗号分隔的列表。 |
 | `--field <name>=<value>` | `memory search` | 结果必须具有的一个 frontmatter 字段；可以重复。有多个值的 frontmatter 字段，匹配其中任意一个即可。 |
+| `--cases <dir>` | `memory score` | 用例所在的目录；默认是 home 中的 `memory-cases`。 |
+| `--bot <name>` | `memory score` | 使用其 memory 的 bot；默认是 `default`。 |
+| `--memory <dir>` | `memory score` | 代替 bot 自己的 memory 使用的 memory 目录。 |
+| `--window <n>` | `memory score` | 有多少条最近的消息保持完整，就像压缩之后那样；默认是 6。 |
+| `--no-record` | `memory score` | 打印分数，但不把它加入历史记录。 |
+| `--answer-with <program> [args]` | `memory score` | 给一个程序的回答打分，而不是给 bot 看到的内容打分；它接受其后的所有内容。 |
 
 action 的 flag 由它的参数生成：名为 `note` 的参数变成 `--note <text>`，布尔值变成 `--flag` 或 `--flag=true`，数组或对象接受 JSON。声明了 `creates` 的 action 不会出现在父对象的页面上；它从新建对象的入口或命令行运行。
 
@@ -169,7 +179,7 @@ step 会自行清理：它结束时，它启动的、仍在运行的每个进程
 
 ## 代码变更 {#changed-code}
 
-`serve` 和每个 run 的进程只在文件变化之前一直运行它们加载的代码。`serve` 监视内核的代码（`engine`、`cli`）、每个已加载插件的包（源码、flow、schema）以及该包所依赖的 workspace 包。文件安静一秒之后，它会启动一个新进程来检查新代码能否加载。若能，`serve` 以 `operad serve stop` 的方式停止，打印 `reloading: <what changed>`，并使用同样的命令行和环境重新启动，仍处于你所启动的进程之下（它留在你的终端里，会转发 Ctrl-C，并以 serve 的退出码结束）。正在运行的 step 继续使用它启动时的代码并运行完毕；run 的进程会在 step 之间查看这些文件，若有变化，它就停止，以便由新进程执行下一个 step。`operad history` 为此显示一行 `continuing on updated code`。
+`serve` 和每个 run 的进程只在文件变化之前一直运行它们加载的代码。`serve` 监视内核的代码（`engine`、`cli`）、home 的 flow 文件、每个已加载插件的包（源码、flow、schema）以及该包所依赖的 workspace 包。文件安静一秒之后，它会启动一个新进程来检查新代码能否加载。若能，`serve` 以 `operad serve stop` 的方式停止，打印 `reloading: <what changed>`，并使用同样的命令行和环境重新启动，仍处于你所启动的进程之下（它留在你的终端里，会转发 Ctrl-C，并以 serve 的退出码结束）。正在运行的 step 继续使用它启动时的代码并运行完毕；run 的进程会在 step 之间查看这些文件，若有变化，它就停止，以便由新进程执行下一个 step。`operad history` 为此显示一行 `continuing on updated code`。
 
 无法加载的新代码（语法错误、无效的 schema）不会让任何东西停摆。`serve` 继续运行旧代码，并在它的错误输出上打印 `code changed (...) but
 does not load; the old code keeps running: <problems>`；当文件再次能够加载时，它会重新加载，如果是某个设置文件（`config.json`、`triggers.json`、`keys.json`）读取失败后被修好，同样如此。run 的进程不会在无法加载的代码上执行下一个 step：它把同样的一行打印到该 run 的日志（`<store>/logs/runs/<run id>.out`）中，并等待文件能够加载。设置文件在下次使用时重新读取；仅仅更改它们不会重启 `serve`。
@@ -264,7 +274,7 @@ is running`，前提是没有 `serve` 持有该 home。
 
 ## dev 命令 {#dev-commands}
 
-`operad dev repo add <path> [--name <name>]` 注册一个目录，该目录必须是带有 remote 的 git work tree。对于不是 git work tree 根目录、没有 remote、名称已经注册且未被移除，或路径已经以另一个仍在使用的名称注册的目录，它会拒绝，不写入任何内容，并打印原因。仓库没有 `.operad/dev.json` 时，它会写入一个。仓库已被移除的名称可以在新路径上重新注册，并保留它的计划和任务：要移动仓库的文件夹，先移除该仓库，移动文件夹，再用同一个名称重新添加。`operad init` 会对每个已注册的仓库检查其 remote 能否连通、主分支是否已发布；它只以只读方式询问 remote，不会推送任何内容。`operad dev repo list` 打印 `no repositories`，或每个仓库一行 `<name>  <path>`。`operad dev repo remove <name>` 打印 `removed <name>`。如果仓库有未完成的任务，它会拒绝（`repository "<name>" has <n> open task(s)`）；请先 merge 或取消这些任务。
+`operad dev repo add <path> [--name <name>]` 注册一个目录。该目录不需要 git，机器也不需要 git 程序：这样的文件夹按原样添加，`.operad/dev.json` 设为就地工作且不指定 remote，只有在创建任务时才需要 git。没有 remote 的仓库也可以，它的 merge 留在本地的 main 分支中。对于位于某个 git 仓库内的目录（`"<dir>" is inside the git repository at "<root>"; add "<root>" instead`）、名称已经注册且未被移除，或路径已经以另一个仍在使用的名称注册的目录，它会拒绝，不写入任何内容，并打印原因。仓库没有 `.operad/dev.json` 时，它会写入一个。仓库已被移除的名称可以在新路径上重新注册，并保留它的计划和任务：要移动仓库的文件夹，先移除该仓库，移动文件夹，再用同一个名称重新添加。`operad init` 会对每个已有 commit 的已注册仓库检查其 remote 能否连通、主分支是否已发布（没有 git 的文件夹会被跳过）；它只以只读方式询问 remote，不会推送任何内容。`operad dev repo list` 打印 `no repositories`，或每个仓库一行 `<name>  <path>`。`operad dev repo remove <name>` 打印 `removed <name>`。如果仓库有未完成的任务，它会拒绝（`repository "<name>" has <n> open task(s)`）；请先 merge 或取消这些任务。
 
 `operad dev plan add --slug <slug> --title <title> [--concurrency <n>]
 [--flow <name>] [--repo <name>]` 创建一个计划并打印它的 id。
@@ -294,7 +304,7 @@ is running`，前提是没有 `serve` 持有该 home。
 
 `operad bot setting <bot>` 从 stdin 读取一个 JSON 对象并提议该更改。bot 可以收紧默认的访问配置，但绝不能放宽。MCP 服务器不在这里更改；请使用 `bot mcp`。
 
-`operad bot schedule <bot> add|edit|remove <name>` 提议添加、更改或删除一个定时 prompt。`add` 接受 `--schedule`、`--words` 和 `--prompt`；`edit` 接受要更改的一个或多个字段以及 `--words`；`remove` 接受 `--words`。可选的 `--model` 和 `--effort` 设置或清除这两个字段。提议会以文字和 cron 两种形式显示 schedule，并显示 prompt、model 和 effort；在人批准之前不会触发任何东西。
+`operad bot schedule <bot> add|edit|remove <name>` 提议添加、更改或删除一个定时任务。`add` 接受 `--schedule`、`--words` 和 `--prompt`；`edit` 接受要更改的一个或多个字段以及 `--words`；`remove` 接受 `--words`。可选的 `--model` 和 `--effort` 设置或清除这两个字段。提议会以文字和 cron 两种形式显示 schedule，并显示 prompt、model 和 effort；在人批准之前不会运行任何东西。
 
 ## 可运行的示例 {#runnable-examples}
 

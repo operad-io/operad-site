@@ -14,6 +14,7 @@
 - [Setup Dev](https://operad.io/docs/setup-prompt/): Setup Dev: have your bot read a repository and propose the settings that turn dev on for it.
 - [config.json](https://operad.io/docs/config/): The config.json file: where the home is, every section and key, and every plugin's settings.
 - [dev.json and the dev plugin](https://operad.io/docs/dev/): dev.json and the dev plugin: its commands, the reviewer, workers and pools, usage and end results.
+- [Flows in the home](https://operad.io/docs/home-flows/): Your own flows in the home, written as one file each, without a plugin.
 - [Access](https://operad.io/docs/access/): Access profiles, the default profile, access-user.json, always allow, target grants, MCP tools and background runs.
 - [The command line](https://operad.io/docs/cli/): Every operad command and option, its arguments, output and exit code.
 - [The terminal client](https://operad.io/docs/tui/): The terminal client: themes, live updates, states and leaving.

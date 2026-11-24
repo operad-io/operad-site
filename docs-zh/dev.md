@@ -17,17 +17,45 @@ plan -> tasks (draft) -> confirm -> ready -> code -> test -> review -> you merge
 ```
 
 1. **计划和任务。** 计划是一个需求（`operad dev plan add`）。其中每个任务有一份 brief，也就是给 worker 的说明（`operad dev task add`）。任务可以用 `--after` 等另一个任务。`operad dev:confirm <plan>` 把计划里处于草稿的任务变成 ready；`operad serve` 调度的就是已确认的计划。新计划的 auto 级别是 `off`（`autoDefault`），它等你来启动其中的任务：确认之后运行 `operad dev:auto <plan> --level run`，`serve` 就会启动它们。
-2. **启动。** `serve` 启动 ready 的任务，数量受仓库的 `concurrency` 和各个 pool 的上限限制。每个任务有自己的 git worktree 和分支，所以任务之间、任务与你自己的检出之间互不影响。
+2. **启动。** `serve` 启动 ready 的任务，数量受仓库的 `concurrency` 和各个 pool 的上限限制。在默认的 `workIn` 为 `worktree` 时，每个任务有自己的 git worktree 和分支，所以任务之间、任务与你自己的检出之间互不影响；设为 `branch` 时，它在你的文件夹中得到一个分支（见[任务在哪里工作](#where-a-task-works)）。
 3. **编码。** 一个 worker 通过 pool 从 `workers` 中选出，带着 brief 在任务的 worktree 里运行并提交。worker 的模型不可用时，可以把工作交给它的 `fallback`。
 4. **测试。** `gate.commands` 里的命令在这次提交上运行。失败的测试会先单独再跑一次，用来区分不稳定的测试和真正的失败。
 5. **评审。** reviewer 读改动并写一份报告。达到 `reviewer.fixLevel`（默认 `major`）的意见会让评审不通过。如果某次 attempt 的 work 留下了 `changed the main checkout: <files>` 这一行，dev 自己会对其中指名的每个文件给出一条 major 发现，不论 reviewer 是否报告了它。
 6. **返工。** 测试失败或评审不通过，任务会被退回给 worker，最多 `maxAutoRework` 次（默认 `2`）。超过之后任务就等你处理。
 7. **等你处理。** 通过测试和评审的任务会在 `operad pending` 里以 `ready to merge` 等待，可用的操作有 `dev:merge`、`dev:reject`、`dev:rework`、`dev:reverify` 和 `dev:cancel`。需要人介入的情况下任务也会等待：评审有意见、gate 失败、达到返工上限、worker 没有新增提交。worker 自己的提问，例如它的 harness 发出的权限请求，也是一个 pending 项；`allow_once` 或 `reject_once` 回答它，同一个 worker 继续。
-8. **合并和清理。** `dev:merge` 把验证过的提交放到 main 上（按 `integration.style`），运行 `integration.keyCommands`，然后推送到 remote。接着清理会删除任务的 worktree 和分支。同一个仓库的任务一次只集成一个。如果 remote 拒绝推送，什么都不会写入，任务带着一条说明继续等待。
+8. **合并和清理。** `dev:merge` 把验证过的提交放到 main 上（按 `integration.style`），运行 `integration.keyCommands`，然后推送到 remote（没有 remote 的仓库改为移动它本地的 main 分支）。接着清理会删除任务的 worktree 和分支。同一个仓库的任务一次只集成一个。如果 remote 拒绝推送，什么都不会写入，任务带着一条说明继续等待。
 
 每一步都有记录：`operad history <task>` 显示运行了什么、测试或评审发现了什么、你选了什么。进程已死的运行会从它最后记录的步骤重新开始。计划可以在没有你的情况下走得更远：`operad dev:auto <plan> --level merge` 会在测试通过后合并已评审的工作，`--level run` 不需要你就会启动计划里的任务，但每个任务在合并时仍然会停下来等你，`--level off` 则在每次启动和合并时都等你。`autoDefault` 为新计划设置这个级别。
 
 各部分的键见下面几节：[仓库和它的 worker](#the-repository-and-its-workers)、[gate 和它的检查](#the-gate-and-its-checks)、[开发、评审、集成和清理](#work-review-integration-and-cleanup)，以及 [flow 和它们的 stage](#flows-and-their-stages)。
+
+## 任务在哪里工作 {#where-a-task-works}
+
+`.operad/dev.json` 中的 `workIn`（“Work in”）设置工作在哪里进行。两个值是 `branch`（“A branch in this folder”）和 `worktree`（“A separate worktree”，默认值）。它和 `concurrency` 一起构成四个台阶；你一次上一个台阶，`dev.json` 中的检查命令保持不变。
+
+| Step | `workIn` | `concurrency` | What you do |
+|---|---|---|---|
+| 1 | `branch` | 1 | 只 chat：仓库上的 chat 在你的文件夹中、在当前检出的分支上工作，不打开 `work/chat-<id>` 分支。 |
+| 2 | `branch` | 1 | 启动任务。每个任务在你的文件夹中得到一个新分支；flow 在那里运行，一次一个任务。 |
+| 3 | `worktree` | 1 | 把 `workIn` 设为 `worktree`。每个任务有自己的文件夹，一次一个。 |
+| 4 | `worktree` | 2 或更多 | 提高 `concurrency`：同时运行几个任务，如本页其余部分所述。 |
+
+设为 `branch` 时：
+
+- 你的文件夹有未提交的改动时，任务拒绝启动，并指出这些文件。请先提交或把它们放到一边。
+- 任务的分支在你的文件夹中创建，worker 的改动提交在它上面。检查和评审仍然在一个单独的 gate 文件夹中针对该提交运行，评审报告写在那里，而不是写在你的文件夹中。是否进行评审只取决于 flow 有没有评审 stage。检查失败不会在你开始时所在的分支上留下提交；merge 把提交带到该分支上，并把你的文件夹切换回去。
+- `dev.json` 在一次 attempt 开始时读取一次，这次读取的内容在整个 attempt 中保留，因为在此期间文件夹处在任务的分支上。
+- 等你处理、可以 merge 或已暂停的任务会一直占用你的文件夹，直到它被 merge、取消或拒绝，所以不会启动第二个任务。被拒绝或取消的任务会把你的文件夹放回你开始时所在的分支，并保留任务的分支。
+- 当任务占用你的文件夹时，仓库上的 chat 以只读方式回复，并说明原因。任务工作期间不要自己编辑这个文件夹：它是一个共用的文件夹，没有什么能把你的改动和 agent 的改动区分开。
+- 设为 `branch` 时，大于 1 的 `concurrency` 会被拒绝；消息会说明该改哪一个。
+
+要从 `branch` 升到 `worktree`，等到没有任务在运行或占用该文件夹，再修改 `workIn`。要退回，等到没有任务在运行、也没有任务的文件夹留下，再重新设为 `branch`。`Setup Dev` 会问你想怎样工作，并替你写好 `workIn`；拿不准时它选 `branch`。两种方式下 `pool` 插件都保持打开。
+
+## 没有 git 的文件夹 {#a-folder-without-git}
+
+文件夹不需要 git，电脑也不需要 git 程序，就可以被添加（`operad dev repo add`、app 或 [Setup Dev](setup-prompt.md)）或在其中 chat。这样的文件夹按原样添加：`.operad/dev.json` 就地工作，不指定 remote。chat 在文件夹本身中回答，可以修改它的文件；它不打开单独的文件夹，因为那需要 git。此时 bot 不会问任何关于 git 的事。
+
+只有创建任务才需要 git。当你在没有 git 的文件夹中、在没有 git 的电脑上，或在还没有 commit 的 git 文件夹中要求创建任务时，创建会被拒绝，并用一行说明缺了什么，bot 会提出[在这里设置 git](chats-and-bots.md#set-up-git-here)：需要时它帮你安装 git，先显示 `.gitignore` 和文件列表，经你批准后做第一个 commit。之后该文件夹有了 git，处在一个没有 remote 的分支上，如上面的 `branch` 台阶所述，任务继续进行。位于另一个 git 仓库内的文件夹不能单独添加：拒绝时会指出应改为添加的那个仓库的文件夹。你的 home 文件夹和磁盘根目录不能做第一个 commit。
 
 ## 创建计划或任务 {#creating-a-plan-or-a-task}
 
@@ -46,7 +74,7 @@ plan -> tasks (draft) -> confirm -> ready -> code -> test -> review -> you merge
 |---|---|---|---|---|---|
 | `dev.$schema` | string | 不存在 | `https://operad.io/schemas/dev.schema.json` 或其他 schema URL | 只有编辑器会读取 | 忽略 |
 | `dev.name` | string | 未设置 | 非空文本 | 读取文件时；它与设置一起保存，但不会为已注册的仓库改名 | 拒绝：`name: must be a non-empty string` |
-| `dev.remote` | string | `"origin"` | 一个 git remote 名称 | 抓取、推送或清理任务分支时 | 拒绝：`remote: must be a non-empty string` |
+| `dev.remote` | string | 仓库有名为 `"origin"` 的 remote 时为它，否则没有 | 一个 git remote 名称；没有 remote 的仓库不写它，这时它以本地的 main 分支为基础，不抓取也不推送任何东西 | 抓取、推送或清理任务分支时 | 拒绝：`remote: must be a non-empty string` |
 | `dev.mainBranch` | string | `"main"` | 一个分支名 | 任务分支开始以及合并 main 时 | 拒绝：`mainBranch: must be a non-empty string` |
 | `dev.worktreeRoot` | string | `".operad-worktrees"` | 仓库内的相对路径 | 创建或读取 worktree 时 | 拒绝：`worktreeRoot: must be relative to the repository` 或 `worktreeRoot: must stay inside the repository` |
 | `dev.worktrees` | string | 未设置 | `worktreeRoot` 的旧名称；`worktreeRoot` 不存在时读取 | 读取文件时 | 拒绝，使用相同的两条消息，其中指明 `worktrees` |
@@ -258,6 +286,8 @@ field`。无效的文件会整个被拒绝，并指明该文件；review step �
 
 worker 启动之前，work step 会记录主检出的 `git status`，以及其中已被标为改动的文件的内容。step 结束时，那里出现的、worktree 解释不了的改动，会在任务的 Changes、该 step 的 history 和 worker 的回答中写作 `changed the main checkout: <files>`：一个新的 status 条目，或对那里本已改动的文件的进一步编辑。`dev` 不会撤销它。比较的范围是该 step 自己的时间窗口，而 `dev` 无法分辨是哪个进程写了文件，所以 worker 运行期间另一个会话在主检出中做的改动也会被写出。该 attempt 的评审会得到一条来自 `dev` 自己的 major 发现，针对每个被指名的文件，出现在它的报告和评审 prompt 中；任务进入 rework，由 worker 改在自己的 worktree 中做这些改动。
 
+如果 worker 在主检出中做了一个不在 remote 的 main 上的 commit，即使之后工作树是干净的，这也算在内（快进到 remote 已有的内容，或别人推送的 commit，不会被报告）：这时那一行写作 `changed the main checkout: <branch> (moved <old>..<new>)`，评审会得到一条 major 发现，说明工作在那里做了提交，而带着 `work did nothing` 等待的任务会说明 worker 没有改动自己 worktree 中的任何东西，但改动了主检出。worker 的写权限并不被它的访问 profile 限制在它的 worktree 内，所以是这项检查让每个 harness 都遵守这一点。
+
 ## 移动仓库的文件夹 {#moving-a-repositorys-folder}
 
 已注册的仓库在文件夹移动之后保留它的名称、计划和任务。先移除它，移动文件夹，再用同一个名称重新注册：
@@ -272,7 +302,7 @@ operad dev repo add ~/Code/operad-ios --name operad-ios
 
 ## 从客户端添加仓库 {#adding-a-repository-from-a-client}
 
-与远程 `operad serve` 通信的客户端无法在那台机器上运行 `operad dev repo add`，所以 `dev` 还声明了操作 `dev:repo-add`。它接受仓库在运行 `serve` 的那台机器上的 `path`，以及可选的 `name`，并要求确认。该操作和该命令调用同一份代码：操作添加的就是命令添加的，写入同样的 `.operad/dev.json`，并用命令的话拒绝（not a git work tree、no remote、already registered）。它的回答是命令的那一行 `added <name> (<path>)`，新仓库随后出现在 `GET /v1/objects?type=repo` 中。
+与远程 `operad serve` 通信的客户端无法在那台机器上运行 `operad dev repo add`，所以 `dev` 还声明了操作 `dev:repo-add`。它接受仓库在运行 `serve` 的那台机器上的 `path`，以及可选的 `name`，并要求确认。该操作和该命令调用同一份代码：操作添加的就是命令添加的，写入同样的 `.operad/dev.json`，并用命令的话拒绝（inside another git repository、already registered）。没有 git 的文件夹可以添加：只有创建任务才需要 git，那时 bot 会提出[在这里设置 git](chats-and-bots.md#set-up-git-here)。它的回答是命令的那一行 `added <name> (<path>)`，新仓库随后出现在 `GET /v1/objects?type=repo` 中。
 
 ```json
 { "action": "dev:repo-add", "args": { "path": "/srv/operad" }, "confirmed": true }
@@ -643,6 +673,7 @@ then no new work starts`，就绪的任务保持就绪，而不是失败。`pool
 
 - `operad list task` 和 `operad show` 的前几行，在该行的备注末尾给出该任务最后一次 attempt 的 worker，只有名称。超过 16 个字符的名称用 `…` 截断；Metrics 中有完整名称。
 - `operad history` 有上面的 work 行：`work: claude` 或 `work: pi (fallback from claude)`。
+- 评审过的任务有一个 Review section：最新的一轮在最前（结果、dev.json 中的 fix level、reviewer 的 agent 和 model、按严重程度列出的发现，以及 reviewer 检查了什么），更早的轮次在后面的页上。被访问 profile 拦下的工具调用在 Log 中显示为 `blocked by the access profile: <rule>`；它是一道防护，不是失败。
 - 任务的 Metrics 一节在 attempt 之下增加一张表，每个 worker 一行，对该 worker 运行过的 attempt 求和：attempt 数、成本、时间和 first pass（首轮评审通过的 attempt，相对于被评审的 attempt）。
 - 在有 pool 之前的任务没有 worker：该行显示 none，Metrics 中没有 worker 表。`dev` 没有仓库级的 metrics，所以那里没有可拆分的东西。
 
@@ -678,7 +709,7 @@ harness 不报告的计数为 `0`。在这个字段出现之前写下的记录�
 `dev` 用一个符号在任务的行和它的 metrics 中显示成本的质量：`$0.31` 是 exact，`~$0.31` 是 estimated，`≥$0.31` 是 incomplete（至少这么多）。
 
 计划的行备注读作 `1/8 · ~$4.20 · P2 // 2`：已合并的任务数除以任务数（已取消的不计），计划的任务的总成本，取其中最弱的质量（没有任务有成本时省略），优先级，以及 `//` 之后该计划的任务可以同时运行多少个。计划的徽章带有它的 auto 级别。任务的备注读作 `$0.31 · claude · area: app-core`：成本（在还没有时为 `$0.00`）、worker、area（或 `waiting for area
-app-core (T-0023-action-numbers)`），最后是被拒绝的 push 的消息。仓库的备注读作 `plans: 1 · tasks: 4`，统计未关闭的。
+app-core (T-0023-action-numbers)`），最后是被拒绝的 push 的消息。仓库的备注读作 `1 plan · 4 tasks open`（没有时为 `0 plans · 0 tasks open`）。
 
 step 以下列结果之一结束：
 

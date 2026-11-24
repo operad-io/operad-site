@@ -46,7 +46,7 @@ profile 是一个 JSON 对象。每个 chat 和每个生成的 step 都从下面
 
 `readOnly` 使调用的工作目录变为只读：在那里的写入或编辑会询问，`bash` 命令也会询问，除非它在只读命令的短名单上。读取命令可以以 `cd <dir>` 开头，不写入任何地方的重定向（`2>/dev/null`、`2>&1`）是允许的；重定向到文件仍会询问。deny 仍然优先。
 
-`level` 是 chat 的访问级别。`plan` 是只读的；`ask` 对每次写入和每条不确定只读的命令都询问；`edits` 放行工作目录内的写入，而工作目录外的写入和不确定只读的命令会询问；`full` 什么都不问。在 `full` 下，匹配器跟不上的命令（内联代码、shell 展开、切换目录后它跟不上的路径）会运行，除非明确匹配某条 deny，而 `plan`、`ask` 和 `edits` 仍会就它询问。在 `full` 下只剩 `denyPaths`、`denyCommands`、`readOnly` 和 `readPaths` 之下的写入还起作用：deny 会拒绝，只读的工作目录会就写入或不确定只读的命令询问，`readPaths` 之下的写入会询问。`askCommands`、`askPaths` 和未列出的 MCP 工具在 `full` 下不询问；它们在 `plan`、`ask` 和 `edits` 下仍然适用。对外写入的问题在 `full` 下不适用；在 `plan`、`ask` 或 `edits` 的后台运行中仍会询问。chat 在仓库上从 `plan` 开始，在 bot 上从 bot 的 `accessLevel` 设置开始（未设置时为 `ask`；`full` 除 deny 规则外什么都不问），但定时 prompt 打开的 chat 例外，它从 `full` 开始；`/access <level>` 可以更改它；见 [chat 和 bot](chats-and-bots.md#access-level)。
+`level` 是 chat 的访问级别。`plan` 是只读的；`ask` 对每次写入和每条不确定只读的命令都询问；`edits` 放行工作目录内的写入，而工作目录外的写入和不确定只读的命令会询问；`full` 什么都不问。在 `full` 下，匹配器跟不上的命令（内联代码、shell 展开、切换目录后它跟不上的路径）会运行，除非明确匹配某条 deny，而 `plan`、`ask` 和 `edits` 仍会就它询问。在 `full` 下只剩 `denyPaths`、`denyCommands`、`readOnly` 和 `readPaths` 之下的写入还起作用：deny 会拒绝，只读的工作目录会就写入或不确定只读的命令询问，`readPaths` 之下的写入会询问。`askCommands`、`askPaths` 和未列出的 MCP 工具在 `full` 下不询问；它们在 `plan`、`ask` 和 `edits` 下仍然适用。对外写入的问题在 `full` 下不适用；在 `plan`、`ask` 或 `edits` 的后台运行中仍会询问。chat 在仓库上从 `plan` 开始，在 bot 上从 bot 的 `accessLevel` 设置开始（未设置时为 `ask`；`full` 除 deny 规则外什么都不问），但定时任务的运行例外，它从 `full` 开始；`/access <level>` 可以更改它；见 [chat 和 bot](chats-and-bots.md#access-level)。
 
 `readPaths` 允许读取位于 `denyPaths` 某个上级条目之下的目录。它不允许写入：在那里写入会询问。
 
@@ -148,6 +148,6 @@ profile 中的 `allowMcp`（或 bot 设置中的 `mcpAllow`）以 `<server>.<too
 
 当没有任何人的消息启动一次运行时，它就是**后台运行**：计划任务、webhook、来自其他来源的传入消息，或某次运行发出的事件。按这条规则，只有来自 chat 自己的客户端来源（`ios`、`telegram`、`cli`、`tui`、`other`）的消息才算人的消息。
 
-在后台运行中，现有的 `alwaysAllow` 条目不被使用，也不提供 `allow_always`：每次询问都会重新问。这是有意为之：计划运行或传入运行要重新受 profile 约束，而不是继承某个人在先前对话中给出的权限。
+在后台运行中，现有的 `alwaysAllow` 条目不被使用，也不提供 `allow_always`：每次询问都会重新问。这是有意为之：定时任务的运行或传入运行要重新受 profile 约束，而不是继承某个人在先前对话中给出的权限。
 
 低于 `full` 时，**对外写入**也会先询问：一条消息、一封邮件或一个帖子；一次 `git push`；或对外部服务的一次写入调用。问题会写明目标（chat、地址、仓库和分支，或服务）并带上全部内容；它的选项是 `Send once`、`Always for this flow and target` 和 `Reject`。向owner 自己的某个渠道，或向 `outwardAllow` 中的目标写入，不会询问。plugin 的 step 或 action 会声明这样的写入；shell step 使用 `outwardCommands`。chat 中针对确切调用的 `alwaysAllow` 不会解除这个问题；只有上面那一节的目标 grant 可以。处于 `full` 的 chat 对外什么都不问：见[访问级别](chats-and-bots.md#access-level)。

@@ -57,8 +57,8 @@ http http://127.0.0.1:8765
 | `GET /v1/objects/<id>` | `{ "id", "type", "link", "row", "sections", "actions", "skills"? }`：打开该对象的链接、行、section 目录，以及当前可用的 action，附带它们的 `args` schema、`note` 字段、`confirm` 标志，以及当 chat 可以在 `/` 之后运行它时的 `command` 描述。chat 在它的 action 旁边还带有 `skills: [{ "name", "description"? }]`，这样一个请求就给出命令和 skill：每一个都是 chat 可以用 `/name` 输入的 skill，描述取自它的 `SKILL.md`，截到菜单的长度；文件读不到的 skill 会被省略。名称同时也是命令的 skill 不会作为 skill 运行：`/name` 运行的是命令。chat 的最后一条已完成的回复报告了 context 时，它还带有 `context: { "used", "window"?, "model"? }`：`used` 是最后一次 model 调用的 input 加上 cache read 和 cache write，`window` 是已知时该 model 的 context window，`model` 是已知时作答的 model。新的 session 在下一条回复之前不带 `context`。最新的 run 已经结束的对象还带有 `lastRun`：`{ "outcome": "done" | "failed" | "cancelled", "reason"?, "endedAt" }`，它读自 run 的结束记录，而不是 History 的文本。`reason` 是 run 结束时记录的那一行，对没有记录原因的失败，则是失败的 step 的消息；两者都没有时省略；`endedAt` 是自 epoch 起的毫秒数。没有 run 的对象，或最新的 run 仍在进行的对象，没有 `lastRun`。它不是行的一部分。 |
 | `GET /v1/objects/<id>/sections/<section>?cursor=<c>&full=<bool>&after=<mark>` | `{ "markdown": "...", "next": "<c>", "mark": "<m>", "tail": "..." }`。section 还可以带有 `data`，即插件为它的客户端定义的对象，每次读取都带，包括带 `after` 的读取。chat 的 `transcript` 还带有来自最后一条已完成回复的 `context: { "used", "window"?, "model"? }`，与对象视图一样，每次读取都带，包括带 `after` 的读取；带有 `data.queued` 和 `data.queuedCount`，即已发送但尚未被 run 接收的消息，按发送顺序排列，每条有 `id`、`text`、`at` 和 `attachments`；还带有 `data.replies`，即每条回复在 Markdown 之外的结构化形式（见 [chat 的回复](#a-chats-replies)）。`data.replies` 跟随读取的窗口：一页带有该页上的回复，带 `after` 的读取带有该 mark 之后完成的回复和仍在运行的那一条，`tail` 事件带有正在运行的回复。`full=true` 跳过大小上限。`mark` 是已完成内容所到的不透明位置，`tail` 是仍在变化的部分的 Markdown；不使用它们的插件两者都不发送。带上前一次读取得到的 `after=<mark>` 时，`markdown` 只包含该 mark 之后已完成的内容；此时答复还带有 `delta`：只有那一部分时为 true；插件答复的是整页、客户端必须替换而不是追加时为 false。大小上限同时涵盖 `markdown`、`tail` 和插件的 `data`，但绝不截断 `tail`：chat 先截掉 `data.replies` 中的工具输出文本，保留它的行数并设置 `truncated`，之后才缩短 `markdown`；连 tail、data 和截断说明也放不下时，调用会被拒绝，并给出提到 `--full` 的超限消息。来自其他 section 或对象的 mark 会以 `400` 被拒绝。 |
 | `POST /v1/act` | 运行一个 action。请求体是 `{ "action": "plugin:action", "id": "<id>", "args": {...}, "note": "...", "confirmed": true }`；只有 `action` 始终必需，针对对象的 action 还需要 `id`。带 `confirm: true` 的 action 需要 `"confirmed": true`。请求体最大 1 MiB；更大的会得到 `413`，消息为 `the request body is larger than the 1 MB limit`。action 的 schema 中以 `"format": "file"` 声明的参数（一个字符串，或字符串列表）接受上传的 `ref`；action 以文件存放的路径运行。 |
-| `POST /v1/commands` | 像 `operad <plugin> <verb>` 一样运行一个插件 verb。请求体是 `{ "plugin": "cron", "verb": "scheduled", "args": ["list", "--json"], "input": "..." }`；`plugin` 和 `verb` 必需，`args` 是字符串数组，`input` 是命令从 stdin 读取的文本。答复是 `{ "plugin", "verb", "value" }`，其中 `value` 是命令返回的内容。没有已加载的插件声明的 verb 是 `404`；命令拒绝时得到 `422` 和它的原因。scheduled flows 命令列出、添加、编辑、暂停、恢复和删除 `triggers.json` 中的 cron 规则；见 [`triggers.json`](config.md#triggersjson)。 |
-| `GET /v1/plugins` | `{ "plugins": [{ "name": "dev", "version": "0.4.0", "enabled": true, "origin": "builtin" }] }`：已配置的插件，按配置中的顺序排列，内容与 `operad plugin list` 打印的相同。关闭的或没有加载的插件，其 `version` 为 `null`，命令行在那里打印 `-`。`origin` 对 operad 自带的包是 `builtin`，对 home 的 `config.json` 指定的其他任何插件（一个路径或另一个包）是 `home`；项目的插件不会被加载，所以没有第三个值。已加载的 harness 插件还带有 `signedIn`：它的 agent 能判断用户是否已登录时为 `true` 或 `false`，不能判断时没有该字段（关闭的或不是 harness 的插件也没有）。只暴露是或否；它绝不显示凭据，客户端读取它也不需要 session。已加载的 harness 插件还带有 `models`：`{ "list", "default", "windows"?, "info"? }`。`list` 是 chat 可以选择的 model id，`info` 把一个 id 映射到 `{ "id", "name"?, "provider"?, "window"?, "capabilities"? }`；`capabilities` 是 `vision`、`reasoning`、`tools` 和 `web` 的子集。harness 不知道的字段不出现，绝不猜测；只读 `list` 的客户端仍然可用。 |
+| `POST /v1/commands` | 像 `operad <plugin> <verb>` 一样运行一个插件 verb。请求体是 `{ "plugin": "cron", "verb": "routines", "args": ["list", "--json"], "input": "..." }`；`plugin` 和 `verb` 必需，`args` 是字符串数组，`input` 是命令从 stdin 读取的文本。答复是 `{ "plugin", "verb", "value" }`，其中 `value` 是命令返回的内容。没有已加载的插件声明的 verb 是 `404`；命令拒绝时得到 `422` 和它的原因。routines 命令列出、添加、编辑、暂停、恢复和删除 `triggers.json` 中的 cron 规则；见 [`triggers.json`](config.md#triggersjson)。 |
+| `GET /v1/plugins` | `{ "plugins": [{ "name": "dev", "version": "0.4.0", "enabled": true, "origin": "builtin" }] }`：已配置的插件，按配置中的顺序排列，内容与 `operad plugin list` 打印的相同。关闭的或没有加载的插件，其 `version` 为 `null`，命令行在那里打印 `-`。`origin` 对 operad 自带的包是 `builtin`，对 home 的 `config.json` 指定的其他任何插件（一个路径或另一个包）是 `home`；项目的插件不会被加载，所以没有第三个值。已加载的 harness 插件还带有 `signedIn`：它的 agent 能判断用户是否已登录时为 `true` 或 `false`，不能判断时没有该字段（关闭的或不是 harness 的插件也没有）。只暴露是或否；它绝不显示凭据，客户端读取它也不需要 session。已加载的 harness 插件还带有 `models`：`{ "list", "default", "windows"?, "info"? }`。`list` 是 chat 可以选择的 model id，`info` 把一个 id 映射到 `{ "id", "name"?, "provider"?, "window"?, "capabilities"? }`；`capabilities` 是 `vision`、`reasoning`、`tools` 和 `web` 的子集。harness 不知道的字段不出现，绝不猜测；只读 `list` 的客户端仍然可用。已加载的 harness 插件还带有 `accessLevels`：它的 agent 能承载的访问级别（`plan`、`ask`、`edits`、`full`），一个都不能承载时是空列表。客户端在为某个级别的 chat 提供 agent 时，只提供能承载该级别的那些；以 agent 无法承载的级别创建、或改到这样的级别的 chat，会在该请求处被拒绝，并用一句话列出该 agent 能承载的级别。新 chat 的默认 agent 是第一个能承载该 chat 起始级别的已加载 agent。 |
 | `POST /v1/plugins` | 开启或关闭一个插件，或从 npm 安装一个插件。切换时，请求体是 `{ "name": "<plugin>", "enabled": true, "confirmed"?: true }`；`name` 和 `enabled` 必需。安装时，请求体是 `{ "install": "<package>[@version]", "confirmed": true }`；答复是 `{ "plugin": { ... } }`，即处于关闭状态的新条目。见[插件](#plugins)。 |
 | `GET /v1/plugins/<name>/setup` | `{ "setup": { "plugin", "enabled", "missing": [{ "name", "description" }] } }`：插件自己的检查发现尚未设置好的内容，供客户端在该插件的页面上使用。关闭的插件只答复 `enable` 这一项（不运行它的检查）。插件带有 setup guide 时，它在 `GET /v1/plugins` 中的行带有 `"guide": true`，客户端据此在它上面放一个 Setup <name> 按钮（bot 的 `setup` action，带 `plugin`）。guide 本身的文本绝不在答复中。没有 guide 的插件答复 `404`。 |
 | `GET /v1/settings?scope=<scope>` | 列出用户可以调整的设置：`{ "settings": [{ "name", "scope", "value", "default", "title", "description", "type", "enum", "editable", "confirm" }] }`。没有 `scope` 时，列出全局设置和每个仓库 scope；一个 scope 指定一个仓库。在某个 scope 中无法读取的设置会被省略。 |
@@ -104,9 +104,13 @@ POST /v1/act
 
 `GET /v1/objects/<id>/sections/<section>` 读取一个 section。`cursor` 取前一次读取的 `next`；`full=true`（或 `1`）跳过大小上限。有 `pages` 的 section 还会答复目录，因此客户端可以跳转：第一页没有 cursor，其他每一页带有自己的 cursor。
 
+section 以通用的方式绘制：插件新增的 section（例如 `dev` 中任务的 Review，最新的一轮在最前，带有 `pages`）不需要桌面端或 iOS app 做任何改动，它们本来就能绘制任何 section 的 Markdown 和 `pages`。
+
 live section 还带有 `mark` 和 `tail`。`mark` 是已完成内容的不透明位置；`tail` 是仍在变化的部分的 Markdown（chat 中未完成的回复和思考、正在运行的工具调用，或 agent 正等待重试的 model 请求），每次读取都给出整个 tail。live section 还可以带有 `retry`，即 agent 等待再试一次的 model 请求：`{ "attempt": 2, "maxAttempts": 3, "until": 1767225604000, "reason": "the provider is overloaded" }`。`until` 是下一次尝试开始的时间，为自 epoch 起的毫秒数，客户端据此倒计时；`reason` 是 provider 给出的、经过遮蔽的消息。不认识 `retry` 的客户端会忽略它。`serve` 还会把该 `tail` 作为 `tail` 事件推送到事件流上，这样客户端不必再读一次 section 就能渲染正在运行的回复（见[事件](#events)）。若要追加而不是替换，传入上一次读取的 `after=<mark>`：此时答复的 `markdown` 只包含该 mark 之后已完成的内容，当它只包含这些时 `delta` 为 `true`。无法以 delta 作答的插件答复整页，`delta` 为 `false`；此时客户端替换自己的内容。来自其他 section 或对象的 mark 是 `400`。
 
 大小上限同时涵盖 `markdown`、`tail` 和插件的 `data`，但绝不截断 `tail`。chat 先截掉 `data.replies` 中的工具输出文本，保留它的行数并设置 `truncated`；之后才缩短 `markdown`。连 tail、data 和截断说明也放不下时，调用是 `400`，并提到 `--full`。带 `full=true` 的读取让 data 保持完整。
+
+当 `data.replies` 超出它在上限中所占的份额时，chat 分三轮缩短，每一轮都从最旧的回复开始，逐条回复地向最新的推进。第一轮缩短所有不是答案的内容：thinking、text、工具输入和输入消息（输入消息保留约 200 字节的预览）。然后是答案，从最旧的开始，缩到约 200 字节（两行）的预览，附近有行尾或句末时就在那里截断，绝不截在一个字符中间，并以 `…` 结尾。只有当每条回复都已是这个预览而页面仍然超出份额时，chat 才会缩到预览以下，然后丢掉最旧的回复，所以每条较旧的回复都尽可能久地保留它答案的开头，而最新的回复和正在运行的回复保持完整最久。每段被缩短的文本都在它的块或条目上带有 `"cut": true`（输入或答案消息、thinking 或 text 条目、就其 `input` 而言的工具条目）。要完整读取被截断的回复，用 `full=true` 再读同一页（相同的 `cursor`，第一页则不带）；在 `after` 读取或 `tail` 事件中被截断的回复，由包含它的那一页的 `full=true` 读取完整读出：那次读取带有完整的每段文本，没有 `cut`。
 
 ### chat 的回复 {#a-chats-replies}
 
@@ -236,23 +240,27 @@ kernel 的 `waiting` 和 `running` 标志保持不变。客户端按这个顺序
 
 行还可以带有 `data`，即插件为它的客户端定义的对象。kernel 在 list、get 和 pending 的行中原样传递它。不认识某个插件的形状的客户端会忽略它。
 
-bot 行的 `data.scheduled` 是它的定时 prompt 组成的数组，这样编辑表单不必解析 bot section 的 Markdown。每一项是：
+定时任务是 `bot-routine` 类型的对象（id 为 `RT-0001`，bot 内置的梦境整理则为 `dreaming-<bot>`），列在 `GET /v1/objects/bot-routine`。它的行以定时任务的名称为 `title`，以 bot 的名称为 `note`，`parent` 为 `bot:<bot>`，`state` 为 `open`、`paused` 或 `removed`（默认列表显示前两种）。它的 `data` 如下，这样编辑表单不必解析页面的 Markdown：
 
 ```json
 {
-  "name": "Morning",
+  "bot": "default",
   "schedule": "0 8 * * *",
   "prompt": "Collect the day's news.",
   "model": "claude-sonnet",
   "effort": "high",
   "paused": false,
+  "builtin": false,
   "nextRun": "2026-01-02T08:00:00.000Z",
-  "lastResult": "Collected 12 items.",
-  "lastChatId": "C-0042"
+  "lastResult": "done",
+  "lastSummary": "Collected 12 items.",
+  "timeZone": "America/Toronto"
 }
 ```
 
-条目把 `model` 和 `effort` 留给 bot 决定时，它们为 `null`。`nextRun` 是 ISO 时间，条目被暂停或两年内没有下一次运行时为 `null`。条目第一次触发之前，`lastResult` 和 `lastChatId` 为 `null`。
+`schedule` 是一个在 `timeZone`（服务器的 IANA 时区）中运行的 cron 表达式，所以位于其他时区的客户端在用户编辑时预览下一次运行，要用这个时区而不是自己的；`nextRun` 已经是绝对时间。定时任务把 `model` 和 `effort` 留给 bot 决定时，它们为 `null`。`nextRun` 是 ISO 时间，定时任务被暂停或两年内没有下一次运行时为 `null`。`lastResult` 是 `done`、`nothing to report` 或 `failed`，在第一次运行之前或有运行正在进行时为 `null`；`lastSummary` 是回复的简短摘要。对内置的梦境整理，`builtin` 为 `true`，没有 `prompt`、`model` 和 `effort`。
+
+页面的 section 是 `routine`（提示、时间安排和上一次结果），以及最近 30 天内每次运行一个 `run-<id>`，最新的在前，各自带有那次运行的过程和结果。action 是定时任务上的 `bot:edit`（可选的 `schedule`、`prompt`、`model`、`effort`）、`bot:pause`、`bot:resume`、`bot:run-now` 和 `bot:remove`，以及 bot 上的 `bot:schedule-add`，它接受 `name`、`schedule`、`prompt` 和可选的字段；较早的 `bot:schedule-edit`、`bot:schedule-pause`、`bot:schedule-resume`、`bot:schedule-run-now` 和 `bot:schedule-remove` 仍然在 bot 上，接受 `name`。`bot:run-now` 立即运行定时任务一次，不改变它的下一次按时运行；未知的定时任务，或上一次运行仍在回复的定时任务，会以 `422` 和原因被拒绝。bot 行不再带有 `data.scheduled`；它仍然带有 `data.timeZone` 和 `data.followUps`。
 
 bot 行的 `data.followUps` 是该 bot 尚未到期的 follow-up 组成的数组，最早到期的在前，涵盖它所有的 chat。客户端通过匹配 `chatId` 显示某个 chat 自己的 follow-up。每一项是：
 
@@ -267,13 +275,9 @@ bot 行的 `data.followUps` 是该 bot 尚未到期的 follow-up 组成的数组
 
 `due` 是 ISO 时间。用户用 bot 上的 action `bot:follow-up-cancel` 取消一个，参数为 `id`。bot 没有 follow-up 时数组为空。
 
-定时 prompt 打开的 chat 带有 `data.scheduled`，它指明该 chat 的 bot 和打开它的条目，客户端读取它，而不必从标题猜测：
+定时任务的运行不是 chat。它的记录有一个 `R-` id，`state` 为 `run`，所以它既不在打开的 chat 列表中，也不在已关闭的 chat 列表中，客户端只把它显示为定时任务页面的一个 section。这条记录带有 `data.scheduled`（指明它的 bot 和定时任务）以及 `data.run`。人拥有的每个 chat 都没有这两者。
 
-```json
-{ "scheduled": { "bot": "default", "entry": "Morning" } }
-```
-
-其他所有 chat 都没有 `data.scheduled`。
+绑定了渠道的 chat 带有 `data.channels`，即渠道名称组成的字符串列表（例如 `telegram:<id>`）；其中有一个以 `telegram:` 开头时，客户端显示 Telegram 徽标。没有绑定的 chat 没有 `data.channels`。
 
 有消息尚未被任何 run 接收的 chat 带有 `data.queued`（按发送顺序）和 `data.queuedCount`；没有排队的消息时两者都没有。每一项是：
 

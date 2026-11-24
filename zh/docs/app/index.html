@@ -69,6 +69,7 @@
         <li><a href="../setup-prompt/">Setup Dev</a></li>
         <li><a href="../config/">config.json</a></li>
         <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../home-flows/">home 中的 flow</a></li>
         <li><a href="../access/">访问</a></li>
         <li><a href="../cli/">命令行</a></li>
         <li><a href="../tui/">终端客户端</a></li>
@@ -108,7 +109,7 @@ Scan this in the operad app:
 <p>app 只能连到 <code>serve</code> 可以监听的地址：loopback、私有地址（<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>、<code>192.168.0.0/16</code>）、link-local 或 Tailscale 地址。同一网络中的手机使用私有地址。在别处的手机需要 <code>tailscale serve</code> 给出的 HTTPS 名称，用 <code>--url</code> 传入（见 <a href="../../../zh/docs/tailscale/">Tailscale</a>）；app 连不到普通的 <code>http://100.x.y.z:&lt;port&gt;</code> Tailscale 地址，即使 <code>serve</code> 在监听它。每个请求都需要 token；缺少或过期的 token 会得到 <code>401</code>，app 会提示 token 已被轮换。</p>
 <h2 id="tabs">Tab<a class="anchor" href="#tabs" aria-label="链接到本节">#</a></h2>
 <p>底部的 tab 栏是：</p>
-<ul><li><strong>Pending</strong>：所有在等待用户的内容。</li><li><strong>Running</strong>：每一个进行中的 run。</li><li>每个插件的顶层对象类型各有一个 tab：<code>dev</code> 是 <strong>Projects</strong>（项目），<code>chat</code> 是 <strong>Chat</strong>。</li><li><strong>Settings</strong>：服务器设置，以及插件放在 settings 之下的对象。</li></ul>
+<ul><li><strong>Pending</strong>：所有在等待用户的内容。</li><li><strong>Running</strong>：每一个进行中的 run。</li><li>每个插件的顶层对象类型各有一个 tab，标题取自 <code>GET /v1/types</code> 发送的 <code>pluginTitle</code>（<code>dev</code> 是 <strong>Projects</strong>）；不读取它的客户端显示插件名。<code>chat</code> 是 <strong>Chat</strong>。</li><li><strong>Settings</strong>：服务器设置，以及插件放在 settings 之下的对象。</li></ul>
 <p>顶层以下的类型（计划、任务）没有 tab；它从父对象的页面、Pending 或 Running 中打开。<code>bot</code> 插件没有 tab：bot 页就是该 bot 的设置页，bot 出现在 <strong>Settings</strong> 下名为 <strong>Bots</strong> 的 section 中。</p>
 <p>对象页依次是：行（id、title、state、note、badge 和 mark）、对象有下一级时的进度条、子对象列表，然后是 section 的 tab。History 始终是最后一个 section；没有单独的 History tab。live section 会跟随它的末尾并显示新内容；chat 的 transcript 就是一个 live section。底部的 action 栏把第一个可用的 action 作为主按钮，其余放在 <code>⋯</code> 菜单中；需要 note 的 action 会打开输入框，<code>confirm: true</code> 的 action 用红色询问。打开某个对象的 action（<code>opens</code>）会把 app 带到那个对象。</p>
 <h2 id="pending-and-notifications">Pending 和通知<a class="anchor" href="#pending-and-notifications" aria-label="链接到本节">#</a></h2>
@@ -131,7 +132,7 @@ Scan this in the operad app:
 <h3 id="a-bot-chat">bot chat<a class="anchor" href="#a-bot-chat" aria-label="链接到本节">#</a></h3>
 <p>bot 上的 chat 使用该 bot 的工作目录、skill 和访问 profile；bot 的设置在每次回复时都会重新读取，因此收紧访问权限或添加 skill 无需新建 chat 即可生效。如果 agent 原生支持 MCP 服务器（<code>claude</code> 和 <code>radian</code> 支持；<code>pi</code> 暂不支持），bot chat 可以使用该 bot 列出的本地 MCP 服务器。工具发生变化的服务器，在用户于 Pending 中批准该变化之前不会被挂载。</p>
 <h3 id="access-level">访问级别<a class="anchor" href="#access-level" aria-label="链接到本节">#</a></h3>
-<p>每个 chat 都有一个访问级别，显示在 <strong>Access</strong> 菜单中：<strong>Plan only</strong>、<strong>Ask each time</strong>、<strong>Accept edits</strong> 或 <strong>Full access</strong>。仓库 chat 从 Plan only 开始，bot chat 从 Ask each time 开始，但定时 prompt 打开的 chat 除外，它从 Full access 开始；选择一个级别会为该 chat 及之后的每次回复更改它。把仍在主 clone 中工作的仓库 chat 提升到 Accept edits 或 Full access 时，会先打开它的 worktree，失败时级别保持原样并说明原因；bot chat 在任何级别下都在自己的目录中工作。profile 的 deny 列表仍然有效，只读的工作目录仍然会询问；Full access 会用一行说明它跳过该级别的问题，而 deny 仍然会拒绝。见 <a href="../../../zh/docs/chats-and-bots/#access-level">Chat 和 bot</a>。</p>
+<p>每个 chat 都有一个访问级别，显示在 <strong>Access</strong> 菜单中：<strong>Plan only</strong>、<strong>Ask each time</strong>、<strong>Accept edits</strong> 或 <strong>Full access</strong>。仓库 chat 从 Plan only 开始，bot chat 从 Ask each time 开始，但定时任务的运行除外，它从 Full access 开始；选择一个级别会为该 chat 及之后的每次回复更改它。把仍在主 clone 中工作的仓库 chat 提升到 Accept edits 或 Full access 时，会先打开它的 worktree，失败时级别保持原样并说明原因；bot chat 在任何级别下都在自己的目录中工作。profile 的 deny 列表仍然有效，只读的工作目录仍然会询问；Full access 会用一行说明它跳过该级别的问题，而 deny 仍然会拒绝。见 <a href="../../../zh/docs/chats-and-bots/#access-level">Chat 和 bot</a>。</p>
 <h2 id="attachments">附件<a class="anchor" href="#attachments" aria-label="链接到本节">#</a></h2>
 <p>输入框可以发送照片、相机图像和文件。app 用 <code>POST /v1/uploads</code> 上传每一个，然后把返回的 <code>ref</code> 放在消息的 <code>attachments</code> 中。文件最大 20 MB；更大的会得到 <code>413</code> 和该上限。记录消息时，上传的文件会移到 operad home 下该 chat 自己的附件目录，transcript 通过 <code>GET /v1/attachments/...</code> 链接它。</p>
 <p>agent 回复时，agent 能读取的图像（<code>claude</code>、<code>pi</code>）作为图像输入给出，每张最大 5 MB；其他所有文件以 agent 可以读取的路径给出。chat 的访问 profile 会获得对该 chat 附件目录的读取权限，除此之外没有别的。一条消息可以只有附件而没有文本。</p>

@@ -69,6 +69,7 @@
         <li><a href="../setup-prompt/">Setup Dev</a></li>
         <li><a href="../config/">config.json</a></li>
         <li><a href="../dev/">dev.json 和 dev 插件</a></li>
+        <li><a href="../home-flows/">home 中的 flow</a></li>
         <li><a href="../access/">访问</a></li>
         <li><a href="../cli/">命令行</a></li>
         <li><a href="../tui/">终端客户端</a></li>
@@ -90,8 +91,8 @@
 
   <main class="tile paper doc" id="top">
 <h1 id="quickstart">快速上手</h1>
-<p><code>operad init</code> 创建 home 并检查插件。新 home 一开始是个人助理，带有 <code>chat</code>、<code>bot</code>、<code>memory</code> 和它找到的 agent；<code>shell</code>、<code>dev</code> 和 <code>pool</code> 是关闭的，<a href="https://github.com/operad-io/operad/blob/main/README.md#quickstart">the Quickstart</a> 会为仓库把它们打开。<code>operad serve</code> 为该 home 运行循环；<code>operad tui</code> 打开<a href="../../../zh/docs/tui/">终端客户端</a>，并在没有 <code>serve</code> 应答时启动它。不带命令的 <code>operad</code> 一次完成最初的几步：home 不存在时创建它，启动 <code>serve</code>，并打开默认 bot 的新 chat。<code>operad pending</code> 列出等待人处理的事项，<code>operad list &lt;type&gt;</code> 列出对象。</p>
-<p>要让你的 bot 为某个仓库提议 <code>.operad/dev.json</code> 并打开 <code>dev</code>，请使用 <a href="../../../zh/docs/setup-prompt/">Setup Dev</a>。设置见 <a href="../../../zh/docs/config/">config.json</a>，命令见<a href="../../../zh/docs/cli/">命令行</a>，出问题时怎么办见 <a href="../../../zh/docs/troubleshooting/">troubleshooting</a>。</p>
+<p><code>operad init</code> 创建 home 并检查插件。新 home 一开始是个人助理，带有 <code>chat</code>、<code>bot</code>、<code>memory</code> 和它找到的 agent；<code>shell</code>、<code>dev</code> 和 <code>pool</code> 是关闭的，<a href="https://github.com/operad-io/operad/blob/main/README.md#quickstart">the Quickstart</a> 会为仓库把它们打开。<code>operad serve</code> 为该 home 运行循环；<code>operad tui</code> 打开<a href="../../../zh/docs/tui/">终端客户端</a>，并在没有 <code>serve</code> 应答时启动它。不带命令的 <code>operad</code> 一次完成最初的几步：home 不存在时创建它，启动 <code>serve</code>，并打开默认 bot 的主 chat（它的 Telegram chat，否则是它最近一个打开的 chat，否则是一个新 chat）。<code>operad pending</code> 列出等待人处理的事项，<code>operad list &lt;type&gt;</code> 列出对象。</p>
+<p>要让你的 bot 为某个仓库提议 <code>.operad/dev.json</code> 并打开 <code>dev</code>，请使用 <a href="../../../zh/docs/setup-prompt/">Setup Dev</a>。设置见 <a href="../../../zh/docs/config/">config.json</a>，命令见<a href="../../../zh/docs/cli/">命令行</a>，出问题时怎么办见 <a href="../../../zh/docs/troubleshooting/">troubleshooting</a>。只有在文件夹里创建任务时才需要 git；那时 bot 会提出 <a href="../../../zh/docs/chats-and-bots/#set-up-git-here">Set up git here</a>。</p>
 <h2 id="a-repository-that-is-not-javascript">非 JavaScript 的仓库<a class="anchor" href="#a-repository-that-is-not-javascript" aria-label="链接到本节">#</a></h2>
 <p>仓库不需要 <code>package.json</code>、不需要 <code>scripts/</code> 目录，也不需要任何特定语言的工具。它的 <code>.operad/dev.json</code> 写明 dev 运行的 shell 命令行，dev 不使用仓库的其他任何内容。下面是一个小型 shell 项目：<code>sh check.sh</code> 运行它的测试，失败的测试会打印 <code>FAIL: &lt;name&gt;</code>，<code>sh check.sh &lt;name&gt;</code> 运行单个测试。</p>
 <pre data-ui><code class="lang-json">{

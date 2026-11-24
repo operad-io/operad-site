@@ -25,7 +25,7 @@ wiki 是每个 bot 共享的一个保留目录。它用来放那些关于外部�
 |---|---|---|---|---|---|
 | `memory.wikiDir` | 字符串 | operad home 中的 `wiki`，所以通常的 home 下是 `~/.operad/wiki` | 一个目录；`~` 是你的 home 目录，相对路径位于 operad home 之下 | 下一次 bot 回复时，以及下一次 `serve` 启动时 | 被设置调用拒绝，并给出 schema 的原因 |
 
-目录缺失时会被创建，不是 git 仓库时会被做成 git 仓库。已经是 git 仓库的目录按原样使用：它不会被再次初始化，它的文件也不会被重新组织。所以把这项设置指向一个已有的 vault，会保留该 vault 的历史、分支和布局。
+目录缺失时会被创建。电脑上有 git 时，它不是 git 仓库就会被做成 git 仓库，不会询问；没有 git 时它保持为普通文件夹，wiki 照样工作，只是不保留历史，并在装上 git 之后某个 bot 下一次使用它时成为仓库。已经是 git 仓库的目录按原样使用：它不会被再次初始化，它的文件也不会被重新组织。所以把这项设置指向一个已有的 vault，会保留该 vault 的历史、分支和布局。
 
 谁可以写 wiki，由每个 bot 的访问 profile 决定，而不是一个全局开关（见[访问](access.md)）。默认情况下 `default` bot 可以写它，其他每个 bot 只能读它。bot 自己的一项设置可以改变这一点：
 
@@ -37,7 +37,7 @@ wiki 是每个 bot 共享的一个保留目录。它用来放那些关于外部�
 
 ## bot 的 memory {#a-bots-memory}
 
-bot 的 memory 位于它工作目录里的 `memory/`，所以 `default` 的是 `~/.operad/bot/default/memory/`。它不共享：其他 bot 读不到它。这个目录是一个独立的 git 仓库，缺失时会被创建，所以一个 bot 的历史与其他每个 bot 的历史分开。工作目录本来就在某个仓库里时，保留那个仓库：插件只提交 `memory/` 这一部分。
+bot 的 memory 位于它工作目录里的 `memory/`，所以 `default` 的是 `~/.operad/bot/default/memory/`。它不共享：其他 bot 读不到它。这个目录缺失时会被创建，电脑上有 git 时它是一个独立的 git 仓库，所以一个 bot 的历史与其他每个 bot 的历史分开。没有 git 时，它是一个没有历史的普通文件夹，直到 git 出现，然后它不经询问就成为仓库。工作目录本来就在某个仓库里时，保留那个仓库：插件只提交 `memory/` 这一部分。
 
 布局有三层和一个文件：
 
@@ -60,7 +60,7 @@ bot chat 把 memory 索引和人的指示放在它的消息上，而不是放在
 
 有工作要做时，bot 有一个 pending 项，写明有多少笔记和 chat 需要检查，以及索引是否超过上限。Run（运行）开始整理；Skip（跳过）关闭它，直到下一次检查发现有工作为止。打开 `bot.bots.<name>.runWithoutAsking` 时，整理不经过这个 pending 项直接运行。bot 的任何 chat 正在写回复时，整理会等待。
 
-从 Run 开始的整理完成后不留下 pending 项。和自动运行一样，它通过配置的 [`notify` 命令](notifications.md)发送一行。这一行写明是哪个 bot、它改动的文件和行数（或者 memory 没有变化）、费用，以及当一次重写丢掉了索引中太多内容时只保留了新增部分。bot 的回复不在这一行里；完整结果留在这次 memory 整理的页面上。失败的整理保留一个 pending 项，带有 Run 和 Skip，以及简短的一行说明失败原因。
+从 Run 开始的整理完成后不留下 pending 项。和自动运行一样，它通过配置的 [`notify` 命令](notifications.md)发送一行。这一行写明是哪个 bot、它改动的文件和行数（或者 memory 没有变化）、费用，以及当一次重写丢掉了索引中太多内容时只保留了新增部分。bot 的回复不在这一行里；完整结果留在梦境整理的页面上。失败的整理保留一个 pending 项，带有 Run 和 Skip，以及简短的一行说明失败原因。
 
 ## memory skill {#the-memory-skill}
 
@@ -106,7 +106,7 @@ memory: bot default, chat C-12
 wiki: bot default, chat C-12
 ```
 
-什么都没写的回复不做提交。这些提交是普通仓库中的普通提交：用 `git log` 查看，或在能显示它们的编辑器里查看，并像其他任何提交一样 revert 其中一个。不会有任何东西被 push 到任何地方。
+什么都没写的回复不做提交，在没有 git 的电脑上的回复也不做。这些提交是普通仓库中的普通提交：用 `git log` 查看，或在能显示它们的编辑器里查看，并像其他任何提交一样 revert 其中一个。不会有任何东西被 push 到任何地方。
 
 插件分不清你自己未提交的修改和 bot 的修改：一次回复结束时，那一刻 wiki 之下的每一处改动都会被提交，提交信息里写着该 bot 和该 chat。请在 bot 写入之前提交你自己的修改，或者事后单独提交它们。
 
@@ -127,3 +127,19 @@ operad 目前还不能自己判断一次 bot 运行读过这样的内容：agent
 ## 还没有的东西 {#not-here-yet}
 
 目前还没有捕获或审阅流程。向量搜索尚未构建；索引的构建方式让另一个搜索引擎可以替换它，而不必改动工具。wiki、memory 布局和夜间整理现在已经可用。
+
+## 回归集 {#the-regression-set}
+
+一个用例是一次 bot 答错了、或被你更正的交流（更正算作一次 miss）。每个用例是一个文件 `~/.operad/memory-cases/<id>.json`；用例中有你的 chat 文本，所以它们留在你的 home 里。`memory propose` 把它在你的 chat 中找到的更正变成 pending 项；带着正确答案应当说出的短语批准其中一项，就会添加这个用例。`memory score` 对 bot 当前的 memory 运行这个集合，并把分数追加到 home 中的 `memory-scores.jsonl`。当每个短语都被说出（忽略大小写、空格和标点），且没有说出任何 `avoid` 短语时，用例通过。
+
+| Key | Type | Default | Allowed values | When it takes effect | Wrong value |
+|---|---|---|---|---|---|
+| `id` | string | 无，必填 | 小写字母、数字、`-` 和 `_`，最多 64 个；文件名为 `<id>.json` | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `kind` | string | 无，必填 | `miss` 或 `correction` | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `context` | list | 无 | 更早的消息，最旧的在前 | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `context.role` | string | 无，消息中必填 | `user` 或 `assistant` | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `context.text` | string | 无，消息中必填 | 任何文本 | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `question` | string | 无，必填 | 非空文本 | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `answer` | object | 无，必填 | `include`，以及可选的 `avoid` | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `answer.include` | list | 无，必填 | 正确答案应当说出的一个或多个短语 | 下一次 `memory score` 时 | 拒绝，并指出文件名 |
+| `answer.avoid` | list | 无 | 错误答案中的短语；说出其中任何一个的答案不通过 | 下一次 `memory score` 时 | 拒绝，并指出文件名 |

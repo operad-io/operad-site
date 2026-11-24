@@ -120,7 +120,8 @@ description: 出问题时：operad 打印的每条需要你处理的消息，以
 |---|---|---|
 | `no repository "<name>"` | 该仓库没有注册。 | `operad dev repo add <path> [--name <name>]`。 |
 | `repository "<name>" was removed` | 该仓库已被移除。 | 需要的话先移动文件夹，然后运行 `operad dev repo add <path> --name <name>`；见 [dev](dev.md#moving-a-repositorys-folder)。 |
-| `<path> has no remote` | `repo add` 需要一个 remote。 | 添加一个 `origin` remote，然后重试。 |
+| `"<dir>" is inside the git repository at "<root>"; add "<root>" instead` | 该文件夹是某个 git 仓库的子文件夹；子文件夹不能单独添加。 | `operad dev repo add <root>`。完全没有 git 的文件夹可以添加。 |
+| `Creating a task needs git, and git is not installed on this machine…`、`This folder is not under git yet…`、`Git is set up here but has no commit yet…` | 任务需要 git 和第一个 commit；在文件夹里 chat 不需要。 | 让 bot 在这里设置 git；需要时它会安装 git（每条命令都是一个由你批准的 pending 项），并提出第一个 commit。见 [Set up git here](chats-and-bots.md#set-up-git-here)。 |
 | `no plan "<plan>"` | 计划 id 有误，或不在这个仓库中。 | `operad list plan --repo <name>`。 |
 | `no task "<task>"` | 任务 id 有误。 | `operad list task --repo <name>`。 |
 | `a task cannot follow itself` | `--after` 指名了任务自己。 | 去掉那个 `--after`。 |
