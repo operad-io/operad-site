@@ -6,6 +6,8 @@ description: operad 用户手册：operad 是什么，以及每个主题对应�
 
 operad 是面向编码 agent 的开放编排层。它让 agent（radian、Claude Code、pi 等）按经过验证的 flow 运行，把发生过的事保留为 history，并在工作需要人的地方联系到人：终端客户端、手机 app、通知、chat。你会看到三类内容：flow、等待人处理的事项（pending）、以及每个 step 做了什么和原因（history）。其余功能由插件提供，例如 `dev` 插件的计划和任务。
 
+在 operad 里，编排多个 agent 就是编排任务要走的 flow，而不是给 agent 分派角色。flow 定下一个任务要经过哪些 step、step 之间做哪些检查；哪个 step 由哪个 agent 来做，只是一项可以改的设置。
+
 ## 页面 {#pages}
 
 - [quickstart](quickstart.md)：创建 home，启动 `serve`，打开客户端。
