@@ -348,6 +348,7 @@ ${html}
   <p class="fnote">operad.io · <a href="${rootPrefix}${L.home}">${S.footHome}</a> · <a href="${REPO}">GitHub</a></p>
 </footer>
 
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "31131e39474742c7a407a418f67082aa"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
 `;
